@@ -1,0 +1,72 @@
+using System;
+using TMPro;
+using UnityEngine;
+using UnityEngine.UI;
+
+public class UI_Login : MonoBehaviour
+{
+    [Header("UI Elements")]
+    public TMP_InputField nickNameInputField;
+    public Button loginButton;
+    public TextMeshProUGUI warningText;
+    
+    [Header("Debug")]
+    public bool generateRandomNickName = true;
+    public string randomNickNamePrefix = "Player_";
+
+    private const int MaxNickNameLength = 20;
+    
+    private string _nickName;
+
+    private void Start()
+    {
+        if (generateRandomNickName)
+        {
+            string randomNickName = randomNickNamePrefix + UnityEngine.Random.Range(1000, 9999);
+            nickNameInputField.text = randomNickName;
+            _nickName = randomNickName;
+            loginButton.gameObject.SetActive(true);
+            warningText.gameObject.SetActive(false);
+        }
+    }
+
+    private void OnEnable()
+    {
+        nickNameInputField.onEndEdit.AddListener(OnInsertedNickName);
+    }
+
+    private void OnDisable()
+    {
+        nickNameInputField.onEndEdit.RemoveListener(OnInsertedNickName);
+    }
+
+    private void OnInsertedNickName(string nickName)
+    {
+        _nickName = nickName;
+        
+        if (string.IsNullOrEmpty(_nickName))
+        {
+            warningText.gameObject.SetActive(true);
+            warningText.text = "Nickname cannot be empty.";
+            loginButton.gameObject.SetActive(false);
+            return;
+        }
+        
+        if(_nickName.Length > MaxNickNameLength)
+        {
+            warningText.gameObject.SetActive(true);
+            warningText.text = $"Nickname cannot exceed {MaxNickNameLength} characters.";
+            loginButton.gameObject.SetActive(false);
+            nickNameInputField.text = string.Empty;
+            return;
+        }
+
+        loginButton.gameObject.SetActive(true);
+        warningText.gameObject.SetActive(false);
+    }
+
+    public void Login()
+    {
+        MainMenuManager.Login(_nickName);
+    }
+}
