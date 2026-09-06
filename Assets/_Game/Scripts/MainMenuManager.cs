@@ -9,6 +9,8 @@ public class MainMenuManager : MonoBehaviourPunCallbacks
 {
     public UI_Login login;
     public UI_Lobby lobby;
+    
+    private Dictionary<string, RoomInfo> _availableRooms = new Dictionary<string, RoomInfo>();
 
     private void Awake()
     {
@@ -83,11 +85,19 @@ public class MainMenuManager : MonoBehaviourPunCallbacks
 
     public override void OnRoomListUpdate(List<RoomInfo> roomList)
     {
-        base.OnRoomListUpdate(roomList);
+        // Update the available rooms dictionary based on the received room list
+        foreach (var info in roomList)
+        {
+            if (info.RemovedFromList) // If the room is removed from the list, remove it from the available rooms dictionary
+                _availableRooms.Remove(info.Name);
+            
+            else // If the room is added or updated, add or update it in the available rooms dictionary
+                _availableRooms[info.Name] = info;
+        }
         
-        Debug.Log("Room list updated. Total rooms: " + roomList.Count);
-
-        lobby.UpdateRoomList(roomList);
+        Debug.Log($"Updated room list. Total available rooms: {_availableRooms.Count}");
+        
+        lobby.UpdateRoomList(_availableRooms);
     }
 
     public static void CreateRoom(string roomName)

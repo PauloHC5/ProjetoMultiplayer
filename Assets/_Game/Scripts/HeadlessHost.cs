@@ -1,8 +1,10 @@
+using System;
 using System.Linq;
 using Photon.Pun;
 using Photon.Realtime;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using Random = UnityEngine.Random;
 
 public class HeadlessHost : MonoBehaviourPunCallbacks
 {
@@ -22,6 +24,15 @@ public class HeadlessHost : MonoBehaviourPunCallbacks
         {
             Debug.Log("Already connected to Photon server as " + PhotonNetwork.NickName);
         }
+    }
+
+    private void Start()
+    {
+        if (PhotonNetwork.InRoom)
+        {
+            chatUI.InitChatUI(PhotonNetwork.CurrentRoom.Name, PhotonNetwork.CurrentRoom.PlayerCount, PhotonNetwork.CurrentRoom.MaxPlayers);
+        }
+            
     }
 
     public override void OnConnectedToMaster()
@@ -52,7 +63,7 @@ public class HeadlessHost : MonoBehaviourPunCallbacks
             PhotonNetwork.LoadLevel(SceneManager.GetActiveScene().name);
         }
         
-        chatUI.InitChatUI(PhotonNetwork.CurrentRoom.Name, PhotonNetwork.CurrentRoom.PlayerCount, PhotonNetwork.CurrentRoom.MaxPlayers);
+        chatUI?.InitChatUI(PhotonNetwork.CurrentRoom.Name, PhotonNetwork.CurrentRoom.PlayerCount, PhotonNetwork.CurrentRoom.MaxPlayers);
     }
     
     private string GenerateRandomRoomName()
@@ -67,13 +78,13 @@ public class HeadlessHost : MonoBehaviourPunCallbacks
     {
         int currentPlayers = PhotonNetwork.CurrentRoom.PlayerCount;
         int maxPlayers = PhotonNetwork.CurrentRoom.MaxPlayers;
-        chatUI?.OnPlayerEnteredRoom(currentPlayers, maxPlayers);
+        chatUI?.OnPlayerEnteredRoom(newPlayer.NickName, currentPlayers, maxPlayers);
     }
 
     public override void OnPlayerLeftRoom(Photon.Realtime.Player otherPlayer)
     {
         int currentPlayers = PhotonNetwork.CurrentRoom.PlayerCount;
         int maxPlayers = PhotonNetwork.CurrentRoom.MaxPlayers;
-        chatUI?.OnPlayerLeftRoom(currentPlayers, maxPlayers);
+        chatUI?.OnPlayerLeftRoom(otherPlayer.NickName, currentPlayers, maxPlayers);
     }
 }

@@ -794,7 +794,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Player
   laserPrefab: {fileID: -8598748547545543793, guid: 1a2dc1bf48ef33445bd320b213005467, type: 3}
-  speed: 5
+  speed: 10
+  shootSfx: {fileID: 11400000, guid: eed8b4b32103b734ba348e06663863fb, type: 2}
 --- !u!50 &585312903
 Rigidbody2D:
   serializedVersion: 5

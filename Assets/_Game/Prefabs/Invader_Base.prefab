@@ -153,3 +153,4 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::Invader
   animationSprites: []
   animationTime: 0.8
+  killedSfx: {fileID: 11400000, guid: f7b9e99808bb87147b11252c15101374, type: 2}

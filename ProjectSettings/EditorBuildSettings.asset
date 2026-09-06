@@ -6,6 +6,9 @@ EditorBuildSettings:
   serializedVersion: 2
   m_Scenes:
   - enabled: 1
+    path: Assets/_Game/Scenes/SpaveInvadersMenu.unity
+    guid: 4c970e974cb57bd4fb71b80531b7562e
+  - enabled: 1
     path: Assets/_Game/Scenes/RoomTest.unity
     guid: 575ca29a987857641bab992882129220
   m_configObjects:

@@ -12,19 +12,19 @@ public class AudioCue : ScriptableObject
 
     [SerializeField]
     [Range(0f, 3f)]
-    private float _minPitch;
+    private float _minPitch = 1f;
 
     [SerializeField]
     [Range(0f, 3f)] 
-    private float _Maxpitch;
+    private float _Maxpitch = 1f;
 
     [SerializeField]
     [Range(0f, 1f)]
-    private float _minVolume;
+    private float _minVolume = 1f;
 
     [SerializeField]
     [Range(0f, 1f)]
-    private float _maxVolume;
+    private float _maxVolume = 1f;
 
     public AudioClip GetSample()
     {

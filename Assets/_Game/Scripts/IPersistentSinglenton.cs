@@ -43,7 +43,7 @@ public class IPersistentSinglenton<T> : MonoBehaviour where T : MonoBehaviour
             else if(_uniqueInstance != value)
             {
 #if UNITY_EDITOR
-                Debug.LogError($"Trying to set a second instance of singleton {typeof(T).Name}! \n Seu Idiota!");
+                Debug.LogWarning($"Trying to set a second instance of singleton {typeof(T).Name}! \n");
 #endif
                 DestroyImmediate(value.gameObject);
             }

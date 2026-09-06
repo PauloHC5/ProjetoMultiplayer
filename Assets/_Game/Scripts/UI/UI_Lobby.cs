@@ -28,22 +28,20 @@ public class UI_Lobby : MonoBehaviour
         roomNameInputField.onEndEdit.RemoveAllListeners();
     }
 
-    public void UpdateRoomList(List<RoomInfo> roomList)
+    public void UpdateRoomList(Dictionary<string, RoomInfo> _availableRooms)
     {
-        RemoveUnexistingRoomButtons(roomList);
-        AddNewRoomButtons(roomList);
-        CheckFullRooms(roomList);
+        RemoveUnexistingRoomButtons(_availableRooms);
+        AddNewRoomButtons(_availableRooms);
+        UpdateRoomsStates(_availableRooms);
     }
     
-    private void RemoveUnexistingRoomButtons(List<RoomInfo> roomList)
+    private void RemoveUnexistingRoomButtons(Dictionary<string, RoomInfo> availableRooms)
     {
         HashSet<string> existingRoomNames = new HashSet<string>();
-        for (var index = 0; index < roomList.Count; index++)
+        foreach (var room in availableRooms)
         {
-            if(roomList[index].RemovedFromList) continue;
-            
-            var room = roomList[index];
-            existingRoomNames.Add(room.Name);
+            if (room.Value.RemovedFromList) continue;
+            existingRoomNames.Add(room.Key);
         }
 
         for (int i = scrollViewContent.childCount - 1; i >= 0; i--)
@@ -56,36 +54,36 @@ public class UI_Lobby : MonoBehaviour
         }
     }
 
-    private void AddNewRoomButtons(List<RoomInfo> roomList)
+    private void AddNewRoomButtons(Dictionary<string, RoomInfo> availableRooms)
     {
-        foreach (var room in roomList)
+        foreach (var room in availableRooms)
         {
-            if(room.RemovedFromList) continue;
+            if(room.Value.RemovedFromList) continue;
             
-            Transform existingButton = scrollViewContent.Find(room.Name);
+            Transform existingButton = scrollViewContent.Find(room.Key);
             
             if (existingButton != null) continue;
             
             RoomButtom newButton = Instantiate(roomButtonPrefab, scrollViewContent);
-            newButton.name = room.Name;
-            newButton.InitRoomButton(room.Name, room.PlayerCount, room.MaxPlayers);
+            newButton.name = room.Key;
         }
     }
     
-    private void CheckFullRooms(List<RoomInfo> roomList)
+    private void UpdateRoomsStates(Dictionary<string, RoomInfo> availableRooms)
     {
-        foreach (var room in roomList)
+        foreach (var room in availableRooms)
         {
-            if(room.RemovedFromList) continue;
+            if(room.Value.RemovedFromList) continue;
             
-            Transform existingButton = scrollViewContent.Find(room.Name);
+            Transform existingButton = scrollViewContent.Find(room.Key);
             
             if (existingButton == null) continue;
             
             RoomButtom button = existingButton.GetComponent<RoomButtom>();
             if (button != null)
             {
-                button.Button.interactable = room.PlayerCount != room.MaxPlayers;
+                button.Button.interactable = room.Value.PlayerCount != room.Value.MaxPlayers;
+                button.UpdateRoomState(room.Key, room.Value.PlayerCount, room.Value.MaxPlayers);
             }
         }
     }

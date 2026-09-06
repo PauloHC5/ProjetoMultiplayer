@@ -7,8 +7,9 @@ public class Player : MonoBehaviour
 {
     public Projectile laserPrefab;
     public float speed = 5.0f;
+    public AudioCue shootSfx;
         
-        private bool _laserActive;
+    private bool _laserActive;
 
     private void Update()
     {
@@ -36,6 +37,7 @@ public class Player : MonoBehaviour
             Projectile projectile = Instantiate(laserPrefab, transform.position, Quaternion.identity);
             projectile.destroyed += () => _laserActive = false;
             _laserActive = true;
+            GameManager.Instance.AudioManager.PlaySfx(shootSfx);
         }
     }
 

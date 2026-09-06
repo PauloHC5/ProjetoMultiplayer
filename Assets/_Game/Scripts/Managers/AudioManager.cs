@@ -22,7 +22,6 @@ public class AudioManager
     private int _sfxPoolSize = 5;
 
     private List<AudioSource> _sfxSourcePool;
-    private GameObject _audioSourceInstance;    
 
     public void InitializePool()
     {
@@ -210,7 +209,8 @@ public class AudioManager
 
     private int CreateAudioSource()
     {
-        AudioSource audioSource = _audioSourceInstance.AddComponent<AudioSource>();
+        GameObject audioSourceInstance = new GameObject("AudioSourceInstance");
+        AudioSource audioSource = audioSourceInstance.AddComponent<AudioSource>();
         audioSource.playOnAwake = false;
         audioSource.outputAudioMixerGroup = _audioMixer.FindMatchingGroups("SFX")[0];
         _sfxSourcePool.Add(audioSource);

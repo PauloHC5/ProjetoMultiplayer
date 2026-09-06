@@ -5,9 +5,11 @@ public class Invader : MonoBehaviour
 {
     public Sprite[] animationSprites;
     public float animationTime;
+    public AudioCue killedSfx;
     
     private SpriteRenderer _spriteRenderer;
     private int _animationFrame;
+    
     public Action killed;
 
     private void Awake()
@@ -35,6 +37,7 @@ public class Invader : MonoBehaviour
         if(other.gameObject.layer == LayerMask.NameToLayer("Laser"))
         {
             killed?.Invoke();
+            GameManager.Instance.AudioManager.PlaySfx(killedSfx);
             gameObject.SetActive(false);
         }
     }

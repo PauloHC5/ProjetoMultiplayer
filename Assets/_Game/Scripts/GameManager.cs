@@ -10,6 +10,8 @@ public class GameManager : IPersistentSinglenton<GameManager>
     [SerializeField]
     private AudioManager _audioManager;
 
+    public AudioManager AudioManager => _audioManager;
+
     void Start()
     {
         _audioManager?.InitializePool();

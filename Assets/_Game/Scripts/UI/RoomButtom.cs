@@ -23,7 +23,7 @@ public class RoomButtom : MonoBehaviour
         _buttomText.color = Button.interactable ? Color.green : Color.gray;
     }
 
-    public void InitRoomButton(string roomName, int playerCount, int maxPlayers)
+    public void UpdateRoomState(string roomName, int playerCount, int maxPlayers)
     {
         _buttomText.text = RoomNamePrefix + roomName + " \n" + RoomPlayerCountPrefix + playerCount + "/" + maxPlayers;
     }

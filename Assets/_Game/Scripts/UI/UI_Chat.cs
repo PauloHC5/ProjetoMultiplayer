@@ -2,21 +2,32 @@ using System;
 using Photon.Pun;
 using TMPro;
 using UnityEngine;
+using UnityEngine.InputSystem;
 
 public class UI_Chat : MonoBehaviour
 {
     [Header("UI Elements")]
-    public Transform scrollViewContent;
-    public TextMeshProUGUI chatMessagePrefab;
+    public TextMeshProUGUI chat;
     public TMP_InputField chatInputField;
     public TextMeshProUGUI roomNameText;
     public TextMeshProUGUI playersCountText;
     
-    private PhotonView _photonView;
+    public PhotonView PhotonView { get; private set; }
 
     private void Awake()
     {
-        _photonView = GetComponent<PhotonView>();
+        PhotonView = GetComponent<PhotonView>();
+    }
+
+    private void Update()
+    {
+        if(Keyboard.current.enterKey.wasPressedThisFrame || Keyboard.current.numpadEnterKey.wasPressedThisFrame)
+        {
+            if (chatInputField.isFocused)
+            {
+                SendChatMessage();
+            }
+        }
     }
 
     public void InitChatUI(string roomName, int playerCount, int maxPlayers)
@@ -25,14 +36,18 @@ public class UI_Chat : MonoBehaviour
         playersCountText.text = "Players: " + playerCount + "/" + maxPlayers;
     }
 
-    public void OnPlayerEnteredRoom(int playerCount, int maxPlayers)
+    public void OnPlayerEnteredRoom(string playerName, int playerCount, int maxPlayers)
     {
         playersCountText.text = "Players: " + playerCount + "/" + maxPlayers;
+        
+        chat.text += "\n \n" + playerName + " has joined the room.";
     }
 
-    public void OnPlayerLeftRoom(int playerCount, int maxPlayers)
+    public void OnPlayerLeftRoom(string playerName, int playerCount, int maxPlayers)
     {
         playersCountText.text = "Players: " + playerCount + "/" + maxPlayers;
+        
+        chat.text += "\n \n" + playerName + " has left the room.";
     }
     
     public void SendChatMessage()
@@ -40,7 +55,7 @@ public class UI_Chat : MonoBehaviour
         string message = chatInputField.text.Trim();
         if (!string.IsNullOrEmpty(message))
         {
-            _photonView.RPC("ReceiveChatMessage", RpcTarget.AllBuffered, message);
+            PhotonView.RPC("ReceiveChatMessage", RpcTarget.All, message);
             chatInputField.text = string.Empty;
         }
     }
@@ -51,11 +66,9 @@ public class UI_Chat : MonoBehaviour
         string userName = info.Sender.NickName;
         
         string message = msg.Trim();
-        if (!string.IsNullOrEmpty(message) || !string.IsNullOrWhiteSpace(userName))
-        {
-            TextMeshProUGUI newMessage = Instantiate(chatMessagePrefab, scrollViewContent);
-            newMessage.text = userName + ": " + message;
-            chatInputField.text = string.Empty;
-        }
+        
+        if (string.IsNullOrEmpty(message) && string.IsNullOrWhiteSpace(userName)) return;
+        
+        chat.text += "\n \n" + userName + ": " + message;
     }
 }
