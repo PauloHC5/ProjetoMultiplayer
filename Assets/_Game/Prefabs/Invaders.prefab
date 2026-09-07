@@ -1,0 +1,80 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1 &7751632355803559981
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 6910397273489476099}
+  - component: {fileID: 7380585379183910588}
+  m_Layer: 0
+  m_Name: Invaders
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &6910397273489476099
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7751632355803559981}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 7, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &7380585379183910588
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7751632355803559981}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 83b1db522b8b5f04a958ae6fc49632a3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Invaders
+  prefabs:
+  - {fileID: 721702209136384595, guid: c27f82190daed0543816a4df5edd6210, type: 3}
+  - {fileID: 721702209136384595, guid: c27f82190daed0543816a4df5edd6210, type: 3}
+  - {fileID: 432213940651264849, guid: b0ff2d1534342fb4aaf2eed7628ba587, type: 3}
+  - {fileID: 432213940651264849, guid: b0ff2d1534342fb4aaf2eed7628ba587, type: 3}
+  - {fileID: 2332977524222137839, guid: 19fa160092d14e54592c80f08b436869, type: 3}
+  rows: 5
+  columns: 11
+  speed:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0.16741072
+      inSlope: 0.13703606
+      outSlope: 0.13703606
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0.38002297
+    - serializedVersion: 3
+      time: 0.99885195
+      value: 5.5703673
+      inSlope: 8.296445
+      outSlope: 8.296445
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.05396098
+      outWeight: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  missileAttackRate: 1
+  missilePrefab: {fileID: 1057425784480642454, guid: d198b54e17c98b444b89b16a77eadcf9, type: 3}

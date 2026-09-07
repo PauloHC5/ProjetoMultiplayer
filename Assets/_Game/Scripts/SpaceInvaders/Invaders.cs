@@ -1,4 +1,5 @@
 using System;
+using _Game.Scripts;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -15,6 +16,8 @@ public class Invaders : MonoBehaviour
     public int TotalInvaders => this.rows * this.columns;
     public float PercertKilled => (float)this.AmountKilled / (float)this.TotalInvaders;
     public int AmountAlive => this.TotalInvaders - this.AmountKilled;
+    
+    public Action OnInvadersDestroyed;
 
     private Vector3 _direction = Vector3.right;
     private Camera _mainCamera;
@@ -36,7 +39,6 @@ public class Invaders : MonoBehaviour
                 Vector3 position = rowPosition;
                 position.x += col * 2.0f;
                 invader.transform.localPosition = position;
-                invader.killed += InvaderKilled;
             }
         }
     }
@@ -69,13 +71,14 @@ public class Invaders : MonoBehaviour
         }
     }
     
-    private void InvaderKilled()
+    private void InvaderKilled(int points)
     {
         AmountKilled++;
         
         if(AmountKilled >= TotalInvaders)
         {
-            SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+            OnInvadersDestroyed?.Invoke();
+            Destroy(this.gameObject);
         }
     }
     
@@ -100,5 +103,15 @@ public class Invaders : MonoBehaviour
                 break;
             }
         }
+    }
+
+    private void OnEnable()
+    {
+        GameMode.OnInvaderKilled += InvaderKilled;
+    }
+    
+    private void OnDisable()
+    {
+        GameMode.OnInvaderKilled -= InvaderKilled;
     }
 }

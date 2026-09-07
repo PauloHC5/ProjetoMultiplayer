@@ -1,17 +1,16 @@
 using System;
+using _Game.Scripts;
 using UnityEngine;
 
 public class Invader : MonoBehaviour
 {
+    public int points;
     public Sprite[] animationSprites;
     public float animationTime;
     public AudioCue killedSfx;
     
     private SpriteRenderer _spriteRenderer;
     private int _animationFrame;
-    
-    public Action killed;
-
     private void Awake()
     {
         _spriteRenderer = GetComponent<SpriteRenderer>();
@@ -36,7 +35,7 @@ public class Invader : MonoBehaviour
     {
         if(other.gameObject.layer == LayerMask.NameToLayer("Laser"))
         {
-            killed?.Invoke();
+            GameMode.OnInvaderKilled?.Invoke(this.points);
             GameManager.Instance.AudioManager.PlaySfx(killedSfx);
             gameObject.SetActive(false);
         }

@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public class IPersistentSinglenton<T> : MonoBehaviour where T : MonoBehaviour
+public abstract class IPersistentSinglenton<T> : MonoBehaviour where T : MonoBehaviour
 {
     private static T _uniqueInstance;
     private static bool bIsRunning = true;
