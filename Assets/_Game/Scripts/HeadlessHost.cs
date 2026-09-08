@@ -8,7 +8,10 @@ using Random = UnityEngine.Random;
 
 public class HeadlessHost : MonoBehaviourPunCallbacks
 {
+    public string roomName;
     public UI_Chat chatUI;
+    
+    public bool bDebugMode = false;
     
     void Awake()
     {
@@ -16,13 +19,15 @@ public class HeadlessHost : MonoBehaviourPunCallbacks
         
         if(!PhotonNetwork.IsConnected)
         {
-            PhotonNetwork.ConnectUsingSettings();
             PhotonNetwork.NickName = "TestPlayer_" + Random.Range(1000, 9999);
-            Debug.Log("Connecting to Photon server as " + PhotonNetwork.NickName);
+            if(bDebugMode)
+                Debug.Log("Connecting to Photon server as " + PhotonNetwork.NickName);
+            PhotonNetwork.ConnectUsingSettings();
         }
         else
         {
-            Debug.Log("Already connected to Photon server as " + PhotonNetwork.NickName);
+            if(bDebugMode)
+                Debug.Log("Already connected to Photon server as " + PhotonNetwork.NickName);
         }
     }
 
@@ -36,6 +41,23 @@ public class HeadlessHost : MonoBehaviourPunCallbacks
     }
 
     public override void OnConnectedToMaster()
+    {
+        if (this.roomName != string.Empty)
+        {
+            if(bDebugMode)
+                Debug.Log("Tentando entrar na sala: " + this.roomName);
+        
+            PhotonNetwork.JoinRoom(this.roomName);
+            // NÃO faça nada com o valor de retorno, nem dê return aqui
+            // o resultado real vem via OnJoinedRoom ou OnJoinRoomFailed
+        }
+        else
+        {
+            CreateRoom();
+        }
+    }
+
+    private void CreateRoom()
     {
         string sceneName = SceneManager.GetActiveScene().name;
         
@@ -56,7 +78,8 @@ public class HeadlessHost : MonoBehaviourPunCallbacks
 
     public override void OnJoinedRoom()
     {
-        Debug.Log("Host holding the room: " + PhotonNetwork.CurrentRoom.Name);
+        if(bDebugMode)
+            Debug.Log("Host holding the room: " + PhotonNetwork.CurrentRoom.Name);
         
         if (PhotonNetwork.IsMasterClient && SceneManager.GetActiveScene().name != PhotonNetwork.CurrentRoom.CustomProperties["sceneName"].ToString())
         {
@@ -65,7 +88,15 @@ public class HeadlessHost : MonoBehaviourPunCallbacks
         
         chatUI?.InitChatUI(PhotonNetwork.CurrentRoom.Name, PhotonNetwork.CurrentRoom.PlayerCount, PhotonNetwork.CurrentRoom.MaxPlayers);
     }
+
+    public override void OnJoinRoomFailed(short returnCode, string message)
+    {
+        if(bDebugMode)
+            Debug.LogWarning($"Falha ao entrar na sala '{this.roomName}': {message}. Criando uma nova.");
     
+        CreateRoom();
+    }
+
     private string GenerateRandomRoomName()
     {
         const string chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";

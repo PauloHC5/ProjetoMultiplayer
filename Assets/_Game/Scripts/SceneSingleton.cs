@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace _Game.Scripts
 {
-    public abstract class SceneSingleton<T> : MonoBehaviourPun where T : MonoBehaviourPun
+    public abstract class SceneSingleton<T> : MonoBehaviourPunCallbacks where T : MonoBehaviourPunCallbacks
     {
         private static T _uniqueInstance;
         private static bool bIsRunning = true;
@@ -39,8 +39,6 @@ namespace _Game.Scripts
                 }
             }
         }
-        
-        
 
         protected virtual void Awake()
         {

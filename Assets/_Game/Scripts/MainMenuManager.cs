@@ -9,7 +9,9 @@ public class MainMenuManager : MonoBehaviourPunCallbacks
 {
     public UI_Login login;
     public UI_Lobby lobby;
-    
+
+    public const int MaxNickNameLength = 18;
+
     private Dictionary<string, RoomInfo> _availableRooms = new Dictionary<string, RoomInfo>();
 
     private void Awake()

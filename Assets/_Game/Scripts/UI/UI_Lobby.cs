@@ -16,7 +16,7 @@ public class UI_Lobby : MonoBehaviour
     
     private string _customRoomName;
     
-    private const int MaxRoomNameLength = 38;
+    public const int MaxRoomNameLength = 38;
 
     private void OnEnable()
     {

@@ -13,8 +13,6 @@ public class UI_Login : MonoBehaviour
     [Header("Debug")]
     public bool generateRandomNickName = true;
     public string randomNickNamePrefix = "Player_";
-
-    private const int MaxNickNameLength = 20;
     
     private string _nickName;
 
@@ -52,10 +50,10 @@ public class UI_Login : MonoBehaviour
             return;
         }
         
-        if(_nickName.Length > MaxNickNameLength)
+        if(_nickName.Length > MainMenuManager.MaxNickNameLength)
         {
             warningText.gameObject.SetActive(true);
-            warningText.text = $"Nickname cannot exceed {MaxNickNameLength} characters.";
+            warningText.text = $"Nickname cannot exceed {MainMenuManager.MaxNickNameLength} characters.";
             loginButton.gameObject.SetActive(false);
             nickNameInputField.text = string.Empty;
             return;

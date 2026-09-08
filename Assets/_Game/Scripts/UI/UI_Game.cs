@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using _Game.Scripts;
 using TMPro;
 using UnityEngine;
@@ -9,17 +10,19 @@ public class UI_Game : MonoBehaviour
     public TextMeshProUGUI scoreCounterText;
     public TextMeshProUGUI livesCounterText;
     public TextMeshProUGUI gameCountdownText;
+    
+    private Dictionary<string, TextMeshProUGUI> _plauerUIStatus = new Dictionary<string, TextMeshProUGUI>();
 
     private void Awake()
     {
-        livesCounterText.text = GameMode.Instance.StartingLives.ToString();
-        scoreCounterText.text = "0";
+        //livesCounterText.text = GameMode.Instance.StartingLives.ToString();
+        //scoreCounterText.text = "0";
     }
 
     private void Start()
     {
-        gameCountdownText.text = GameMode.Instance.StartGameDelay.ToString();
-        livesCounterText.text = GameMode.Instance.StartingLives.ToString();
+        //gameCountdownText.text = GameMode.Instance.StartGameDelay.ToString();
+        //livesCounterText.text = GameMode.Instance.StartingLives.ToString();
     }
     
     private void OnGameCountdownChanged(int countdown)
@@ -36,17 +39,17 @@ public class UI_Game : MonoBehaviour
 
     private void UpdateScore(int points)
     {
-        scoreCounterText.text = points.ToString();
+        //scoreCounterText.text = points.ToString();
     }
     
     private void OnLivesChanged(int lives)
     {
         if(lives <= 0)
         {
-            livesCounterText.text = "0";
+            //livesCounterText.text = "0";
             return;
         }
-        livesCounterText.text = lives.ToString();
+        //livesCounterText.text = lives.ToString();
     }
     
     private void OnEnable()

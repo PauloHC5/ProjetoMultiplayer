@@ -1,7 +1,10 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using Photon.Pun;
+using Photon.Realtime;
 using UnityEngine;
+using Hashtable = ExitGames.Client.Photon.Hashtable;
 
 namespace _Game.Scripts
 {
@@ -10,13 +13,19 @@ namespace _Game.Scripts
         [Header("Game Mode")]
         [SerializeField] private int startGameDelay = 3;
         [SerializeField] private int startingLives = 3;
-        [SerializeField] private Player playerPrefab;
+        [SerializeField] private Player[] playerPrefabs = new Player[3];
         [SerializeField] private Invaders invadersPrefab;
+        
+        [Header("Debug")]
+        public bool bDebugMode = false;
         
         private int _gameCountdown;
         private int _currentLives;
         private Invaders _invaders;
         private int _currentScore;
+        private bool _bGameStarted = false;
+        
+        private readonly Vector3 _playerSpawnPosition = new Vector3(0, -13f, 0);
         
         public int StartingLives => startingLives;
         public int StartGameDelay => startGameDelay;
@@ -33,26 +42,43 @@ namespace _Game.Scripts
 
         private void Start()
         {
-            Debug.Log("GameMode.Start");
+            if(bDebugMode)
+                Debug.Log("GameMode.Start");
+            
             _currentLives = startingLives;
-            StartCoroutine(StartGameCooldown());
-            FindAnyObjectByType<Player>().OnPlayerDestroyed += OnPlayerDestroyed;
+            //FindAnyObjectByType<Player>().OnPlayerDestroyed += OnPlayerDestroyed;
             
             OnInvaderKilled += AddPoints;
         }
         
+        public override void OnJoinedRoom()
+        {
+            base.OnJoinedRoom();
+            
+            if(bDebugMode)
+                Debug.LogWarning("GameMode.OnJoinedRoom");
+            
+            var playersInRoom = PhotonNetwork.CurrentRoom.Players.Count;
+            
+            PhotonNetwork.Instantiate(playerPrefabs[playersInRoom - 1].name, _playerSpawnPosition, Quaternion.identity);
+        }
+        
         private IEnumerator StartGameCooldown()
         {
+            _bGameStarted = true;
             _gameCountdown = startGameDelay;
             OnGameCooldownChanged?.Invoke(_gameCountdown);
             while (_gameCountdown > -1)
             {
-                Debug.Log($"GameMode.StartGameCooldown: {_gameCountdown}");
+                if (bDebugMode)
+                    Debug.Log($"GameMode.StartGameCooldown: {_gameCountdown}");
+                
                 yield return new WaitForSeconds(1.0f);
                 OnGameCooldownChanged?.Invoke(--_gameCountdown);
             }
             
-            Debug.Log("GameMode.StartGameCooldown: Game Started");
+            if(bDebugMode)
+                Debug.Log("GameMode.StartGameCooldown: Game Started");
             
             _invaders = Instantiate(invadersPrefab);
             _invaders.OnInvadersDestroyed += WaveCompleted;
@@ -66,7 +92,8 @@ namespace _Game.Scripts
         
         private void WaveCompleted()
         {
-            Debug.Log("GameMode.WaveCompleted");
+            if(bDebugMode)
+                Debug.Log("GameMode.WaveCompleted");
             
             _invaders.OnInvadersDestroyed -= WaveCompleted;
             
@@ -75,14 +102,17 @@ namespace _Game.Scripts
         
         private void OnPlayerDestroyed()
         {
-            Debug.Log("GameMode.OnPlayerDestroyed");
+            if(bDebugMode)
+                Debug.Log("GameMode.OnPlayerDestroyed");
+            
             _currentLives--;
             OnLivesChanged?.Invoke(_currentLives);
             _invaders.enabled = false;
 
             if (_currentLives <= 0)
             {
-                Debug.Log("GameMode.OnPlayerDestroyed: Game Over");
+                if(bDebugMode)
+                    Debug.Log("GameMode.OnPlayerDestroyed: Game Over");
                 return;
             }
             
@@ -96,8 +126,8 @@ namespace _Game.Scripts
             
             _invaders.enabled = true;
             
-            var player = Instantiate(playerPrefab);
-            player.OnPlayerDestroyed += OnPlayerDestroyed;
+            //var player = Instantiate(playerPrefab);
+            //player.OnPlayerDestroyed += OnPlayerDestroyed;
             
         }
     }
