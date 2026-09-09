@@ -1,6 +1,8 @@
+using Photon.Pun;
 using System;
 using UnityEngine;
 
+[RequireComponent(typeof(PhotonView))]
 public class Projectile : MonoBehaviour
 {
     public Vector3 direction;

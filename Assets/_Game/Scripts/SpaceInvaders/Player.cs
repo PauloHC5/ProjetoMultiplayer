@@ -47,7 +47,7 @@ public class Player : MonoBehaviourPun
 
     public void Move(Vector2 direction)
     {
-        Vector3 movement = new Vector3(direction.x, direction.y, 0) * speed * Time.deltaTime;
+        Vector2 movement = new Vector2(direction.x, direction.y) * speed;
         _rigidbody2D.linearVelocity = movement;
     }
     

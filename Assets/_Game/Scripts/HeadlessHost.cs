@@ -9,6 +9,7 @@ using Random = UnityEngine.Random;
 public class HeadlessHost : MonoBehaviourPunCallbacks
 {
     public string roomName;
+    public int roomMaxPlayers = 0;
     public UI_Chat chatUI;
     
     public bool bDebugMode = false;
@@ -57,21 +58,26 @@ public class HeadlessHost : MonoBehaviourPunCallbacks
         }
     }
 
-    private void CreateRoom()
+    private void CreateRoom(string inRoomName = "")
     {
         string sceneName = SceneManager.GetActiveScene().name;
         
         RoomOptions options = new RoomOptions
         {
-            MaxPlayers = Random.Range(1, 3),
+            MaxPlayers = roomMaxPlayers != 0 ? roomMaxPlayers : Random.Range(1, 3),
             CustomRoomProperties = new ExitGames.Client.Photon.Hashtable
             {
                 { "sceneName", sceneName }
             },
             IsVisible = true
         };
-        
-        string roomName = GenerateRandomRoomName();
+
+        string roomName;
+
+        if (inRoomName != string.Empty)
+            roomName = inRoomName;
+        else
+            roomName = GenerateRandomRoomName();
         
         PhotonNetwork.JoinOrCreateRoom(roomName, options, TypedLobby.Default);
     }
@@ -94,7 +100,7 @@ public class HeadlessHost : MonoBehaviourPunCallbacks
         if(bDebugMode)
             Debug.LogWarning($"Falha ao entrar na sala '{this.roomName}': {message}. Criando uma nova.");
     
-        CreateRoom();
+        CreateRoom(roomName);
     }
 
     private string GenerateRandomRoomName()

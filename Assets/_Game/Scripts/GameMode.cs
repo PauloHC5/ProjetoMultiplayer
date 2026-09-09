@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using _Game.Scripts.SpaceInvaders;
 using Photon.Pun;
 using Photon.Realtime;
 using UnityEngine;
@@ -13,6 +14,7 @@ namespace _Game.Scripts
         [Header("Game Mode")]
         [SerializeField] private int startGameDelay = 3;
         [SerializeField] private int startingLives = 3;
+        [SerializeField] private PlayerController playerControllerPrefab;
         [SerializeField] private Player[] playerPrefabs = new Player[3];
         [SerializeField] private Invaders invadersPrefab;
         
@@ -23,8 +25,10 @@ namespace _Game.Scripts
         private int _currentLives;
         private Invaders _invaders;
         private int _currentScore;
-        private bool _bGameStarted = false;
-        
+        private bool _bGameStarted = false;        
+        private Stack<Player> _playersPrefabsAvailable;        
+        private Stack<Player> _playersPrefabsUsed;        
+
         private readonly Vector3 _playerSpawnPosition = new Vector3(0, -13f, 0);
         
         public int StartingLives => startingLives;
@@ -38,6 +42,14 @@ namespace _Game.Scripts
         protected override void Awake()
         {
             base.Awake();
+
+            _playersPrefabsAvailable = new Stack<Player>();
+            for (int i = playerPrefabs.Length - 1; i >= 0; i--)
+            {
+                _playersPrefabsAvailable.Push(playerPrefabs[i]);
+            }
+
+            _playersPrefabsUsed = new Stack<Player>();
         }
 
         private void Start()
@@ -56,11 +68,38 @@ namespace _Game.Scripts
             base.OnJoinedRoom();
             
             if(bDebugMode)
-                Debug.LogWarning("GameMode.OnJoinedRoom");
+                Debug.Log("GameMode.OnJoinedRoom: Joined room " + PhotonNetwork.CurrentRoom.Name);
+
+            var playerNickname = PhotonNetwork.NickName;            
+
+            var playerController = Instantiate(playerControllerPrefab, Vector3.zero, Quaternion.identity);
+
+            playerController.name = "PlayerController_" + playerNickname;
+
+            var playerSpawned = SpawnPlayer(playerController);   
             
-            var playersInRoom = PhotonNetwork.CurrentRoom.Players.Count;
-            
-            PhotonNetwork.Instantiate(playerPrefabs[playersInRoom - 1].name, _playerSpawnPosition, Quaternion.identity);
+            Debug.Log(_playersPrefabsAvailable.Count);
+        }
+
+        private Player SpawnPlayer(PlayerController playerController)
+        {
+            var availablePlayerPrefab = _playersPrefabsAvailable.Pop();
+
+            _playersPrefabsUsed.Push(availablePlayerPrefab);
+
+            var Player = PhotonNetwork.Instantiate(availablePlayerPrefab.name, _playerSpawnPosition, Quaternion.identity).GetComponent<Player>();            
+
+            playerController.Possess(Player);
+
+            if (bDebugMode)
+                Debug.Log("Spawned Player Character and for:" + playerController.name);
+
+            return Player;
+        }
+
+        public override void OnPlayerLeftRoom(Photon.Realtime.Player otherPlayer)
+        {  
+            _playersPrefabsAvailable.Push(_playersPrefabsUsed.Pop());
         }
         
         private IEnumerator StartGameCooldown()

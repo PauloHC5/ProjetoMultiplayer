@@ -5,35 +5,68 @@ using UnityEngine.InputSystem;
 
 namespace _Game.Scripts.SpaceInvaders
 {
-    [RequireComponent(typeof(PhotonView))]
-    public class PlayerController : MonoBehaviourPun
+    public class PlayerController : MonoBehaviour
     {
-        [HideInInspector]
-        public Player PossessedPlayer;
+        // Every client finds its own controller this way - since this class
+        // never exists on remote machines, there's no risk of pointing at
+        // someone else's controller.
+        public static PlayerController Local { get; private set; }
+
+        private Player _possessedPlayer;
+
+        public bool HasPossessedPlayer => _possessedPlayer != null;
+
+        private void Awake()
+        {
+            Local = this;
+        }
+
+        private void OnDestroy()
+        {
+            if (Local == this)
+            {
+                Local = null;
+            }
+        }
+
+        public void Possess(Player player)
+        {
+            _possessedPlayer = player;
+        }
+
+        public void UnPossess()
+        {
+            _possessedPlayer = null;
+        }
 
         private void Update()
         {
-            if(!photonView.IsMine || PossessedPlayer == null)
-                return;
-            
-            if (Keyboard.current.spaceKey.wasPressedThisFrame || Mouse.current.leftButton.wasPressedThisFrame)
+            if (_possessedPlayer != null)
             {
-                PossessedPlayer.TryShoot();
+                if (Keyboard.current.spaceKey.wasPressedThisFrame || Mouse.current.leftButton.wasPressedThisFrame)
+                {
+                    _possessedPlayer.TryShoot();
+                }
+            }
+            else
+            {
+                // TODO: menu/spectator input (e.g. navigate options, cycle
+                // between teammates' cameras) goes here instead.
             }
         }
-        
+
         private void FixedUpdate()
         {
-            if (!photonView.IsMine) return;
- 
+            if (_possessedPlayer == null) return;
+
             Vector2 direction = Vector2.zero;
- 
+
             if (Keyboard.current.aKey.isPressed || Keyboard.current.leftArrowKey.isPressed)
                 direction = Vector2.left;
             else if (Keyboard.current.dKey.isPressed || Keyboard.current.rightArrowKey.isPressed)
                 direction = Vector2.right;
- 
-            PossessedPlayer.Move(direction);
+            
+            _possessedPlayer.Move(direction);
         }
     }
 }
