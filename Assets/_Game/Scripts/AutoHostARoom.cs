@@ -6,7 +6,7 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 using Random = UnityEngine.Random;
 
-public class HeadlessHost : MonoBehaviourPunCallbacks
+public class AutoHostARoom : MonoBehaviourPunCallbacks
 {
     public string roomName;
     public int roomMaxPlayers = 0;
@@ -16,20 +16,19 @@ public class HeadlessHost : MonoBehaviourPunCallbacks
     
     void Awake()
     {
+        if (PhotonNetwork.IsConnected)
+        {
+            if(bDebugMode)
+                Debug.Log("Already connected to Photon server as " + PhotonNetwork.NickName  +". Interrupting auto-hosting.");
+            return;
+        }
+        
         PhotonNetwork.AutomaticallySyncScene = true;
         
-        if(!PhotonNetwork.IsConnected)
-        {
-            PhotonNetwork.NickName = "TestPlayer_" + Random.Range(1000, 9999);
-            if(bDebugMode)
-                Debug.Log("Connecting to Photon server as " + PhotonNetwork.NickName);
-            PhotonNetwork.ConnectUsingSettings();
-        }
-        else
-        {
-            if(bDebugMode)
-                Debug.Log("Already connected to Photon server as " + PhotonNetwork.NickName);
-        }
+        PhotonNetwork.NickName = "TestPlayer_" + Random.Range(1000, 9999);
+        if(bDebugMode)
+            Debug.Log("Connecting to Photon server as " + PhotonNetwork.NickName);
+        PhotonNetwork.ConnectUsingSettings();
     }
 
     private void Start()
@@ -99,8 +98,15 @@ public class HeadlessHost : MonoBehaviourPunCallbacks
     {
         if(bDebugMode)
             Debug.LogWarning($"Falha ao entrar na sala '{this.roomName}': {message}. Criando uma nova.");
-    
-        CreateRoom(roomName);
+
+        if (message == "Game full")
+        {
+            CreateRoom();
+        }
+        else
+        {
+            CreateRoom(roomName);
+        }
     }
 
     private string GenerateRandomRoomName()

@@ -12,9 +12,9 @@ namespace _Game.Scripts.SpaceInvaders
         // someone else's controller.
         public static PlayerController Local { get; private set; }
 
-        private Player _possessedPlayer;
+        private PlayerCharacter _possessedPlayerCharacter;
 
-        public bool HasPossessedPlayer => _possessedPlayer != null;
+        public bool HasPossessedPlayer => _possessedPlayerCharacter != null;
 
         private void Awake()
         {
@@ -29,23 +29,23 @@ namespace _Game.Scripts.SpaceInvaders
             }
         }
 
-        public void Possess(Player player)
+        public void Possess(PlayerCharacter playerCharacter)
         {
-            _possessedPlayer = player;
+            _possessedPlayerCharacter = playerCharacter;
         }
 
         public void UnPossess()
         {
-            _possessedPlayer = null;
+            _possessedPlayerCharacter = null;
         }
 
         private void Update()
         {
-            if (_possessedPlayer != null)
+            if (_possessedPlayerCharacter != null)
             {
                 if (Keyboard.current.spaceKey.wasPressedThisFrame || Mouse.current.leftButton.wasPressedThisFrame)
                 {
-                    _possessedPlayer.TryShoot();
+                    _possessedPlayerCharacter.TryShoot();
                 }
             }
             else
@@ -57,7 +57,7 @@ namespace _Game.Scripts.SpaceInvaders
 
         private void FixedUpdate()
         {
-            if (_possessedPlayer == null) return;
+            if (_possessedPlayerCharacter == null) return;
 
             Vector2 direction = Vector2.zero;
 
@@ -66,7 +66,7 @@ namespace _Game.Scripts.SpaceInvaders
             else if (Keyboard.current.dKey.isPressed || Keyboard.current.rightArrowKey.isPressed)
                 direction = Vector2.right;
             
-            _possessedPlayer.Move(direction);
+            _possessedPlayerCharacter.Move(direction);
         }
     }
 }

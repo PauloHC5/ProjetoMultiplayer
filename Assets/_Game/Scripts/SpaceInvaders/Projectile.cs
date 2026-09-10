@@ -3,13 +3,20 @@ using System;
 using UnityEngine;
 
 [RequireComponent(typeof(PhotonView))]
-public class Projectile : MonoBehaviour
+public class Projectile : MonoBehaviourPun
 {
     public Vector3 direction;
     
     public float speed;
 
     public Action destroyed;
+    
+    public SpriteRenderer SpriteRenderer { get; private set; }
+
+    private void Awake()
+    {
+        SpriteRenderer = GetComponent<SpriteRenderer>();
+    }
 
     private void FixedUpdate()
     {
@@ -18,7 +25,9 @@ public class Projectile : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D other)
     {
+        if(!photonView.IsMine) return;
+        
         destroyed?.Invoke();
-        Destroy(this.gameObject);
+        PhotonNetwork.Destroy(this.gameObject);
     }
 }

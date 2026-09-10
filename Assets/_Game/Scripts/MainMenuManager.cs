@@ -11,6 +11,8 @@ public class MainMenuManager : MonoBehaviourPunCallbacks
     public UI_Lobby lobby;
 
     public const int MaxNickNameLength = 18;
+    public const string RoomTestSceneName = "RoomTest";
+    public const string SpaceInvadersMultiplayerSceneName = "SpaceInvadersMultiplayer";
 
     private Dictionary<string, RoomInfo> _availableRooms = new Dictionary<string, RoomInfo>();
 
@@ -65,23 +67,30 @@ public class MainMenuManager : MonoBehaviourPunCallbacks
 
     public override void OnJoinedRoom()
     {
-        string roomSceneName = PhotonNetwork.CurrentRoom.CustomProperties.TryGetValue("sceneName", out object value) ? value.ToString() : null;
+        Debug.Log("MainMenuManager: Joined room " + PhotonNetwork.CurrentRoom.Name);
         
-        if(string.IsNullOrEmpty(roomSceneName))
+        string roomSceneName = PhotonNetwork.CurrentRoom.CustomProperties.TryGetValue("sceneName", out object value) ? value.ToString() : null;
+
+        LoadRoomScene(roomSceneName);
+    }
+    
+    private void LoadRoomScene(string sceneName)
+    {
+        if(string.IsNullOrEmpty(sceneName))
         {
-            Debug.LogError("Room does not have a valid scene name in its custom properties.");
+            Debug.LogWarning("Room scene name is not set in the room's custom properties. Cannot load the room scene.");
             return;
         }
         
-        if(SceneManager.GetActiveScene().name == roomSceneName) return;
-
+        if(SceneManager.GetActiveScene().name == sceneName) return;
+        
         if (PhotonNetwork.IsMasterClient)
         {
-            PhotonNetwork.LoadLevel(roomSceneName);
+            PhotonNetwork.LoadLevel(sceneName);
         }
         else
         {
-            Debug.Log("Joined as a non-master client. Waiting for the master client to load the scene.");
+            Debug.LogWarning("Only the master client can load the room scene.");
         }
     }
 
@@ -117,7 +126,7 @@ public class MainMenuManager : MonoBehaviourPunCallbacks
             IsOpen = true,
             CustomRoomProperties = new ExitGames.Client.Photon.Hashtable
             {
-                { "sceneName",  "RoomTest" }
+                { "sceneName",  SpaceInvadersMultiplayerSceneName }
             }
         };
 

@@ -319,7 +319,7 @@ MonoBehaviour:
   startGameDelay: 3
   startingLives: 3
   playerControllerPrefab: {fileID: 7145116076282536125, guid: b8ac1bb3e2e04e649afa5032e52a1b6f, type: 3}
-  playerPrefabs:
+  playerCharacterPrefabs:
   - {fileID: 4051483603578224192, guid: 1e3f0df2fdec36d4aab6f25c54807f18, type: 3}
   - {fileID: 4051483603578224192, guid: 0b77bcc530e612645bbd159a63f428e5, type: 3}
   - {fileID: 4051483603578224192, guid: 67beb969ec87d5046af57e5d9172d8b1, type: 3}
@@ -353,9 +353,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::HeadlessHost
   roomName: TestRoom
-  roomMaxPlayers: 2
+  roomMaxPlayers: 3
   chatUI: {fileID: 593721810}
-  bDebugMode: 1
+  bDebugMode: 0
 --- !u!114 &281756323
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -372,7 +372,7 @@ MonoBehaviour:
   Group: 0
   prefixField: -1
   Synchronization: 1
-  OwnershipTransfer: 0
+  OwnershipTransfer: 1
   observableSearch: 2
   ObservedComponents: []
   sceneViewId: 2
@@ -1131,6 +1131,10 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 519420031}
     - target: {fileID: 4113257420416600772, guid: 0fa3ad4ac70aebc4eabd30367dd13837, type: 3}
+      propertyPath: m_Enabled
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4113257420416600772, guid: 0fa3ad4ac70aebc4eabd30367dd13837, type: 3}
       propertyPath: m_RenderMode
       value: 1
       objectReference: {fileID: 0}
@@ -1157,6 +1161,18 @@ PrefabInstance:
     - target: {fileID: 7914125982042458128, guid: 0fa3ad4ac70aebc4eabd30367dd13837, type: 3}
       propertyPath: m_SizeDelta.y
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7914125982042458128, guid: 0fa3ad4ac70aebc4eabd30367dd13837, type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: -101205.71
+      objectReference: {fileID: 0}
+    - target: {fileID: 7914125982042458128, guid: 0fa3ad4ac70aebc4eabd30367dd13837, type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: -50704.363
+      objectReference: {fileID: 0}
+    - target: {fileID: 8516120554213083672, guid: 0fa3ad4ac70aebc4eabd30367dd13837, type: 3}
+      propertyPath: m_Enabled
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []

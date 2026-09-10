@@ -1,14 +1,20 @@
 using System;
 using System.Collections;
-using System.Collections.Generic;
-using _Game.Scripts;
 using Photon.Pun;
+using TMPro;
 using UnityEngine;
-using UnityEngine.InputSystem;
-using UnityEngine.SceneManagement;
 
-[RequireComponent(typeof(Player), typeof(PhotonView), typeof(Rigidbody2D))]
-public class Player : MonoBehaviourPun
+public enum PlayerType
+{
+    Player1,
+    Player2,
+    Player3
+}
+
+[RequireComponent(typeof(PhotonView))]
+[RequireComponent(typeof(Rigidbody2D))]
+[RequireComponent(typeof(PhotonRigidbody2DView))]
+public class PlayerCharacter : MonoBehaviourPun
 {
     [Header("Player Settings")]
     public Projectile laserPrefab;
@@ -22,6 +28,7 @@ public class Player : MonoBehaviourPun
     private bool _invincible;
     private SpriteRenderer _spriteRenderer;
     private Rigidbody2D _rigidbody2D;
+    private TextMeshProUGUI _playerNicknameText;
     
     public Action OnPlayerDestroyed;
 
@@ -29,6 +36,7 @@ public class Player : MonoBehaviourPun
     {
         _spriteRenderer = GetComponent<SpriteRenderer>();
         _rigidbody2D = GetComponent<Rigidbody2D>();
+        _playerNicknameText = GetComponentInChildren<TextMeshProUGUI>();
         
         // Only the owner needs a real physics simulation to get blocked by
         // walls/obstacles. Remote copies get their position overwritten by
@@ -42,7 +50,18 @@ public class Player : MonoBehaviourPun
 
     private void Start()
     {
-        StartCoroutine(Invincible());
+        if (!photonView.IsMine) return;
+        
+        photonView.RPC(nameof(RpcInvincible), RpcTarget.All);
+        
+        photonView.RPC(nameof(RpcSetNickname), RpcTarget.AllBuffered, PhotonNetwork.NickName);
+    }
+    
+    [PunRPC]
+    private void RpcSetNickname(string nickname)
+    {
+        _playerNicknameText.text = nickname;
+        _playerNicknameText.color = _spriteRenderer.color;
     }
 
     public void Move(Vector2 direction)
@@ -53,6 +72,8 @@ public class Player : MonoBehaviourPun
     
     public void TryShoot()
     {
+        if(!photonView.IsMine) return;
+        
         if (_laserActive) return;
  
         _laserActive = true;
@@ -61,6 +82,7 @@ public class Player : MonoBehaviourPun
         // the projectile to every client and assigns ownership to us.
         GameObject go = PhotonNetwork.Instantiate(laserPrefab.name, transform.position, Quaternion.identity);
         Projectile projectile = go.GetComponent<Projectile>();
+        projectile.SpriteRenderer.color = _spriteRenderer.color;
         projectile.destroyed += () => _laserActive = false;
  
         GameManager.Instance.AudioManager.PlaySfx(shootSfx);
@@ -93,6 +115,13 @@ public class Player : MonoBehaviourPun
             PhotonNetwork.Destroy(gameObject);
         }
     }
+
+    [PunRPC]
+    private void RpcInvincible()
+    {
+        StartCoroutine(Invincible());
+    }
+    
     
     private IEnumerator Invincible()
     {
