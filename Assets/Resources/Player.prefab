@@ -264,7 +264,7 @@ BoxCollider2D:
   m_CallbackLayers:
     serializedVersion: 2
     m_Bits: 4294967295
-  m_IsTrigger: 1
+  m_IsTrigger: 0
   m_UsedByEffector: 0
   m_CompositeOperation: 0
   m_CompositeOrder: 0
@@ -360,7 +360,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: PhotonUnityNetworking::Photon.Pun.PhotonRigidbody2DView
   m_SynchronizeVelocity: 1
   m_SynchronizeAngularVelocity: 0
-  m_TeleportEnabled: 0
+  m_TeleportEnabled: 1
   m_TeleportIfDistanceGreaterThan: 3
 --- !u!1 &8672670351422875805
 GameObject:

@@ -45,6 +45,8 @@ MonoBehaviour:
   - RpcRequestPlayerCharacter
   - RpcSpawnPlayerCharacter
   - RpcSetNickname
+  - RpcShoot
+  - RpcRequestPlayerType
   DisableAutoOpenWizard: 1
   ShowSettings: 1
   DevRegionSetOnce: 0

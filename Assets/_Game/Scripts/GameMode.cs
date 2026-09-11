@@ -7,8 +7,16 @@ using Photon.Realtime;
 using UnityEngine;
 using Hashtable = ExitGames.Client.Photon.Hashtable;
 
+public enum PlayerTypes
+{
+    Player1,
+    Player2,
+    Player3
+}
+
 namespace _Game.Scripts
 {
+    [RequireComponent(typeof(PhotonView))]
     public class GameMode : SceneSingleton<GameMode>
     {
         [Header("Game Mode")]
@@ -21,15 +29,16 @@ namespace _Game.Scripts
         [Header("Debug")]
         public bool bDebugMode = false;
         
+        private PhotonView _photonView;
         private int _gameCountdown;
         private int _currentLives;
         private Invaders _invaders;
         private int _currentScore;
         private bool _bGameStarted = false;        
+        private Dictionary<PlayerType, PlayerCharacter> _playerCharacters = new Dictionary<PlayerType, PlayerCharacter>();
 
         private readonly Vector3 _playerSpawnPosition = new Vector3(0, -13f, 0);
-        private const string AvailablePlayerCharacterPrefabsKey = "AvailablePlayerCharacterPrefabs";
-        private const string PlayerCharacterPrefabIndexKey = "PlayerPrefabIndex";
+        private const string PlayerTypeKey = "AvailablePlayerTypes";
         
         public int StartingLives => startingLives;
         public int StartGameDelay => startGameDelay;
@@ -38,10 +47,25 @@ namespace _Game.Scripts
         public static Action<int> OnLivesChanged;
         public static Action<int> OnInvaderKilled;
         public static Action<int> OnScoreChanged;
+        public static Action OnGameStarted;
+        public static Action OnGameEnded;
+        public static Action OnWaveCompleted;
+        public static Action<Player, PlayerCharacter> OnPlayerCharacterSpawned;
+        public static Action<Player> OnPlayerLeft;
+        public static Action RoomReady;
 
         protected override void Awake()
         {
             base.Awake();
+            
+            _photonView = GetComponent<PhotonView>();
+            
+            _playerCharacters = new Dictionary<PlayerType, PlayerCharacter>
+            {
+                { PlayerType.Player1, playerCharacterPrefabs[0] },
+                { PlayerType.Player2, playerCharacterPrefabs[1] },
+                { PlayerType.Player3, playerCharacterPrefabs[2] }
+            };
         }
 
         private void Start()
@@ -54,16 +78,22 @@ namespace _Game.Scripts
             
             OnInvaderKilled += AddPoints;
 
-            StartCoroutine(WaitForRoomThenSpawn());
+            StartCoroutine(WaitForRoomBeReady());
         }
 
-        private IEnumerator WaitForRoomThenSpawn()
+        private IEnumerator WaitForRoomBeReady()
         {
             yield return new WaitUntil(() => PhotonNetwork.InRoom);
+            
+            RoomReady?.Invoke();
     
             SpawnPlayerController();
-            photonView.RPC(nameof(RpcRequestPlayerCharacter), RpcTarget.MasterClient,
+            _photonView.RPC(nameof(RpcRequestPlayerType), RpcTarget.MasterClient,
                 PhotonNetwork.LocalPlayer.ActorNumber);
+            
+            if(!PhotonNetwork.IsMasterClient) yield break;
+            
+            StartCoroutine(StartGameCooldown());
         }
 
 
@@ -75,93 +105,73 @@ namespace _Game.Scripts
         }
         
         [PunRPC]
-        private void RpcRequestPlayerCharacter(int requestingActorNumber)
+        private void RpcRequestPlayerType(int requestingActorNumber)
         {
             if(!PhotonNetwork.IsMasterClient) return;
-
-            // Get the available player prefabs from the room custom properties
-            var availablePlayerCharacterPrefabs = GetAvailablePlayerCharacterPrefabs();
-            
-            // Find the first available player prefab index
-            int prefabToUseIndex = Array.IndexOf(availablePlayerCharacterPrefabs, true);
-            
-            if(prefabToUseIndex == -1)
-            {
-                Debug.LogError("No available player prefabs to spawn.");
-                return;
-            }
-            
-            availablePlayerCharacterPrefabs[prefabToUseIndex] = false; // Mark this prefab as unavailable for future players
-            PhotonNetwork.CurrentRoom.SetCustomProperties(new Hashtable { { AvailablePlayerCharacterPrefabsKey, availablePlayerCharacterPrefabs } });
             
             var requestingPlayer = PhotonNetwork.CurrentRoom.GetPlayer(requestingActorNumber);
-            requestingPlayer.SetCustomProperties(new Hashtable { { PlayerCharacterPrefabIndexKey, prefabToUseIndex } });
             
-            photonView.RPC(nameof(RpcSpawnPlayerCharacter), requestingPlayer, prefabToUseIndex);
+            var playerType = GetAvailablePlayerType(requestingPlayer);
+            
+            requestingPlayer.SetCustomProperties(new Hashtable { { PlayerTypeKey, playerType } });
+            
+            if(bDebugMode)
+                Debug.Log("GameMode.RpcRequestPlayerType: assigned 'PlayerType' " + playerType + " to player " + requestingPlayer.NickName);
+            
+            _photonView.RPC(nameof(RpcSpawnPlayerCharacter), requestingPlayer, playerType);
         }
 
-        private bool[] GetAvailablePlayerCharacterPrefabs()
+        private PlayerType GetAvailablePlayerType(Player requestingPlayer)
         {
-            // Check if the room custom properties contain the availablePlayerCharacterPrefabs key and get its value
-            if (PhotonNetwork.CurrentRoom.CustomProperties.TryGetValue(AvailablePlayerCharacterPrefabsKey, out var value))
-                return (bool[])value;
+            var playersInTheRoom = PhotonNetwork.CurrentRoom.PlayerCount;
             
-            // If the availablePlayerCharacterPrefabs is not set, initialize it with all prefabs available
-            var fresh = new bool[playerCharacterPrefabs.Length];
-            for (int i = 0; i < fresh.Length; i++) fresh[i] = true;
-            return fresh;
+            // If there is only one player in the room, assign PlayerType.Player1 to the requesting player
+            if(playersInTheRoom != 1)
+            {
+                List<PlayerType> availablePlayerTypes = new List<PlayerType>();
+                
+                foreach (var player in PhotonNetwork.CurrentRoom.Players)
+                {
+                    if(player.Value.ActorNumber == requestingPlayer.ActorNumber) continue;
+                    
+                    if(player.Value.CustomProperties.TryGetValue(PlayerTypeKey, out var index))
+                    {
+                        availablePlayerTypes.Add((PlayerType)index);
+                    }
+                    else
+                    {
+                        Debug.LogError("There is a player in the room without a PlayerType custom property. This should not happen." +
+                                       "\nPlayer: " + player.Value.NickName + " ActorNumber: " + player.Value.ActorNumber);
+                    }
+                }
+                
+                for (int i = 0; i < Enum.GetValues(typeof(PlayerType)).Length; i++)
+                {
+                    if (!availablePlayerTypes.Contains((PlayerType)i))
+                    {
+                        return (PlayerType)i;
+                    }
+                }
+            }
+
+            return PlayerType.Player1;
         }
 
         [PunRPC]
-        private void RpcSpawnPlayerCharacter(int prefabToUseIndex)
+        private void RpcSpawnPlayerCharacter(PlayerType playerType)
         {
             if(bDebugMode)
-                Debug.Log("GameMode.RpcSpawnPlayerCharacter: received index " + prefabToUseIndex);
+                Debug.Log("GameMode.RpcSpawnPlayerCharacter: received player type " + playerType + " for player " + PhotonNetwork.LocalPlayer.NickName);
             
-            var playerCharacter = PhotonNetwork.Instantiate(playerCharacterPrefabs[prefabToUseIndex].name, _playerSpawnPosition, Quaternion.identity).GetComponent<PlayerCharacter>();
+            var playerCharacter = PhotonNetwork.Instantiate(_playerCharacters[playerType].name, _playerSpawnPosition, Quaternion.identity).GetComponent<PlayerCharacter>();
             PlayerController.Local.Possess(playerCharacter);
+            
+            OnPlayerCharacterSpawned?.Invoke(PhotonNetwork.LocalPlayer, playerCharacter);
         }
 
         public override void OnPlayerLeftRoom(Player otherPlayer)
         {
-            if(!PhotonNetwork.IsMasterClient) return;
-
-            if (!otherPlayer.CustomProperties.TryGetValue(PlayerCharacterPrefabIndexKey, out var index)) return;
-            
-            var availablePlayerCharacterPrefabs = GetAvailablePlayerCharacterPrefabs();
-            
-            availablePlayerCharacterPrefabs[(int)index] = true;
-            PhotonNetwork.CurrentRoom.SetCustomProperties(new Hashtable { { AvailablePlayerCharacterPrefabsKey, availablePlayerCharacterPrefabs } });
-        }
-
-        public override void OnRoomPropertiesUpdate(Hashtable propertiesThatChanged)
-        {
-            DebugAvailablePlayerCharacterPrefabs();
-        }
-
-        private void DebugAvailablePlayerCharacterPrefabs()
-        {
-            if(!bDebugMode || !PhotonNetwork.IsMasterClient) return;
-
-            var availablePlayerCharacterPrefabs = GetAvailablePlayerCharacterPrefabs();
-            
-            if(availablePlayerCharacterPrefabs == null) return;
-            
-            string availablePrefabsString = "Available Player Prefabs: ";
-            
-            for (int i = 0; i < availablePlayerCharacterPrefabs.Length; i++)
-            {
-                if (availablePlayerCharacterPrefabs[i])
-                {
-                    availablePrefabsString += $"\n Player Character {i} Prefab is available. ";
-                }
-                else
-                {
-                    availablePrefabsString += $"\n Player Character {i} Prefab is NOT available. ";
-                }
-            }
-            
-            Debug.Log(availablePrefabsString);
+            OnPlayerLeft?.Invoke(otherPlayer);
         }
 
         private IEnumerator StartGameCooldown()
@@ -181,8 +191,10 @@ namespace _Game.Scripts
             if(bDebugMode)
                 Debug.Log("GameMode.StartGameCooldown: Game Started");
             
-            _invaders = Instantiate(invadersPrefab);
-            _invaders.OnInvadersDestroyed += WaveCompleted;
+            OnGameStarted?.Invoke();
+            
+            //_invaders = Instantiate(invadersPrefab);
+           // _invaders.OnInvadersDestroyed += WaveCompleted;
         }
         
         private void AddPoints(int points)

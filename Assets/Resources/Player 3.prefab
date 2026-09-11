@@ -72,6 +72,10 @@ PrefabInstance:
       propertyPath: m_WasSpriteAssigned
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 8806387911206087571, guid: d309fc0006846c549aeb75c69f86a298, type: 3}
+      propertyPath: laserPrefab
+      value: 
+      objectReference: {fileID: 8158047387858787813, guid: 0dbe12123b569ce43aeddd647c8548b4, type: 3}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []

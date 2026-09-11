@@ -2,20 +2,24 @@ using Photon.Pun;
 using System;
 using UnityEngine;
 
-[RequireComponent(typeof(PhotonView))]
 public class Projectile : MonoBehaviourPun
 {
     public Vector3 direction;
     
     public float speed;
 
-    public Action destroyed;
+    public Action Destroyed;
     
     public SpriteRenderer SpriteRenderer { get; private set; }
 
     private void Awake()
     {
         SpriteRenderer = GetComponent<SpriteRenderer>();
+    }
+
+    private void Start()
+    {
+        Invoke(nameof(DestroyProjectile), 3f);
     }
 
     private void FixedUpdate()
@@ -25,9 +29,17 @@ public class Projectile : MonoBehaviourPun
 
     private void OnTriggerEnter2D(Collider2D other)
     {
-        if(!photonView.IsMine) return;
-        
-        destroyed?.Invoke();
-        PhotonNetwork.Destroy(this.gameObject);
+        DestroyProjectile();
+    }
+
+    private void OnCollisionEnter2D(Collision2D other)
+    {
+        DestroyProjectile();
+    }
+
+    private void DestroyProjectile()
+    {
+        Destroyed?.Invoke();
+        Destroy(this.gameObject);
     }
 }

@@ -23,10 +23,11 @@ public class PlayerCharacter : MonoBehaviourPun
     [Header("Audio")]
     public AudioCue shootSfx;
     public AudioCue explosionSfx;
+    
+    public SpriteRenderer SpriteRenderer { get; private set; }
         
     private bool _laserActive;
     private bool _invincible;
-    private SpriteRenderer _spriteRenderer;
     private Rigidbody2D _rigidbody2D;
     private TextMeshProUGUI _playerNicknameText;
     
@@ -34,7 +35,7 @@ public class PlayerCharacter : MonoBehaviourPun
 
     private void Awake()
     {
-        _spriteRenderer = GetComponent<SpriteRenderer>();
+        SpriteRenderer = GetComponent<SpriteRenderer>();
         _rigidbody2D = GetComponent<Rigidbody2D>();
         _playerNicknameText = GetComponentInChildren<TextMeshProUGUI>();
         
@@ -61,7 +62,7 @@ public class PlayerCharacter : MonoBehaviourPun
     private void RpcSetNickname(string nickname)
     {
         _playerNicknameText.text = nickname;
-        _playerNicknameText.color = _spriteRenderer.color;
+        _playerNicknameText.color = SpriteRenderer.color;
     }
 
     public void Move(Vector2 direction)
@@ -78,14 +79,20 @@ public class PlayerCharacter : MonoBehaviourPun
  
         _laserActive = true;
  
-        // Called only on the owner. PhotonNetwork.Instantiate replicates
-        // the projectile to every client and assigns ownership to us.
-        GameObject go = PhotonNetwork.Instantiate(laserPrefab.name, transform.position, Quaternion.identity);
-        Projectile projectile = go.GetComponent<Projectile>();
-        projectile.SpriteRenderer.color = _spriteRenderer.color;
-        projectile.destroyed += () => _laserActive = false;
+        photonView.RPC(nameof(RpcShoot), RpcTarget.All);
  
         GameManager.Instance.AudioManager.PlaySfx(shootSfx);
+    }
+    
+    [PunRPC]
+    private void RpcShoot(PhotonMessageInfo info)
+    {
+        float lag = (float)(PhotonNetwork.Time - info.SentServerTime);
+        
+        var positionToSpawn = transform.position + (Vector3)(Vector2.up * lag);
+        
+        Projectile laser = Instantiate(laserPrefab, positionToSpawn, Quaternion.identity);
+        laser.Destroyed += () => _laserActive = false;
     }
 
     private void OnTriggerEnter2D(Collider2D other)
@@ -134,13 +141,13 @@ public class PlayerCharacter : MonoBehaviourPun
         while (elapsedTime < invincibleTime)
         {
             isVisible = !isVisible;
-            _spriteRenderer.enabled = isVisible;
+            SpriteRenderer.enabled = isVisible;
 
             yield return new WaitForSeconds(0.2f);
             elapsedTime += 0.2f;
         }
 
-        _spriteRenderer.enabled = true;
+        SpriteRenderer.enabled = true;
         _invincible = false;
     }
     
