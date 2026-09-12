@@ -47,6 +47,8 @@ MonoBehaviour:
   - RpcSetNickname
   - RpcShoot
   - RpcRequestPlayerType
+  - RpcRegisterPlayer
+  - RpcReplicateGameCooldown
   DisableAutoOpenWizard: 1
   ShowSettings: 1
   DevRegionSetOnce: 0

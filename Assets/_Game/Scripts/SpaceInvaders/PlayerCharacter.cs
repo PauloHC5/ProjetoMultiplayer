@@ -3,6 +3,7 @@ using System.Collections;
 using Photon.Pun;
 using TMPro;
 using UnityEngine;
+using UnityEngine.InputSystem;
 
 public enum PlayerType
 {
@@ -57,7 +58,16 @@ public class PlayerCharacter : MonoBehaviourPun
         
         photonView.RPC(nameof(RpcSetNickname), RpcTarget.AllBuffered, PhotonNetwork.NickName);
     }
-    
+
+    private void Update()
+    {
+        if (!photonView.IsMine) return;
+        
+        if(Keyboard.current.fKey.wasPressedThisFrame)
+            photonView.RPC(nameof(RpcExplode), RpcTarget.All);
+
+    }
+
     [PunRPC]
     private void RpcSetNickname(string nickname)
     {
@@ -100,13 +110,10 @@ public class PlayerCharacter : MonoBehaviourPun
         if(!photonView.IsMine) return;
         
         if (_invincible) return;
-        
-        // Every client's physics evaluates this trigger for every Player
-        // instance in the scene. Without this guard, all 3 clients would
-        // each try to resolve this player's death independently.
+                
         if(other.gameObject.layer == LayerMask.NameToLayer("Missile") || other.gameObject.layer == LayerMask.NameToLayer("Invader"))
         {
-            photonView.RPC(nameof(RpcExplode), RpcTarget.All);
+           photonView.RPC(nameof(RpcExplode), RpcTarget.All);
         }
     }
 

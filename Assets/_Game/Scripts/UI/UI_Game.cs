@@ -1,11 +1,8 @@
-using System;
 using System.Collections.Generic;
 using _Game.Scripts;
-using Photon.Pun;
 using Photon.Realtime;
 using TMPro;
 using UnityEngine;
-using UnityEngine.InputSystem;
 using UnityEngine.UI;
 
 public struct PlayerUIStatus
@@ -23,24 +20,24 @@ public class UI_Game : MonoBehaviour
     public GameObject playerStatusPrefab;
     public GameObject statusBarUI;
     public TextMeshProUGUI gameCountdownText;
-    
-    private readonly Dictionary<int, PlayerUIStatus> _plauerUIStatus = new Dictionary<int, PlayerUIStatus>();
-    
+
+    private PlayerUIStatus _localPlayerStatus;
+
     private const string PlayerNicknameTextComponentName = "Player Nickname Text (TMP)";
     private const string ScoreCounterTextComponentName = "Score Counter Text (TMP)";
     private const string LivesCounterTextComponentName = "Lives Counter Text (TMP)";
 
     private void Awake()
     {
-        //livesCounterText.text = GameMode.Instance.StartingLives.ToString();
-        //scoreCounterText.text = "0";
-    }
-
-    private void Start()
-    {
-        //gameCountdownText.text = GameMode.Instance.StartGameDelay.ToString();
-        //livesCounterText.text = GameMode.Instance.StartingLives.ToString();
-    }
+        _localPlayerStatus = new PlayerUIStatus
+        {
+            gameObject = null,
+            PlayerIcon = null,
+            PlayerNicknameText = null,
+            ScoreCounterText = null,
+            LivesCounterText = null
+        };        
+    }    
     
     private void OnGameCountdownChanged(int countdown)
     {
@@ -50,6 +47,9 @@ public class UI_Game : MonoBehaviour
         {
             gameCountdownText.text = "GO!";
         }
+
+
+        gameCountdownText.enabled = countdown >= 0;
     }
 
     private void UpdateScore(int points)
@@ -60,25 +60,17 @@ public class UI_Game : MonoBehaviour
     private void OnLivesChanged(int lives)
     {
         if(lives <= 0)
-        {
-            //livesCounterText.text = "0";
+        {            
+            _localPlayerStatus.LivesCounterText.text = "0";
             return;
         }
-        //livesCounterText.text = lives.ToString();
-    }
-    
-    private void OnPlayerLeft(Player player)
-    {
-        if (!_plauerUIStatus.ContainsKey(player.ActorNumber))
-            return;
-
-        var playerStatusText = _plauerUIStatus[player.ActorNumber];
-        Destroy(playerStatusText.gameObject);
-        _plauerUIStatus.Remove(player.ActorNumber);
-    }
+        _localPlayerStatus.LivesCounterText.text = lives.ToString();
+    }        
 
     private void SpawnPlayerStatusUI(Player player, PlayerCharacter playerCharacter)
     {
+        if (_localPlayerStatus.gameObject != null) return;
+
         GameObject playerStatusGO = Instantiate(playerStatusPrefab, Vector3.zero, Quaternion.identity);
         
         if(playerStatusGO == null)
@@ -113,7 +105,7 @@ public class UI_Game : MonoBehaviour
         playerStatus.LivesCounterText.text = GameMode.Instance.StartingLives.ToString();
         playerStatus.LivesCounterText.color = playerColor;
 
-        _plauerUIStatus.Add(player.ActorNumber, playerStatus);
+        _localPlayerStatus = playerStatus;
     }
 
     private void OnEnable()
@@ -122,7 +114,7 @@ public class UI_Game : MonoBehaviour
         GameMode.OnGameCooldownChanged += OnGameCountdownChanged;
         GameMode.OnScoreChanged += UpdateScore;
         GameMode.OnPlayerCharacterSpawned += SpawnPlayerStatusUI;
-        GameMode.OnPlayerLeft += OnPlayerLeft;
+        GameMode.OnGameStarted += () => { gameCountdownText.enabled = false; };
     }
 
     private void OnDisable()
@@ -131,6 +123,6 @@ public class UI_Game : MonoBehaviour
         GameMode.OnGameCooldownChanged -= OnGameCountdownChanged;
         GameMode.OnLivesChanged -= OnLivesChanged;
         GameMode.OnPlayerCharacterSpawned -= SpawnPlayerStatusUI;
-        GameMode.OnPlayerLeft -= OnPlayerLeft;
+        GameMode.OnGameStarted -= () => { gameCountdownText.enabled = false; };
     }
 }

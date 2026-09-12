@@ -1165,11 +1165,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7914125982042458128, guid: 0fa3ad4ac70aebc4eabd30367dd13837, type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: -290735.12
+      value: -363794.1
       objectReference: {fileID: 0}
     - target: {fileID: 7914125982042458128, guid: 0fa3ad4ac70aebc4eabd30367dd13837, type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: -144417.83
+      value: -179336.84
       objectReference: {fileID: 0}
     - target: {fileID: 8516120554213083672, guid: 0fa3ad4ac70aebc4eabd30367dd13837, type: 3}
       propertyPath: m_Enabled
@@ -1555,11 +1555,11 @@ RectTransform:
   m_Children: []
   m_Father: {fileID: 345395259}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0.5, y: 0.5}
-  m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0, y: 288.6}
-  m_SizeDelta: {x: 381.65, y: 50}
-  m_Pivot: {x: 0.5, y: 0.5}
+  m_AnchorMin: {x: 1, y: 1}
+  m_AnchorMax: {x: 1, y: 1}
+  m_AnchoredPosition: {x: -40, y: -22.054993}
+  m_SizeDelta: {x: 381.65002, y: 50}
+  m_Pivot: {x: 1, y: 1}
 --- !u!114 &1708115333
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1614,7 +1614,7 @@ MonoBehaviour:
   m_fontSizeMin: 18
   m_fontSizeMax: 72
   m_fontStyle: 0
-  m_HorizontalAlignment: 2
+  m_HorizontalAlignment: 4
   m_VerticalAlignment: 512
   m_textAlignment: 65535
   m_characterSpacing: 0
@@ -1883,7 +1883,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: "Wainting \nfor players"
+  m_text: 3
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: c6c0a65388fd02e448988d1ce6f2fd00, type: 2}
   m_sharedMaterial: {fileID: -5060138518038165327, guid: c6c0a65388fd02e448988d1ce6f2fd00, type: 2}
