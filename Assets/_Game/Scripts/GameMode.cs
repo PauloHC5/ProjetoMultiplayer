@@ -33,20 +33,21 @@ namespace _Game.Scripts
         private int _gameCountdown;
         private int _currentLives;
         private Invaders _invaders;
-        private int _currentScore;
         private bool _bGameStarted = false;        
         private Dictionary<PlayerType, PlayerCharacter> _playerCharacters = new Dictionary<PlayerType, PlayerCharacter>();
 
         private readonly Vector3 _playerSpawnPosition = new Vector3(0, -13f, 0);
-        private const string PlayerTypeKey = "AvailablePlayerTypes";
+        
+        public const string PlayerTypeKey = "AvailablePlayerTypes";
+        public const string PlayerScoreKey = "PlayerScore";
         
         public int StartingLives => startingLives;
         public int StartGameDelay => startGameDelay;
         
         public static Action<int> OnGameCooldownChanged;
         public static Action<int> OnLivesChanged;
-        public static Action<int> OnInvaderKilled;
-        public static Action<int> OnScoreChanged;
+        public static Action<int, int> OnInvaderKilled;
+        public static Action OnScoreChanged;
         public static Action OnGameStarted;
         public static Action OnGameEnded;
         public static Action OnWaveCompleted;
@@ -75,7 +76,7 @@ namespace _Game.Scripts
             
             _currentLives = startingLives;            
             
-            OnInvaderKilled += AddPoints;
+            OnInvaderKilled += InvaderKilled;
 
             StartCoroutine(WaitForRoomBeReady());
         }
@@ -113,6 +114,7 @@ namespace _Game.Scripts
             var playerType = GetAvailablePlayerType(requestingPlayer);
             
             requestingPlayer.SetCustomProperties(new Hashtable { { PlayerTypeKey, playerType } });
+            requestingPlayer.SetCustomProperties(new Hashtable { { PlayerScoreKey, 0 } });
             
             if(bDebugMode)
                 Debug.Log("GameMode.RpcRegisterPlayer: assigned 'PlayerType' " + playerType + " to player " + requestingPlayer.NickName);
@@ -192,8 +194,17 @@ namespace _Game.Scripts
                 yield return new WaitForSeconds(1.0f);
             }
 
-            _invaders = PhotonNetwork.Instantiate(invadersPrefab.name, invadersPrefab.transform.position, Quaternion.identity).GetComponent<Invaders>();
-            // _invaders.OnInvadersDestroyed += WaveCompleted;
+            _invaders = PhotonNetwork.InstantiateRoomObject(invadersPrefab.name, invadersPrefab.transform.position, Quaternion.identity).GetComponent<Invaders>();
+            _photonView.RPC(nameof(RpcSubscribeToWaveCompleted), RpcTarget.AllBuffered);
+        }
+        
+        [PunRPC]
+        private void RpcSubscribeToWaveCompleted()
+        {
+            if(!_invaders)
+                _invaders = FindAnyObjectByType<Invaders>();
+            
+            _invaders.OnInvadersDestroyed += WaveCompleted;
         }
 
         [PunRPC]
@@ -219,16 +230,42 @@ namespace _Game.Scripts
             
         }
         
-        private void AddPoints(int points)
+        private void InvaderKilled(int playerID, int points)
         {
-            _currentScore += points;
-            OnScoreChanged?.Invoke(_currentScore);
+            if(!PhotonNetwork.IsMasterClient) return;
+            
+            Debug.Log($"GameMode.InvaderKilled: Player {playerID} killed an invader for {points} points");
+            
+            Player player = PhotonNetwork.CurrentRoom.GetPlayer(playerID);
+            if (player == null) return;
+            
+            if (player.CustomProperties.TryGetValue(PlayerScoreKey, out var index))
+            {
+                int currentScore = (int)index;
+                currentScore += points;
+                player.SetCustomProperties(new Hashtable() { { PlayerScoreKey, currentScore } });
+            }
+            else
+            {
+                Debug.LogError("GameMode.InvaderKilled: Player " + player.NickName + " does not have a PlayerScore custom property. This should not happen.");
+            }
         }
-        
+
+        public override void OnPlayerPropertiesUpdate(Player targetPlayer, Hashtable changedProps)
+        {
+            // if the changed property is the PlayerScoreKey, invoke the OnScoreChanged event
+            if (changedProps.ContainsKey(PlayerScoreKey))
+            {
+                OnScoreChanged?.Invoke();
+            }
+        }
+
         private void WaveCompleted()
         {
             if(bDebugMode)
                 Debug.Log("GameMode.WaveCompleted");
+            
+            if(!PhotonNetwork.IsMasterClient) return;
             
             _invaders.OnInvadersDestroyed -= WaveCompleted;
             

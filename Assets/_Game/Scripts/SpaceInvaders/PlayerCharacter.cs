@@ -99,10 +99,14 @@ public class PlayerCharacter : MonoBehaviourPun
     {
         float lag = (float)(PhotonNetwork.Time - info.SentServerTime);
         
-        var positionToSpawn = transform.position + (Vector3)(Vector2.up * lag);
-        
-        Projectile laser = Instantiate(laserPrefab, positionToSpawn, Quaternion.identity);
+        //var positionToSpawn = transform.position + (Vector3)(Vector2.up * lag);
+        Vector3 fixedPositionToSpawn = Vector3.zero;
+        fixedPositionToSpawn.x = transform.position.x + (Vector2.right * lag).x;
+        fixedPositionToSpawn.y = transform.position.y + (Vector2.right * lag).y;
+
+        Projectile laser = Instantiate(laserPrefab, fixedPositionToSpawn, Quaternion.identity);
         laser.Destroyed += () => _laserActive = false;
+        laser.Init(photonView.OwnerActorNr, photonView.IsMine);
     }
 
     private void OnTriggerEnter2D(Collider2D other)
@@ -135,7 +139,6 @@ public class PlayerCharacter : MonoBehaviourPun
     {
         StartCoroutine(Invincible());
     }
-    
     
     private IEnumerator Invincible()
     {

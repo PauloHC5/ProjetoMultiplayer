@@ -2,11 +2,14 @@ using Photon.Pun;
 using System;
 using UnityEngine;
 
-public class Projectile : MonoBehaviourPun
+public class Projectile : MonoBehaviour
 {
+    [Header("Projectile Settings")]
     public Vector3 direction;
-    
     public float speed;
+
+    public bool IsLocalProjectile { get; private set; }
+    public int InstigatorPlayerId { get; private set; }
 
     public Action Destroyed;
     
@@ -15,6 +18,12 @@ public class Projectile : MonoBehaviourPun
     private void Awake()
     {
         SpriteRenderer = GetComponent<SpriteRenderer>();
+    }
+
+    public void Init(int instigatorPlayerId, bool isLocalProjectile)
+    {
+        InstigatorPlayerId = instigatorPlayerId;
+        IsLocalProjectile = isLocalProjectile;
     }
 
     private void Start()
@@ -37,7 +46,7 @@ public class Projectile : MonoBehaviourPun
         DestroyProjectile();
     }
 
-    private void DestroyProjectile()
+    public void DestroyProjectile()
     {
         Destroyed?.Invoke();
         Destroy(this.gameObject);

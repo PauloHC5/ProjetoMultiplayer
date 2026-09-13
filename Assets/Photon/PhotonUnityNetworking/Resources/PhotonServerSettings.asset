@@ -49,6 +49,11 @@ MonoBehaviour:
   - RpcRequestPlayerType
   - RpcRegisterPlayer
   - RpcReplicateGameCooldown
+  - AdvanceRow
+  - RpcConfirmKill
+  - RpcRequestKill
+  - MissileAttack
+  - RpcSubscribeToWaveCompleted
   DisableAutoOpenWizard: 1
   ShowSettings: 1
   DevRegionSetOnce: 0

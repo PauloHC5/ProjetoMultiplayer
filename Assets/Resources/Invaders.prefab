@@ -59,27 +59,32 @@ MonoBehaviour:
     m_Curve:
     - serializedVersion: 3
       time: 0
-      value: 0.16741072
-      inSlope: 0.13703606
-      outSlope: 0.13703606
-      tangentMode: 0
+      value: 0.2
+      inSlope: 5.8
+      outSlope: 5.8
+      tangentMode: 34
       weightedMode: 0
       inWeight: 0
-      outWeight: 0.38002297
+      outWeight: 0.33333334
     - serializedVersion: 3
-      time: 0.99885195
-      value: 5.5703673
-      inSlope: 8.296445
-      outSlope: 8.296445
-      tangentMode: 0
+      time: 1
+      value: 6
+      inSlope: 5.8
+      outSlope: 5.8
+      tangentMode: 34
       weightedMode: 0
-      inWeight: 0.05396098
+      inWeight: 0.33333334
       outWeight: 0
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
   missileAttackRate: 1
   missilePrefab: {fileID: 1057425784480642454, guid: d198b54e17c98b444b89b16a77eadcf9, type: 3}
+  killedSfx: {fileID: 11400000, guid: f7b9e99808bb87147b11252c15101374, type: 2}
+  laserLayerMask:
+    serializedVersion: 2
+    m_Bits: 128
+  testMode: 0
 --- !u!114 &5313734984663642673
 MonoBehaviour:
   m_ObjectHideFlags: 0

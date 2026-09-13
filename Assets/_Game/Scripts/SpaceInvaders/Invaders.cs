@@ -1,5 +1,8 @@
 using System;
+using System.Collections;
+using System.Linq;
 using _Game.Scripts;
+using Photon.Pun;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -11,6 +14,15 @@ public class Invaders : MonoBehaviour
     public AnimationCurve speed;
     public float missileAttackRate = 1.0f;
     public Projectile missilePrefab;
+    public AudioCue killedSfx;
+    [SerializeField] private LayerMask laserLayerMask;
+    public bool testMode = false;
+    
+    private Vector3 _direction = Vector3.right;
+    private Camera _mainCamera;
+    private Invader[] _invaders;
+    private PhotonView _photonView;
+    private bool _bRequestedRowAdvance = false;
     
     public int AmountKilled { get; private set; }
     public int TotalInvaders => this.rows * this.columns;
@@ -19,12 +31,11 @@ public class Invaders : MonoBehaviour
     
     public Action OnInvadersDestroyed;
 
-    private Vector3 _direction = Vector3.right;
-    private Camera _mainCamera;
-
     private void Awake()
     {
         _mainCamera = Camera.main;
+        _invaders = new Invader[this.rows * this.columns];
+        _photonView = GetComponent<PhotonView>();
         
         for (int row = 0; row < this.rows; row++)
         {
@@ -39,79 +50,102 @@ public class Invaders : MonoBehaviour
                 Vector3 position = rowPosition;
                 position.x += col * 2.0f;
                 invader.transform.localPosition = position;
+                _invaders[row * this.columns + col] = invader;
+                invader.invaderIndex = row * this.columns + col;
             }
         }
     }
 
     private void Start()
     {
-        InvokeRepeating(nameof(MissileAttack), missileAttackRate, missileAttackRate);
+        InvokeRepeating(nameof(RequestMissileAttack), missileAttackRate, missileAttackRate);
+    }
+    
+    private void RequestMissileAttack()
+    {
+        if(!PhotonNetwork.IsMasterClient) return;
+        
+        int invaderIndex = UnityEngine.Random.Range(0, _invaders.Length);
+        
+        _photonView.RPC(nameof(MissileAttack), RpcTarget.All, invaderIndex);
     }
 
     private void FixedUpdate()  
     {
-        this.transform.position += _direction * (this.speed.Evaluate(PercertKilled) * Time.fixedDeltaTime);
-
-        Vector3 leftEdge = _mainCamera.ViewportToWorldPoint(Vector3.zero);
-        Vector3 rightEdge = _mainCamera.ViewportToWorldPoint(Vector3.right);
+        if(testMode) return;
         
-        foreach (Transform invader in this.transform)
-        {
-            if(!invader.gameObject.activeInHierarchy) continue;
-
-            if (_direction == Vector3.right && invader.position.x >= (rightEdge.x - 1.0f))
-            {
-                AdvanceRow();
-            }
-            else if (_direction == Vector3.left && invader.position.x <= (leftEdge.x + 1.0f))
-            {
-                AdvanceRow();
-            }
-                
-        }
+        transform.position += _direction * (speed.Evaluate(PercertKilled) * Time.fixedDeltaTime);
     }
     
-    private void InvaderKilled(int points)
+    public void ReplicateKill(int invaderIndex, int instigatorPlayerId)
     {
+        _photonView.RPC(nameof(RpcConfirmKill), RpcTarget.AllBuffered, invaderIndex, instigatorPlayerId);
+    }
+
+    [PunRPC]
+    private void RpcConfirmKill(int invaderIndex, int instigatorPlayerId, PhotonMessageInfo info)
+    {
+        GameMode.OnInvaderKilled?.Invoke(instigatorPlayerId, _invaders[invaderIndex].points);
+        
+        if (!info.Sender.IsLocal)
+        {
+            _invaders[invaderIndex].DeactivateDelay();
+        }
+        else
+        {
+            _invaders[invaderIndex].gameObject.SetActive(false);
+        }
+
         AmountKilled++;
         
         if(AmountKilled >= TotalInvaders)
         {
             OnInvadersDestroyed?.Invoke();
-            Destroy(this.gameObject);
+            Destroy(gameObject);
         }
+        
+        GameManager.Instance.AudioManager.PlaySfx(killedSfx);
     }
     
+    public void HitBoundaries()
+    {
+        if(!PhotonNetwork.IsMasterClient || _bRequestedRowAdvance) return;
+        
+        _bRequestedRowAdvance = true;
+        _photonView.RPC(nameof(AdvanceRow), RpcTarget.All);
+    }
+    
+    [PunRPC]
     private void AdvanceRow()
     {
+        // Reverse the direction of the invaders and move them down by 1 unit
         _direction.x *= -1.0f;
         
-        Vector3 position = this.transform.position;
-        position.y -= 1.0f;
-        this.transform.position = position;
+        Vector3 newPosition = transform.position;
+        
+        // Move the invaders down by 1 unit
+        newPosition.y -= 1.0f;
+        
+        transform.position = newPosition;
+        StartCoroutine(FinishRowAdvance());
     }
     
-    private void MissileAttack()
+    private IEnumerator FinishRowAdvance()
     {
-        foreach (Invader invader in this.GetComponentsInChildren<Invader>())
+        yield return new WaitForEndOfFrame();
+        _bRequestedRowAdvance = false;
+    }
+    
+    [PunRPC]
+    private void MissileAttack(int invaderIndex)
+    {
+        if(testMode) return;
+        
+        // Find all alive invaders
+        var selectedInvader = _invaders[invaderIndex];
+        if (selectedInvader != null && selectedInvader.gameObject.activeInHierarchy)
         {
-            if(!invader.gameObject.activeInHierarchy) continue;
-
-            if (UnityEngine.Random.value < (1f / (float)AmountAlive))
-            {
-                Instantiate(this.missilePrefab, invader.transform.position, Quaternion.identity);
-                break;
-            }
+            Instantiate(missilePrefab, selectedInvader.transform.position, Quaternion.identity);
         }
-    }
-
-    private void OnEnable()
-    {
-        GameMode.OnInvaderKilled += InvaderKilled;
-    }
-    
-    private void OnDisable()
-    {
-        GameMode.OnInvaderKilled -= InvaderKilled;
     }
 }

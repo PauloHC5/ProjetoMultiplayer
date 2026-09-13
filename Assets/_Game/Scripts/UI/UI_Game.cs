@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using _Game.Scripts;
+using Photon.Pun;
 using Photon.Realtime;
 using TMPro;
 using UnityEngine;
@@ -52,9 +53,15 @@ public class UI_Game : MonoBehaviour
         gameCountdownText.enabled = countdown >= 0;
     }
 
-    private void UpdateScore(int points)
+    private void UpdateScore()
     {
-        //scoreCounterText.text = points.ToString();
+        if(PhotonNetwork.LocalPlayer == null || _localPlayerStatus.ScoreCounterText == null) return;
+        
+        if(PhotonNetwork.LocalPlayer.CustomProperties.TryGetValue(GameMode.PlayerScoreKey, out var index))
+        {
+            int currentScore = (int)index;
+            _localPlayerStatus.ScoreCounterText.text = currentScore.ToString();
+        }
     }
     
     private void OnLivesChanged(int lives)
