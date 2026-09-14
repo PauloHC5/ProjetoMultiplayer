@@ -1,4 +1,5 @@
 using System.Collections;
+using _Game.Scripts;
 using UnityEngine;
 
 public class Invader : MonoBehaviour
@@ -15,6 +16,8 @@ public class Invader : MonoBehaviour
     
     private int _laserLayer;
     private int _defaultLayer;
+    
+    private const string InvadersLimitTag = "InvadersLimit";
     
     private void Awake()
     {

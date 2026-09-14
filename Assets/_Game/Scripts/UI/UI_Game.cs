@@ -21,6 +21,7 @@ public class UI_Game : MonoBehaviour
     public GameObject playerStatusPrefab;
     public GameObject statusBarUI;
     public TextMeshProUGUI gameCountdownText;
+    public GameObject gameOverUI;
 
     private PlayerUIStatus _localPlayerStatus;
 
@@ -114,6 +115,23 @@ public class UI_Game : MonoBehaviour
 
         _localPlayerStatus = playerStatus;
     }
+    
+    private void OnGameOver(int playerCharactersAlive)
+    {
+        gameCountdownText.enabled = false;
+        gameOverUI.SetActive(true);
+    }
+    
+    public void ReturnToMainMenu()
+    {
+        PhotonNetwork.Disconnect();
+        GameManager.LoadMainMenu();
+    }
+    
+    private void OnGameStarted()
+    {
+        gameCountdownText.enabled = false;
+    }
 
     private void OnEnable()
     {
@@ -121,7 +139,8 @@ public class UI_Game : MonoBehaviour
         GameMode.OnGameCooldownChanged += OnGameCountdownChanged;
         GameMode.OnScoreChanged += UpdateScore;
         GameMode.OnPlayerCharacterSpawned += SpawnPlayerStatusUI;
-        GameMode.OnGameStarted += () => { gameCountdownText.enabled = false; };
+        GameMode.GameStartedEvent += OnGameStarted;
+        GameMode.GameOverEvent += OnGameOver;
     }
 
     private void OnDisable()
@@ -130,6 +149,7 @@ public class UI_Game : MonoBehaviour
         GameMode.OnGameCooldownChanged -= OnGameCountdownChanged;
         GameMode.OnLivesChanged -= OnLivesChanged;
         GameMode.OnPlayerCharacterSpawned -= SpawnPlayerStatusUI;
-        GameMode.OnGameStarted -= () => { gameCountdownText.enabled = false; };
+        GameMode.GameStartedEvent -= OnGameStarted;
+        GameMode.GameOverEvent -= OnGameOver;
     }
 }

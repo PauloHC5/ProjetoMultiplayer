@@ -1,5 +1,6 @@
 using System;
 using System.Collections;
+using _Game.Scripts;
 using Photon.Pun;
 using TMPro;
 using UnityEngine;
@@ -32,7 +33,7 @@ public class PlayerCharacter : MonoBehaviourPun
     private Rigidbody2D _rigidbody2D;
     private TextMeshProUGUI _playerNicknameText;
     
-    public Action OnPlayerDestroyed;
+    public Action<PlayerCharacter> OnPlayerDestroyed;
 
     private void Awake()
     {
@@ -122,16 +123,20 @@ public class PlayerCharacter : MonoBehaviourPun
     }
 
     [PunRPC]
-    private void RpcExplode()
+    public void RpcExplode()
     {
         // Runs on every client: everyone hears/sees the explosion.
         GameManager.Instance.AudioManager.PlaySfx(explosionSfx);
  
         if (photonView.IsMine)
         {
-            OnPlayerDestroyed?.Invoke();
             PhotonNetwork.Destroy(gameObject);
         }
+    }
+
+    private void OnDestroy()
+    {
+        OnPlayerDestroyed?.Invoke(this);
     }
 
     [PunRPC]
@@ -161,4 +166,21 @@ public class PlayerCharacter : MonoBehaviourPun
         _invincible = false;
     }
     
+    private void OnGameOver(int playerCharactersAlive)
+    {
+        if(photonView.IsMine && playerCharactersAlive <= 0)
+        {
+            PhotonNetwork.Destroy(gameObject);
+        }
+    }
+
+    private void OnEnable()
+    {
+        GameMode.GameOverEvent += OnGameOver;
+    }
+
+    private void OnDisable()
+    {
+        GameMode.GameOverEvent -= OnGameOver;
+    }
 }

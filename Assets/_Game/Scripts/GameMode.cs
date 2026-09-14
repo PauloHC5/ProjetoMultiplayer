@@ -34,11 +34,12 @@ namespace _Game.Scripts
         private int _currentLives;
         private Invaders _invaders;
         private Dictionary<PlayerType, PlayerCharacter> _playerCharacters = new Dictionary<PlayerType, PlayerCharacter>();
-
         private readonly Vector3 _playerSpawnPosition = new Vector3(0, -13f, 0);
+        private bool _bGameCountdownRunning = false;
         
-        public const string PlayerTypeKey = "AvailablePlayerTypes";
-        public const string PlayerScoreKey = "PlayerScore";
+        public static readonly string PlayerTypeKey = "AvailablePlayerTypes";
+        public static readonly string PlayerScoreKey = "PlayerScore";
+        public static readonly string PlayerCharactersAliveKey = "PlayerCharactersAlive";
         
         public int StartingLives => startingLives;
         public int StartGameDelay => startGameDelay;
@@ -47,9 +48,8 @@ namespace _Game.Scripts
         public static Action<int> OnLivesChanged;
         public static Action<int, int> OnInvaderKilled;
         public static Action OnScoreChanged;
-        public static Action OnGameStarted;
-        public static Action OnGameEnded;
-        public static Action OnWaveCompleted;
+        public static Action GameStartedEvent;
+        public static Action<int> GameOverEvent;
         public static Action<Player, PlayerCharacter> OnPlayerCharacterSpawned;
         public static Action<Player> OnPlayerLeft;
         public static Action RoomReady;
@@ -76,6 +76,7 @@ namespace _Game.Scripts
             _currentLives = startingLives;            
             
             OnInvaderKilled += InvaderKilled;
+            InvadersLimit.OnInvadersLimitReached += OnInvadersReachedLimit;
 
             StartCoroutine(WaitForRoomBeReady());
         }
@@ -90,7 +91,6 @@ namespace _Game.Scripts
             _photonView.RPC(nameof(RpcRegisterPlayer), RpcTarget.MasterClient,
                 PhotonNetwork.LocalPlayer.ActorNumber);
             
-            if(!PhotonNetwork.IsMasterClient) yield break;
             
             StartCoroutine(StartGameCountdown());
         }
@@ -112,8 +112,8 @@ namespace _Game.Scripts
             
             var playerType = GetAvailablePlayerType(requestingPlayer);
             
-            requestingPlayer.SetCustomProperties(new Hashtable { { PlayerTypeKey, playerType } });
-            requestingPlayer.SetCustomProperties(new Hashtable { { PlayerScoreKey, 0 } });
+            SetPlayerType(requestingPlayer, playerType);
+            SetPlayerScore(requestingPlayer, 0);
             
             if(bDebugMode)
                 Debug.Log("GameMode.RpcRegisterPlayer: assigned 'PlayerType' " + playerType + " to player " + requestingPlayer.NickName);
@@ -156,6 +156,13 @@ namespace _Game.Scripts
 
             return PlayerType.Player1;
         }
+        
+        private void SetPlayerType(Player player, PlayerType playerType)
+        {
+            if(!PhotonNetwork.InRoom || !PhotonNetwork.IsConnectedAndReady) return;
+            
+            player.SetCustomProperties(new Hashtable { { PlayerTypeKey, playerType } });
+        }
 
         [PunRPC]
         private void RpcSpawnPlayerCharacter(PlayerType playerType)
@@ -167,8 +174,31 @@ namespace _Game.Scripts
             PlayerController.Local.Possess(playerCharacter);
             
             OnPlayerCharacterSpawned?.Invoke(PhotonNetwork.LocalPlayer, playerCharacter);
+            
+            var playerCharactersAlive = GetOrInitPlayerCharactersAlive() + 1;
+            
+            SetPlayerCharactersAlive(playerCharactersAlive);
 
             playerCharacter.OnPlayerDestroyed += OnPlayerDestroyed;
+        }
+
+        public static int GetOrInitPlayerCharactersAlive()
+        {
+            if (PhotonNetwork.CurrentRoom.CustomProperties.TryGetValue(PlayerCharactersAliveKey, out var index))
+            {
+                return (int)index;
+            }
+            else
+            {
+                return 0;
+            }
+        }
+        
+        private void SetPlayerCharactersAlive(int count)
+        {
+            if(!PhotonNetwork.InRoom || !PhotonNetwork.IsConnectedAndReady) return;
+            
+            PhotonNetwork.CurrentRoom.SetCustomProperties(new Hashtable { { PlayerCharactersAliveKey, count } });
         }
 
         public override void OnPlayerEnteredRoom(Player newPlayer)
@@ -181,24 +211,32 @@ namespace _Game.Scripts
         public override void OnPlayerLeftRoom(Player otherPlayer)
         {
             OnPlayerLeft?.Invoke(otherPlayer);
+            
+            // If countdown is running and the master client leaves, the new master client should start the countdown again
+            if (_bGameCountdownRunning && PhotonNetwork.IsMasterClient)
+                StartCoroutine(StartGameCountdown());
         }
 
         private IEnumerator StartGameCountdown()
-        {            
+        {     
+            if(!PhotonNetwork.IsMasterClient) yield break;
+            
             _gameCountdown = startGameDelay;
+            
             OnGameCooldownChanged?.Invoke(_gameCountdown);
             while (_gameCountdown > -1)
             {                
-                photonView.RPC(nameof(RpcReplicateGameCooldown), RpcTarget.All, _gameCountdown);
+                photonView.RPC(nameof(RpcReplicateGameCooldown), RpcTarget.All, --_gameCountdown);
                 yield return new WaitForSeconds(1.0f);
             }
 
             _invaders = PhotonNetwork.InstantiateRoomObject(invadersPrefab.name, invadersPrefab.transform.position, Quaternion.identity).GetComponent<Invaders>();
-            _photonView.RPC(nameof(RpcSubscribeToWaveCompleted), RpcTarget.AllBuffered);
+            _photonView.RPC(nameof(RpcSubscribeToNewInvadersEvents), RpcTarget.All);
+            
         }
         
         [PunRPC]
-        private void RpcSubscribeToWaveCompleted()
+        private void RpcSubscribeToNewInvadersEvents()
         {
             if(!_invaders)
                 _invaders = FindAnyObjectByType<Invaders>();
@@ -209,9 +247,12 @@ namespace _Game.Scripts
         [PunRPC]
         private void RpcReplicateGameCooldown(int countdown)
         {
-            if(countdown > -1)
+            _gameCountdown = countdown;
+            _bGameCountdownRunning = true;
+            
+            if(_gameCountdown > -1)
             {                
-                OnGameCooldownChanged?.Invoke(--_gameCountdown);
+                OnGameCooldownChanged?.Invoke(_gameCountdown);
 
                 if (bDebugMode)
                     Debug.Log($"GameMode.StartGameContdown: {_gameCountdown}");
@@ -222,7 +263,9 @@ namespace _Game.Scripts
             if (bDebugMode)
                 Debug.Log("GameMode.StartGameContdown: Game Started");
             
-            OnGameStarted?.Invoke();            
+            _bGameCountdownRunning = false;
+            
+            GameStartedEvent?.Invoke();            
         }
         
         private void InvaderKilled(int playerID, int points)
@@ -234,16 +277,8 @@ namespace _Game.Scripts
             Player player = PhotonNetwork.CurrentRoom.GetPlayer(playerID);
             if (player == null) return;
             
-            if (player.CustomProperties.TryGetValue(PlayerScoreKey, out var index))
-            {
-                int currentScore = (int)index;
-                currentScore += points;
-                player.SetCustomProperties(new Hashtable() { { PlayerScoreKey, currentScore } });
-            }
-            else
-            {
-                Debug.LogError("GameMode.InvaderKilled: Player " + player.NickName + " does not have a PlayerScore custom property. This should not happen.");
-            }
+            var playerScore = GetPlayerScore(player) + points;
+            SetPlayerScore(player, playerScore);
         }
 
         public override void OnPlayerPropertiesUpdate(Player targetPlayer, Hashtable changedProps)
@@ -260,40 +295,68 @@ namespace _Game.Scripts
             if(bDebugMode)
                 Debug.Log("GameMode.WaveCompleted");
             
-            if(!PhotonNetwork.IsMasterClient) return;
-            
-            // Reset invaders dead mask in room properties
-            if (PhotonNetwork.CurrentRoom.CustomProperties.TryGetValue(Invaders.DeadInvadersKey, out var deadMaskObj) && deadMaskObj is bool[] deadMask)
-            {
-                Array.Clear(deadMask, 0, deadMask.Length);
-                PhotonNetwork.CurrentRoom.SetCustomProperties(new Hashtable { { Invaders.DeadInvadersKey, deadMask } });
-            }
-            
             _invaders.OnInvadersDestroyed -= WaveCompleted;
             
             StartCoroutine(StartGameCountdown());
         }
         
-        private void OnPlayerDestroyed()
+        private void OnInvadersReachedLimit()
+        {
+            if(bDebugMode)
+                Debug.Log("GameMode.OnInvadersReachedLimit");
+            
+            _invaders.OnInvadersDestroyed -= WaveCompleted;
+            
+            OnPlayerCharacterSpawned = null;
+         
+            _currentLives = 0;
+            
+            GameOver(0);
+        }
+        
+        private void OnPlayerDestroyed(PlayerCharacter playerCharacterDestroyed)
         {            
             if(bDebugMode)
                 Debug.Log("GameMode.OnPlayerDestroyed");
             
+            playerCharacterDestroyed.OnPlayerDestroyed -= OnPlayerDestroyed;
+            
             _currentLives--;
+
+            var playerCharactersAlive = GetOrInitPlayerCharactersAlive() - 1;
+            
+            SetPlayerCharactersAlive(playerCharactersAlive);
+            
             OnLivesChanged?.Invoke(_currentLives);
 
             if(PhotonNetwork.CurrentRoom.PlayerCount == 1 && _invaders)
-                _invaders.enabled = false;
+                _invaders.stopMovement = true;
 
             if (_currentLives <= 0)
             {
-                if(bDebugMode)
-                    Debug.Log("GameMode.OnPlayerDestroyed: Game Over");
+                GameOver(playerCharactersAlive);
                 return;
             }
-            
 
             StartCoroutine(PlayerDestroyedCooldown());
+        }
+
+        private void GameOver(int playerCharactersAlive)
+        {
+            if(bDebugMode)
+                Debug.Log("GameMode.OnPlayerDestroyed: Game Over");
+
+            if (playerCharactersAlive <= 0)
+            {
+                if(bDebugMode)
+                    Debug.Log("GameMode.OnPlayerDestroyed: No more player characters alive, closing room.");
+                    
+                PhotonNetwork.CurrentRoom.IsOpen = false;
+                    
+                StopAllCoroutines();
+            }
+                
+            GameOverEvent?.Invoke(playerCharactersAlive);
         }
         
         private IEnumerator PlayerDestroyedCooldown()
@@ -301,7 +364,7 @@ namespace _Game.Scripts
             yield return new WaitForSeconds(2.0f);                       
 
             if (PhotonNetwork.CurrentRoom.PlayerCount == 1 && _invaders)
-                _invaders.enabled = true;
+                _invaders.stopMovement = false;
 
             PlayerType playerType = PlayerType.Player1;
             if (PhotonNetwork.LocalPlayer.CustomProperties.TryGetValue(PlayerTypeKey, out var index))
@@ -309,6 +372,26 @@ namespace _Game.Scripts
 
             RpcSpawnPlayerCharacter(playerType);
 
+        }
+        
+        public static int GetPlayerScore(Player player)
+        {
+            if (player.CustomProperties.TryGetValue(PlayerScoreKey, out var index))
+            {
+                return (int)index;
+            }
+            else
+            {
+                Debug.LogError("GameMode.GetPlayerScore: Player " + player.NickName + " does not have a PlayerScore custom property. This should not happen.");
+                return 0;
+            }
+        }
+        
+        private void SetPlayerScore(Player player, int score)
+        {
+            if(!PhotonNetwork.InRoom || !PhotonNetwork.IsConnectedAndReady) return;
+            
+            player.SetCustomProperties(new Hashtable { { PlayerScoreKey, score } });
         }
     }
 }

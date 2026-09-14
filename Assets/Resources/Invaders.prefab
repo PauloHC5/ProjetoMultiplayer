@@ -84,7 +84,7 @@ MonoBehaviour:
   laserLayerMask:
     serializedVersion: 2
     m_Bits: 128
-  testMode: 0
+  stopMovement: 0
 --- !u!114 &5313734984663642673
 MonoBehaviour:
   m_ObjectHideFlags: 0

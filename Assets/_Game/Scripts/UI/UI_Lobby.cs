@@ -82,7 +82,9 @@ public class UI_Lobby : MonoBehaviour
             RoomButtom button = existingButton.GetComponent<RoomButtom>();
             if (button != null)
             {
-                button.Button.interactable = room.Value.PlayerCount != room.Value.MaxPlayers;
+                var interactable = room.Value.PlayerCount < room.Value.MaxPlayers && room.Value.IsOpen && room.Value.IsVisible;
+                
+                button.Button.interactable = interactable;
                 button.UpdateRoomState(room.Key, room.Value.PlayerCount, room.Value.MaxPlayers);
             }
         }

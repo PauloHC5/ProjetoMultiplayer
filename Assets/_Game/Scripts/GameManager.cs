@@ -1,16 +1,28 @@
 using System;
+using NUnit.Framework;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
 public class GameManager : IPersistentSinglenton<GameManager>
 {
     public string _currentScene;
+    public string mainMenuSceneName;
     public Action<string> OnSceneLoaded;
 
     [SerializeField]
     private AudioManager _audioManager;
 
     public AudioManager AudioManager => _audioManager;
+
+    protected override void Awake()
+    {
+        base.Awake();
+        
+        if(string.IsNullOrEmpty(mainMenuSceneName))
+        {
+            Debug.LogError("Main menu scene name is not set in GameManager.");
+        }
+    }
 
     void Start()
     {
@@ -33,6 +45,11 @@ public class GameManager : IPersistentSinglenton<GameManager>
             _currentScene = name;
             OnSceneLoaded?.Invoke(name);
         };
+    }
+    
+    public static void LoadMainMenu()
+    {
+        Instance.LoadScene(Instance.mainMenuSceneName);
     }
 
     public void RegisterOnLoadedScene(Action<String> callback)
