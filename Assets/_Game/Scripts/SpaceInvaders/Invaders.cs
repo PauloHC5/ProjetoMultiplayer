@@ -5,8 +5,9 @@ using _Game.Scripts;
 using Photon.Pun;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using Hashtable = ExitGames.Client.Photon.Hashtable;
 
-public class Invaders : MonoBehaviour
+public class Invaders : MonoBehaviourPunCallbacks
 {
     public Invader[] prefabs;
     public int rows = 5;
@@ -24,6 +25,8 @@ public class Invaders : MonoBehaviour
     private PhotonView _photonView;
     private bool _bRequestedRowAdvance = false;
     
+    public const string DeadInvadersKey = "DeadInvaders";
+    
     public int AmountKilled { get; private set; }
     public int TotalInvaders => this.rows * this.columns;
     public float PercertKilled => (float)this.AmountKilled / (float)this.TotalInvaders;
@@ -37,6 +40,11 @@ public class Invaders : MonoBehaviour
         _invaders = new Invader[this.rows * this.columns];
         _photonView = GetComponent<PhotonView>();
         
+        SpawnInvaders();
+    }
+
+    private void SpawnInvaders()
+    {
         for (int row = 0; row < this.rows; row++)
         {
             float width = 2.0f * (this.columns - 1);
@@ -59,8 +67,53 @@ public class Invaders : MonoBehaviour
     private void Start()
     {
         InvokeRepeating(nameof(RequestMissileAttack), missileAttackRate, missileAttackRate);
+
+        if (PhotonNetwork.IsMasterClient && !PhotonNetwork.CurrentRoom.CustomProperties.ContainsKey(DeadInvadersKey))
+        {
+            SetDeadInvaders(new bool[TotalInvaders]);
+        }
+
+        SyncInvadersState();
     }
     
+    private bool[] GetDeadInvaders()
+    {
+        if (PhotonNetwork.CurrentRoom.CustomProperties.TryGetValue(DeadInvadersKey, out var deadMaskObj) && deadMaskObj is bool[] deadMask)
+        {
+            return deadMask;
+        }
+        
+        // If the dead mask is not found, return a new array with all invaders alive
+        return new bool[TotalInvaders];
+    }
+    
+    private void SetDeadInvaders(bool[] deadMask)
+    {
+        PhotonNetwork.CurrentRoom.SetCustomProperties(new Hashtable { { DeadInvadersKey, deadMask } });
+    }
+
+    private void SyncInvadersState()
+    {
+        var deadMask = GetDeadInvaders();
+        int killedCount = 0;
+
+        for (int i = 0; i < _invaders.Length; i++)
+        {
+            if (!deadMask[i]) continue;
+            
+            killedCount++;
+            DeactivateInvader(i, false);
+        }
+        
+        AmountKilled = killedCount;
+    }
+
+    public override void OnRoomPropertiesUpdate(Hashtable propertiesThatChanged)
+    {
+        if(!propertiesThatChanged.ContainsKey(DeadInvadersKey)) return;
+        SyncInvadersState();
+    }
+
     private void RequestMissileAttack()
     {
         if(!PhotonNetwork.IsMasterClient) return;
@@ -77,9 +130,26 @@ public class Invaders : MonoBehaviour
         transform.position += _direction * (speed.Evaluate(PercertKilled) * Time.fixedDeltaTime);
     }
     
-    public void ReplicateKill(int invaderIndex, int instigatorPlayerId)
+    public void RequestKill(int invaderIndex, int instigatorPlayerId)
     {
-        _photonView.RPC(nameof(RpcConfirmKill), RpcTarget.AllBuffered, invaderIndex, instigatorPlayerId);
+        _photonView.RPC(nameof(RpcRequestKill), RpcTarget.MasterClient, invaderIndex, instigatorPlayerId);
+    }
+
+    [PunRPC]
+    private void RpcRequestKill(int invaderIndex, int instigatorPlayerId)
+    {
+        if(!PhotonNetwork.IsMasterClient) return;
+        
+        if(invaderIndex < 0 || invaderIndex >= _invaders.Length) return;
+        if(!_invaders[invaderIndex].gameObject.activeInHierarchy) return;
+        
+        var invadersDeadMask = GetDeadInvaders();
+        if(invadersDeadMask[invaderIndex]) return; // Already dead
+        
+        invadersDeadMask[invaderIndex] = true;
+        SetDeadInvaders(invadersDeadMask);
+        
+        _photonView.RPC(nameof(RpcConfirmKill), RpcTarget.All, invaderIndex, instigatorPlayerId);
     }
 
     [PunRPC]
@@ -87,14 +157,7 @@ public class Invaders : MonoBehaviour
     {
         GameMode.OnInvaderKilled?.Invoke(instigatorPlayerId, _invaders[invaderIndex].points);
         
-        if (!info.Sender.IsLocal)
-        {
-            _invaders[invaderIndex].DeactivateDelay();
-        }
-        else
-        {
-            _invaders[invaderIndex].gameObject.SetActive(false);
-        }
+        DeactivateInvader(invaderIndex, info.Sender.IsLocal);
 
         AmountKilled++;
         
@@ -105,6 +168,21 @@ public class Invaders : MonoBehaviour
         }
         
         GameManager.Instance.AudioManager.PlaySfx(killedSfx);
+    }
+    
+    private void DeactivateInvader(int invaderIndex, bool isLocal)
+    {
+        if(invaderIndex < 0 || invaderIndex >= _invaders.Length) return;
+        if(!_invaders[invaderIndex].gameObject.activeInHierarchy) return;
+        
+        if(isLocal)
+        {
+            _invaders[invaderIndex].DeactivateDelay();
+        }
+        else
+        {
+            _invaders[invaderIndex].gameObject.SetActive(false);
+        }
     }
     
     public void HitBoundaries()

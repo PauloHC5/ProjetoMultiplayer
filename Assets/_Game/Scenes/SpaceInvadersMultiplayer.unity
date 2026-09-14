@@ -316,7 +316,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3f7fbcf551604982b460c15e8fc0a2ae, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::_Game.Scripts.GameMode
-  startGameDelay: 0
+  startGameDelay: 3
   startingLives: 3
   playerControllerPrefab: {fileID: 7145116076282536125, guid: b8ac1bb3e2e04e649afa5032e52a1b6f, type: 3}
   playerCharacterPrefabs:
@@ -1193,11 +1193,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7914125982042458128, guid: 0fa3ad4ac70aebc4eabd30367dd13837, type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: -660505.56
+      value: -731839.94
       objectReference: {fileID: 0}
     - target: {fileID: 7914125982042458128, guid: 0fa3ad4ac70aebc4eabd30367dd13837, type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: -323286.62
+      value: -357796.62
       objectReference: {fileID: 0}
     - target: {fileID: 8516120554213083672, guid: 0fa3ad4ac70aebc4eabd30367dd13837, type: 3}
       propertyPath: m_Enabled

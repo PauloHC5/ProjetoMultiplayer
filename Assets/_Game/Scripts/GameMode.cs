@@ -33,7 +33,6 @@ namespace _Game.Scripts
         private int _gameCountdown;
         private int _currentLives;
         private Invaders _invaders;
-        private bool _bGameStarted = false;        
         private Dictionary<PlayerType, PlayerCharacter> _playerCharacters = new Dictionary<PlayerType, PlayerCharacter>();
 
         private readonly Vector3 _playerSpawnPosition = new Vector3(0, -13f, 0);
@@ -93,7 +92,7 @@ namespace _Game.Scripts
             
             if(!PhotonNetwork.IsMasterClient) yield break;
             
-            StartCoroutine(StartGameContdown());
+            StartCoroutine(StartGameCountdown());
         }
 
 
@@ -184,7 +183,7 @@ namespace _Game.Scripts
             OnPlayerLeft?.Invoke(otherPlayer);
         }
 
-        private IEnumerator StartGameContdown()
+        private IEnumerator StartGameCountdown()
         {            
             _gameCountdown = startGameDelay;
             OnGameCooldownChanged?.Invoke(_gameCountdown);
@@ -222,12 +221,8 @@ namespace _Game.Scripts
 
             if (bDebugMode)
                 Debug.Log("GameMode.StartGameContdown: Game Started");
-
-            _bGameStarted = true;
-
-            OnGameStarted?.Invoke();            
-
             
+            OnGameStarted?.Invoke();            
         }
         
         private void InvaderKilled(int playerID, int points)
@@ -267,9 +262,16 @@ namespace _Game.Scripts
             
             if(!PhotonNetwork.IsMasterClient) return;
             
+            // Reset invaders dead mask in room properties
+            if (PhotonNetwork.CurrentRoom.CustomProperties.TryGetValue(Invaders.DeadInvadersKey, out var deadMaskObj) && deadMaskObj is bool[] deadMask)
+            {
+                Array.Clear(deadMask, 0, deadMask.Length);
+                PhotonNetwork.CurrentRoom.SetCustomProperties(new Hashtable { { Invaders.DeadInvadersKey, deadMask } });
+            }
+            
             _invaders.OnInvadersDestroyed -= WaveCompleted;
             
-            StartCoroutine(StartGameContdown());
+            StartCoroutine(StartGameCountdown());
         }
         
         private void OnPlayerDestroyed()

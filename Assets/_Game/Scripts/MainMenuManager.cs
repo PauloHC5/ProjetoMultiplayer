@@ -121,7 +121,7 @@ public class MainMenuManager : MonoBehaviourPunCallbacks
 
         RoomOptions options = new RoomOptions
         {
-            MaxPlayers = 4,
+            MaxPlayers = 3,
             IsVisible = true,
             IsOpen = true,
             CustomRoomProperties = new ExitGames.Client.Photon.Hashtable

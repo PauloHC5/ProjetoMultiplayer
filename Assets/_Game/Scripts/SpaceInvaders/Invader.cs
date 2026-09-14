@@ -48,7 +48,7 @@ public class Invader : MonoBehaviour
             
             if(!laser.IsLocalProjectile) return;
             
-            _invaders.ReplicateKill(invaderIndex, laser.InstigatorPlayerId);
+            _invaders.RequestKill(invaderIndex, laser.InstigatorPlayerId);
         }
         
         if(other.gameObject.layer == _defaultLayer)
