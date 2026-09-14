@@ -86,7 +86,7 @@ public class UI_Chat : MonoBehaviourPunCallbacks
         string message = chatInputField.text.Trim();
         if (!string.IsNullOrEmpty(message))
         {
-            PhotonView.RPC("ReceiveChatMessage", RpcTarget.All, message);
+            PhotonView.RPC(nameof(ReceiveChatMessage), RpcTarget.All, message);
             chatInputField.text = string.Empty;
         }
     }

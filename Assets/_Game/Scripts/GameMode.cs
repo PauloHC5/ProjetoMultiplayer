@@ -95,6 +95,11 @@ namespace _Game.Scripts
             StartCoroutine(StartGameCountdown());
         }
 
+        public override void OnLeftRoom()
+        {
+            GameManager.LoadMainMenu();
+        }
+
 
         private void SpawnPlayerController()
         {
@@ -350,8 +355,9 @@ namespace _Game.Scripts
             {
                 if(bDebugMode)
                     Debug.Log("GameMode.OnPlayerDestroyed: No more player characters alive, closing room.");
-                    
-                PhotonNetwork.CurrentRoom.IsOpen = false;
+                   
+                if(PhotonNetwork.CurrentRoom.IsOpen)
+                    PhotonNetwork.CurrentRoom.IsOpen = false;
                     
                 StopAllCoroutines();
             }

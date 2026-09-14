@@ -124,8 +124,7 @@ public class UI_Game : MonoBehaviour
     
     public void ReturnToMainMenu()
     {
-        PhotonNetwork.Disconnect();
-        GameManager.LoadMainMenu();
+        PhotonNetwork.LeaveRoom();                
     }
     
     private void OnGameStarted()
