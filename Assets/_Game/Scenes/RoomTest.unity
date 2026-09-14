@@ -119,17 +119,6 @@ NavMeshSettings:
     debug:
       m_Flags: 0
   m_NavMeshData: {fileID: 0}
---- !u!114 &701084147 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 7317432063680343506, guid: 0fa3ad4ac70aebc4eabd30367dd13837, type: 3}
-  m_PrefabInstance: {fileID: 825737006}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f42c389c18eb66542afe27e2b350697e, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::UI_Chat
 --- !u!1001 &825737006
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -138,30 +127,6 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
-    - target: {fileID: 128459573918715138, guid: 0fa3ad4ac70aebc4eabd30367dd13837, type: 3}
-      propertyPath: m_AnchorMax.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 128459573918715138, guid: 0fa3ad4ac70aebc4eabd30367dd13837, type: 3}
-      propertyPath: m_AnchorMax.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 128459573918715138, guid: 0fa3ad4ac70aebc4eabd30367dd13837, type: 3}
-      propertyPath: m_SizeDelta.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 128459573918715138, guid: 0fa3ad4ac70aebc4eabd30367dd13837, type: 3}
-      propertyPath: m_SizeDelta.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 1213796940820988474, guid: 0fa3ad4ac70aebc4eabd30367dd13837, type: 3}
-      propertyPath: m_AnchorMax.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 1213796940820988474, guid: 0fa3ad4ac70aebc4eabd30367dd13837, type: 3}
-      propertyPath: m_SizeDelta.y
-      value: 0
-      objectReference: {fileID: 0}
     - target: {fileID: 2133986488441202420, guid: 0fa3ad4ac70aebc4eabd30367dd13837, type: 3}
       propertyPath: m_Name
       value: Canvas Chat
@@ -174,9 +139,13 @@ PrefabInstance:
       propertyPath: m_AnchorMax.y
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 3390536081178763988, guid: 0fa3ad4ac70aebc4eabd30367dd13837, type: 3}
-      propertyPath: sceneViewId
-      value: 1
+    - target: {fileID: 3013461681659050961, guid: 0fa3ad4ac70aebc4eabd30367dd13837, type: 3}
+      propertyPath: m_AnchorMin.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3707147454599793473, guid: 0fa3ad4ac70aebc4eabd30367dd13837, type: 3}
+      propertyPath: m_Value
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 3723946080316260100, guid: 0fa3ad4ac70aebc4eabd30367dd13837, type: 3}
       propertyPath: m_Pivot.x
@@ -266,16 +235,24 @@ PrefabInstance:
       propertyPath: m_AnchorMax.y
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 7056229160933621818, guid: 0fa3ad4ac70aebc4eabd30367dd13837, type: 3}
-      propertyPath: m_AnchorMax.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 7056229160933621818, guid: 0fa3ad4ac70aebc4eabd30367dd13837, type: 3}
-      propertyPath: m_SizeDelta.x
+    - target: {fileID: 5205210894851692406, guid: 0fa3ad4ac70aebc4eabd30367dd13837, type: 3}
+      propertyPath: m_AnchorMin.y
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 7914125982042458128, guid: 0fa3ad4ac70aebc4eabd30367dd13837, type: 3}
       propertyPath: m_SizeDelta.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7914125982042458128, guid: 0fa3ad4ac70aebc4eabd30367dd13837, type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: -0.0003981609
+      objectReference: {fileID: 0}
+    - target: {fileID: 7914125982042458128, guid: 0fa3ad4ac70aebc4eabd30367dd13837, type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: -0.00038146973
+      objectReference: {fileID: 0}
+    - target: {fileID: 8443895375864545853, guid: 0fa3ad4ac70aebc4eabd30367dd13837, type: 3}
+      propertyPath: m_Value
       value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
@@ -512,7 +489,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f08f689bcf36efd449cda88a4df03b4c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::HeadlessHost
-  chatUI: {fileID: 701084147}
+  roomName: 
+  roomMaxPlayers: 0
+  bDebugMode: 0
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0

@@ -1,13 +1,17 @@
 using System;
 using Photon.Pun;
+using Photon.Realtime;
 using TMPro;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEngine.UI;
 
-public class UI_Chat : MonoBehaviour
+public class UI_Chat : MonoBehaviourPunCallbacks
 {
     [Header("UI Elements")]
-    public TextMeshProUGUI chat;
+    public Button chatButton;
+    public GameObject chatOverlay;
+    public TextMeshProUGUI chatContent;
     public TMP_InputField chatInputField;
     public TextMeshProUGUI roomNameText;
     public TextMeshProUGUI playersCountText;
@@ -17,6 +21,13 @@ public class UI_Chat : MonoBehaviour
     private void Awake()
     {
         PhotonView = GetComponent<PhotonView>();
+    }
+
+    private void Start()
+    {
+        if (!PhotonNetwork.InRoom) return;
+        
+        InitChatUI(PhotonNetwork.CurrentRoom.Name, PhotonNetwork.CurrentRoom.PlayerCount, PhotonNetwork.CurrentRoom.MaxPlayers);
     }
 
     private void Update()
@@ -29,28 +40,48 @@ public class UI_Chat : MonoBehaviour
             }
         }
     }
+    
+    public void OnChatButtonClicked()
+    {
+        chatOverlay.SetActive(!chatOverlay.activeSelf);
+    }
 
-    public void InitChatUI(string roomName, int playerCount, int maxPlayers)
+    public override void OnJoinedRoom()
+    {
+        InitChatUI(PhotonNetwork.CurrentRoom.Name, PhotonNetwork.CurrentRoom.PlayerCount, PhotonNetwork.CurrentRoom.MaxPlayers);
+    }
+
+    public override void OnPlayerEnteredRoom(Player newPlayer)
+    {
+        OnPlayerEnteredRoom(newPlayer.NickName, PhotonNetwork.CurrentRoom.PlayerCount, PhotonNetwork.CurrentRoom.MaxPlayers);
+    }
+
+    public override void OnPlayerLeftRoom(Player otherPlayer)
+    {
+        OnPlayerLeftRoom(otherPlayer.NickName, PhotonNetwork.CurrentRoom.PlayerCount, PhotonNetwork.CurrentRoom.MaxPlayers);
+    }
+
+    private void InitChatUI(string roomName, int playerCount, int maxPlayers)
     {
         roomNameText.text = "Room: " + roomName;
         playersCountText.text = "Players: " + playerCount + "/" + maxPlayers;
     }
 
-    public void OnPlayerEnteredRoom(string playerName, int playerCount, int maxPlayers)
+    private void OnPlayerEnteredRoom(string playerName, int playerCount, int maxPlayers)
     {
         playersCountText.text = "Players: " + playerCount + "/" + maxPlayers;
         
-        chat.text += "\n \n" + playerName + " has joined the room.";
+        chatContent.text += "\n \n" + playerName + " has joined the room.";
     }
 
-    public void OnPlayerLeftRoom(string playerName, int playerCount, int maxPlayers)
+    private void OnPlayerLeftRoom(string playerName, int playerCount, int maxPlayers)
     {
         playersCountText.text = "Players: " + playerCount + "/" + maxPlayers;
         
-        chat.text += "\n \n" + playerName + " has left the room.";
+        chatContent.text += "\n \n" + playerName + " has left the room.";
     }
     
-    public void SendChatMessage()
+    private void SendChatMessage()
     {
         string message = chatInputField.text.Trim();
         if (!string.IsNullOrEmpty(message))
@@ -69,6 +100,6 @@ public class UI_Chat : MonoBehaviour
         
         if (string.IsNullOrEmpty(message) && string.IsNullOrWhiteSpace(userName)) return;
         
-        chat.text += "\n \n" + userName + ": " + message;
+        chatContent.text += "\n \n" + userName + ": " + message;
     }
 }

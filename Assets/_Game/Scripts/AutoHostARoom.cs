@@ -10,7 +10,6 @@ public class AutoHostARoom : MonoBehaviourPunCallbacks
 {
     public string roomName;
     public int roomMaxPlayers = 0;
-    public UI_Chat chatUI;
     
     public bool bDebugMode = false;
     
@@ -31,25 +30,14 @@ public class AutoHostARoom : MonoBehaviourPunCallbacks
         PhotonNetwork.ConnectUsingSettings();
     }
 
-    private void Start()
-    {
-        if (PhotonNetwork.InRoom)
-        {
-            chatUI.InitChatUI(PhotonNetwork.CurrentRoom.Name, PhotonNetwork.CurrentRoom.PlayerCount, PhotonNetwork.CurrentRoom.MaxPlayers);
-        }
-            
-    }
-
     public override void OnConnectedToMaster()
     {
         if (this.roomName != string.Empty)
         {
             if(bDebugMode)
-                Debug.Log("Tentando entrar na sala: " + this.roomName);
+                Debug.Log("Trying to join room: " + this.roomName);
         
             PhotonNetwork.JoinRoom(this.roomName);
-            // NÃO faça nada com o valor de retorno, nem dê return aqui
-            // o resultado real vem via OnJoinedRoom ou OnJoinRoomFailed
         }
         else
         {
@@ -70,15 +58,10 @@ public class AutoHostARoom : MonoBehaviourPunCallbacks
             },
             IsVisible = true
         };
-
-        string roomName;
-
-        if (inRoomName != string.Empty)
-            roomName = inRoomName;
-        else
-            roomName = GenerateRandomRoomName();
         
-        PhotonNetwork.JoinOrCreateRoom(roomName, options, TypedLobby.Default);
+        string roomNameToCreate = inRoomName != string.Empty ? inRoomName : GenerateRandomRoomName();
+        
+        PhotonNetwork.JoinOrCreateRoom(roomNameToCreate, options, TypedLobby.Default);
     }
 
     public override void OnJoinedRoom()
@@ -90,16 +73,14 @@ public class AutoHostARoom : MonoBehaviourPunCallbacks
         {
             PhotonNetwork.LoadLevel(SceneManager.GetActiveScene().name);
         }
-        
-        chatUI?.InitChatUI(PhotonNetwork.CurrentRoom.Name, PhotonNetwork.CurrentRoom.PlayerCount, PhotonNetwork.CurrentRoom.MaxPlayers);
     }
 
     public override void OnJoinRoomFailed(short returnCode, string message)
     {
         if(bDebugMode)
-            Debug.LogWarning($"Falha ao entrar na sala '{this.roomName}': {message}. Criando uma nova.");
+            Debug.LogWarning($"Failed to join room '{this.roomName}': {message}. Creating a new one.");
 
-        if (message == "Game full")
+        if (message == "Game full") // If the room is full, create a new room with a random name
         {
             CreateRoom();
         }
@@ -115,19 +96,5 @@ public class AutoHostARoom : MonoBehaviourPunCallbacks
         var random = new System.Random();
         return new string(Enumerable.Repeat(chars, 8)
             .Select(s => s[random.Next(s.Length)]).ToArray());
-    }
-
-    public override void OnPlayerEnteredRoom(Photon.Realtime.Player newPlayer)
-    {
-        int currentPlayers = PhotonNetwork.CurrentRoom.PlayerCount;
-        int maxPlayers = PhotonNetwork.CurrentRoom.MaxPlayers;
-        chatUI?.OnPlayerEnteredRoom(newPlayer.NickName, currentPlayers, maxPlayers);
-    }
-
-    public override void OnPlayerLeftRoom(Photon.Realtime.Player otherPlayer)
-    {
-        int currentPlayers = PhotonNetwork.CurrentRoom.PlayerCount;
-        int maxPlayers = PhotonNetwork.CurrentRoom.MaxPlayers;
-        chatUI?.OnPlayerLeftRoom(otherPlayer.NickName, currentPlayers, maxPlayers);
     }
 }

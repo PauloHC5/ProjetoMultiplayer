@@ -234,6 +234,8 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 6622505577506573462}
+  - component: {fileID: 5667969407516284908}
+  - component: {fileID: 217341268556156375}
   m_Layer: 5
   m_Name: Chat
   m_TagString: Untagged
@@ -250,8 +252,8 @@ RectTransform:
   m_GameObject: {fileID: 2067000262701964659}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
+  m_LocalScale: {x: 1.57, y: 1.57, z: 1.57}
+  m_ConstrainProportionsScale: 1
   m_Children:
   - {fileID: 5061866571332017854}
   - {fileID: 3128855978744840824}
@@ -263,9 +265,47 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0, y: 45.349216}
-  m_SizeDelta: {x: 430.1866, y: 626.9789}
+  m_AnchoredPosition: {x: 0, y: 0.0000076293945}
+  m_SizeDelta: {x: 565, y: 809}
   m_Pivot: {x: 0.5, y: 0.5}
+--- !u!222 &5667969407516284908
+CanvasRenderer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2067000262701964659}
+  m_CullTransparentMesh: 1
+--- !u!114 &217341268556156375
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2067000262701964659}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.Image
+  m_Material: {fileID: 0}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_RaycastTarget: 1
+  m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
+  m_Maskable: 1
+  m_OnCullStateChanged:
+    m_PersistentCalls:
+      m_Calls: []
+  m_Sprite: {fileID: 21300000, guid: 2e5023d2344cca14f9485efe2ab55ff2, type: 3}
+  m_Type: 0
+  m_PreserveAspect: 0
+  m_FillCenter: 1
+  m_FillMethod: 4
+  m_FillAmount: 1
+  m_FillClockwise: 1
+  m_FillOrigin: 0
+  m_UseSpriteMesh: 0
+  m_PixelsPerUnitMultiplier: 1
 --- !u!1 &2133986488441202420
 GameObject:
   m_ObjectHideFlags: 0
@@ -300,6 +340,7 @@ RectTransform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 6622505577506573462}
+  - {fileID: 572117894450331505}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
@@ -316,7 +357,7 @@ Canvas:
   m_GameObject: {fileID: 2133986488441202420}
   m_Enabled: 1
   serializedVersion: 3
-  m_RenderMode: 0
+  m_RenderMode: 1
   m_Camera: {fileID: 0}
   m_PlaneDistance: 100
   m_PixelPerfect: 0
@@ -327,7 +368,7 @@ Canvas:
   m_VertexColorAlwaysGammaSpace: 0
   m_AdditionalShaderChannelsFlag: 25
   m_UpdateRectTransformForStandalone: 0
-  m_SortingLayerID: 0
+  m_SortingLayerID: 1139064329
   m_SortingOrder: 0
   m_TargetDisplay: 0
 --- !u!114 &8516120554213083672
@@ -345,7 +386,7 @@ MonoBehaviour:
   m_UiScaleMode: 1
   m_ReferencePixelsPerUnit: 100
   m_ScaleFactor: 1
-  m_ReferenceResolution: {x: 800, y: 600}
+  m_ReferenceResolution: {x: 1920, y: 1080}
   m_ScreenMatchMode: 1
   m_MatchWidthOrHeight: 0
   m_PhysicalUnit: 3
@@ -382,7 +423,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f42c389c18eb66542afe27e2b350697e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::UI_Chat
-  chat: {fileID: 7450890425638711721}
+  chatButton: {fileID: 5112445194538188977}
+  chatOverlay: {fileID: 2067000262701964659}
+  chatContent: {fileID: 7450890425638711721}
   chatInputField: {fileID: 909505066490583712}
   roomNameText: {fileID: 3291890613573800641}
   playersCountText: {fileID: 7328399388849083212}
@@ -518,7 +561,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: -0.0001393855, y: 0.000030517578}
+  m_AnchoredPosition: {x: -0.0009585221, y: -0.000015258789}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0, y: 0}
 --- !u!222 &7880430792475046532
@@ -705,10 +748,10 @@ RectTransform:
   - {fileID: 8634829422499304476}
   m_Father: {fileID: 6622505577506573462}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0.5, y: 0.5}
-  m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -35.52397, y: -275.0118}
-  m_SizeDelta: {x: 174.7535, y: 30}
+  m_AnchorMin: {x: 0.14653984, y: 0.2122361}
+  m_AnchorMax: {x: 0.7164602, y: 0.27976394}
+  m_AnchoredPosition: {x: 0.15014648, y: -0.5394592}
+  m_SizeDelta: {x: -147.2465, y: -25}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &3392762375718711624
 CanvasRenderer:
@@ -883,10 +926,10 @@ RectTransform:
   - {fileID: 2492738225637953245}
   m_Father: {fileID: 6622505577506573462}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0.5, y: 0.5}
-  m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 163.98923, y: -275.0118}
-  m_SizeDelta: {x: 48.9881, y: 40.58}
+  m_AnchorMin: {x: 0.7377288, y: 0.20976391}
+  m_AnchorMax: {x: 0.85576993, y: 0.27976394}
+  m_AnchoredPosition: {x: -1.8221283, y: 0.46054077}
+  m_SizeDelta: {x: -18.011902, y: -16.419998}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &7030621368553535127
 CanvasRenderer:
@@ -1562,7 +1605,7 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 7577355212989750623}
   m_HandleRect: {fileID: 5205210894851692406}
   m_Direction: 2
-  m_Value: 0
+  m_Value: 1
   m_Size: 1
   m_NumberOfSteps: 0
   m_OnValueChanged:
@@ -1606,7 +1649,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 1.7563124, y: -80.47546}
+  m_AnchoredPosition: {x: -3.6724892, y: -0.000009536743}
   m_SizeDelta: {x: 200, y: 200}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &1215467729022595577
@@ -1630,7 +1673,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.Image
   m_Material: {fileID: 0}
-  m_Color: {r: 0.23529413, g: 0.23529413, b: 0.23529413, a: 0.392}
+  m_Color: {r: 0.21960786, g: 0.21960786, b: 0.21960786, a: 0.29803923}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
@@ -1709,10 +1752,10 @@ RectTransform:
   m_Children: []
   m_Father: {fileID: 6622505577506573462}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0.13064913, y: 0.70900005}
-  m_AnchorMax: {x: 0.8703246, y: 0.7887849}
-  m_AnchoredPosition: {x: 0, y: 0.52619934}
-  m_SizeDelta: {x: 0.5509949, y: 0}
+  m_AnchorMin: {x: 0.12900001, y: 0.75576395}
+  m_AnchorMax: {x: 0.8703246, y: 0.8362361}
+  m_AnchoredPosition: {x: 0.22453308, y: 0.25090027}
+  m_SizeDelta: {x: -0.44900513, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &1901504019198184010
 CanvasRenderer:
@@ -1972,10 +2015,10 @@ RectTransform:
   m_Children: []
   m_Father: {fileID: 6622505577506573462}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0.07235086, y: 0.640595}
-  m_AnchorMax: {x: 0.9146492, y: 0.71859497}
-  m_AnchoredPosition: {x: -0.682251, y: 0.017105103}
-  m_SizeDelta: {x: 1.3370056, y: 1}
+  m_AnchorMin: {x: 0.070539825, y: 0.70376396}
+  m_AnchorMax: {x: 0.9146492, y: 0.7854722}
+  m_AnchoredPosition: {x: 0.49996948, y: -0.5341339}
+  m_SizeDelta: {x: 0.33700562, y: -2}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &2929311666493160596
 CanvasRenderer:
@@ -2077,6 +2120,138 @@ MonoBehaviour:
   m_hasFontAssetChanged: 0
   m_baseMaterial: {fileID: 0}
   m_maskOffset: {x: 0, y: 0, z: 0, w: 0}
+--- !u!1 &7705457169960266233
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 572117894450331505}
+  - component: {fileID: 893691890978197598}
+  - component: {fileID: 3964695965111188703}
+  - component: {fileID: 5112445194538188977}
+  m_Layer: 5
+  m_Name: Chat Button
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!224 &572117894450331505
+RectTransform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7705457169960266233}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 3723946080316260100}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_AnchorMin: {x: 1, y: 0}
+  m_AnchorMax: {x: 1, y: 0}
+  m_AnchoredPosition: {x: 0, y: 0}
+  m_SizeDelta: {x: 119.28, y: 119.28}
+  m_Pivot: {x: 1, y: 0}
+--- !u!222 &893691890978197598
+CanvasRenderer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7705457169960266233}
+  m_CullTransparentMesh: 1
+--- !u!114 &3964695965111188703
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7705457169960266233}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.Image
+  m_Material: {fileID: 0}
+  m_Color: {r: 0.06666667, g: 0.9921569, b: 0, a: 1}
+  m_RaycastTarget: 1
+  m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
+  m_Maskable: 1
+  m_OnCullStateChanged:
+    m_PersistentCalls:
+      m_Calls: []
+  m_Sprite: {fileID: 21300000, guid: eb7e0bfeebc4fd64093339a97588a635, type: 3}
+  m_Type: 0
+  m_PreserveAspect: 0
+  m_FillCenter: 1
+  m_FillMethod: 4
+  m_FillAmount: 1
+  m_FillClockwise: 1
+  m_FillOrigin: 0
+  m_UseSpriteMesh: 0
+  m_PixelsPerUnitMultiplier: 1
+--- !u!114 &5112445194538188977
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7705457169960266233}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4e29b1a8efbd4b44bb3f3716e73f07ff, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.Button
+  m_Navigation:
+    m_Mode: 3
+    m_WrapAround: 0
+    m_SelectOnUp: {fileID: 0}
+    m_SelectOnDown: {fileID: 0}
+    m_SelectOnLeft: {fileID: 0}
+    m_SelectOnRight: {fileID: 0}
+  m_Transition: 1
+  m_Colors:
+    m_NormalColor: {r: 1, g: 1, b: 1, a: 1}
+    m_HighlightedColor: {r: 0.9607843, g: 0.9607843, b: 0.9607843, a: 1}
+    m_PressedColor: {r: 0.78431374, g: 0.78431374, b: 0.78431374, a: 1}
+    m_SelectedColor: {r: 0.9607843, g: 0.9607843, b: 0.9607843, a: 1}
+    m_DisabledColor: {r: 0.78431374, g: 0.78431374, b: 0.78431374, a: 0.5019608}
+    m_ColorMultiplier: 1
+    m_FadeDuration: 0.1
+  m_SpriteState:
+    m_HighlightedSprite: {fileID: 0}
+    m_PressedSprite: {fileID: 0}
+    m_SelectedSprite: {fileID: 0}
+    m_DisabledSprite: {fileID: 0}
+  m_AnimationTriggers:
+    m_NormalTrigger: Normal
+    m_HighlightedTrigger: Highlighted
+    m_PressedTrigger: Pressed
+    m_SelectedTrigger: Selected
+    m_DisabledTrigger: Disabled
+  m_Interactable: 1
+  m_TargetGraphic: {fileID: 3964695965111188703}
+  m_OnClick:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 7317432063680343506}
+        m_TargetAssemblyTypeName: UI_Chat, Assembly-CSharp
+        m_MethodName: OnChatButtonClicked
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!1 &7761057935304213137
 GameObject:
   m_ObjectHideFlags: 0
@@ -2109,10 +2284,10 @@ RectTransform:
   m_Children: []
   m_Father: {fileID: 6622505577506573462}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0.2673246, y: 0.80500007}
-  m_AnchorMax: {x: 0.7306492, y: 0.88118994}
-  m_AnchoredPosition: {x: 0.5, y: 0.83470154}
-  m_SizeDelta: {x: 1, y: 2}
+  m_AnchorMin: {x: 0.26900002, y: 0.84200007}
+  m_AnchorMax: {x: 0.7377288, y: 0.92100006}
+  m_AnchoredPosition: {x: -0.17131042, y: 0.19769287}
+  m_SizeDelta: {x: -2, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &2522282860561932382
 CanvasRenderer:
