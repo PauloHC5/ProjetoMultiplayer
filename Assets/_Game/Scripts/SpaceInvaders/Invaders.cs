@@ -32,7 +32,8 @@ public class Invaders : MonoBehaviourPunCallbacks
     public float PercertKilled => (float)this.AmountKilled / (float)this.TotalInvaders;
     public int AmountAlive => this.TotalInvaders - this.AmountKilled;
     
-    public Action OnInvadersDestroyed;
+    public Action<int, int> OnInvaderKilled;
+    public event Action AllInvadersDestroyedEvent;
 
     private void Awake()
     {        
@@ -40,6 +41,13 @@ public class Invaders : MonoBehaviourPunCallbacks
         _photonView = GetComponent<PhotonView>();
         
         SpawnInvaders();
+
+        for(int i = 0; i < _invaders.Length; i++)
+        {
+            _invaders[i].invaderIndex = i;
+            _invaders[i].OnInvaderHitBoundaries += InvaderHitBoundaries;
+            _invaders[i].OnInvaderKilled += InvaderKilled;
+        }
     }
 
     private void SpawnInvaders()
@@ -58,7 +66,6 @@ public class Invaders : MonoBehaviourPunCallbacks
                 position.x += col * 2.0f;
                 invader.transform.localPosition = position;
                 _invaders[row * this.columns + col] = invader;
-                invader.invaderIndex = row * this.columns + col;
             }
         }
     }
@@ -102,25 +109,28 @@ public class Invaders : MonoBehaviourPunCallbacks
         _photonView.RPC(nameof(MissileAttack), RpcTarget.All, invaderIndex);
     }
     
-    public void RequestKill(int invaderIndex, int instigatorPlayerId)
+    private void InvaderKilled(int invaderIndex, int instigatorPlayerId)
     {
-        //_photonView.RPC(nameof(RpcConfirmKill), RpcTarget.All, invaderIndex, instigatorPlayerId);
-        RpcConfirmKill(invaderIndex, instigatorPlayerId);
+        RpcReplicateKill(invaderIndex, instigatorPlayerId);
     }    
 
-    private void RpcConfirmKill(int invaderIndex, int instigatorPlayerId)
+    private void RpcReplicateKill(int invaderIndex, int instigatorPlayerId)
     {
         if (!_invaders[invaderIndex].gameObject.activeInHierarchy) return;
-
-        GameMode.OnInvaderKilled?.Invoke(instigatorPlayerId, _invaders[invaderIndex].points);
         
-        DeactivateInvader(invaderIndex, false);
+        var invaderKilled = _invaders[invaderIndex];
+
+        OnInvaderKilled?.Invoke(instigatorPlayerId, invaderKilled.points);
+        
+        invaderKilled.gameObject.SetActive(false);
+        
+        invaderKilled.OnInvaderKilled -= InvaderKilled;
 
         AmountKilled++;
         
         if(PhotonNetwork.IsMasterClient && AmountKilled >= TotalInvaders)
         {
-            OnInvadersDestroyed?.Invoke();
+            AllInvadersDestroyedEvent?.Invoke();
 
             PhotonNetwork.Destroy(gameObject);
         }
@@ -128,22 +138,7 @@ public class Invaders : MonoBehaviourPunCallbacks
         GameManager.Instance.AudioManager.PlaySfx(killedSfx);
     }
     
-    private void DeactivateInvader(int invaderIndex, bool isLocal)
-    {
-        if(invaderIndex < 0 || invaderIndex >= _invaders.Length) return;
-        if(!_invaders[invaderIndex].gameObject.activeInHierarchy) return;
-        
-        if(isLocal)
-        {
-            _invaders[invaderIndex].DeactivateDelay();
-        }
-        else
-        {
-            _invaders[invaderIndex].gameObject.SetActive(false);
-        }
-    }
-    
-    public void HitBoundaries()
+    public void InvaderHitBoundaries()
     {
         if(!PhotonNetwork.IsMasterClient || _bRequestedRowAdvance) return;
         

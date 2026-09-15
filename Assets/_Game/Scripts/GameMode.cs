@@ -32,7 +32,7 @@ namespace _Game.Scripts
         private PhotonView _photonView;
         private int _gameCountdown;
         private int _currentLives;
-        private Invaders _invaders;
+        private Invaders _invadersInTheScene;
         private Dictionary<PlayerType, PlayerCharacter> _playerCharacters = new Dictionary<PlayerType, PlayerCharacter>();
         private readonly Vector3 _playerSpawnPosition = new Vector3(0, -13f, 0);
         private bool _bGameCountdownRunning = false;
@@ -46,7 +46,6 @@ namespace _Game.Scripts
         
         public static Action<int> OnGameCooldownChanged;
         public static Action<int> OnLivesChanged;
-        public static Action<int, int> OnInvaderKilled;
         public static Action OnScoreChanged;
         public static Action GameStartedEvent;
         public static Action<int> GameOverEvent;
@@ -75,7 +74,6 @@ namespace _Game.Scripts
             
             _currentLives = startingLives;            
             
-            OnInvaderKilled += InvaderKilled;
             InvadersLimit.OnInvadersLimitReached += OnInvadersReachedLimit;
 
             StartCoroutine(WaitForRoomBeReady());
@@ -211,6 +209,11 @@ namespace _Game.Scripts
             if (!PhotonNetwork.IsMasterClient) return;
 
             photonView.RPC(nameof(RpcReplicateGameCooldown), newPlayer, _gameCountdown);
+
+            if (_invadersInTheScene)
+            {
+                photonView.RPC(nameof(RpcSubscribeToInvadersEvents), newPlayer);
+            }
         }
 
         public override void OnPlayerLeftRoom(Player otherPlayer)
@@ -235,18 +238,8 @@ namespace _Game.Scripts
                 yield return new WaitForSeconds(1.0f);
             }
 
-            _invaders = PhotonNetwork.InstantiateRoomObject(invadersPrefab.name, invadersPrefab.transform.position, Quaternion.identity).GetComponent<Invaders>();
-            _photonView.RPC(nameof(RpcSubscribeToNewInvadersEvents), RpcTarget.All);
-            
-        }
-        
-        [PunRPC]
-        private void RpcSubscribeToNewInvadersEvents()
-        {
-            if(!_invaders)
-                _invaders = FindAnyObjectByType<Invaders>();
-            
-            _invaders.OnInvadersDestroyed += WaveCompleted;
+            _invadersInTheScene = PhotonNetwork.InstantiateRoomObject(invadersPrefab.name, invadersPrefab.transform.position, Quaternion.identity).GetComponent<Invaders>();
+            _photonView.RPC(nameof(RpcSubscribeToInvadersEvents), RpcTarget.All);
         }
 
         [PunRPC]
@@ -273,11 +266,22 @@ namespace _Game.Scripts
             GameStartedEvent?.Invoke();            
         }
         
+        [PunRPC]
+        private void RpcSubscribeToInvadersEvents()
+        {
+            if(!_invadersInTheScene)
+                _invadersInTheScene = FindAnyObjectByType<Invaders>();
+            
+            _invadersInTheScene.AllInvadersDestroyedEvent += WaveCompleted;
+            _invadersInTheScene.OnInvaderKilled += InvaderKilled;
+        }
+        
         private void InvaderKilled(int playerID, int points)
         {
             if(!PhotonNetwork.IsMasterClient) return;
             
-            Debug.Log($"GameMode.InvaderKilled: Player {playerID} killed an invader for {points} points");
+            if(bDebugMode)
+                Debug.Log($"GameMode.InvaderKilled: Player {playerID} killed an invader for {points} points");
             
             Player player = PhotonNetwork.CurrentRoom.GetPlayer(playerID);
             if (player == null) return;
@@ -300,7 +304,17 @@ namespace _Game.Scripts
             if(bDebugMode)
                 Debug.Log("GameMode.WaveCompleted");
             
-            _invaders.OnInvadersDestroyed -= WaveCompleted;
+            photonView.RPC(nameof(RpcReplicateUnsubscribeFromInvadersEvents), RpcTarget.All);
+        }
+        
+        [PunRPC]
+        private void RpcReplicateUnsubscribeFromInvadersEvents()
+        {
+            /*if(!_invadersInTheScene)
+                _invadersInTheScene = FindAnyObjectByType<Invaders>();*/
+            
+            _invadersInTheScene.AllInvadersDestroyedEvent -= WaveCompleted;
+            _invadersInTheScene.OnInvaderKilled -= InvaderKilled;
             
             StartCoroutine(StartGameCountdown());
         }
@@ -310,7 +324,18 @@ namespace _Game.Scripts
             if(bDebugMode)
                 Debug.Log("GameMode.OnInvadersReachedLimit");
             
-            _invaders.OnInvadersDestroyed -= WaveCompleted;
+            _photonView.RPC(nameof(RpcReplicateInvadersReachedLimit), RpcTarget.All);
+        }
+
+        [PunRPC]
+        private void RpcReplicateInvadersReachedLimit()
+        {
+            /*if(!_invadersInTheScene)
+                _invadersInTheScene = FindAnyObjectByType<Invaders>();*/
+            
+            _invadersInTheScene.OnInvaderKilled -= InvaderKilled;
+            _invadersInTheScene.AllInvadersDestroyedEvent -= WaveCompleted;
+            InvadersLimit.OnInvadersLimitReached -= OnInvadersReachedLimit;
             
             OnPlayerCharacterSpawned = null;
          
@@ -318,7 +343,6 @@ namespace _Game.Scripts
             
             GameOver(0);
         }
-        
         private void OnPlayerDestroyed(PlayerCharacter playerCharacterDestroyed)
         {            
             if(bDebugMode)
@@ -334,8 +358,8 @@ namespace _Game.Scripts
             
             OnLivesChanged?.Invoke(_currentLives);
 
-            if(PhotonNetwork.CurrentRoom.PlayerCount == 1 && _invaders)
-                _invaders.stopMovement = true;
+            if(PhotonNetwork.CurrentRoom.PlayerCount == 1 && _invadersInTheScene)
+                _invadersInTheScene.stopMovement = true;
 
             if (_currentLives <= 0)
             {
@@ -369,8 +393,8 @@ namespace _Game.Scripts
         {
             yield return new WaitForSeconds(2.0f);                       
 
-            if (PhotonNetwork.CurrentRoom.PlayerCount == 1 && _invaders)
-                _invaders.stopMovement = false;
+            if (PhotonNetwork.CurrentRoom.PlayerCount == 1 && _invadersInTheScene)
+                _invadersInTheScene.stopMovement = false;
 
             PlayerType playerType = PlayerType.Player1;
             if (PhotonNetwork.LocalPlayer.CustomProperties.TryGetValue(PlayerTypeKey, out var index))
@@ -404,11 +428,12 @@ namespace _Game.Scripts
         {
             base.OnDestroy();
             
-            OnInvaderKilled -= InvaderKilled;
             InvadersLimit.OnInvadersLimitReached -= OnInvadersReachedLimit;
-    
-            if (_invaders != null)
-                _invaders.OnInvadersDestroyed -= WaveCompleted;
+
+            if (_invadersInTheScene == null) return;
+            
+            _invadersInTheScene.AllInvadersDestroyedEvent -= WaveCompleted;
+            _invadersInTheScene.OnInvaderKilled -= InvaderKilled;
         }
     }
 }

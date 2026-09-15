@@ -11,18 +11,17 @@ public class Invader : MonoBehaviour
     
     private SpriteRenderer _spriteRenderer;
     private int _animationFrame;
-    private Invaders _invaders;
     private bool _hitPredicted;
     
     private int _laserLayer;
     private int _defaultLayer;
     
-    private const string InvadersLimitTag = "InvadersLimit";
+    public event System.Action OnInvaderHitBoundaries;
+    public event System.Action<int, int> OnInvaderKilled;
     
     private void Awake()
     {
         _spriteRenderer = GetComponent<SpriteRenderer>();
-        _invaders = GetComponentInParent<Invaders>();
         
         _laserLayer = LayerMask.NameToLayer("Laser");
         _defaultLayer = LayerMask.NameToLayer("Default");
@@ -49,14 +48,12 @@ public class Invader : MonoBehaviour
         {
             var laser = other.GetComponent<Projectile>();
             
-            if(!laser.IsLocalProjectile) return;
-            
-            _invaders.RequestKill(invaderIndex, laser.InstigatorPlayerId);
+            OnInvaderKilled?.Invoke(invaderIndex, laser.InstigatorPlayerId);
         }
         
         if(other.gameObject.layer == _defaultLayer)
         {
-            _invaders.HitBoundaries();
+            OnInvaderHitBoundaries?.Invoke();
         }
     }
     
