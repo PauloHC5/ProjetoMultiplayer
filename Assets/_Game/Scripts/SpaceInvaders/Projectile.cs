@@ -5,7 +5,7 @@ using UnityEngine;
 public class Projectile : MonoBehaviour
 {
     [Header("Projectile Settings")]
-    public Vector3 direction;
+    public Vector2 direction;
     public float speed;
 
     public bool IsLocalProjectile { get; private set; }
@@ -15,9 +15,12 @@ public class Projectile : MonoBehaviour
     
     public SpriteRenderer SpriteRenderer { get; private set; }
 
+    private Rigidbody2D _rigidbody2D;
+
     private void Awake()
     {
         SpriteRenderer = GetComponent<SpriteRenderer>();
+        _rigidbody2D = GetComponent<Rigidbody2D>();
     }
 
     public void Init(int instigatorPlayerId, bool isLocalProjectile)
@@ -28,12 +31,14 @@ public class Projectile : MonoBehaviour
 
     private void Start()
     {
+        _rigidbody2D.linearVelocity += this.direction * this.speed;
+
         Invoke(nameof(DestroyProjectile), 3f);
     }
 
     private void FixedUpdate()
-    {
-        this.transform.position += this.direction * (this.speed * Time.fixedDeltaTime);
+    {        
+        //this.transform.position += this.direction * (this.speed * Time.fixedDeltaTime);
     }
 
     private void OnTriggerEnter2D(Collider2D other)
