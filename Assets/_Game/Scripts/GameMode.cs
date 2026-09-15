@@ -310,9 +310,6 @@ namespace _Game.Scripts
         [PunRPC]
         private void RpcReplicateUnsubscribeFromInvadersEvents()
         {
-            /*if(!_invadersInTheScene)
-                _invadersInTheScene = FindAnyObjectByType<Invaders>();*/
-            
             _invadersInTheScene.AllInvadersDestroyedEvent -= WaveCompleted;
             _invadersInTheScene.OnInvaderKilled -= InvaderKilled;
             
@@ -330,9 +327,6 @@ namespace _Game.Scripts
         [PunRPC]
         private void RpcReplicateInvadersReachedLimit()
         {
-            /*if(!_invadersInTheScene)
-                _invadersInTheScene = FindAnyObjectByType<Invaders>();*/
-            
             _invadersInTheScene.OnInvaderKilled -= InvaderKilled;
             _invadersInTheScene.AllInvadersDestroyedEvent -= WaveCompleted;
             InvadersLimit.OnInvadersLimitReached -= OnInvadersReachedLimit;
