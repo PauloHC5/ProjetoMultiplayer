@@ -104,17 +104,17 @@ public class Invaders : MonoBehaviourPunCallbacks
     
     public void RequestKill(int invaderIndex, int instigatorPlayerId)
     {
-        _photonView.RPC(nameof(RpcConfirmKill), RpcTarget.All, invaderIndex, instigatorPlayerId);
+        //_photonView.RPC(nameof(RpcConfirmKill), RpcTarget.All, invaderIndex, instigatorPlayerId);
+        RpcConfirmKill(invaderIndex, instigatorPlayerId);
     }    
 
-    [PunRPC]
-    private void RpcConfirmKill(int invaderIndex, int instigatorPlayerId, PhotonMessageInfo info)
+    private void RpcConfirmKill(int invaderIndex, int instigatorPlayerId)
     {
         if (!_invaders[invaderIndex].gameObject.activeInHierarchy) return;
 
         GameMode.OnInvaderKilled?.Invoke(instigatorPlayerId, _invaders[invaderIndex].points);
         
-        DeactivateInvader(invaderIndex, info.Sender.IsLocal);
+        DeactivateInvader(invaderIndex, false);
 
         AmountKilled++;
         
