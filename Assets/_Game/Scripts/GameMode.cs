@@ -355,10 +355,10 @@ namespace _Game.Scripts
             {
                 if(bDebugMode)
                     Debug.Log("GameMode.OnPlayerDestroyed: No more player characters alive, closing room.");
-                   
-                if(PhotonNetwork.CurrentRoom.IsOpen)
+
+                if (PhotonNetwork.CurrentRoom.IsOpen)
                     PhotonNetwork.CurrentRoom.IsOpen = false;
-                    
+                
                 StopAllCoroutines();
             }
                 
@@ -398,6 +398,17 @@ namespace _Game.Scripts
             if(!PhotonNetwork.InRoom || !PhotonNetwork.IsConnectedAndReady) return;
             
             player.SetCustomProperties(new Hashtable { { PlayerScoreKey, score } });
+        }
+
+        protected override void OnDestroy()
+        {
+            base.OnDestroy();
+            
+            OnInvaderKilled -= InvaderKilled;
+            InvadersLimit.OnInvadersLimitReached -= OnInvadersReachedLimit;
+    
+            if (_invaders != null)
+                _invaders.OnInvadersDestroyed -= WaveCompleted;
         }
     }
 }
