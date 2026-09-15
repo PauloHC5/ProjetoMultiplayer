@@ -3,6 +3,7 @@ using System.Collections;
 using System.Linq;
 using _Game.Scripts;
 using Photon.Pun;
+using Photon.Realtime;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using Hashtable = ExitGames.Client.Photon.Hashtable;
@@ -19,8 +20,7 @@ public class Invaders : MonoBehaviourPunCallbacks
     [SerializeField] private LayerMask laserLayerMask;
     public bool stopMovement = false;
     
-    private Vector3 _direction = Vector3.right;
-    private Camera _mainCamera;
+    private Vector3 _direction = Vector3.right;    
     private Invader[] _invaders;
     private PhotonView _photonView;
     private bool _bRequestedRowAdvance = false;
@@ -35,8 +35,7 @@ public class Invaders : MonoBehaviourPunCallbacks
     public Action OnInvadersDestroyed;
 
     private void Awake()
-    {
-        _mainCamera = Camera.main;
+    {        
         _invaders = new Invader[this.rows * this.columns];
         _photonView = GetComponent<PhotonView>();
         
@@ -67,13 +66,6 @@ public class Invaders : MonoBehaviourPunCallbacks
     private void Start()
     {
         InvokeRepeating(nameof(RequestMissileAttack), missileAttackRate, missileAttackRate);
-
-        if (!PhotonNetwork.CurrentRoom.CustomProperties.ContainsKey(DeadInvadersKey))
-        {
-            SetDeadInvaders(new bool[TotalInvaders]);
-        }
-
-        SyncInvadersState();
     }
     
     private void FixedUpdate()  
@@ -82,45 +74,23 @@ public class Invaders : MonoBehaviourPunCallbacks
         
         transform.position += _direction * (speed.Evaluate(PercertKilled) * Time.fixedDeltaTime);
     }
-    
-    private bool[] GetDeadInvaders()
+
+    public override void OnPlayerEnteredRoom(Player newPlayer)
     {
-        if (PhotonNetwork.CurrentRoom.CustomProperties.TryGetValue(DeadInvadersKey, out var deadMaskObj) && deadMaskObj is bool[] deadMask)
+        if(!PhotonNetwork.IsMasterClient) return;
+
+        bool[] activeInvaders = _invaders.Select(invader => invader.gameObject.activeInHierarchy).ToArray();
+
+        photonView.RPC(nameof(RpcSyncInvadersState), newPlayer, activeInvaders);
+    }
+
+    [PunRPC]
+    private void RpcSyncInvadersState(bool[] activeInvaders)
+    {                
+        for (int i = 0; i < activeInvaders.Length; i++)
         {
-            return deadMask;
+            _invaders[i].gameObject.SetActive(activeInvaders[i]);
         }
-        
-        // If the dead mask is not found, return a new array with all invaders alive
-        return new bool[TotalInvaders];
-    }
-    
-    private void SetDeadInvaders(bool[] deadMask)
-    {
-        if(! PhotonNetwork.IsMasterClient ||!PhotonNetwork.InRoom || !PhotonNetwork.IsConnectedAndReady) return;
-        
-        PhotonNetwork.CurrentRoom.SetCustomProperties(new Hashtable { { DeadInvadersKey, deadMask } });
-    }
-
-    private void SyncInvadersState()
-    {
-        var deadMask = GetDeadInvaders();
-        int killedCount = 0;
-
-        for (int i = 0; i < _invaders.Length; i++)
-        {
-            if (!deadMask[i]) continue;
-            
-            killedCount++;
-            DeactivateInvader(i, false);
-        }
-        
-        AmountKilled = killedCount;
-    }
-
-    public override void OnRoomPropertiesUpdate(Hashtable propertiesThatChanged)
-    {
-        if(!propertiesThatChanged.ContainsKey(DeadInvadersKey)) return;
-        SyncInvadersState();
     }
 
     private void RequestMissileAttack()
@@ -145,12 +115,6 @@ public class Invaders : MonoBehaviourPunCallbacks
         if(invaderIndex < 0 || invaderIndex >= _invaders.Length) return;
         if(!_invaders[invaderIndex].gameObject.activeInHierarchy) return;
         
-        var invadersDeadMask = GetDeadInvaders();
-        if(invadersDeadMask[invaderIndex]) return; // Already dead
-        
-        invadersDeadMask[invaderIndex] = true;
-        SetDeadInvaders(invadersDeadMask);
-        
         _photonView.RPC(nameof(RpcConfirmKill), RpcTarget.All, invaderIndex, instigatorPlayerId);
     }
 
@@ -166,11 +130,6 @@ public class Invaders : MonoBehaviourPunCallbacks
         if(PhotonNetwork.IsMasterClient && AmountKilled >= TotalInvaders)
         {
             OnInvadersDestroyed?.Invoke();
-            
-            // Reset the dead invaders mask for the next game
-            var deadMask = GetDeadInvaders();
-            Array.Clear(deadMask, 0, deadMask.Length);
-            SetDeadInvaders(deadMask);
 
             PhotonNetwork.Destroy(gameObject);
         }
