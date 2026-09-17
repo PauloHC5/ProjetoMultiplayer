@@ -56,20 +56,4 @@ public class Invader : MonoBehaviour
             OnInvaderHitBoundaries?.Invoke();
         }
     }
-    
-    public void DeactivateDelay()
-    {
-        _spriteRenderer.enabled = false;
-
-        // Mantém o collider vivo por mais um instante: dá tempo pra lasers
-        // cosméticos ainda em voo em outros clientes colidarem e se
-        // autodestruírem naturalmente, antes de desativar o objeto inteiro.
-        StartCoroutine(DeactivateAfterGracePeriod());
-    }
-    
-    private IEnumerator DeactivateAfterGracePeriod()
-    {
-        yield return new WaitForSeconds(0.5f); // cobre RTT esperado + margem
-        gameObject.SetActive(false);
-    }
 }
