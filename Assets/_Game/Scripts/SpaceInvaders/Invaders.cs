@@ -24,8 +24,9 @@ public class Invaders : MonoBehaviourPunCallbacks
     private Invader[] _invaders;
     private PhotonView _photonView;
     private bool _bRequestedRowAdvance = false;
+    private int _shotCounter;
+    public const int InvadersInstigatorId = 451;
     
-    public const string DeadInvadersKey = "DeadInvaders";
     
     public int AmountKilled { get; private set; }
     public int TotalInvaders => this.rows * this.columns;
@@ -72,7 +73,7 @@ public class Invaders : MonoBehaviourPunCallbacks
 
     private void Start()
     {
-        //InvokeRepeating(nameof(RequestMissileAttack), missileAttackRate, missileAttackRate);
+        InvokeRepeating(nameof(RequestMissileAttack), missileAttackRate, missileAttackRate);
     }
     
     private void FixedUpdate()  
@@ -106,8 +107,25 @@ public class Invaders : MonoBehaviourPunCallbacks
         if(!PhotonNetwork.IsMasterClient) return;
         
         int invaderIndex = UnityEngine.Random.Range(0, _invaders.Length);
+        _shotCounter++;
         
-        _photonView.RPC(nameof(MissileAttack), RpcTarget.All, invaderIndex);
+        _photonView.RPC(nameof(MissileAttack), RpcTarget.All, invaderIndex, _shotCounter);
+    }
+    
+    [PunRPC]
+    private void MissileAttack(int invaderIndex, int shotId)
+    {
+        if(stopMovement) return;
+        
+        // Find all alive invaders
+        var selectedInvader = _invaders[invaderIndex];
+        if (selectedInvader != null && selectedInvader.gameObject.activeInHierarchy)
+        {
+            var isLocalProjectile = PhotonNetwork.IsMasterClient;
+            
+            var missile = Instantiate(missilePrefab, selectedInvader.transform.position, Quaternion.identity);
+            missile.Init(InvadersInstigatorId, isLocalProjectile, shotId);
+        }
     }
     
     private void InvaderKilled(int invaderIndex, bool isLocalProjectile, int instigatorPlayerId)
@@ -171,19 +189,6 @@ public class Invaders : MonoBehaviourPunCallbacks
     {
         yield return new WaitForEndOfFrame();
         _bRequestedRowAdvance = false;
-    }
-    
-    [PunRPC]
-    private void MissileAttack(int invaderIndex)
-    {
-        if(stopMovement) return;
-        
-        // Find all alive invaders
-        var selectedInvader = _invaders[invaderIndex];
-        if (selectedInvader != null && selectedInvader.gameObject.activeInHierarchy)
-        {
-            Instantiate(missilePrefab, selectedInvader.transform.position, Quaternion.identity);
-        }
     }
     
     private void OnGameOver(int playerCharactersAlive)

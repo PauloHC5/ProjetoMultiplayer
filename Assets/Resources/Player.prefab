@@ -296,7 +296,6 @@ MonoBehaviour:
   speed: 10
   shootSfx: {fileID: 11400000, guid: eed8b4b32103b734ba348e06663863fb, type: 2}
   explosionSfx: {fileID: 11400000, guid: b801a95c9ae27e34c836a1f912fbe15b, type: 2}
-  bDebugMode: 0
 --- !u!50 &8381791318763381138
 Rigidbody2D:
   serializedVersion: 5

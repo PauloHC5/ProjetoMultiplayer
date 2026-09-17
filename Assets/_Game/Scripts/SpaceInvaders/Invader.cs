@@ -48,7 +48,7 @@ public class Invader : MonoBehaviour
         {
             var laser = other.GetComponent<Projectile>();
             
-            OnInvaderKilled?.Invoke(invaderIndex, laser.IsLocalProjectile, laser.InstigatorPlayerId);
+            OnInvaderKilled?.Invoke(invaderIndex, laser.IsLocalProjectile, laser.InstigatorId);
         }
         
         if(other.gameObject.layer == _defaultLayer)

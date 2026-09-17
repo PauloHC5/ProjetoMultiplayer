@@ -32,6 +32,7 @@ public class PlayerCharacter : MonoBehaviourPun
     private bool _invincible;
     private Rigidbody2D _rigidbody2D;
     private TextMeshProUGUI _playerNicknameText;
+    private int _shotCounter;
     
     public Action<PlayerCharacter> OnPlayerDestroyed;
 
@@ -55,7 +56,7 @@ public class PlayerCharacter : MonoBehaviourPun
     {
         if (!photonView.IsMine) return;
         
-        photonView.RPC(nameof(RpcInvincible), RpcTarget.All);
+        photonView.RPC(nameof(RpcStartInvincible), RpcTarget.AllBuffered);
         
         photonView.RPC(nameof(RpcSetNickname), RpcTarget.AllBuffered, PhotonNetwork.NickName);
     }
@@ -65,7 +66,7 @@ public class PlayerCharacter : MonoBehaviourPun
         if (!photonView.IsMine) return;
         
         if(Keyboard.current.fKey.wasPressedThisFrame)
-            photonView.RPC(nameof(RpcExplode), RpcTarget.All);
+            photonView.RPC(nameof(RpcExplodeSfx), RpcTarget.All);
     }
 
     [PunRPC]
@@ -91,14 +92,17 @@ public class PlayerCharacter : MonoBehaviourPun
 
         Vector2 characterPosition = transform.position;
         Vector2 characterVelocity = _rigidbody2D.linearVelocity;
+        
+        int shotId = _shotCounter++;
 
         photonView.RPC(nameof(RpcShoot), RpcTarget.All,
         characterPosition,
-        characterVelocity);           
+        characterVelocity,
+        shotId);           
     }
     
     [PunRPC]
-    private void RpcShoot(Vector2 shooterPosition, Vector2 shooterVelocity, PhotonMessageInfo info)
+    private void RpcShoot(Vector2 shooterPosition, Vector2 shooterVelocity, int shotId, PhotonMessageInfo info)
     {
         float lag = Mathf.Max(0f, (float)(PhotonNetwork.Time - info.SentServerTime));
 
@@ -109,28 +113,43 @@ public class PlayerCharacter : MonoBehaviourPun
 
         Projectile laser = Instantiate(laserPrefab, fixedPositionToSpawn, Quaternion.identity);
         laser.Destroyed += () => _laserActive = false;
-        laser.Init(photonView.OwnerActorNr, photonView.IsMine);
+        laser.Init(photonView.OwnerActorNr, photonView.IsMine, shotId);
 
         GameManager.Instance.AudioManager.PlaySfx(shootSfx);
     }
 
     private void OnTriggerEnter2D(Collider2D other)
     {
-        if(!photonView.IsMine) return;
+        if(!PhotonNetwork.IsMasterClient) return;
         
         if (_invincible) return;
                 
         if(other.gameObject.layer == LayerMask.NameToLayer("Missile") || other.gameObject.layer == LayerMask.NameToLayer("Invader"))
         {
-           photonView.RPC(nameof(RpcExplode), RpcTarget.All);
+            photonView.RPC(nameof(RpcExplodeSfx), RpcTarget.All);
+            
+            var player = photonView.Owner;
+            
+            if (Equals(PhotonNetwork.MasterClient, player))
+            {
+                PhotonNetwork.Destroy(gameObject);
+            }
+            else
+            {
+                photonView.RPC(nameof(RpcExplode), player);
+            }
         }
     }
 
     [PunRPC]
-    public void RpcExplode()
-    {                    
+    private void RpcExplode()
+    {
         PhotonNetwork.Destroy(gameObject);
+    }
 
+    [PunRPC]
+    public void RpcExplodeSfx()
+    {                    
         GameManager.Instance.AudioManager.PlaySfx(explosionSfx);
     }
 
@@ -140,9 +159,17 @@ public class PlayerCharacter : MonoBehaviourPun
     }
 
     [PunRPC]
-    private void RpcInvincible()
+    private void RpcStartInvincible()
     {
         StartCoroutine(Invincible());
+    }
+    
+    [PunRPC]
+    private void RpcEndInvincible()
+    {
+        StopAllCoroutines();
+        _invincible = false;
+        SpriteRenderer.enabled = true;
     }
     
     private IEnumerator Invincible()
@@ -164,6 +191,8 @@ public class PlayerCharacter : MonoBehaviourPun
 
         SpriteRenderer.enabled = true;
         _invincible = false;
+        
+        photonView.RPC(nameof(RpcEndInvincible), RpcTarget.OthersBuffered);
     }
     
     private void OnGameOver(int playerCharactersAlive)

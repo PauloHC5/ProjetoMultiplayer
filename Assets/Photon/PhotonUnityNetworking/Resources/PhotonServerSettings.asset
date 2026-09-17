@@ -57,6 +57,14 @@ MonoBehaviour:
   - RpcReplicateGameOver
   - RpcSubscribeToNewInvadersEvents
   - RpcSyncInvadersState
+  - RpcReplicateInvadersReachedLimit
+  - RpcReplicateUnsubscribeFromInvadersEvents
+  - RpcSubscribeToInvadersEvents
+  - RpcReplicateKill
+  - RpcDestroy
+  - RpcExplodeSfx
+  - RpcEndInvincible
+  - RpcStartInvincible
   DisableAutoOpenWizard: 1
   ShowSettings: 1
   DevRegionSetOnce: 0

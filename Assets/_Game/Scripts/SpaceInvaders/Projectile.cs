@@ -1,5 +1,7 @@
 using Photon.Pun;
 using System;
+using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 public class Projectile : MonoBehaviour
@@ -9,13 +11,17 @@ public class Projectile : MonoBehaviour
     public float speed;
 
     public bool IsLocalProjectile { get; private set; }
-    public int InstigatorPlayerId { get; private set; }
+    public int InstigatorId { get; private set; }
+    public int ShotId { get; private set; }
 
     public Action Destroyed;
+    private bool _destroyed;
     
     public SpriteRenderer SpriteRenderer { get; private set; }
 
     private Rigidbody2D _rigidbody2D;
+    
+    private static readonly Dictionary<(int instigatorId, int shotId), Projectile> _projectileRegistry = new();
 
     private void Awake()
     {
@@ -23,10 +29,13 @@ public class Projectile : MonoBehaviour
         _rigidbody2D = GetComponent<Rigidbody2D>();
     }
 
-    public void Init(int instigatorPlayerId, bool isLocalProjectile)
+    public void Init(int instigatorPlayerId, bool isLocalProjectile, int shotId)
     {
-        InstigatorPlayerId = instigatorPlayerId;
+        InstigatorId = instigatorPlayerId;
         IsLocalProjectile = isLocalProjectile;
+        ShotId = shotId;
+
+        _projectileRegistry[(instigatorPlayerId, shotId)] = this;
     }
 
     private void Start()
@@ -38,17 +47,39 @@ public class Projectile : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D other)
     {
-        DestroyProjectile();
+        RequestDestroy();
     }
 
     private void OnCollisionEnter2D(Collision2D other)
     {
+        RequestDestroy();
+    }
+
+    private void RequestDestroy()
+    {
+        if (_destroyed) return;
+        
         DestroyProjectile();
+        ProjectileNetwork.RequestDestroy(InstigatorId, ShotId);
+    }
+    
+    public static void DestroyRemote(int instigatorId, int shotId)
+    {
+        if (_projectileRegistry.TryGetValue((instigatorId, shotId), out var p) && p != null)
+        {
+            p.DestroyProjectile();
+        }
     }
 
     public void DestroyProjectile()
     {
+        if (_destroyed) return;
+        _destroyed = true;
+ 
+        var shotId = _projectileRegistry.FirstOrDefault(x => x.Value == this).Key.shotId;
+        _projectileRegistry.Remove((InstigatorId, ShotId));
+ 
         Destroyed?.Invoke();
-        Destroy(this.gameObject);
+        Destroy(gameObject);
     }
 }
