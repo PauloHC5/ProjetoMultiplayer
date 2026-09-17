@@ -72,13 +72,14 @@ public class Invaders : MonoBehaviourPunCallbacks
 
     private void Start()
     {
-        InvokeRepeating(nameof(RequestMissileAttack), missileAttackRate, missileAttackRate);
+        //InvokeRepeating(nameof(RequestMissileAttack), missileAttackRate, missileAttackRate);
     }
     
     private void FixedUpdate()  
     {
-        if(stopMovement) return;
-        
+        if (!PhotonNetwork.IsMasterClient) return;
+        if (stopMovement) return;
+
         transform.position += _direction * (speed.Evaluate(PercertKilled) * Time.fixedDeltaTime);
     }
 
@@ -109,11 +110,14 @@ public class Invaders : MonoBehaviourPunCallbacks
         _photonView.RPC(nameof(MissileAttack), RpcTarget.All, invaderIndex);
     }
     
-    private void InvaderKilled(int invaderIndex, int instigatorPlayerId)
+    private void InvaderKilled(int invaderIndex, bool isLocalProjectile, int instigatorPlayerId)
     {
-        RpcReplicateKill(invaderIndex, instigatorPlayerId);
-    }    
+        if (!isLocalProjectile) return;
 
+        photonView.RPC(nameof(RpcReplicateKill), RpcTarget.All, invaderIndex, instigatorPlayerId);
+    }
+
+    [PunRPC]
     private void RpcReplicateKill(int invaderIndex, int instigatorPlayerId)
     {
         if (!_invaders[invaderIndex].gameObject.activeInHierarchy) return;
@@ -149,6 +153,8 @@ public class Invaders : MonoBehaviourPunCallbacks
     [PunRPC]
     private void AdvanceRow()
     {
+        if (!PhotonNetwork.IsMasterClient) return;
+
         // Reverse the direction of the invaders and move them down by 1 unit
         _direction.x *= -1.0f;
         

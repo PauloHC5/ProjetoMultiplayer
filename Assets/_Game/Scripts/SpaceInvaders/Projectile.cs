@@ -34,12 +34,7 @@ public class Projectile : MonoBehaviour
         _rigidbody2D.linearVelocity += this.direction * this.speed;
 
         Invoke(nameof(DestroyProjectile), 3f);
-    }
-
-    private void FixedUpdate()
-    {        
-        //this.transform.position += this.direction * (this.speed * Time.fixedDeltaTime);
-    }
+    }    
 
     private void OnTriggerEnter2D(Collider2D other)
     {

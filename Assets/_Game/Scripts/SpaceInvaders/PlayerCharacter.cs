@@ -66,7 +66,6 @@ public class PlayerCharacter : MonoBehaviourPun
         
         if(Keyboard.current.fKey.wasPressedThisFrame)
             photonView.RPC(nameof(RpcExplode), RpcTarget.All);
-
     }
 
     [PunRPC]
@@ -89,25 +88,30 @@ public class PlayerCharacter : MonoBehaviourPun
         if (_laserActive) return;
  
         _laserActive = true;
- 
-        photonView.RPC(nameof(RpcShoot), RpcTarget.All);
- 
-        GameManager.Instance.AudioManager.PlaySfx(shootSfx);
+
+        Vector2 characterPosition = transform.position;
+        Vector2 characterVelocity = _rigidbody2D.linearVelocity;
+
+        photonView.RPC(nameof(RpcShoot), RpcTarget.All,
+        characterPosition,
+        characterVelocity);           
     }
     
     [PunRPC]
-    private void RpcShoot(PhotonMessageInfo info)
+    private void RpcShoot(Vector2 shooterPosition, Vector2 shooterVelocity, PhotonMessageInfo info)
     {
-        float lag = (float)(PhotonNetwork.Time - info.SentServerTime);
-        
-        //var positionToSpawn = transform.position + (Vector3)(Vector2.up * lag);
-        Vector3 fixedPositionToSpawn = Vector3.zero;
-        fixedPositionToSpawn.x = transform.position.x + (Vector2.right * lag).x;
-        fixedPositionToSpawn.y = transform.position.y + (Vector2.right * lag).y;
+        float lag = Mathf.Max(0f, (float)(PhotonNetwork.Time - info.SentServerTime));
+
+        if (!photonView.IsMine)
+            Debug.Log($"RPC Shoot received from {info.Sender.NickName} with lag of: " + lag);
+
+        Vector3 fixedPositionToSpawn = shooterPosition + shooterVelocity * lag;
 
         Projectile laser = Instantiate(laserPrefab, fixedPositionToSpawn, Quaternion.identity);
         laser.Destroyed += () => _laserActive = false;
         laser.Init(photonView.OwnerActorNr, photonView.IsMine);
+
+        GameManager.Instance.AudioManager.PlaySfx(shootSfx);
     }
 
     private void OnTriggerEnter2D(Collider2D other)
@@ -124,14 +128,10 @@ public class PlayerCharacter : MonoBehaviourPun
 
     [PunRPC]
     public void RpcExplode()
-    {
-        // Runs on every client: everyone hears/sees the explosion.
+    {                    
+        PhotonNetwork.Destroy(gameObject);
+
         GameManager.Instance.AudioManager.PlaySfx(explosionSfx);
- 
-        if (photonView.IsMine)
-        {
-            PhotonNetwork.Destroy(gameObject);
-        }
     }
 
     private void OnDestroy()
