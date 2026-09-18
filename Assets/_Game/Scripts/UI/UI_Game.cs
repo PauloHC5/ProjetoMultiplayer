@@ -6,17 +6,18 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
-public struct PlayerUIStatus
-{
-    public GameObject gameObject;
-    public Image PlayerIcon;
-    public TextMeshProUGUI PlayerNicknameText;
-    public TextMeshProUGUI ScoreCounterText;
-    public TextMeshProUGUI LivesCounterText;
-}
 
 public class UI_Game : MonoBehaviour
 {
+    private struct PlayerUIStatus
+    {
+        public GameObject PlayerUIStatusObject;
+        public Image PlayerIcon;
+        public TextMeshProUGUI PlayerNicknameText;
+        public TextMeshProUGUI ScoreCounterText;
+        public TextMeshProUGUI LivesCounterText;
+    }
+    
     [Header("UI Elements")]
     public GameObject playerStatusPrefab;
     public GameObject statusBarUI;
@@ -25,6 +26,7 @@ public class UI_Game : MonoBehaviour
 
     private PlayerUIStatus _localPlayerStatus;
 
+    // Constants for finding child components in the player status prefab
     private const string PlayerNicknameTextComponentName = "Player Nickname Text (TMP)";
     private const string ScoreCounterTextComponentName = "Score Counter Text (TMP)";
     private const string LivesCounterTextComponentName = "Lives Counter Text (TMP)";
@@ -33,7 +35,7 @@ public class UI_Game : MonoBehaviour
     {
         _localPlayerStatus = new PlayerUIStatus
         {
-            gameObject = null,
+            PlayerUIStatusObject = null,
             PlayerIcon = null,
             PlayerNicknameText = null,
             ScoreCounterText = null,
@@ -77,7 +79,7 @@ public class UI_Game : MonoBehaviour
 
     private void SpawnPlayerStatusUI(Player player, PlayerCharacter playerCharacter)
     {
-        if (_localPlayerStatus.gameObject != null) return;
+        if (_localPlayerStatus.PlayerUIStatusObject != null) return;
 
         GameObject playerStatusGO = Instantiate(playerStatusPrefab, Vector3.zero, Quaternion.identity);
         
@@ -96,7 +98,7 @@ public class UI_Game : MonoBehaviour
         
         PlayerUIStatus playerStatus = new PlayerUIStatus
         {
-            gameObject = playerStatusGO,
+            PlayerUIStatusObject = playerStatusGO,
             PlayerIcon = playerIcon,
             PlayerNicknameText = nicknameText,
             ScoreCounterText = scoreCounterText,

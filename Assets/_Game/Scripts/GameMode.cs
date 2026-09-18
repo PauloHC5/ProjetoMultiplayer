@@ -160,6 +160,19 @@ namespace _Game.Scripts
             return PlayerType.Player1;
         }
         
+        public static PlayerType GetPlayerType(Player player)
+        {
+            if (player.CustomProperties.TryGetValue(PlayerTypeKey, out var index))
+            {
+                return (PlayerType)index;
+            }
+            else
+            {
+                Debug.LogWarning("GameMode.GetPlayerType: Player " + player.NickName + " does not have a PlayerType custom property.");
+                return PlayerType.Player1;
+            }
+        }
+        
         private void SetPlayerType(Player player, PlayerType playerType)
         {
             if(!PhotonNetwork.InRoom || !PhotonNetwork.IsConnectedAndReady) return;

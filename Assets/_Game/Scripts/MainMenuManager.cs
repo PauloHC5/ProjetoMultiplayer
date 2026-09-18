@@ -11,7 +11,6 @@ public class MainMenuManager : MonoBehaviourPunCallbacks
     public UI_Lobby lobby;
 
     public const int MaxNickNameLength = 18;
-    public const string RoomTestSceneName = "RoomTest";
     public const string SpaceInvadersMultiplayerSceneName = "SpaceInvadersMultiplayer";
 
     private Dictionary<string, RoomInfo> _availableRooms = new Dictionary<string, RoomInfo>();
