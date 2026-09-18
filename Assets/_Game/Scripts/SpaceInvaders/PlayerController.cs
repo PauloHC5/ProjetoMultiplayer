@@ -57,7 +57,7 @@ namespace _Game.Scripts.SpaceInvaders
 
         private void FixedUpdate()
         {
-            if (_possessedPlayerCharacter == null) return;
+            if (_possessedPlayerCharacter == null || _possessedPlayerCharacter.bBotMode) return;
 
             Vector2 direction = Vector2.zero;
 

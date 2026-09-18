@@ -10,7 +10,6 @@ public class Projectile : MonoBehaviour
     public Vector2 direction;
     public float speed;
 
-    public bool IsLocalProjectile { get; private set; }
     public int InstigatorId { get; private set; }
     public int ShotId { get; private set; }
 
@@ -18,24 +17,25 @@ public class Projectile : MonoBehaviour
     private bool _destroyed;
     
     public SpriteRenderer SpriteRenderer { get; private set; }
+    public Collider2D Collider2D { get; private set; }
 
     private Rigidbody2D _rigidbody2D;
     
-    private static readonly Dictionary<(int instigatorId, int shotId), Projectile> _projectileRegistry = new();
+    private static readonly Dictionary<(int instigatorId, int shotId), Projectile> ProjectileRegistry = new();
 
     private void Awake()
     {
         SpriteRenderer = GetComponent<SpriteRenderer>();
         _rigidbody2D = GetComponent<Rigidbody2D>();
+        Collider2D = GetComponent<Collider2D>();
     }
 
-    public void Init(int instigatorPlayerId, bool isLocalProjectile, int shotId)
+    public void Init(int instigatorPlayerId, int shotId)
     {
         InstigatorId = instigatorPlayerId;
-        IsLocalProjectile = isLocalProjectile;
         ShotId = shotId;
 
-        _projectileRegistry[(instigatorPlayerId, shotId)] = this;
+        ProjectileRegistry[(instigatorPlayerId, shotId)] = this;
     }
 
     private void Start()
@@ -65,7 +65,7 @@ public class Projectile : MonoBehaviour
     
     public static void DestroyRemote(int instigatorId, int shotId)
     {
-        if (_projectileRegistry.TryGetValue((instigatorId, shotId), out var p) && p != null)
+        if (ProjectileRegistry.TryGetValue((instigatorId, shotId), out var p) && p != null)
         {
             p.DestroyProjectile();
         }
@@ -76,8 +76,8 @@ public class Projectile : MonoBehaviour
         if (_destroyed) return;
         _destroyed = true;
  
-        var shotId = _projectileRegistry.FirstOrDefault(x => x.Value == this).Key.shotId;
-        _projectileRegistry.Remove((InstigatorId, ShotId));
+        var shotId = ProjectileRegistry.FirstOrDefault(x => x.Value == this).Key.shotId;
+        ProjectileRegistry.Remove((InstigatorId, ShotId));
  
         Destroyed?.Invoke();
         Destroy(gameObject);

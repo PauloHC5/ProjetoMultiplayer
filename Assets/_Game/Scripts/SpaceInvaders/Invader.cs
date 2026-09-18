@@ -17,7 +17,7 @@ public class Invader : MonoBehaviour
     private int _defaultLayer;
     
     public event System.Action OnInvaderHitBoundaries;
-    public event System.Action<int, bool, int> OnInvaderKilled;
+    public event System.Action<int, int> OnInvaderKilled;
     
     private void Awake()
     {
@@ -48,7 +48,7 @@ public class Invader : MonoBehaviour
         {
             var laser = other.GetComponent<Projectile>();
             
-            OnInvaderKilled?.Invoke(invaderIndex, laser.IsLocalProjectile, laser.InstigatorId);
+            OnInvaderKilled?.Invoke(invaderIndex, laser.InstigatorId);
         }
         
         if(other.gameObject.layer == _defaultLayer)

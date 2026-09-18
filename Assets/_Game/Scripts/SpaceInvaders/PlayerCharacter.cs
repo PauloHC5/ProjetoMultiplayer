@@ -21,6 +21,7 @@ public class PlayerCharacter : MonoBehaviourPun
     [Header("Player Settings")]
     public Projectile laserPrefab;
     public float speed = 5.0f;
+    public bool bBotMode = false;
     
     [Header("Audio")]
     public AudioCue shootSfx;
@@ -33,6 +34,7 @@ public class PlayerCharacter : MonoBehaviourPun
     private Rigidbody2D _rigidbody2D;
     private TextMeshProUGUI _playerNicknameText;
     private int _shotCounter;
+    private Vector2 _botMoveDirection = Vector2.zero;
     
     public Action<PlayerCharacter> OnPlayerDestroyed;
 
@@ -67,6 +69,26 @@ public class PlayerCharacter : MonoBehaviourPun
         
         if(Keyboard.current.fKey.wasPressedThisFrame)
             photonView.RPC(nameof(RpcExplodeSfx), RpcTarget.All);
+
+        if (bBotMode)
+            BotMovement();
+        
+    }
+
+    private void BotMovement()
+    {
+        // Bot movement logic
+        if(_botMoveDirection == Vector2.zero || UnityEngine.Random.value < 0.01f) // Randomly change direction
+        {
+            _botMoveDirection = new Vector2(UnityEngine.Random.Range(-1f, 1f), 0f).normalized;
+        }
+        Move(_botMoveDirection);
+
+        // Bot shooting logic
+        if (UnityEngine.Random.value < 0.01f) // Random chance to shoot
+        {
+            TryShoot();
+        }
     }
 
     [PunRPC]
@@ -113,7 +135,8 @@ public class PlayerCharacter : MonoBehaviourPun
 
         Projectile laser = Instantiate(laserPrefab, fixedPositionToSpawn, Quaternion.identity);
         laser.Destroyed += () => _laserActive = false;
-        laser.Init(photonView.OwnerActorNr, photonView.IsMine, shotId);
+        laser.Init(photonView.OwnerActorNr, shotId);
+        laser.Collider2D.enabled = photonView.IsMine;
 
         GameManager.Instance.AudioManager.PlaySfx(shootSfx);
     }
@@ -139,6 +162,13 @@ public class PlayerCharacter : MonoBehaviourPun
                 photonView.RPC(nameof(RpcExplode), player);
             }
         }
+    }
+
+    private void OnCollisionEnter2D(Collision2D other)
+    {
+        if(!bBotMode || !photonView.IsMine) return;
+        
+        _botMoveDirection = -_botMoveDirection; // Reverse direction on collision
     }
 
     [PunRPC]

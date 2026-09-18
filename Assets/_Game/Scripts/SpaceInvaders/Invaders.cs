@@ -121,17 +121,13 @@ public class Invaders : MonoBehaviourPunCallbacks
         var selectedInvader = _invaders[invaderIndex];
         if (selectedInvader != null && selectedInvader.gameObject.activeInHierarchy)
         {
-            var isLocalProjectile = PhotonNetwork.IsMasterClient;
-            
             var missile = Instantiate(missilePrefab, selectedInvader.transform.position, Quaternion.identity);
-            missile.Init(InvadersInstigatorId, isLocalProjectile, shotId);
+            missile.Init(InvadersInstigatorId, shotId);
         }
     }
     
-    private void InvaderKilled(int invaderIndex, bool isLocalProjectile, int instigatorPlayerId)
+    private void InvaderKilled(int invaderIndex, int instigatorPlayerId)
     {
-        if (!isLocalProjectile) return;
-
         photonView.RPC(nameof(RpcReplicateKill), RpcTarget.All, invaderIndex, instigatorPlayerId);
     }
 
