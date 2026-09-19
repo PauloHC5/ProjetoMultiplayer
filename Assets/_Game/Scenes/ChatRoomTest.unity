@@ -278,10 +278,26 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 4086501730273439730, guid: 0fa3ad4ac70aebc4eabd30367dd13837, type: 3}
+      propertyPath: m_Name
+      value: Chat Input Field
+      objectReference: {fileID: 0}
     - target: {fileID: 4113257420416600772, guid: 0fa3ad4ac70aebc4eabd30367dd13837, type: 3}
       propertyPath: m_Camera
       value: 
       objectReference: {fileID: 2122273937}
+    - target: {fileID: 4113257420416600772, guid: 0fa3ad4ac70aebc4eabd30367dd13837, type: 3}
+      propertyPath: m_Enabled
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4804134184146568689, guid: 0fa3ad4ac70aebc4eabd30367dd13837, type: 3}
+      propertyPath: m_Name
+      value: Chat Type Text
+      objectReference: {fileID: 0}
+    - target: {fileID: 5112445194538188977, guid: 0fa3ad4ac70aebc4eabd30367dd13837, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
+      value: ToogleChatUI
+      objectReference: {fileID: 0}
     - target: {fileID: 5205210894851692406, guid: 0fa3ad4ac70aebc4eabd30367dd13837, type: 3}
       propertyPath: m_AnchorMax.x
       value: 0
@@ -299,21 +315,29 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 7317432063680343506, guid: 0fa3ad4ac70aebc4eabd30367dd13837, type: 3}
+      propertyPath: chatCanvas
+      value: 
+      objectReference: {fileID: 1461882358}
+    - target: {fileID: 7317432063680343506, guid: 0fa3ad4ac70aebc4eabd30367dd13837, type: 3}
       propertyPath: chatButtonsGroup
       value: 
       objectReference: {fileID: 1915609539}
     - target: {fileID: 7317432063680343506, guid: 0fa3ad4ac70aebc4eabd30367dd13837, type: 3}
       propertyPath: playerChatPrefab
       value: 
-      objectReference: {fileID: 1285463480195662855, guid: 53bb9a48c21348c4d80cec1721104def, type: 3}
+      objectReference: {fileID: 206718856313031749, guid: fa59e71ebf750b742be2293e7337926e, type: 3}
     - target: {fileID: 7317432063680343506, guid: 0fa3ad4ac70aebc4eabd30367dd13837, type: 3}
       propertyPath: roomChat.chatObj
       value: 
       objectReference: {fileID: 606994820}
     - target: {fileID: 7317432063680343506, guid: 0fa3ad4ac70aebc4eabd30367dd13837, type: 3}
+      propertyPath: playerChatOverlay
+      value: 
+      objectReference: {fileID: 1309964907}
+    - target: {fileID: 7317432063680343506, guid: 0fa3ad4ac70aebc4eabd30367dd13837, type: 3}
       propertyPath: roomChat.chatButton
       value: 
-      objectReference: {fileID: 1040076026}
+      objectReference: {fileID: 0}
     - target: {fileID: 7317432063680343506, guid: 0fa3ad4ac70aebc4eabd30367dd13837, type: 3}
       propertyPath: roomChat.chatContent
       value: 
@@ -341,7 +365,11 @@ PrefabInstance:
     - target: {fileID: 7317432063680343506, guid: 0fa3ad4ac70aebc4eabd30367dd13837, type: 3}
       propertyPath: roomChat.chatButton.chatButtonObj
       value: 
-      objectReference: {fileID: 1040076024}
+      objectReference: {fileID: 0}
+    - target: {fileID: 7705457169960266233, guid: 0fa3ad4ac70aebc4eabd30367dd13837, type: 3}
+      propertyPath: m_Name
+      value: Chat Toogle Button
+      objectReference: {fileID: 0}
     - target: {fileID: 7914125982042458128, guid: 0fa3ad4ac70aebc4eabd30367dd13837, type: 3}
       propertyPath: m_SizeDelta.y
       value: 0
@@ -352,141 +380,11 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 3723946080316260100, guid: 0fa3ad4ac70aebc4eabd30367dd13837, type: 3}
       insertIndex: -1
       addedObject: {fileID: 1915609539}
+    - targetCorrespondingSourceObject: {fileID: 3723946080316260100, guid: 0fa3ad4ac70aebc4eabd30367dd13837, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1309964907}
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 0fa3ad4ac70aebc4eabd30367dd13837, type: 3}
---- !u!1 &1040076024
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 1040076025}
-  - component: {fileID: 1040076028}
-  - component: {fileID: 1040076027}
-  - component: {fileID: 1040076026}
-  m_Layer: 5
-  m_Name: Room Chat Button
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!224 &1040076025
-RectTransform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1040076024}
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 2.215303, y: 2.215303, z: 2.215303}
-  m_ConstrainProportionsScale: 1
-  m_Children:
-  - {fileID: 1504334562}
-  m_Father: {fileID: 1915609539}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 163.97998, y: 57.97}
-  m_Pivot: {x: 0.5, y: 0.5}
---- !u!114 &1040076026
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1040076024}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 4e29b1a8efbd4b44bb3f3716e73f07ff, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.Button
-  m_Navigation:
-    m_Mode: 3
-    m_WrapAround: 0
-    m_SelectOnUp: {fileID: 0}
-    m_SelectOnDown: {fileID: 0}
-    m_SelectOnLeft: {fileID: 0}
-    m_SelectOnRight: {fileID: 0}
-  m_Transition: 1
-  m_Colors:
-    m_NormalColor: {r: 1, g: 1, b: 1, a: 1}
-    m_HighlightedColor: {r: 0.9607843, g: 0.9607843, b: 0.9607843, a: 1}
-    m_PressedColor: {r: 0.78431374, g: 0.78431374, b: 0.78431374, a: 1}
-    m_SelectedColor: {r: 0.9607843, g: 0.9607843, b: 0.9607843, a: 1}
-    m_DisabledColor: {r: 0.78431374, g: 0.78431374, b: 0.78431374, a: 0.5019608}
-    m_ColorMultiplier: 1
-    m_FadeDuration: 0.1
-  m_SpriteState:
-    m_HighlightedSprite: {fileID: 0}
-    m_PressedSprite: {fileID: 0}
-    m_SelectedSprite: {fileID: 0}
-    m_DisabledSprite: {fileID: 0}
-  m_AnimationTriggers:
-    m_NormalTrigger: Normal
-    m_HighlightedTrigger: Highlighted
-    m_PressedTrigger: Pressed
-    m_SelectedTrigger: Selected
-    m_DisabledTrigger: Disabled
-  m_Interactable: 1
-  m_TargetGraphic: {fileID: 1040076027}
-  m_OnClick:
-    m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 1461882350}
-        m_TargetAssemblyTypeName: UI_Chat, Assembly-CSharp
-        m_MethodName: SendChatMessage
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
---- !u!114 &1040076027
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1040076024}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.Image
-  m_Material: {fileID: 0}
-  m_Color: {r: 0.08627451, g: 0.08627451, b: 0.08627451, a: 1}
-  m_RaycastTarget: 1
-  m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
-  m_Maskable: 1
-  m_OnCullStateChanged:
-    m_PersistentCalls:
-      m_Calls: []
-  m_Sprite: {fileID: 10905, guid: 0000000000000000f000000000000000, type: 0}
-  m_Type: 1
-  m_PreserveAspect: 0
-  m_FillCenter: 1
-  m_FillMethod: 4
-  m_FillAmount: 1
-  m_FillClockwise: 1
-  m_FillOrigin: 0
-  m_UseSpriteMesh: 0
-  m_PixelsPerUnitMultiplier: 1
---- !u!222 &1040076028
-CanvasRenderer:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1040076024}
-  m_CullTransparentMesh: 1
 --- !u!1 &1085082943
 GameObject:
   m_ObjectHideFlags: 0
@@ -577,23 +475,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f4688fdb7df04437aeb418b961361dc5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Unity.TextMeshPro::TMPro.TextMeshProUGUI
---- !u!114 &1461882350 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 7317432063680343506, guid: 0fa3ad4ac70aebc4eabd30367dd13837, type: 3}
-  m_PrefabInstance: {fileID: 825737006}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f42c389c18eb66542afe27e2b350697e, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::UI_Chat
---- !u!224 &1461882354 stripped
-RectTransform:
-  m_CorrespondingSourceObject: {fileID: 3723946080316260100, guid: 0fa3ad4ac70aebc4eabd30367dd13837, type: 3}
-  m_PrefabInstance: {fileID: 825737006}
-  m_PrefabAsset: {fileID: 0}
---- !u!1 &1504334561
+--- !u!1 &1309964906
 GameObject:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -601,137 +483,43 @@ GameObject:
   m_PrefabAsset: {fileID: 0}
   serializedVersion: 6
   m_Component:
-  - component: {fileID: 1504334562}
-  - component: {fileID: 1504334564}
-  - component: {fileID: 1504334563}
+  - component: {fileID: 1309964907}
   m_Layer: 5
-  m_Name: Text (TMP)
+  m_Name: Player Chat Overlay
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!224 &1504334562
+--- !u!224 &1309964907
 RectTransform:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1504334561}
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_GameObject: {fileID: 1309964906}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 1040076025}
+  m_Father: {fileID: 1461882354}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 0, y: 0}
+  m_AnchorMin: {x: 1, y: 0.5}
+  m_AnchorMax: {x: 1, y: 0.5}
+  m_AnchoredPosition: {x: -282.5, y: -0.0024414}
+  m_SizeDelta: {x: 565, y: 808.99}
   m_Pivot: {x: 0.5, y: 0.5}
---- !u!114 &1504334563
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
+--- !u!224 &1461882354 stripped
+RectTransform:
+  m_CorrespondingSourceObject: {fileID: 3723946080316260100, guid: 0fa3ad4ac70aebc4eabd30367dd13837, type: 3}
+  m_PrefabInstance: {fileID: 825737006}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1504334561}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f4688fdb7df04437aeb418b961361dc5, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Unity.TextMeshPro::TMPro.TextMeshProUGUI
-  m_Material: {fileID: 0}
-  m_Color: {r: 1, g: 1, b: 1, a: 1}
-  m_RaycastTarget: 1
-  m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
-  m_Maskable: 1
-  m_OnCullStateChanged:
-    m_PersistentCalls:
-      m_Calls: []
-  m_text: 'Room Chat
-
-'
-  m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: c6c0a65388fd02e448988d1ce6f2fd00, type: 2}
-  m_sharedMaterial: {fileID: -5060138518038165327, guid: c6c0a65388fd02e448988d1ce6f2fd00, type: 2}
-  m_fontSharedMaterials: []
-  m_fontMaterial: {fileID: 0}
-  m_fontMaterials: []
-  m_fontColor32:
-    serializedVersion: 2
-    rgba: 4280867115
-  m_fontColor: {r: 0.16862746, g: 0.85098046, b: 0.15686275, a: 1}
-  m_enableVertexGradient: 0
-  m_colorMode: 3
-  m_fontColorGradient:
-    topLeft: {r: 1, g: 1, b: 1, a: 1}
-    topRight: {r: 1, g: 1, b: 1, a: 1}
-    bottomLeft: {r: 1, g: 1, b: 1, a: 1}
-    bottomRight: {r: 1, g: 1, b: 1, a: 1}
-  m_fontColorGradientPreset: {fileID: 0}
-  m_spriteAsset: {fileID: 0}
-  m_tintAllSprites: 0
-  m_StyleSheet: {fileID: 0}
-  m_TextStyleHashCode: -1183493901
-  m_overrideHtmlColors: 0
-  m_faceColor:
-    serializedVersion: 2
-    rgba: 4294967295
-  m_fontSize: 15.7
-  m_fontSizeBase: 15.7
-  m_fontWeight: 400
-  m_enableAutoSizing: 0
-  m_fontSizeMin: 18
-  m_fontSizeMax: 72
-  m_fontStyle: 0
-  m_HorizontalAlignment: 2
-  m_VerticalAlignment: 512
-  m_textAlignment: 65535
-  m_characterSpacing: 0
-  m_characterHorizontalScale: 1
-  m_wordSpacing: 0
-  m_lineSpacing: 0
-  m_lineSpacingMax: 0
-  m_paragraphSpacing: 0
-  m_charWidthMaxAdj: 0
-  m_TextWrappingMode: 1
-  m_wordWrappingRatios: 0.4
-  m_overflowMode: 0
-  m_linkedTextComponent: {fileID: 0}
-  parentLinkedComponent: {fileID: 0}
-  m_enableKerning: 0
-  m_ActiveFontFeatures: 6e72656b
-  m_enableExtraPadding: 0
-  checkPaddingRequired: 0
-  m_isRichText: 1
-  m_EmojiFallbackSupport: 1
-  m_parseCtrlCharacters: 1
-  m_isOrthographic: 1
-  m_isCullingEnabled: 0
-  m_horizontalMapping: 0
-  m_verticalMapping: 0
-  m_uvLineOffset: 0
-  m_geometrySortingOrder: 0
-  m_IsTextObjectScaleStatic: 0
-  m_VertexBufferAutoSizeReduction: 0
-  m_useMaxVisibleDescender: 1
-  m_pageToDisplay: 1
-  m_margin: {x: 0, y: 0, z: 0, w: 0}
-  m_isUsingLegacyAnimationComponent: 0
-  m_isVolumetricText: 0
-  m_hasFontAssetChanged: 0
-  m_baseMaterial: {fileID: 0}
-  m_maskOffset: {x: 0, y: 0, z: 0, w: 0}
---- !u!222 &1504334564
-CanvasRenderer:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
+--- !u!223 &1461882358 stripped
+Canvas:
+  m_CorrespondingSourceObject: {fileID: 4113257420416600772, guid: 0fa3ad4ac70aebc4eabd30367dd13837, type: 3}
+  m_PrefabInstance: {fileID: 825737006}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1504334561}
-  m_CullTransparentMesh: 1
 --- !u!114 &1538352668 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 7450890425638711721, guid: 0fa3ad4ac70aebc4eabd30367dd13837, type: 3}
@@ -782,8 +570,7 @@ RectTransform:
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
-  m_Children:
-  - {fileID: 1040076025}
+  m_Children: []
   m_Father: {fileID: 1461882354}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}

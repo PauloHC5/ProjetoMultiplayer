@@ -17,7 +17,7 @@ namespace Photon.Chat.DemoChat
     /// </remarks>
     public class ChatSettings : ScriptableObject
     {
-        [Tooltip("Your Chat AppId from Photon Dashboard")]
+        [Tooltip("Your RoomChat AppId from Photon Dashboard")]
         public string AppId;
 
         [HideInInspector]
