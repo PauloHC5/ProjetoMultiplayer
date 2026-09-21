@@ -2,6 +2,7 @@ using System;
 using Photon.Pun;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEngine.Serialization;
 
 namespace _Game.Scripts.SpaceInvaders
 {
@@ -12,9 +13,10 @@ namespace _Game.Scripts.SpaceInvaders
         // someone else's controller.
         public static PlayerController Local { get; private set; }
 
-        private PlayerCharacter _possessedPlayerCharacter;
+        [SerializeField]
+        private PlayerCharacter possessedPlayerCharacter;
 
-        public bool HasPossessedPlayer => _possessedPlayerCharacter != null;
+        public bool HasPossessedPlayer => possessedPlayerCharacter != null;
 
         private void Awake()
         {
@@ -31,21 +33,21 @@ namespace _Game.Scripts.SpaceInvaders
 
         public void Possess(PlayerCharacter playerCharacter)
         {
-            _possessedPlayerCharacter = playerCharacter;
+            possessedPlayerCharacter = playerCharacter;
         }
 
         public void UnPossess()
         {
-            _possessedPlayerCharacter = null;
+            possessedPlayerCharacter = null;
         }
 
         private void Update()
         {
-            if (_possessedPlayerCharacter != null)
+            if (possessedPlayerCharacter != null)
             {
                 if (Keyboard.current.spaceKey.wasPressedThisFrame || Mouse.current.leftButton.wasPressedThisFrame)
                 {
-                    _possessedPlayerCharacter.TryShoot();
+                    possessedPlayerCharacter.TryShoot();
                 }
             }
             else
@@ -57,16 +59,56 @@ namespace _Game.Scripts.SpaceInvaders
 
         private void FixedUpdate()
         {
-            if (_possessedPlayerCharacter == null || _possessedPlayerCharacter.bBotMode) return;
+            if (possessedPlayerCharacter == null || possessedPlayerCharacter.bBotMode) return;
 
             Vector2 direction = Vector2.zero;
-
-            if (Keyboard.current.aKey.isPressed || Keyboard.current.leftArrowKey.isPressed)
-                direction = Vector2.left;
-            else if (Keyboard.current.dKey.isPressed || Keyboard.current.rightArrowKey.isPressed)
-                direction = Vector2.right;
             
-            _possessedPlayerCharacter.Move(direction);
+            EightWayMovement(direction);
+            //FourWayMovement(direction);
+        }
+        
+        private void EightWayMovement(Vector2 direction)
+        {
+            if (Keyboard.current.aKey.isPressed || Keyboard.current.leftArrowKey.isPressed)
+            {
+                direction.x -= 1f;
+            }
+            if (Keyboard.current.dKey.isPressed || Keyboard.current.rightArrowKey.isPressed)
+            {
+                direction.x += 1f;
+            }
+            if (Keyboard.current.wKey.isPressed || Keyboard.current.upArrowKey.isPressed)
+            {
+                direction.y += 1f;
+            }
+            if (Keyboard.current.sKey.isPressed || Keyboard.current.downArrowKey.isPressed)
+            {
+                direction.y -= 1f;
+            }
+
+            possessedPlayerCharacter.Move(direction);
+        }
+        
+        private void FourWayMovement(Vector2 direction)
+        {
+            if (Keyboard.current.aKey.isPressed || Keyboard.current.leftArrowKey.isPressed)
+            {
+                direction.x -= 1f;
+            }
+            else if (Keyboard.current.dKey.isPressed || Keyboard.current.rightArrowKey.isPressed)
+            {
+                direction.x += 1f;
+            }
+            else if (Keyboard.current.wKey.isPressed || Keyboard.current.upArrowKey.isPressed)
+            {
+                direction.y += 1f;
+            }
+            else if (Keyboard.current.sKey.isPressed || Keyboard.current.downArrowKey.isPressed)
+            {
+                direction.y -= 1f;
+            }
+
+            possessedPlayerCharacter.Move(direction);
         }
     }
 }

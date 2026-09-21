@@ -56,7 +56,7 @@ public class PlayerCharacter : MonoBehaviourPun
 
     private void Start()
     {
-        if (!photonView.IsMine) return;
+        if (!photonView.IsMine || !PhotonNetwork.IsConnected) return;
         
         photonView.RPC(nameof(RpcStartInvincible), RpcTarget.AllBuffered);
         
@@ -106,21 +106,29 @@ public class PlayerCharacter : MonoBehaviourPun
     
     public void TryShoot()
     {
-        if(!photonView.IsMine) return;
-        
-        if (_laserActive) return;
- 
-        _laserActive = true;
+        if (PhotonNetwork.IsConnected)
+        {
 
-        Vector2 characterPosition = transform.position;
-        Vector2 characterVelocity = _rigidbody2D.linearVelocity;
-        
-        int shotId = _shotCounter++;
+            if (!photonView.IsMine) return;
 
-        photonView.RPC(nameof(RpcShoot), RpcTarget.All,
-        characterPosition,
-        characterVelocity,
-        shotId);           
+            if (_laserActive) return;
+
+            _laserActive = true;
+
+            Vector2 characterPosition = transform.position;
+            Vector2 characterVelocity = _rigidbody2D.linearVelocity;
+
+            int shotId = _shotCounter++;
+
+            photonView.RPC(nameof(RpcShoot), RpcTarget.All,
+                characterPosition,
+                characterVelocity,
+                shotId);
+        }
+        else
+        {
+            RpcShoot(transform.position, _rigidbody2D.linearVelocity, _shotCounter++, new PhotonMessageInfo());
+        }
     }
     
     [PunRPC]
