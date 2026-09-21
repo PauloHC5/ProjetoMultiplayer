@@ -8,6 +8,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 2764516007797317965, guid: d309fc0006846c549aeb75c69f86a298, type: 3}
+      propertyPath: m_Sprite
+      value: 
+      objectReference: {fileID: 21300000, guid: deaf0cd256cd43d4db66b7b141086e80, type: 3}
     - target: {fileID: 3237252627021774936, guid: d309fc0006846c549aeb75c69f86a298, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0
@@ -52,6 +56,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Player 3
       objectReference: {fileID: 0}
+    - target: {fileID: 7635905824344413223, guid: d309fc0006846c549aeb75c69f86a298, type: 3}
+      propertyPath: m_Controller
+      value: 
+      objectReference: {fileID: 22100000, guid: 229fd3a8b455dba47961a667fdfb4157, type: 2}
     - target: {fileID: 7795914129631279361, guid: d309fc0006846c549aeb75c69f86a298, type: 3}
       propertyPath: m_Sprite
       value: 
@@ -78,6 +86,10 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8806387911206087571, guid: d309fc0006846c549aeb75c69f86a298, type: 3}
       propertyPath: laserPrefab
+      value: 
+      objectReference: {fileID: 8158047387858787813, guid: 0dbe12123b569ce43aeddd647c8548b4, type: 3}
+    - target: {fileID: 8806387911206087571, guid: d309fc0006846c549aeb75c69f86a298, type: 3}
+      propertyPath: projectilePrefab
       value: 
       objectReference: {fileID: 8158047387858787813, guid: 0dbe12123b569ce43aeddd647c8548b4, type: 3}
     m_RemovedComponents: []

@@ -13,7 +13,7 @@ public class Projectile : MonoBehaviour
     public int InstigatorId { get; private set; }
     public int ShotId { get; private set; }
 
-    public Action Destroyed;
+    public Action<Projectile> Destroyed;
     private bool _destroyed;
     
     public SpriteRenderer SpriteRenderer { get; private set; }
@@ -60,7 +60,9 @@ public class Projectile : MonoBehaviour
         if (_destroyed) return;
         
         DestroyProjectile();
-        ProjectileNetwork.RequestDestroy(InstigatorId, ShotId);
+        
+        if(PhotonNetwork.IsConnected)
+            ProjectileNetwork.RequestDestroy(InstigatorId, ShotId);
     }
     
     public static void DestroyRemote(int instigatorId, int shotId)
@@ -79,7 +81,7 @@ public class Projectile : MonoBehaviour
         var shotId = ProjectileRegistry.FirstOrDefault(x => x.Value == this).Key.shotId;
         ProjectileRegistry.Remove((InstigatorId, ShotId));
  
-        Destroyed?.Invoke();
+        Destroyed?.Invoke(this);
         Destroy(gameObject);
     }
 }

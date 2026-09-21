@@ -19,30 +19,40 @@ public enum PlayerType
 public class PlayerCharacter : MonoBehaviourPun
 {
     [Header("Player Settings")]
-    public Projectile laserPrefab;
-    public float speed = 5.0f;
-    public bool bBotMode = false;
-    
+    public Projectile projectilePrefab;
+    [SerializeField] private float speed = 10.0f;
+    [SerializeField] private Transform projectileSpawnPoint;
+
     [Header("Audio")]
     public AudioCue shootSfx;
+
+    [Header("Bot Settings")]
+    public bool bBotMode = false;
+
     public AudioCue explosionSfx;
     
     public SpriteRenderer SpriteRenderer { get; private set; }
-        
-    private bool _laserActive;
-    private bool _invincible;
     private Rigidbody2D _rigidbody2D;
+    private Animator _characterAnimator;
+
+    private bool _projectileActive;
+    private bool _invincible;
     private TextMeshProUGUI _playerNicknameText;
     private int _shotCounter;
     private Vector2 _botMoveDirection = Vector2.zero;
     
     public Action<PlayerCharacter> OnPlayerDestroyed;
+    
+    private readonly int MoveXHash = Animator.StringToHash("MoveX");
+    private readonly int MoveYHash = Animator.StringToHash("MoveY");
+    private readonly int IsMovingHash = Animator.StringToHash("IsMoving");
 
     private void Awake()
     {
-        SpriteRenderer = GetComponent<SpriteRenderer>();
+        SpriteRenderer = GetComponentInChildren<SpriteRenderer>();
         _rigidbody2D = GetComponent<Rigidbody2D>();
         _playerNicknameText = GetComponentInChildren<TextMeshProUGUI>();
+        _characterAnimator = GetComponentInChildren<Animator>();
         
         // Only the owner needs a real physics simulation to get blocked by
         // walls/obstacles. Remote copies get their position overwritten by
@@ -58,6 +68,13 @@ public class PlayerCharacter : MonoBehaviourPun
     {
         if (!photonView.IsMine || !PhotonNetwork.IsConnected) return;
         
+        StartCoroutine(WaitForRoomBeReady());
+    }
+
+    private IEnumerator WaitForRoomBeReady()
+    {
+        yield return new WaitUntil(() => PhotonNetwork.InRoom);
+        
         photonView.RPC(nameof(RpcStartInvincible), RpcTarget.AllBuffered);
         
         photonView.RPC(nameof(RpcSetNickname), RpcTarget.AllBuffered, PhotonNetwork.NickName);
@@ -72,7 +89,6 @@ public class PlayerCharacter : MonoBehaviourPun
 
         if (bBotMode)
             BotMovement();
-        
     }
 
     private void BotMovement()
@@ -100,53 +116,63 @@ public class PlayerCharacter : MonoBehaviourPun
 
     public void Move(Vector2 direction)
     {
+        _characterAnimator.SetBool(IsMovingHash, direction.sqrMagnitude > 0.01f);
+        _characterAnimator.SetFloat(MoveXHash, direction.x);
+        _characterAnimator.SetFloat(MoveYHash, direction.y);
+
         Vector2 movement = new Vector2(direction.x, direction.y) * speed;
         _rigidbody2D.linearVelocity = movement;
     }
     
     public void TryShoot()
     {
+        if(_projectileActive) return;
+        
         if (PhotonNetwork.IsConnected)
         {
-
             if (!photonView.IsMine) return;
-
-            if (_laserActive) return;
-
-            _laserActive = true;
-
-            Vector2 characterPosition = transform.position;
+            
+            Vector2 projectileSpawnPosition = projectileSpawnPoint.position;
             Vector2 characterVelocity = _rigidbody2D.linearVelocity;
 
             int shotId = _shotCounter++;
 
             photonView.RPC(nameof(RpcShoot), RpcTarget.All,
-                characterPosition,
+                projectileSpawnPosition,
                 characterVelocity,
                 shotId);
         }
         else
         {
-            RpcShoot(transform.position, _rigidbody2D.linearVelocity, _shotCounter++, new PhotonMessageInfo());
+            RpcShoot(projectileSpawnPoint.position, _rigidbody2D.linearVelocity, _shotCounter++, new PhotonMessageInfo());
         }
+        
+        _projectileActive = true;
     }
     
     [PunRPC]
-    private void RpcShoot(Vector2 shooterPosition, Vector2 shooterVelocity, int shotId, PhotonMessageInfo info)
+    private void RpcShoot(Vector2 projectileSpawnPosition, Vector2 shooterVelocity, int shotId, PhotonMessageInfo info)
     {
         float lag = Mathf.Max(0f, (float)(PhotonNetwork.Time - info.SentServerTime));
 
         if (!photonView.IsMine)
             Debug.Log($"RPC Shoot received from {info.Sender.NickName} with lag of: " + lag);
 
-        Vector3 fixedPositionToSpawn = shooterPosition + shooterVelocity * lag;
+        Vector3 fixedPositionToSpawn = projectileSpawnPosition + shooterVelocity * lag;
 
-        Projectile laser = Instantiate(laserPrefab, fixedPositionToSpawn, Quaternion.identity);
-        laser.Destroyed += () => _laserActive = false;
-        laser.Init(photonView.OwnerActorNr, shotId);
-        laser.Collider2D.enabled = photonView.IsMine;
+        Projectile projectile = Instantiate(projectilePrefab, fixedPositionToSpawn, Quaternion.identity);
+        projectile.Destroyed += OnProjectileDestroyed;
+        
+        projectile.Init(photonView.OwnerActorNr, shotId);
+        projectile.Collider2D.enabled = photonView.IsMine;
 
         GameManager.Instance.AudioManager.PlaySfx(shootSfx);
+    }
+    
+    private void OnProjectileDestroyed(Projectile projectile)
+    {
+        _projectileActive = false;
+        projectile.Destroyed -= OnProjectileDestroyed;
     }
 
     private void OnTriggerEnter2D(Collider2D other)
