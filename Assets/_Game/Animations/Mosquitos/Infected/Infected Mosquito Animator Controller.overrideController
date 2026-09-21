@@ -1,0 +1,13 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!221 &22100000
+AnimatorOverrideController:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: Infected Mosquito Animator Controller
+  m_Controller: {fileID: 9100000, guid: 10c4c66691aaf2d48a92fd65f5e64235, type: 2}
+  m_Clips:
+  - m_OriginalClip: {fileID: 7400000, guid: bec79b82fa90c314c8a7cade9210f5f7, type: 2}
+    m_OverrideClip: {fileID: 7400000, guid: d4246959f6cff9047bcbec4ce3b82dfc, type: 2}

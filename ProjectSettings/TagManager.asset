@@ -41,8 +41,14 @@ TagManager:
   - name: Default
     uniqueID: 0
     locked: 0
+  - name: Enemies
+    uniqueID: 583268991
+    locked: 0
   - name: Characters
     uniqueID: 2146183049
+    locked: 0
+  - name: Barrier
+    uniqueID: 884387271
     locked: 0
   - name: UI_Chat
     uniqueID: 1139064329

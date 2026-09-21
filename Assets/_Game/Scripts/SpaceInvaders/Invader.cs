@@ -4,10 +4,9 @@ using UnityEngine;
 
 public class Invader : MonoBehaviour
 {
-    public int invaderIndex;
+    
+    [HideInInspector] public int invaderIndex;
     public int points;
-    public Sprite[] animationSprites;
-    public float animationTime;
     
     private SpriteRenderer _spriteRenderer;
     private int _animationFrame;
@@ -25,21 +24,6 @@ public class Invader : MonoBehaviour
         
         _laserLayer = LayerMask.NameToLayer("Laser");
         _defaultLayer = LayerMask.NameToLayer("Default");
-    }
-
-    private void Start()
-    {
-        InvokeRepeating(nameof(AnimateSprite), this.animationTime, this.animationTime);
-    }
-
-    private void AnimateSprite()
-    {
-        _animationFrame++;
-        if (_animationFrame >= this.animationSprites.Length)
-        {
-            _animationFrame = 0;
-        }
-        _spriteRenderer.sprite = this.animationSprites[_animationFrame];
     }
 
     private void OnTriggerEnter2D(Collider2D other)
