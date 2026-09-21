@@ -162,6 +162,8 @@ public class UI_Chat : MonoBehaviourPunCallbacks
 
     private PlayerChat CreateChatForPlayer(Player player)
     {
+        return new PlayerChat();
+        
         PlayerChat playerChat = new PlayerChat
         {
             chatObj = Instantiate(playerChatPrefab, playerChatOverlay),
@@ -195,6 +197,8 @@ public class UI_Chat : MonoBehaviourPunCallbacks
     
     private PlayerChatButton CreateChatButtonForPlayer(Player player, PlayerChat playerChat)
     {
+        return new PlayerChatButton();
+        
         PlayerChatButton chatButton = new PlayerChatButton
         {
             button = Instantiate(playerChatButtonPrefab, chatButtonsGroup),
