@@ -111,10 +111,10 @@ public class PlayerCharacter : MonoBehaviourPun
     private void RpcSetNickname(string nickname)
     {
         _playerNicknameText.text = nickname;
-        _playerNicknameText.color = SpriteRenderer.color;
+        _playerNicknameText.color = GameMode.GetPlayerColorBasedOnPlayerType(photonView.Owner);
     }
 
-    public void Move(Vector2 direction)
+    public void Move(Vector2 direction) 
     {
         _characterAnimator.SetBool(IsMovingHash, direction.sqrMagnitude > 0.01f);
         _characterAnimator.SetFloat(MoveXHash, direction.x);

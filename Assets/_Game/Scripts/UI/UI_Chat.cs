@@ -212,27 +212,8 @@ public class UI_Chat : MonoBehaviourPunCallbacks
 
         chatButton.playerNicknameText.text = player.NickName;
 
-        Color playerIconColor;
-        PlayerType playerType = GameMode.GetPlayerType(player);
-
-        switch (playerType)
-        {
-            case PlayerType.Player1:
-            playerIconColor = Color.green;
-            break;
-        case PlayerType.Player2:
-            playerIconColor = Color.blue;
-            break;
-        case PlayerType.Player3:
-            // Unity doesn't have Color.orange by default — use an RGB approximation
-            playerIconColor = new Color(1f, 0.65f, 0f);
-            break;
-        default:
-            playerIconColor = Color.white;
-            break;
-    }
-
-    chatButton.playerIcon.color = playerIconColor;
+        Color playerIconColor = GameMode.GetPlayerColorBasedOnPlayerType(player);
+        
     
     chatButton.button.onClick.AddListener(() => OnPlayerChatButtonClicked(chatButton));
 

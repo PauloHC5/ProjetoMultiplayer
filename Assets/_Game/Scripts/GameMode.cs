@@ -172,6 +172,18 @@ namespace _Game.Scripts
                 return PlayerType.Player1;
             }
         }
+
+        public static Color GetPlayerColorBasedOnPlayerType(Player player)
+        {
+            PlayerType playerType = GetPlayerType(player);
+            return playerType switch
+            {
+                PlayerType.Player1 => Color.green,
+                PlayerType.Player2 => Color.blue,
+                PlayerType.Player3 => Color.red,
+                _ => Color.white
+            };
+        }
         
         private void SetPlayerType(Player player, PlayerType playerType)
         {

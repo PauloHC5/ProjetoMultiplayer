@@ -105,15 +105,7 @@ public class UI_Game : MonoBehaviour
             LivesCounterText = livesCounterText
         };
 
-        Color playerColor;
-        PlayerType playerType = GameMode.GetPlayerType(player);
-        playerColor = playerType switch
-        {
-            PlayerType.Player1 => Color.green,
-            PlayerType.Player2 => Color.blue,
-            PlayerType.Player3 => Color.orange,
-            _ => Color.white
-        };
+        Color playerColor = GameMode.GetPlayerColorBasedOnPlayerType(player);
 
         playerIcon.color = playerColor;
         playerStatus.PlayerNicknameText.text = player.NickName;
