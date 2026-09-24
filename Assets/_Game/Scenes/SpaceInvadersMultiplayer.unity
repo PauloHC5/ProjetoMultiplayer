@@ -460,7 +460,7 @@ MonoBehaviour:
   - {fileID: 4051483603578224192, guid: 1e3f0df2fdec36d4aab6f25c54807f18, type: 3}
   - {fileID: 4051483603578224192, guid: 0b77bcc530e612645bbd159a63f428e5, type: 3}
   - {fileID: 4051483603578224192, guid: 67beb969ec87d5046af57e5d9172d8b1, type: 3}
-  invadersPrefab: {fileID: 7380585379183910588, guid: 2cdd92942844e9544828eece9b9cef8b, type: 3}
+  mosquitosPrefab: {fileID: 7380585379183910588, guid: 2cdd92942844e9544828eece9b9cef8b, type: 3}
   bDebugMode: 1
 --- !u!4 &281756321
 Transform:
@@ -594,8 +594,8 @@ Canvas:
   m_VertexColorAlwaysGammaSpace: 0
   m_AdditionalShaderChannelsFlag: 25
   m_UpdateRectTransformForStandalone: 0
-  m_SortingLayerID: 0
-  m_SortingOrder: 1
+  m_SortingLayerID: 1139064329
+  m_SortingOrder: 0
   m_TargetDisplay: 0
 --- !u!224 &345395259
 RectTransform:
@@ -1305,6 +1305,10 @@ PrefabInstance:
       propertyPath: m_Camera
       value: 
       objectReference: {fileID: 519420031}
+    - target: {fileID: 4113257420416600772, guid: 0fa3ad4ac70aebc4eabd30367dd13837, type: 3}
+      propertyPath: m_SortingLayerID
+      value: 510877631
+      objectReference: {fileID: 0}
     - target: {fileID: 5205210894851692406, guid: 0fa3ad4ac70aebc4eabd30367dd13837, type: 3}
       propertyPath: m_AnchorMax.x
       value: 1

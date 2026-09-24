@@ -173,8 +173,10 @@ MonoBehaviour:
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 6642ca8a9d1ae7347a3036b53a7c6c49, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::Invader
-  invaderIndex: 0
-  points: 0
-  animationSprites: []
-  animationTime: 0.8
+  m_EditorClassIdentifier: Assembly-CSharp::Mosquito
+  points: 10
+  horizontalZigzagFrequency: 10
+  horizontalZigzagAmplitude: 0.5
+  verticalZigzagFrequency: 23.7
+  verticalZigzagAmplitude: 0.15
+  mosquitoIndex: 0

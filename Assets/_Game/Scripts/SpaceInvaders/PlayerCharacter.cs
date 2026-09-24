@@ -40,6 +40,8 @@ public class PlayerCharacter : MonoBehaviourPun
     private TextMeshProUGUI _playerNicknameText;
     private int _shotCounter;
     private Vector2 _botMoveDirection = Vector2.zero;
+    private int _projectilesLayer;
+    private int _enemiesLayer;
     
     public Action<PlayerCharacter> OnPlayerDestroyed;
     
@@ -53,6 +55,8 @@ public class PlayerCharacter : MonoBehaviourPun
         _rigidbody2D = GetComponent<Rigidbody2D>();
         _playerNicknameText = GetComponentInChildren<TextMeshProUGUI>();
         _characterAnimator = GetComponentInChildren<Animator>();
+        _projectilesLayer = LayerMask.NameToLayer("EnemiesProjectiles");
+        _enemiesLayer = LayerMask.NameToLayer("Enemies");
         
         // Only the owner needs a real physics simulation to get blocked by
         // walls/obstacles. Remote copies get their position overwritten by
@@ -181,7 +185,7 @@ public class PlayerCharacter : MonoBehaviourPun
         
         if (_invincible) return;
                 
-        if(other.gameObject.layer == LayerMask.NameToLayer("Missile") || other.gameObject.layer == LayerMask.NameToLayer("Invader"))
+        if(other.gameObject.layer == _projectilesLayer || other.gameObject.layer == _enemiesLayer)
         {
             photonView.RPC(nameof(RpcExplodeSfx), RpcTarget.All);
             

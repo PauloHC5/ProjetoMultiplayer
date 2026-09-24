@@ -8,9 +8,15 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 using Hashtable = ExitGames.Client.Photon.Hashtable;
 
-public class Invaders : MonoBehaviourPunCallbacks
+public class Mosquitos : MonoBehaviourPunCallbacks
 {
-    public Invader[] prefabs;
+    private enum BoundariesSideHit
+    {
+        Left,
+        Right
+    }
+    
+    public Mosquito[] prefabs;
     public int rows = 5;
     public int columns = 11;
     public AnimationCurve speed;
@@ -21,37 +27,37 @@ public class Invaders : MonoBehaviourPunCallbacks
     public bool stopMovement = false;
     
     private Vector3 _direction = Vector3.right;    
-    private Invader[] _invaders;
+    private Mosquito[] _mosquitos;
     private PhotonView _photonView;
     private bool _bRequestedRowAdvance = false;
     private int _shotCounter;
-    public const int InvadersInstigatorId = 451;
-    
+    private BoundariesSideHit _lastBoundariesSideHit;
+    public const int MosquitosInstigatorId = 451;
     
     public int AmountKilled { get; private set; }
-    public int TotalInvaders => this.rows * this.columns;
-    public float PercertKilled => (float)this.AmountKilled / (float)this.TotalInvaders;
-    public int AmountAlive => this.TotalInvaders - this.AmountKilled;
+    public int TotalMosquitos => this.rows * this.columns;
+    public float PercentKilled => (float)this.AmountKilled / (float)this.TotalMosquitos;
+    public int AmountAlive => this.TotalMosquitos - this.AmountKilled;
     
-    public Action<int, int> OnInvaderKilled;
-    public event Action AllInvadersDestroyedEvent;
+    public Action<int, int> OnMosquitoKilled;
+    public event Action AllMosquitosDestroyedEvent;
 
     private void Awake()
     {        
-        _invaders = new Invader[this.rows * this.columns];
+        _mosquitos = new Mosquito[this.rows * this.columns];
         _photonView = GetComponent<PhotonView>();
         
-        SpawnInvaders();
+        SpawnMosquitos();
 
-        for(int i = 0; i < _invaders.Length; i++)
+        for(int i = 0; i < _mosquitos.Length; i++)
         {
-            _invaders[i].invaderIndex = i;
-            _invaders[i].OnInvaderHitBoundaries += InvaderHitBoundaries;
-            _invaders[i].OnInvaderKilled += InvaderKilled;
+            _mosquitos[i].mosquitoIndex = i;
+            _mosquitos[i].OnMosquitoHitBoundaries += MosquitoHitBoundaries;
+            _mosquitos[i].OnMosquitoKilled += MosquitoKilled;
         }
     }
 
-    private void SpawnInvaders()
+    private void SpawnMosquitos()
     {
         for (int row = 0; row < this.rows; row++)
         {
@@ -62,11 +68,11 @@ public class Invaders : MonoBehaviourPunCallbacks
             
             for(int col = 0; col < this.columns; col++)
             {
-                Invader invader = Instantiate(this.prefabs[row], this.transform);
+                Mosquito mosquito = Instantiate(this.prefabs[row], this.transform);
                 Vector3 position = rowPosition;
                 position.x += col * 4.0f;
-                invader.transform.localPosition = position;
-                _invaders[row * this.columns + col] = invader;
+                mosquito.transform.localPosition = position;
+                _mosquitos[row * this.columns + col] = mosquito;
             }
         }
     }
@@ -81,74 +87,78 @@ public class Invaders : MonoBehaviourPunCallbacks
         if (!PhotonNetwork.IsMasterClient) return;
         if (stopMovement) return;
 
-        transform.position += _direction * (speed.Evaluate(PercertKilled) * Time.fixedDeltaTime);
+        transform.position += _direction * (speed.Evaluate(PercentKilled) * Time.fixedDeltaTime);
     }
 
     public override void OnPlayerEnteredRoom(Player newPlayer)
     {
         if(!PhotonNetwork.IsMasterClient) return;
 
-        bool[] activeInvaders = _invaders.Select(invader => invader.gameObject.activeInHierarchy).ToArray();
+        bool[] activeMosquitos = _mosquitos.Select(mosquito => mosquito.gameObject.activeInHierarchy).ToArray();
 
-        photonView.RPC(nameof(RpcSyncInvadersState), newPlayer, activeInvaders);
+        photonView.RPC(nameof(RpcSyncMosquitosState), newPlayer, activeMosquitos);
     }
 
     [PunRPC]
-    private void RpcSyncInvadersState(bool[] activeInvaders)
+    private void RpcSyncMosquitosState(bool[] activeMosquitos)
     {                
-        for (int i = 0; i < activeInvaders.Length; i++)
+        for (int i = 0; i < activeMosquitos.Length; i++)
         {
-            _invaders[i].gameObject.SetActive(activeInvaders[i]);
+            _mosquitos[i].gameObject.SetActive(activeMosquitos[i]);
         }
     }
 
     private void RequestMissileAttack()
     {
         if(!PhotonNetwork.IsMasterClient) return;
+
+        if(!_mosquitos.Any(mosquito => mosquito.CompareTag("Infected"))) return;
+
+        var infectedMosquitos = _mosquitos.Where(mosquito => mosquito.CompareTag("Infected") && mosquito.gameObject.activeInHierarchy).ToArray();
         
-        int invaderIndex = UnityEngine.Random.Range(0, _invaders.Length);
+        var mosquitoToAttack = infectedMosquitos[UnityEngine.Random.Range(0, infectedMosquitos.Length - 1)];
         _shotCounter++;
         
-        _photonView.RPC(nameof(MissileAttack), RpcTarget.All, invaderIndex, _shotCounter);
+        _photonView.RPC(nameof(MissileAttack), RpcTarget.All, mosquitoToAttack.mosquitoIndex, _shotCounter);
     }
     
     [PunRPC]
-    private void MissileAttack(int invaderIndex, int shotId)
+    private void MissileAttack(int mosquitosIndex, int shotId)
     {
         if(stopMovement) return;
         
-        // Find all alive invaders
-        var selectedInvader = _invaders[invaderIndex];
-        if (selectedInvader != null && selectedInvader.gameObject.activeInHierarchy)
+        // Find all alive mosquitos
+        var selectedMosquito = _mosquitos[mosquitosIndex];
+        if (selectedMosquito != null && selectedMosquito.gameObject.activeInHierarchy)
         {
-            var missile = Instantiate(missilePrefab, selectedInvader.transform.position, Quaternion.identity);
-            missile.Init(InvadersInstigatorId, shotId);
+            var missile = Instantiate(missilePrefab, selectedMosquito.transform.position, Quaternion.identity);
+            missile.Init(MosquitosInstigatorId, shotId);
         }
     }
     
-    private void InvaderKilled(int invaderIndex, int instigatorPlayerId)
+    private void MosquitoKilled(int mosquitoIndex, int instigatorPlayerId)
     {
-        photonView.RPC(nameof(RpcReplicateKill), RpcTarget.All, invaderIndex, instigatorPlayerId);
+        photonView.RPC(nameof(RpcReplicateKill), RpcTarget.All, mosquitoIndex, instigatorPlayerId);
     }
 
     [PunRPC]
-    private void RpcReplicateKill(int invaderIndex, int instigatorPlayerId)
+    private void RpcReplicateKill(int mosquitoIndex, int instigatorPlayerId)
     {
-        if (!_invaders[invaderIndex].gameObject.activeInHierarchy) return;
+        if (!_mosquitos[mosquitoIndex].gameObject.activeInHierarchy) return;
         
-        var invaderKilled = _invaders[invaderIndex];
+        var mosquitoKilled = _mosquitos[mosquitoIndex];
 
-        OnInvaderKilled?.Invoke(instigatorPlayerId, invaderKilled.points);
+        OnMosquitoKilled?.Invoke(instigatorPlayerId, mosquitoKilled.points);
         
-        invaderKilled.gameObject.SetActive(false);
+        mosquitoKilled.gameObject.SetActive(false);
         
-        invaderKilled.OnInvaderKilled -= InvaderKilled;
+        mosquitoKilled.OnMosquitoKilled -= MosquitoKilled;
 
         AmountKilled++;
         
-        if(PhotonNetwork.IsMasterClient && AmountKilled >= TotalInvaders)
+        if(PhotonNetwork.IsMasterClient && AmountKilled >= TotalMosquitos)
         {
-            AllInvadersDestroyedEvent?.Invoke();
+            AllMosquitosDestroyedEvent?.Invoke();
 
             PhotonNetwork.Destroy(gameObject);
         }
@@ -156,9 +166,15 @@ public class Invaders : MonoBehaviourPunCallbacks
         GameManager.Instance.AudioManager.PlaySfx(killedSfx);
     }
     
-    public void InvaderHitBoundaries()
+    public void MosquitoHitBoundaries()
     {
         if(!PhotonNetwork.IsMasterClient || _bRequestedRowAdvance) return;
+        
+        BoundariesSideHit sideHit = transform.position.x > 0 ? BoundariesSideHit.Right : BoundariesSideHit.Left;
+        
+        if(sideHit == _lastBoundariesSideHit) return;
+        
+        _lastBoundariesSideHit = sideHit;
         
         _bRequestedRowAdvance = true;
         _photonView.RPC(nameof(AdvanceRow), RpcTarget.All);
@@ -169,12 +185,11 @@ public class Invaders : MonoBehaviourPunCallbacks
     {
         if (!PhotonNetwork.IsMasterClient) return;
 
-        // Reverse the direction of the invaders and move them down by 1 unit
+        // Reverse the direction of the mosquitos and move them down by 1 unit
         _direction.x *= -1.0f;
         
         Vector3 newPosition = transform.position;
         
-        // Move the invaders down by 1 unit
         newPosition.y -= 1.0f;
         
         transform.position = newPosition;

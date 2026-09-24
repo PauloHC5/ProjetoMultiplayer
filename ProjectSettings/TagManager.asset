@@ -3,7 +3,8 @@
 --- !u!78 &1
 TagManager:
   serializedVersion: 3
-  tags: []
+  tags:
+  - Infected
   layers:
   - Default
   - TransparentFX
@@ -11,9 +12,9 @@ TagManager:
   - Player
   - Water
   - UI
-  - Invader
-  - Laser
-  - Missile
+  - Enemies
+  - Projectiles
+  - EnemiesProjectiles
   - 
   - 
   - 
@@ -49,6 +50,9 @@ TagManager:
     locked: 0
   - name: Barrier
     uniqueID: 884387271
+    locked: 0
+  - name: UI_Game
+    uniqueID: 510877631
     locked: 0
   - name: UI_Chat
     uniqueID: 1139064329

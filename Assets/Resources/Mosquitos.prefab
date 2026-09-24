@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 5313734984663642673}
   - component: {fileID: 6164410096703705953}
   m_Layer: 0
-  m_Name: Invaders
+  m_Name: Mosquitos
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -28,7 +28,7 @@ Transform:
   m_GameObject: {fileID: 7751632355803559981}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 20, z: 0}
+  m_LocalPosition: {x: 0, y: 21.41, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -59,9 +59,9 @@ MonoBehaviour:
     m_Curve:
     - serializedVersion: 3
       time: 0
-      value: 0.5
-      inSlope: 5.5
-      outSlope: 5.5
+      value: 1
+      inSlope: 5
+      outSlope: 5
       tangentMode: 34
       weightedMode: 0
       inWeight: 0
@@ -69,8 +69,8 @@ MonoBehaviour:
     - serializedVersion: 3
       time: 1
       value: 6
-      inSlope: 5.5
-      outSlope: 5.5
+      inSlope: 5
+      outSlope: 5
       tangentMode: 34
       weightedMode: 0
       inWeight: 0.33333334

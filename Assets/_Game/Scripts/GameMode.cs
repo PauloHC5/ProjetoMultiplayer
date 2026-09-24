@@ -24,7 +24,7 @@ namespace _Game.Scripts
         [SerializeField] private int startingLives = 3;
         [SerializeField] private PlayerController playerControllerPrefab;
         [SerializeField] private PlayerCharacter[] playerCharacterPrefabs = new PlayerCharacter[3];
-        [SerializeField] private Invaders invadersPrefab;
+        [SerializeField] private Mosquitos mosquitosPrefab;
         
         [Header("Debug")]
         public bool bDebugMode = false;
@@ -32,7 +32,7 @@ namespace _Game.Scripts
         private PhotonView _photonView;
         private int _gameCountdown;
         private int _currentLives;
-        private Invaders _invadersInTheScene;
+        private Mosquitos _mosquitosInTheScene;
         private Dictionary<PlayerType, PlayerCharacter> _playerCharacters = new Dictionary<PlayerType, PlayerCharacter>();
         private readonly Vector3 _playerSpawnPosition = new Vector3(0, -13f, 0);
         private bool _bGameCountdownRunning = false;
@@ -175,6 +175,12 @@ namespace _Game.Scripts
 
         public static Color GetPlayerColorBasedOnPlayerType(Player player)
         {
+            if(player == null)
+            {
+                Debug.LogWarning("GameMode.GetPlayerColorBasedOnPlayerType: Player is null.");
+                return Color.white;
+            }
+            
             PlayerType playerType = GetPlayerType(player);
             return playerType switch
             {
@@ -235,7 +241,7 @@ namespace _Game.Scripts
 
             photonView.RPC(nameof(RpcReplicateGameCooldown), newPlayer, _gameCountdown);
 
-            if (_invadersInTheScene)
+            if (_mosquitosInTheScene)
             {
                 photonView.RPC(nameof(RpcSubscribeToInvadersEvents), newPlayer);
             }
@@ -263,7 +269,7 @@ namespace _Game.Scripts
                 yield return new WaitForSeconds(1.0f);
             }
 
-            _invadersInTheScene = PhotonNetwork.InstantiateRoomObject(invadersPrefab.name, invadersPrefab.transform.position, Quaternion.identity).GetComponent<Invaders>();
+            _mosquitosInTheScene = PhotonNetwork.InstantiateRoomObject(mosquitosPrefab.name, mosquitosPrefab.transform.position, Quaternion.identity).GetComponent<Mosquitos>();
             _photonView.RPC(nameof(RpcSubscribeToInvadersEvents), RpcTarget.All);
         }
 
@@ -294,11 +300,11 @@ namespace _Game.Scripts
         [PunRPC]
         private void RpcSubscribeToInvadersEvents()
         {
-            if(!_invadersInTheScene)
-                _invadersInTheScene = FindAnyObjectByType<Invaders>();
+            if(!_mosquitosInTheScene)
+                _mosquitosInTheScene = FindAnyObjectByType<Mosquitos>();
             
-            _invadersInTheScene.AllInvadersDestroyedEvent += WaveCompleted;
-            _invadersInTheScene.OnInvaderKilled += InvaderKilled;
+            _mosquitosInTheScene.AllMosquitosDestroyedEvent += WaveCompleted;
+            _mosquitosInTheScene.OnMosquitoKilled += InvaderKilled;
         }
         
         private void InvaderKilled(int playerID, int points)
@@ -335,8 +341,8 @@ namespace _Game.Scripts
         [PunRPC]
         private void RpcReplicateUnsubscribeFromInvadersEvents()
         {
-            _invadersInTheScene.AllInvadersDestroyedEvent -= WaveCompleted;
-            _invadersInTheScene.OnInvaderKilled -= InvaderKilled;
+            _mosquitosInTheScene.AllMosquitosDestroyedEvent -= WaveCompleted;
+            _mosquitosInTheScene.OnMosquitoKilled -= InvaderKilled;
             
             StartCoroutine(StartGameCountdown());
         }
@@ -352,8 +358,8 @@ namespace _Game.Scripts
         [PunRPC]
         private void RpcReplicateInvadersReachedLimit()
         {
-            _invadersInTheScene.OnInvaderKilled -= InvaderKilled;
-            _invadersInTheScene.AllInvadersDestroyedEvent -= WaveCompleted;
+            _mosquitosInTheScene.OnMosquitoKilled -= InvaderKilled;
+            _mosquitosInTheScene.AllMosquitosDestroyedEvent -= WaveCompleted;
             InvadersLimit.OnInvadersLimitReached -= OnInvadersReachedLimit;
             
             OnPlayerCharacterSpawned = null;
@@ -377,8 +383,8 @@ namespace _Game.Scripts
             
             OnLivesChanged?.Invoke(_currentLives);
 
-            if(PhotonNetwork.CurrentRoom.PlayerCount == 1 && _invadersInTheScene)
-                _invadersInTheScene.stopMovement = true;
+            if(PhotonNetwork.CurrentRoom.PlayerCount == 1 && _mosquitosInTheScene)
+                _mosquitosInTheScene.stopMovement = true;
 
             if (_currentLives <= 0)
             {
@@ -412,8 +418,8 @@ namespace _Game.Scripts
         {
             yield return new WaitForSeconds(2.0f);                       
 
-            if (PhotonNetwork.CurrentRoom.PlayerCount == 1 && _invadersInTheScene)
-                _invadersInTheScene.stopMovement = false;
+            if (PhotonNetwork.CurrentRoom.PlayerCount == 1 && _mosquitosInTheScene)
+                _mosquitosInTheScene.stopMovement = false;
 
             PlayerType playerType = PlayerType.Player1;
             if (PhotonNetwork.LocalPlayer.CustomProperties.TryGetValue(PlayerTypeKey, out var index))
@@ -449,10 +455,10 @@ namespace _Game.Scripts
             
             InvadersLimit.OnInvadersLimitReached -= OnInvadersReachedLimit;
 
-            if (_invadersInTheScene == null) return;
+            if (_mosquitosInTheScene == null) return;
             
-            _invadersInTheScene.AllInvadersDestroyedEvent -= WaveCompleted;
-            _invadersInTheScene.OnInvaderKilled -= InvaderKilled;
+            _mosquitosInTheScene.AllMosquitosDestroyedEvent -= WaveCompleted;
+            _mosquitosInTheScene.OnMosquitoKilled -= InvaderKilled;
         }
     }
 }
