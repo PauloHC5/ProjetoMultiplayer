@@ -25,6 +25,10 @@ namespace _Game.Scripts
         [SerializeField] private PlayerController playerControllerPrefab;
         [SerializeField] private PlayerCharacter[] playerCharacterPrefabs = new PlayerCharacter[3];
         [SerializeField] private Mosquitos mosquitosPrefab;
+        [SerializeField] private Pickup[] pickupPrefabs = new Pickup[6];
+        [SerializeField] private BoxCollider2D pickupsSpawnArea;
+        [SerializeField] private float pickupMinSpawnInterval = 10.0f;
+        [SerializeField] private float pickupMaxSpawnInterval = 20.0f;
         
         [Header("Debug")]
         public bool bDebugMode = false;
@@ -34,8 +38,9 @@ namespace _Game.Scripts
         private int _currentLives;
         private Mosquitos _mosquitosInTheScene;
         private Dictionary<PlayerType, PlayerCharacter> _playerCharacters = new Dictionary<PlayerType, PlayerCharacter>();
-        private readonly Vector3 _playerSpawnPosition = new Vector3(0, -13f, 0);
+        private readonly Vector3 _playerSpawnPosition = new Vector3(0, -18.2f, 0);
         private bool _bGameCountdownRunning = false;
+        private Pickup.PickupType _lastPickupTypeSpawned = Pickup.PickupType.Default;
         
         public static readonly string PlayerTypeKey = "AvailablePlayerTypes";
         public static readonly string PlayerScoreKey = "PlayerScore";
@@ -294,7 +299,9 @@ namespace _Game.Scripts
             
             _bGameCountdownRunning = false;
             
-            GameStartedEvent?.Invoke();            
+            GameStartedEvent?.Invoke();     
+            
+            Invoke(nameof(SpawnPickup), UnityEngine.Random.Range(pickupMinSpawnInterval, pickupMaxSpawnInterval));
         }
         
         [PunRPC]
@@ -335,6 +342,7 @@ namespace _Game.Scripts
             if(bDebugMode)
                 Debug.Log("GameMode.WaveCompleted");
             
+            CancelInvoke(nameof(SpawnPickup));
             photonView.RPC(nameof(RpcReplicateUnsubscribeFromInvadersEvents), RpcTarget.All);
         }
         
@@ -409,6 +417,7 @@ namespace _Game.Scripts
                     PhotonNetwork.CurrentRoom.IsOpen = false;
                 
                 StopAllCoroutines();
+                CancelInvoke(nameof(SpawnPickup));
             }
                 
             GameOverEvent?.Invoke(playerCharactersAlive);
@@ -447,6 +456,36 @@ namespace _Game.Scripts
             if(!PhotonNetwork.InRoom || !PhotonNetwork.IsConnectedAndReady) return;
             
             player.SetCustomProperties(new Hashtable { { PlayerScoreKey, score } });
+        }
+        
+        public void AddExtraLife()
+        {
+            _currentLives++;
+            OnLivesChanged?.Invoke(_currentLives);
+        }
+        
+        private void SpawnPickup()
+        {
+            if(!PhotonNetwork.IsMasterClient) return;
+            
+            var randomPickupIndex = UnityEngine.Random.Range(0, pickupPrefabs.Length);
+            var randomPickupPrefab = pickupPrefabs[randomPickupIndex];
+            
+            if(randomPickupPrefab.Type == _lastPickupTypeSpawned)
+            {
+                randomPickupIndex = (randomPickupIndex + 1) % pickupPrefabs.Length;
+                randomPickupPrefab = pickupPrefabs[randomPickupIndex];
+            }
+            
+            _lastPickupTypeSpawned = randomPickupPrefab.Type;
+            
+            var randomX = UnityEngine.Random.Range(pickupsSpawnArea.bounds.min.x, pickupsSpawnArea.bounds.max.x);
+            var randomY = UnityEngine.Random.Range(pickupsSpawnArea.bounds.min.y, pickupsSpawnArea.bounds.max.y);
+            var randomPosition = new Vector3(randomX, randomY, 0f);
+            
+            PhotonNetwork.InstantiateRoomObject(randomPickupPrefab.name, randomPosition, Quaternion.identity);
+            
+            Invoke(nameof(SpawnPickup), UnityEngine.Random.Range(pickupMinSpawnInterval, pickupMaxSpawnInterval));
         }
 
         protected override void OnDestroy()

@@ -179,5 +179,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 18e0e3bd22a701d4b8ac97cfdfa32c75, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Projectile
-  direction: {x: 0, y: -1}
+  direction: 1
   speed: 15

@@ -19,9 +19,9 @@ public enum PlayerType
 public class PlayerCharacter : MonoBehaviourPun
 {
     [Header("Player Settings")]
-    public Projectile projectilePrefab;
     [SerializeField] private float speed = 10.0f;
     [SerializeField] private Transform projectileSpawnPoint;
+    public Projectile projectilePrefab;
 
     [Header("Audio")]
     public AudioCue shootSfx;
@@ -35,19 +35,27 @@ public class PlayerCharacter : MonoBehaviourPun
     private Rigidbody2D _rigidbody2D;
     private Animator _characterAnimator;
 
-    private bool _projectileActive;
-    private bool _invincible;
+    private int _projectilesActive;
     private TextMeshProUGUI _playerNicknameText;
     private int _shotCounter;
     private Vector2 _botMoveDirection = Vector2.zero;
     private int _projectilesLayer;
     private int _enemiesLayer;
+    private int _pickupsLayer;
     
     public Action<PlayerCharacter> OnPlayerDestroyed;
+    public Action<Pickup.PickupType> OnPickupCollected;
+    public Action<Pickup.PickupType> OnPickupExpired;
     
     private readonly int MoveXHash = Animator.StringToHash("MoveX");
     private readonly int MoveYHash = Animator.StringToHash("MoveY");
     private readonly int IsMovingHash = Animator.StringToHash("IsMoving");
+    
+    // Buffs & Status
+    private bool _invincible;
+    private bool _tripleShootActive = false;
+    private bool _piercingProjectilesActive = false;
+    private bool _fasterFireActive = false;
 
     private void Awake()
     {
@@ -57,6 +65,7 @@ public class PlayerCharacter : MonoBehaviourPun
         _characterAnimator = GetComponentInChildren<Animator>();
         _projectilesLayer = LayerMask.NameToLayer("EnemiesProjectiles");
         _enemiesLayer = LayerMask.NameToLayer("Enemies");
+        _pickupsLayer = LayerMask.NameToLayer("Pickups");
         
         // Only the owner needs a real physics simulation to get blocked by
         // walls/obstacles. Remote copies get their position overwritten by
@@ -130,7 +139,7 @@ public class PlayerCharacter : MonoBehaviourPun
     
     public void TryShoot()
     {
-        if(_projectileActive) return;
+        if(_projectilesActive > 0) return;
         
         if (PhotonNetwork.IsConnected)
         {
@@ -150,8 +159,6 @@ public class PlayerCharacter : MonoBehaviourPun
         {
             RpcShoot(projectileSpawnPoint.position, _rigidbody2D.linearVelocity, _shotCounter++, new PhotonMessageInfo());
         }
-        
-        _projectileActive = true;
     }
     
     [PunRPC]
@@ -159,34 +166,47 @@ public class PlayerCharacter : MonoBehaviourPun
     {
         float lag = Mathf.Max(0f, (float)(PhotonNetwork.Time - info.SentServerTime));
 
-        if (!photonView.IsMine)
-            Debug.Log($"RPC Shoot received from {info.Sender.NickName} with lag of: " + lag);
-
         Vector3 fixedPositionToSpawn = projectileSpawnPosition + shooterVelocity * lag;
 
         Projectile projectile = Instantiate(projectilePrefab, fixedPositionToSpawn, Quaternion.identity);
         projectile.Destroyed += OnProjectileDestroyed;
         
-        projectile.Init(photonView.OwnerActorNr, shotId);
+        projectile.Init(photonView.OwnerActorNr, shotId, _piercingProjectilesActive, _fasterFireActive);
         projectile.Collider2D.enabled = photonView.IsMine;
+        _projectilesActive++;
+
+        if (_tripleShootActive)
+        {
+            var leftProjectile = Instantiate(projectilePrefab, fixedPositionToSpawn, Quaternion.Euler(0, 0, 35));
+            leftProjectile.Destroyed += OnProjectileDestroyed;
+            leftProjectile.Init(photonView.OwnerActorNr, shotId, _piercingProjectilesActive, _fasterFireActive);
+            leftProjectile.Collider2D.enabled = photonView.IsMine;
+            _projectilesActive++;
+
+            var rightProjectile = Instantiate(projectilePrefab, fixedPositionToSpawn, Quaternion.Euler(0, 0, -35));
+            rightProjectile.Destroyed += OnProjectileDestroyed;
+            rightProjectile.Init(photonView.OwnerActorNr, shotId, _piercingProjectilesActive, _fasterFireActive);
+            rightProjectile.Collider2D.enabled = photonView.IsMine;
+            _projectilesActive++;
+        }
 
         GameManager.Instance.AudioManager.PlaySfx(shootSfx);
     }
     
     private void OnProjectileDestroyed(Projectile projectile)
     {
-        _projectileActive = false;
+        _projectilesActive--;
         projectile.Destroyed -= OnProjectileDestroyed;
     }
 
     private void OnTriggerEnter2D(Collider2D other)
     {
         if(!PhotonNetwork.IsMasterClient) return;
-        
-        if (_invincible) return;
                 
         if(other.gameObject.layer == _projectilesLayer || other.gameObject.layer == _enemiesLayer)
         {
+            if (_invincible) return;
+            
             photonView.RPC(nameof(RpcExplodeSfx), RpcTarget.All);
             
             var player = photonView.Owner;
@@ -199,6 +219,15 @@ public class PlayerCharacter : MonoBehaviourPun
             {
                 photonView.RPC(nameof(RpcExplode), player);
             }
+        }
+        
+        if(other.gameObject.layer == _pickupsLayer)
+        {
+            var pickup = other.GetComponent<Pickup>();
+            if (pickup == null) return;
+            
+            photonView.RPC(nameof(RpcReplicatePickupState), RpcTarget.AllBuffered, pickup.Type, pickup.Duration);
+            PhotonNetwork.Destroy(other.gameObject);
         }
     }
 
@@ -240,15 +269,14 @@ public class PlayerCharacter : MonoBehaviourPun
         SpriteRenderer.enabled = true;
     }
     
-    private IEnumerator Invincible()
+    private IEnumerator Invincible(float duration = 3.0f)
     {
         _invincible = true;
         
-        float invincibleTime = 3.0f;
         float elapsedTime = 0.0f;
         bool isVisible = true;
 
-        while (elapsedTime < invincibleTime)
+        while (elapsedTime < duration)
         {
             isVisible = !isVisible;
             SpriteRenderer.enabled = isVisible;
@@ -270,6 +298,50 @@ public class PlayerCharacter : MonoBehaviourPun
             PhotonNetwork.Destroy(gameObject);
         }
     }
+    
+    [PunRPC]
+    private void RpcReplicatePickupState(Pickup.PickupType pickupType, float duration)
+    {
+        switch (pickupType)
+        {
+            case Pickup.PickupType._1UP:
+                if(!photonView.IsMine) return;
+                GameMode.Instance.AddExtraLife();
+                break;
+            case Pickup.PickupType.FasterFire:
+                _fasterFireActive = true;
+                StartCoroutine(PickupDuration(pickupType, duration, () => _fasterFireActive = false));
+                break;
+            case Pickup.PickupType.PiercingProjectiles:
+                _piercingProjectilesActive = true;
+                StartCoroutine(PickupDuration(pickupType, duration, () => _piercingProjectilesActive = false));
+                break;
+            case Pickup.PickupType.Repellent:
+                StartCoroutine(Invincible(duration));
+                break;
+            case Pickup.PickupType.SpeedBuff:
+                speed *= 2f;
+                StartCoroutine(PickupDuration(pickupType, duration, () => speed /= 2f));
+                break;
+            case Pickup.PickupType.TripleFire:
+                _tripleShootActive = true;
+                StartCoroutine(PickupDuration(pickupType, duration, () => _tripleShootActive = false));
+                break;
+            default:
+                Debug.LogWarning("Unknown pickup type: " + pickupType);
+                break;
+        }
+        
+        OnPickupCollected?.Invoke(pickupType);
+    }
+    
+    private IEnumerator PickupDuration(Pickup.PickupType pickupType, float duration, Action onEnd)
+    {
+        yield return new WaitForSeconds(duration);
+        onEnd?.Invoke();
+        OnPickupExpired?.Invoke(pickupType);
+    }
+    
 
     private void OnEnable()
     {

@@ -340,7 +340,7 @@ Transform:
   m_GameObject: {fileID: 5440019450894988339}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 13, z: 0}
+  m_LocalPosition: {x: 0, y: -18.02, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -434,9 +434,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 911fab03021f43d49a212d4e9694e3a7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Player
-  projectilePrefab: {fileID: -8598748547545543793, guid: 1a2dc1bf48ef33445bd320b213005467, type: 3}
   speed: 10
   projectileSpawnPoint: {fileID: 4017231318131708658}
+  projectilePrefab: {fileID: -8598748547545543793, guid: 1a2dc1bf48ef33445bd320b213005467, type: 3}
   shootSfx: {fileID: 11400000, guid: eed8b4b32103b734ba348e06663863fb, type: 2}
   bBotMode: 0
   explosionSfx: {fileID: 11400000, guid: b801a95c9ae27e34c836a1f912fbe15b, type: 2}
