@@ -44,8 +44,7 @@ public class PlayerCharacter : MonoBehaviourPun
     private int _pickupsLayer;
     
     public Action<PlayerCharacter> OnPlayerDestroyed;
-    public Action<Pickup.PickupType> OnPickupCollected;
-    public Action<Pickup.PickupType> OnPickupExpired;
+    public Action<Pickup.PickupType, float> OnPickupCollected;
     
     private readonly int MoveXHash = Animator.StringToHash("MoveX");
     private readonly int MoveYHash = Animator.StringToHash("MoveY");
@@ -332,14 +331,13 @@ public class PlayerCharacter : MonoBehaviourPun
                 break;
         }
         
-        OnPickupCollected?.Invoke(pickupType);
+        OnPickupCollected?.Invoke(pickupType, duration);
     }
     
     private IEnumerator PickupDuration(Pickup.PickupType pickupType, float duration, Action onEnd)
     {
         yield return new WaitForSeconds(duration);
         onEnd?.Invoke();
-        OnPickupExpired?.Invoke(pickupType);
     }
     
 

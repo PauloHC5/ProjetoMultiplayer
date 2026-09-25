@@ -466,25 +466,27 @@ namespace _Game.Scripts
         
         private void SpawnPickup()
         {
-            if(!PhotonNetwork.IsMasterClient) return;
-            
-            var randomPickupIndex = UnityEngine.Random.Range(0, pickupPrefabs.Length);
-            var randomPickupPrefab = pickupPrefabs[randomPickupIndex];
-            
-            if(randomPickupPrefab.Type == _lastPickupTypeSpawned)
+            if (PhotonNetwork.IsMasterClient)
             {
-                randomPickupIndex = (randomPickupIndex + 1) % pickupPrefabs.Length;
-                randomPickupPrefab = pickupPrefabs[randomPickupIndex];
+
+                var randomPickupIndex = UnityEngine.Random.Range(0, pickupPrefabs.Length);
+                var randomPickupPrefab = pickupPrefabs[randomPickupIndex];
+
+                if (randomPickupPrefab.Type == _lastPickupTypeSpawned)
+                {
+                    randomPickupIndex = (randomPickupIndex + 1) % pickupPrefabs.Length;
+                    randomPickupPrefab = pickupPrefabs[randomPickupIndex];
+                }
+
+                _lastPickupTypeSpawned = randomPickupPrefab.Type;
+
+                var randomX = UnityEngine.Random.Range(pickupsSpawnArea.bounds.min.x, pickupsSpawnArea.bounds.max.x);
+                var randomY = UnityEngine.Random.Range(pickupsSpawnArea.bounds.min.y, pickupsSpawnArea.bounds.max.y);
+                var randomPosition = new Vector3(randomX, randomY, 0f);
+
+                PhotonNetwork.InstantiateRoomObject(randomPickupPrefab.name, randomPosition, Quaternion.identity);
             }
-            
-            _lastPickupTypeSpawned = randomPickupPrefab.Type;
-            
-            var randomX = UnityEngine.Random.Range(pickupsSpawnArea.bounds.min.x, pickupsSpawnArea.bounds.max.x);
-            var randomY = UnityEngine.Random.Range(pickupsSpawnArea.bounds.min.y, pickupsSpawnArea.bounds.max.y);
-            var randomPosition = new Vector3(randomX, randomY, 0f);
-            
-            PhotonNetwork.InstantiateRoomObject(randomPickupPrefab.name, randomPosition, Quaternion.identity);
-            
+
             Invoke(nameof(SpawnPickup), UnityEngine.Random.Range(pickupMinSpawnInterval, pickupMaxSpawnInterval));
         }
 

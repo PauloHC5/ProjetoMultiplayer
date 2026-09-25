@@ -1,9 +1,12 @@
+using System.Collections;
 using System.Collections.Generic;
 using _Game.Scripts;
+using AYellowpaper.SerializedCollections;
 using Photon.Pun;
 using Photon.Realtime;
 using TMPro;
 using UnityEngine;
+using UnityEngine.Rendering;
 using UnityEngine.UI;
 
 
@@ -23,6 +26,10 @@ public class UI_Game : MonoBehaviour
     public GameObject statusBarUI;
     public TextMeshProUGUI gameCountdownText;
     public GameObject gameOverUI;
+    public Transform pickupStatusUI;
+
+    [SerializedDictionary("Pickup Type", "Sprite")]
+    public AYellowpaper.SerializedCollections.SerializedDictionary<Pickup.PickupType, Sprite> pickupTypeSprites;
 
     private PlayerUIStatus _localPlayerStatus;
 
@@ -75,7 +82,19 @@ public class UI_Game : MonoBehaviour
             return;
         }
         _localPlayerStatus.LivesCounterText.text = lives.ToString();
-    }        
+    }
+    
+    private void OnPlayerCharacterSpawned(Player player, PlayerCharacter playerCharacter)
+    {
+        if(player == null || playerCharacter == null) return;
+        
+        if(player.IsLocal)
+        {
+            SpawnPlayerStatusUI(player, playerCharacter);
+            playerCharacter.OnPickupCollected += OnPickupCollected;
+            playerCharacter.OnPlayerDestroyed += OnPlayerCharacterDestroyed;
+        }
+    }
 
     private void SpawnPlayerStatusUI(Player player, PlayerCharacter playerCharacter)
     {
@@ -118,6 +137,34 @@ public class UI_Game : MonoBehaviour
         _localPlayerStatus = playerStatus;
     }
     
+    private void OnPlayerCharacterDestroyed(PlayerCharacter playerCharacter)
+    {
+        StopAllCoroutines();
+        for(int i = pickupStatusUI.childCount - 1; i >= 0; i--)
+        {
+            Destroy(pickupStatusUI.GetChild(i).gameObject);
+        }
+        
+        playerCharacter.OnPlayerDestroyed -= OnPlayerCharacterDestroyed;
+        playerCharacter.OnPickupCollected -= OnPickupCollected;
+    }
+    
+    private void OnPickupCollected(Pickup.PickupType pickupType, float duration)
+    {
+        if(pickupType == Pickup.PickupType._1UP) return;
+        
+        // Instantiate image for the pickup type
+        var pickupImageGO = new GameObject(pickupType.ToString());
+        pickupImageGO.transform.SetParent(pickupStatusUI, false);
+        
+        var pickupImage = pickupImageGO.AddComponent<Image>();
+        pickupImage.GetComponent<RectTransform>().sizeDelta = new Vector2(35, 35);
+        pickupImage.preserveAspect = true;
+        pickupImage.sprite = pickupTypeSprites[pickupType];
+        
+        StartCoroutine(PickupIconRoutine(pickupImage, duration));
+    }
+
     private void OnGameOver(int playerCharactersAlive)
     {
         gameCountdownText.enabled = false;
@@ -133,13 +180,35 @@ public class UI_Game : MonoBehaviour
     {
         gameCountdownText.enabled = false;
     }
+    
+    private IEnumerator PickupIconRoutine(Image pickupImage, float duration)
+    {
+        if(pickupImage == null) yield break;
+
+        float countdown = duration;
+        Color originalColor = pickupImage.color;
+        float aThirdDuration = duration / 3f;
+
+        while (countdown > 0)
+        {
+            if (countdown <= aThirdDuration)
+            {
+                float alpha = Mathf.PingPong(Time.time * 5, 1);
+                pickupImage.color = new Color(originalColor.r, originalColor.g, originalColor.b, alpha);
+            }
+            countdown -= Time.deltaTime;
+            yield return null;
+        }
+
+        Destroy(pickupImage.gameObject);
+    }
 
     private void OnEnable()
     {
         GameMode.OnLivesChanged += OnLivesChanged;
         GameMode.OnGameCooldownChanged += OnGameCountdownChanged;
         GameMode.OnScoreChanged += UpdateScore;
-        GameMode.OnPlayerCharacterSpawned += SpawnPlayerStatusUI;
+        GameMode.OnPlayerCharacterSpawned += OnPlayerCharacterSpawned;
         GameMode.GameStartedEvent += OnGameStarted;
         GameMode.GameOverEvent += OnGameOver;
     }
@@ -149,7 +218,7 @@ public class UI_Game : MonoBehaviour
         GameMode.OnScoreChanged -= UpdateScore;
         GameMode.OnGameCooldownChanged -= OnGameCountdownChanged;
         GameMode.OnLivesChanged -= OnLivesChanged;
-        GameMode.OnPlayerCharacterSpawned -= SpawnPlayerStatusUI;
+        GameMode.OnPlayerCharacterSpawned -= OnPlayerCharacterSpawned;
         GameMode.GameStartedEvent -= OnGameStarted;
         GameMode.GameOverEvent -= OnGameOver;
     }
