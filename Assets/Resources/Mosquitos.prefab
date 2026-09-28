@@ -28,7 +28,7 @@ Transform:
   m_GameObject: {fileID: 7751632355803559981}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 21.41, z: 0}
+  m_LocalPosition: {x: 0, y: 20, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -48,11 +48,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::Invaders
   prefabs:
   - {fileID: 721702209136384595, guid: c27f82190daed0543816a4df5edd6210, type: 3}
-  - {fileID: 721702209136384595, guid: c27f82190daed0543816a4df5edd6210, type: 3}
-  - {fileID: 721702209136384595, guid: c27f82190daed0543816a4df5edd6210, type: 3}
   - {fileID: 2332977524222137839, guid: 19fa160092d14e54592c80f08b436869, type: 3}
-  - {fileID: 2332977524222137839, guid: 19fa160092d14e54592c80f08b436869, type: 3}
-  rows: 5
+  rows: 6
   columns: 11
   speed:
     serializedVersion: 2
@@ -60,17 +57,17 @@ MonoBehaviour:
     - serializedVersion: 3
       time: 0
       value: 1
-      inSlope: 5
-      outSlope: 5
+      inSlope: 7
+      outSlope: 7
       tangentMode: 34
       weightedMode: 0
       inWeight: 0
       outWeight: 0.33333334
     - serializedVersion: 3
       time: 1
-      value: 6
-      inSlope: 5
-      outSlope: 5
+      value: 8
+      inSlope: 7
+      outSlope: 7
       tangentMode: 34
       weightedMode: 0
       inWeight: 0.33333334

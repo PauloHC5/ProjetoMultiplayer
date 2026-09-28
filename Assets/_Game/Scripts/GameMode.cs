@@ -26,9 +26,12 @@ namespace _Game.Scripts
         [SerializeField] private PlayerCharacter[] playerCharacterPrefabs = new PlayerCharacter[3];
         [SerializeField] private Mosquitos mosquitosPrefab;
         [SerializeField] private Pickup[] pickupPrefabs = new Pickup[6];
+        
+        [Header("Pickups")]
         [SerializeField] private BoxCollider2D pickupsSpawnArea;
         [SerializeField] private float pickupMinSpawnInterval = 10.0f;
         [SerializeField] private float pickupMaxSpawnInterval = 20.0f;
+        [SerializeField] private int oneUpSpawnChance = 10; // 10% chance to spawn a 1UP pickup
         
         [Header("Debug")]
         public bool bDebugMode = false;
@@ -476,6 +479,16 @@ namespace _Game.Scripts
                 {
                     randomPickupIndex = (randomPickupIndex + 1) % pickupPrefabs.Length;
                     randomPickupPrefab = pickupPrefabs[randomPickupIndex];
+                }
+                
+                if(randomPickupPrefab.Type == Pickup.PickupType._1UP)
+                {
+                    var chance = UnityEngine.Random.Range(0, 100);
+                    if (chance >= oneUpSpawnChance)
+                    {
+                        Invoke(nameof(SpawnPickup), UnityEngine.Random.Range(pickupMinSpawnInterval, pickupMaxSpawnInterval));
+                        return;
+                    }
                 }
 
                 _lastPickupTypeSpawned = randomPickupPrefab.Type;

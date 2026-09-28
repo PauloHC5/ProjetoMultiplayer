@@ -471,7 +471,8 @@ MonoBehaviour:
   pickupsSpawnArea: {fileID: 1551202078}
   pickupMinSpawnInterval: 5
   pickupMaxSpawnInterval: 15
-  bDebugMode: 1
+  oneUpSpawnChance: 15
+  bDebugMode: 0
 --- !u!4 &281756321
 Transform:
   m_ObjectHideFlags: 0
@@ -1426,7 +1427,7 @@ BoxCollider2D:
     drawMode: 0
     adaptiveTiling: 0
   m_AutoTiling: 0
-  m_Size: {x: 48.12, y: 1}
+  m_Size: {x: 63.87, y: 1}
   m_EdgeRadius: 0
 --- !u!4 &602366387
 Transform:
@@ -1437,7 +1438,7 @@ Transform:
   m_GameObject: {fileID: 602366385}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: -12.49, z: 0}
+  m_LocalPosition: {x: 0, y: -18.2, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -2384,7 +2385,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 1, y: 1}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: -40, y: -22.054993}
+  m_AnchoredPosition: {x: -40, y: -22.055054}
   m_SizeDelta: {x: 381.65002, y: 50}
   m_Pivot: {x: 1, y: 1}
 --- !u!114 &1708115333
@@ -2686,7 +2687,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 479.72, y: -109}
+  m_AnchoredPosition: {x: 479.72003, y: -109}
   m_SizeDelta: {x: 959.44, y: 81.469}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1789183827

@@ -1,5 +1,6 @@
 using System;
 using System.Collections;
+using System.Collections.Generic;
 using System.Linq;
 using _Game.Scripts;
 using Photon.Pun;
@@ -16,7 +17,7 @@ public class Mosquitos : MonoBehaviourPunCallbacks
         Right
     }
     
-    public Mosquito[] prefabs;
+    public Mosquito[] prefabs = new Mosquito[3];
     public int rows = 5;
     public int columns = 11;
     public AnimationCurve speed;
@@ -33,11 +34,18 @@ public class Mosquitos : MonoBehaviourPunCallbacks
     private int _shotCounter;
     private BoundariesSideHit _lastBoundariesSideHit;
     public const int MosquitosInstigatorId = 451;
+    private Queue<MosquitoType> _mosquitoTypes;
     
     public int AmountKilled { get; private set; }
     public int TotalMosquitos => this.rows * this.columns;
     public float PercentKilled => (float)this.AmountKilled / (float)this.TotalMosquitos;
     public int AmountAlive => this.TotalMosquitos - this.AmountKilled;
+    
+    private bool _bPercentKilled25Triggered = false;
+    private bool _bPercentKilled50Triggered = false;
+    private bool _bPercentKilled75Triggered = false;
+    private bool _bPercentKilled99Triggered = false;
+    
     
     public Action<int, int> OnMosquitoKilled;
     public event Action AllMosquitosDestroyedEvent;
@@ -47,8 +55,22 @@ public class Mosquitos : MonoBehaviourPunCallbacks
         _mosquitos = new Mosquito[this.rows * this.columns];
         _photonView = GetComponent<PhotonView>();
         
+        if(!PhotonNetwork.IsMasterClient) return;
+        
+        _mosquitoTypes = new Queue<MosquitoType>();
+        
         SpawnMosquitos();
+        SubscribeToMosquitosEvents();
+        
+        bool[] mosquitosActive = _mosquitos.Select(mosquito => mosquito.gameObject.activeInHierarchy).ToArray();
+        
+        int[] mosquitoTypes = _mosquitoTypes.Select(mosquitoType => (int)mosquitoType).ToArray();
+        
+        photonView.RPC(nameof(RpcSyncMosquitosState), RpcTarget.Others, mosquitosActive, mosquitoTypes);
+    }
 
+    private void SubscribeToMosquitosEvents()
+    {
         for(int i = 0; i < _mosquitos.Length; i++)
         {
             _mosquitos[i].mosquitoIndex = i;
@@ -59,6 +81,9 @@ public class Mosquitos : MonoBehaviourPunCallbacks
 
     private void SpawnMosquitos()
     {
+        // Make a copy of _mosquitoTypes to avoid modifying the original queue while iterating
+        Queue<MosquitoType> mosquitoTypes = new Queue<MosquitoType>(_mosquitoTypes);
+        
         for (int row = 0; row < this.rows; row++)
         {
             float width = 4.0f * (this.columns - 1);
@@ -68,13 +93,48 @@ public class Mosquitos : MonoBehaviourPunCallbacks
             
             for(int col = 0; col < this.columns; col++)
             {
-                Mosquito mosquito = Instantiate(this.prefabs[row], this.transform);
-                Vector3 position = rowPosition;
-                position.x += col * 4.0f;
-                mosquito.transform.localPosition = position;
-                _mosquitos[row * this.columns + col] = mosquito;
+                Mosquito mosquitoPrefab;
+                
+                if (PhotonNetwork.IsMasterClient)
+                {
+                    MosquitoType mosquitoType = RandomizeMosquitoType(row);
+                    mosquitoPrefab = prefabs[(int)mosquitoType];
+                    _mosquitoTypes.Enqueue(mosquitoType);
+                }
+                else
+                {
+                    mosquitoPrefab = prefabs[(int)mosquitoTypes.Dequeue()];
+                }
+                
+                SpawnMosquito(mosquitoPrefab, row, rowPosition, col);
             }
         }
+    }
+    
+    private MosquitoType RandomizeMosquitoType(int row)
+    {
+        // if we are in the last row, we want to spawn the infected mosquito type
+        if(row == this.rows - 1)
+        {
+            return MosquitoType.Infected;
+        }
+        else // choose a random mosquito type from the prefabs array, as higher is the row, the more likely to spawn the infected mosquito type
+        {
+            float infectedChance = (float)row / (float)this.rows;
+            float randomValue = UnityEngine.Random.value;
+
+            return randomValue < infectedChance ? MosquitoType.Infected : MosquitoType.Normal;
+        }
+        
+    }
+
+    private void SpawnMosquito(Mosquito mosquitoPrefab,int row, Vector3 rowPosition, int col)
+    {
+        Mosquito mosquito = Instantiate(mosquitoPrefab, this.transform);
+        Vector3 position = rowPosition;
+        position.x += col * 4.0f;
+        mosquito.transform.localPosition = position;
+        _mosquitos[row * this.columns + col] = mosquito;
     }
 
     private void Start()
@@ -93,15 +153,26 @@ public class Mosquitos : MonoBehaviourPunCallbacks
     public override void OnPlayerEnteredRoom(Player newPlayer)
     {
         if(!PhotonNetwork.IsMasterClient) return;
-
+        
         bool[] activeMosquitos = _mosquitos.Select(mosquito => mosquito.gameObject.activeInHierarchy).ToArray();
+        
+        int[] mosquitoTypes = _mosquitoTypes.Select(mosquitoType => (int)mosquitoType).ToArray();
+        
+        Debug.Log("Is _mosquitoTypes empty? " + (_mosquitoTypes.Count == 0));
 
-        photonView.RPC(nameof(RpcSyncMosquitosState), newPlayer, activeMosquitos);
+        photonView.RPC(nameof(RpcSyncMosquitosState), newPlayer, activeMosquitos, mosquitoTypes);
     }
 
     [PunRPC]
-    private void RpcSyncMosquitosState(bool[] activeMosquitos)
-    {                
+    private void RpcSyncMosquitosState(bool[] activeMosquitos, int[] mosquitoTypes)
+    {
+        _mosquitoTypes = new Queue<MosquitoType>(mosquitoTypes.Select(t => (MosquitoType)t).ToArray());
+        
+        Debug.Log("Is _mosquitoTypes empty? " + (_mosquitoTypes.Count == 0));
+        
+        SpawnMosquitos();
+        SubscribeToMosquitosEvents();
+        
         for (int i = 0; i < activeMosquitos.Length; i++)
         {
             _mosquitos[i].gameObject.SetActive(activeMosquitos[i]);
@@ -115,6 +186,8 @@ public class Mosquitos : MonoBehaviourPunCallbacks
         if(!_mosquitos.Any(mosquito => mosquito.CompareTag("Infected"))) return;
 
         var infectedMosquitos = _mosquitos.Where(mosquito => mosquito.CompareTag("Infected") && mosquito.gameObject.activeInHierarchy).ToArray();
+        
+        if(infectedMosquitos.Length == 0) return;
         
         var mosquitoToAttack = infectedMosquitos[UnityEngine.Random.Range(0, infectedMosquitos.Length - 1)];
         _shotCounter++;
@@ -164,6 +237,19 @@ public class Mosquitos : MonoBehaviourPunCallbacks
         }
         
         GameManager.Instance.AudioManager.PlaySfx(killedSfx);
+        
+        ChangeMosquitosZigZagMovement();
+    }
+
+    private void ChangeMosquitosZigZagMovement()
+    {
+        if(AmountAlive == 10 || AmountAlive == 7 || AmountAlive == 5 || AmountAlive == 3 || AmountAlive == 1)
+        {
+            for (var index = 0; index < _mosquitos.Length; index++)
+            {
+                _mosquitos[index].ChangeZigZagMovement();
+            }
+        }
     }
     
     public void MosquitoHitBoundaries()
@@ -185,12 +271,12 @@ public class Mosquitos : MonoBehaviourPunCallbacks
     {
         if (!PhotonNetwork.IsMasterClient) return;
 
-        // Reverse the direction of the mosquitos and move them down by 1 unit
+        // Reverse the direction of the mosquitos and move them down by 2 units
         _direction.x *= -1.0f;
         
         Vector3 newPosition = transform.position;
         
-        newPosition.y -= 1.0f;
+        newPosition.y -= 2.0f;
         
         transform.position = newPosition;
         StartCoroutine(FinishRowAdvance());

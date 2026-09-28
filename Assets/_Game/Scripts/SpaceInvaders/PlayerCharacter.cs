@@ -42,6 +42,7 @@ public class PlayerCharacter : MonoBehaviourPun
     private int _projectilesLayer;
     private int _enemiesLayer;
     private int _pickupsLayer;
+    private Coroutine _invincibleCoroutine;
     
     public Action<PlayerCharacter> OnPlayerDestroyed;
     public Action<Pickup.PickupType, float> OnPickupCollected;
@@ -55,6 +56,7 @@ public class PlayerCharacter : MonoBehaviourPun
     private bool _tripleShootActive = false;
     private bool _piercingProjectilesActive = false;
     private bool _fasterFireActive = false;
+    private bool _speedBuffActive = false;
 
     private void Awake()
     {
@@ -225,6 +227,8 @@ public class PlayerCharacter : MonoBehaviourPun
             var pickup = other.GetComponent<Pickup>();
             if (pickup == null) return;
             
+            if(CheckIfThisPickupIsActive(pickup.Type)) return;
+            
             photonView.RPC(nameof(RpcReplicatePickupState), RpcTarget.AllBuffered, pickup.Type, pickup.Duration);
             PhotonNetwork.Destroy(other.gameObject);
         }
@@ -257,13 +261,22 @@ public class PlayerCharacter : MonoBehaviourPun
     [PunRPC]
     private void RpcStartInvincible()
     {
-        StartCoroutine(Invincible());
+        if(_invincible) return;
+        
+        if(_invincibleCoroutine != null)
+            StopCoroutine(_invincibleCoroutine);
+        _invincibleCoroutine = StartCoroutine(Invincible());
     }
     
     [PunRPC]
     private void RpcEndInvincible()
     {
-        StopAllCoroutines();
+        if (_invincibleCoroutine != null)
+        {
+            StopCoroutine(_invincibleCoroutine);
+            _invincibleCoroutine = null;
+        }
+
         _invincible = false;
         SpriteRenderer.enabled = true;
     }
@@ -273,18 +286,19 @@ public class PlayerCharacter : MonoBehaviourPun
         _invincible = true;
         
         float elapsedTime = 0.0f;
-        bool isVisible = true;
+        Color originalColor = SpriteRenderer.color;
 
         while (elapsedTime < duration)
         {
-            isVisible = !isVisible;
-            SpriteRenderer.enabled = isVisible;
+            // Oscillate the alpha value between 0 and 1 to create a blinking effect
+            float alpha = Mathf.PingPong(Time.time * 3, 1f);
+            SpriteRenderer.color = new Color(originalColor.r, originalColor.g, originalColor.b, alpha);
 
             yield return new WaitForSeconds(0.2f);
             elapsedTime += 0.2f;
         }
 
-        SpriteRenderer.enabled = true;
+        SpriteRenderer.color = originalColor;
         _invincible = false;
         
         photonView.RPC(nameof(RpcEndInvincible), RpcTarget.OthersBuffered);
@@ -301,6 +315,35 @@ public class PlayerCharacter : MonoBehaviourPun
     [PunRPC]
     private void RpcReplicatePickupState(Pickup.PickupType pickupType, float duration)
     {
+        StartCoroutine(PickupDuration(pickupType, duration));
+        
+        OnPickupCollected?.Invoke(pickupType, duration);
+    }
+    
+    private IEnumerator PickupDuration(Pickup.PickupType pickupType, float duration)
+    {
+        SetPickupState(pickupType, true, duration);
+        
+        yield return new WaitForSeconds(duration);
+        
+        SetPickupState(pickupType, false);
+    }
+    
+    private bool CheckIfThisPickupIsActive(Pickup.PickupType pickupType)
+    {
+        return pickupType switch
+        {
+            Pickup.PickupType.FasterFire => _fasterFireActive,
+            Pickup.PickupType.PiercingProjectiles => _piercingProjectilesActive,
+            Pickup.PickupType.Repellent => _invincible,
+            Pickup.PickupType.SpeedBuff => _speedBuffActive,
+            Pickup.PickupType.TripleFire => _tripleShootActive,
+            _ => false
+        };
+    }
+    
+    private void SetPickupState(Pickup.PickupType pickupType, bool state, float duration = 0f)
+    {
         switch (pickupType)
         {
             case Pickup.PickupType._1UP:
@@ -308,38 +351,29 @@ public class PlayerCharacter : MonoBehaviourPun
                 GameMode.Instance.AddExtraLife();
                 break;
             case Pickup.PickupType.FasterFire:
-                _fasterFireActive = true;
-                StartCoroutine(PickupDuration(pickupType, duration, () => _fasterFireActive = false));
+                _fasterFireActive = state;
                 break;
             case Pickup.PickupType.PiercingProjectiles:
-                _piercingProjectilesActive = true;
-                StartCoroutine(PickupDuration(pickupType, duration, () => _piercingProjectilesActive = false));
+                _piercingProjectilesActive = state;
                 break;
             case Pickup.PickupType.Repellent:
-                StartCoroutine(Invincible(duration));
+                if(state)
+                {
+                    StartCoroutine(Invincible(duration));
+                }
                 break;
             case Pickup.PickupType.SpeedBuff:
-                speed *= 2f;
-                StartCoroutine(PickupDuration(pickupType, duration, () => speed /= 2f));
+                _speedBuffActive = state;
+                speed = state ? speed * 2f : speed / 2f; // Double speed when active, revert when inactive
                 break;
             case Pickup.PickupType.TripleFire:
-                _tripleShootActive = true;
-                StartCoroutine(PickupDuration(pickupType, duration, () => _tripleShootActive = false));
+                _tripleShootActive = state;
                 break;
             default:
                 Debug.LogWarning("Unknown pickup type: " + pickupType);
                 break;
         }
-        
-        OnPickupCollected?.Invoke(pickupType, duration);
     }
-    
-    private IEnumerator PickupDuration(Pickup.PickupType pickupType, float duration, Action onEnd)
-    {
-        yield return new WaitForSeconds(duration);
-        onEnd?.Invoke();
-    }
-    
 
     private void OnEnable()
     {

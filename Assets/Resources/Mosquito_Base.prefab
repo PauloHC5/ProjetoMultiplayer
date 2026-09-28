@@ -175,8 +175,12 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Mosquito
   points: 10
+  type: 0
   horizontalZigzagFrequency: 10
   horizontalZigzagAmplitude: 0.5
   verticalZigzagFrequency: 23.7
   verticalZigzagAmplitude: 0.15
+  amountToIncreaseAmplitude: 1
+  amplitudeIncreaseDuration: 3
+  frequencyDecreaseAmount: 5
   mosquitoIndex: 0

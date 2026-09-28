@@ -14,7 +14,5 @@ public class ProjectileNetwork : SceneSingleton<ProjectileNetwork>
     private void RpcDestroy(int instigatorId, int shotId)
     {
         Projectile.DestroyRemote(instigatorId, shotId);
-        
-        Debug.Log($"Projectile {instigatorId} destroyed {shotId}");
     }
 }
