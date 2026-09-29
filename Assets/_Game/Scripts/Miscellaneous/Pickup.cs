@@ -12,6 +12,7 @@ public class Pickup : MonoBehaviour
         Repellent,
         SpeedBuff,
         TripleFire,
+        Toolbox,
         
         Default
     }

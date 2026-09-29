@@ -183,9 +183,9 @@ public class Mosquitos : MonoBehaviourPunCallbacks
     {
         if(!PhotonNetwork.IsMasterClient) return;
 
-        if(!_mosquitos.Any(mosquito => mosquito.CompareTag("Infected"))) return;
+        if(_mosquitos.All(mosquito => mosquito.type != MosquitoType.Infected)) return;
 
-        var infectedMosquitos = _mosquitos.Where(mosquito => mosquito.CompareTag("Infected") && mosquito.gameObject.activeInHierarchy).ToArray();
+        var infectedMosquitos = _mosquitos.Where(mosquito => mosquito.type == MosquitoType.Infected && mosquito.gameObject.activeInHierarchy).ToArray();
         
         if(infectedMosquitos.Length == 0) return;
         

@@ -25,13 +25,14 @@ namespace _Game.Scripts
         [SerializeField] private PlayerController playerControllerPrefab;
         [SerializeField] private PlayerCharacter[] playerCharacterPrefabs = new PlayerCharacter[3];
         [SerializeField] private Mosquitos mosquitosPrefab;
-        [SerializeField] private Pickup[] pickupPrefabs = new Pickup[6];
         
         [Header("Pickups")]
+        [SerializeField] private Pickup[] pickupPrefabs = new Pickup[6];
         [SerializeField] private BoxCollider2D pickupsSpawnArea;
         [SerializeField] private float pickupMinSpawnInterval = 10.0f;
         [SerializeField] private float pickupMaxSpawnInterval = 20.0f;
         [SerializeField] private int oneUpSpawnChance = 10; // 10% chance to spawn a 1UP pickup
+        [SerializeField] private int toolboxSpawnChance = 10; // 10% chance to spawn a Toolbox pickup
         
         [Header("Debug")]
         public bool bDebugMode = false;
@@ -319,7 +320,7 @@ namespace _Game.Scripts
         
         private void InvaderKilled(int playerID, int points)
         {
-            if(!PhotonNetwork.IsMasterClient) return;
+            if(!PhotonNetwork.IsMasterClient || playerID == -1) return;
             
             if(bDebugMode)
                 Debug.Log($"GameMode.InvaderKilled: Player {playerID} killed an invader for {points} points");
@@ -490,6 +491,29 @@ namespace _Game.Scripts
                         return;
                     }
                 }
+                
+                
+                if(randomPickupPrefab.Type == Pickup.PickupType.Toolbox)
+                {
+                    if (BarriersManager.IsAnyBarrierDestroyed())
+                    {
+
+                        var chance = UnityEngine.Random.Range(0, 100);
+                        if (chance >= toolboxSpawnChance)
+                        {
+                            Invoke(nameof(SpawnPickup),
+                                UnityEngine.Random.Range(pickupMinSpawnInterval, pickupMaxSpawnInterval));
+                            return;
+                        }
+                        Debug.Log("GameMode.SpawnPickup: Spawning Toolbox pickup because at least one barrier has been destroyed.");
+                    }
+                    else
+                    {
+                        randomPickupIndex = (randomPickupIndex - 1) % pickupPrefabs.Length;
+                        randomPickupPrefab = pickupPrefabs[randomPickupIndex];
+                    }
+                }
+                
 
                 _lastPickupTypeSpawned = randomPickupPrefab.Type;
 

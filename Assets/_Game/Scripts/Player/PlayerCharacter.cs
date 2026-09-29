@@ -369,6 +369,10 @@ public class PlayerCharacter : MonoBehaviourPun
             case Pickup.PickupType.TripleFire:
                 _tripleShootActive = state;
                 break;
+            case Pickup.PickupType.Toolbox:
+                if(!photonView.IsMine) return;
+                BarriersManager.Instance.RestoreBarrier();
+                break;
             default:
                 Debug.LogWarning("Unknown pickup type: " + pickupType);
                 break;

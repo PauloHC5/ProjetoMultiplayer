@@ -42,6 +42,7 @@ public class Mosquito : MonoBehaviour
     
     private int _projectilesLayer;
     private int _defaultLayer;
+    private int _barrierLayer;
     
     public event Action OnMosquitoHitBoundaries;
     public event Action<int, int> OnMosquitoKilled;
@@ -50,6 +51,7 @@ public class Mosquito : MonoBehaviour
     {
         _projectilesLayer = LayerMask.NameToLayer("Projectiles");
         _defaultLayer = LayerMask.NameToLayer("Default");
+        _barrierLayer = LayerMask.NameToLayer("Barrier");
     }
 
     private void Start()
@@ -86,6 +88,12 @@ public class Mosquito : MonoBehaviour
         if(other.gameObject.layer == _defaultLayer)
         {
             OnMosquitoHitBoundaries?.Invoke();
+        }
+        
+        if(other.gameObject.layer == _barrierLayer)
+        {
+            OnMosquitoKilled?.Invoke(mosquitoIndex, -1);
+            BarriersManager.Instance.DamageBarrier(other.gameObject);
         }
     }
 

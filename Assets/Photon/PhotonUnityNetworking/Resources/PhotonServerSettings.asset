@@ -69,6 +69,7 @@ MonoBehaviour:
   - RpcSyncMosquitosState
   - RpcReplicatePickupState
   - RpcReplicateMosquitosTypesQueueToNewMaster
+  - SyncBarrierHealths
   DisableAutoOpenWizard: 1
   ShowSettings: 1
   DevRegionSetOnce: 0
