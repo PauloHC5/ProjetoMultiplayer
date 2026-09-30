@@ -1,5 +1,6 @@
 using System;
 using System.Collections;
+using System.Linq;
 using _Game.Scripts;
 using Photon.Pun;
 using UnityEngine;
@@ -9,23 +10,22 @@ using Hashtable = ExitGames.Client.Photon.Hashtable;
 public class BarriersManager : SceneSingleton<BarriersManager>
 {
     [SerializeField] private GameObject[] barriers;
-    [SerializeField] private int barrierInitialHealth = 3;
-    [SerializeField] private int damagePerHit = 1;
     
     private PhotonView _photonView;
     
-    private const string HealthsKey = "barrierHealths";
+    private const string BarriersActiveKey = "BarriersActive";
 
     private IEnumerator Start()
     {
         yield return new WaitUntil(() => PhotonNetwork.InRoom);
         
         if (PhotonNetwork.IsMasterClient &&
-            !PhotonNetwork.CurrentRoom.CustomProperties.ContainsKey(HealthsKey))
+            !PhotonNetwork.CurrentRoom.CustomProperties.ContainsKey(BarriersActiveKey))
         {
-            var healths = new int[barriers.Length];
-            Array.Fill(healths, barrierInitialHealth);
-            PhotonNetwork.CurrentRoom.SetCustomProperties(new Hashtable { { HealthsKey, healths } });
+            bool[] barriersActive = new bool[barriers.Length];
+            for (int i = 0; i < barriers.Length; i++)
+                barriersActive[i] = true;
+            PhotonNetwork.CurrentRoom.SetCustomProperties(new Hashtable { { BarriersActiveKey, barriersActive } });
         }
 
         UpdateBarrierStatus();
@@ -38,16 +38,16 @@ public class BarriersManager : SceneSingleton<BarriersManager>
         int i = Array.IndexOf(barriers, barrier);
         if (i < 0) return;
 
-        var healths = (int[])PhotonNetwork.CurrentRoom.CustomProperties[HealthsKey];
-        healths = (int[])healths.Clone();
-        healths[i] = Mathf.Max(0, healths[i] - damagePerHit);
+        bool[] barriersActive = (bool[])PhotonNetwork.CurrentRoom.CustomProperties[BarriersActiveKey];
+        barriersActive = (bool[])barriersActive.Clone();
+        barriersActive[i] = false;
 
-        PhotonNetwork.CurrentRoom.SetCustomProperties(new Hashtable { { HealthsKey, healths } });
+        PhotonNetwork.CurrentRoom.SetCustomProperties(new Hashtable { { BarriersActiveKey, barriersActive } });
     }
 
     public override void OnRoomPropertiesUpdate(Hashtable propertiesThatChanged)
     {
-        if (propertiesThatChanged.ContainsKey(HealthsKey))
+        if (propertiesThatChanged.ContainsKey(BarriersActiveKey))
         {
             UpdateBarrierStatus();
             Debug.Log("Barrier healths updated");
@@ -56,27 +56,27 @@ public class BarriersManager : SceneSingleton<BarriersManager>
     
     private void UpdateBarrierStatus()
     {
-        if (!PhotonNetwork.CurrentRoom.CustomProperties.TryGetValue(HealthsKey, out var obj)) return;
-        var healths = (int[])obj;
+        if (!PhotonNetwork.CurrentRoom.CustomProperties.TryGetValue(BarriersActiveKey, out var obj)) return;
+        var barriersActive = (bool[])obj;
 
         for (int i = 0; i < barriers.Length; i++)
-            barriers[i].gameObject.SetActive(healths[i] > 0); // visual em todos os clients
+            barriers[i].gameObject.SetActive(barriersActive[i]);
     }
 
     public void RestoreBarrier()
     {
         // Get one barrier that has been destroyed and restore it
-        var healths = (int[])PhotonNetwork.CurrentRoom.CustomProperties[HealthsKey];
+        bool[] barriersActive = (bool[])PhotonNetwork.CurrentRoom.CustomProperties[BarriersActiveKey];
         
-        if(healths == null) Debug.LogError("Healths array is null in RestoreBarrier");
+        if(barriersActive == null) Debug.LogError("BarriersActive array is null in RestoreBarrier");
         
-        for (int i = 0; i < healths.Length; i++)
+        for (int i = 0; i < barriersActive.Length; i++)
         {
-            if (healths[i] <= 0)
+            if (barriersActive[i] == false)
             {
-                healths = (int[])healths.Clone();
-                healths[i] = barrierInitialHealth;
-                PhotonNetwork.CurrentRoom.SetCustomProperties(new Hashtable { { HealthsKey, healths } });
+                barriersActive = (bool[])barriersActive.Clone();
+                barriersActive[i] = true;
+                PhotonNetwork.CurrentRoom.SetCustomProperties(new Hashtable { { BarriersActiveKey, barriersActive } });
                 break;
             }
         }
@@ -86,14 +86,9 @@ public class BarriersManager : SceneSingleton<BarriersManager>
     {
         if (!PhotonNetwork.InRoom) return false;
         
-        if (!PhotonNetwork.CurrentRoom.CustomProperties.TryGetValue(HealthsKey, out var obj)) return false;
-        var healths = (int[])obj;
+        if (!PhotonNetwork.CurrentRoom.CustomProperties.TryGetValue(BarriersActiveKey, out var obj)) return false;
+        var barriersActive = (bool[])obj;
 
-        for (var index = 0; index < healths.Length; index++)
-        {
-            if (healths[index] <= 0) return true;
-        }
-
-        return false;
+        return barriersActive.Any(t => !t);
     }
 }

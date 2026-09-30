@@ -239,6 +239,12 @@ public class Mosquitos : MonoBehaviourPunCallbacks
         GameManager.Instance.AudioManager.PlaySfx(killedSfx);
         
         ChangeMosquitosZigZagMovement();
+
+        if (AmountAlive == 1)
+        {
+            CancelInvoke(nameof(RequestMissileAttack));
+            InvokeRepeating(nameof(RequestMissileAttack), missileAttackRate / 2, missileAttackRate / 2);
+        }
     }
 
     private void ChangeMosquitosZigZagMovement()

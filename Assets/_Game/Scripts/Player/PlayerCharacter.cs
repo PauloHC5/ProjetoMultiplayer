@@ -278,7 +278,7 @@ public class PlayerCharacter : MonoBehaviourPun
         }
 
         _invincible = false;
-        SpriteRenderer.enabled = true;
+        SpriteRenderer.color = Color.white; // Reset to original color
     }
     
     private IEnumerator Invincible(float duration = 3.0f)

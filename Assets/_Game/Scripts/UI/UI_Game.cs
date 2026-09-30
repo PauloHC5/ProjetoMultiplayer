@@ -151,7 +151,7 @@ public class UI_Game : MonoBehaviour
     
     private void OnPickupCollected(Pickup.PickupType pickupType, float duration)
     {
-        if(pickupType == Pickup.PickupType._1UP) return;
+        if(pickupType is Pickup.PickupType._1UP or Pickup.PickupType.Toolbox) return;
 
         if(!pickupTypeSprites.ContainsKey(pickupType))
         {
