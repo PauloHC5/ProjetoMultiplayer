@@ -82,7 +82,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8806387911206087571, guid: d309fc0006846c549aeb75c69f86a298, type: 3}
       propertyPath: bBotMode
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 8806387911206087571, guid: d309fc0006846c549aeb75c69f86a298, type: 3}
       propertyPath: laserPrefab
