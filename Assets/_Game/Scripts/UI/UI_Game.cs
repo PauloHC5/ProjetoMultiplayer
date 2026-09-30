@@ -152,7 +152,13 @@ public class UI_Game : MonoBehaviour
     private void OnPickupCollected(Pickup.PickupType pickupType, float duration)
     {
         if(pickupType == Pickup.PickupType._1UP) return;
-        
+
+        if(!pickupTypeSprites.ContainsKey(pickupType))
+        {
+            Debug.LogWarning($"Pickup type {pickupType} does not have a corresponding sprite in the dictionary.");
+            return;
+        }
+
         // Instantiate image for the pickup type
         var pickupImageGO = new GameObject(pickupType.ToString());
         pickupImageGO.transform.SetParent(pickupStatusUI, false);
