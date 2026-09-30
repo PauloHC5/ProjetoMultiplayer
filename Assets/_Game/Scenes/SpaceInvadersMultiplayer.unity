@@ -463,8 +463,6 @@ MonoBehaviour:
   - {fileID: 294747283}
   - {fileID: 413720333}
   - {fileID: 1097004816}
-  barrierInitialHealth: 1
-  damagePerHit: 1
 --- !u!4 &274422553
 Transform:
   m_ObjectHideFlags: 0
@@ -540,7 +538,9 @@ MonoBehaviour:
   - {fileID: 4051483603578224192, guid: 1e3f0df2fdec36d4aab6f25c54807f18, type: 3}
   - {fileID: 4051483603578224192, guid: 0b77bcc530e612645bbd159a63f428e5, type: 3}
   - {fileID: 4051483603578224192, guid: 67beb969ec87d5046af57e5d9172d8b1, type: 3}
-  mosquitosPrefab: {fileID: 7380585379183910588, guid: 2cdd92942844e9544828eece9b9cef8b, type: 3}
+  mosquitosHordePrefab: {fileID: 7380585379183910588, guid: 2cdd92942844e9544828eece9b9cef8b, type: 3}
+  hordesPerWave: 3
+  hordeSpawnDelay: 1
   pickupPrefabs:
   - {fileID: 6800254474395900506, guid: 3f3c401c4b8fc3947974eaee7b17fbfd, type: 3}
   - {fileID: 1372803624718939100, guid: 8e4ba7b0373b782488eb067a8d1962cf, type: 3}
@@ -550,9 +550,16 @@ MonoBehaviour:
   - {fileID: 6605038136104068284, guid: 2f9fc2d6ceea7614a8c9b6cebebc0559, type: 3}
   - {fileID: 3203711729101826982, guid: efaaaf0b3303a8a4b9a8d5a078c2b9b9, type: 3}
   pickupsSpawnArea: {fileID: 1551202078}
-  pickupMinSpawnInterval: 5
-  pickupMaxSpawnInterval: 15
-  oneUpSpawnChance: 15
+  pickupSpawnIntervalHordeFirstHorde:
+    Min: 5
+    Max: 15
+  pickupSpawnIntervalHordeSecondHorde:
+    Min: 3
+    Max: 8
+  pickupSpawnIntervalHordeThirdHorde:
+    Min: 3
+    Max: 5
+  oneUpSpawnChance: 10
   toolboxSpawnChance: 25
   bDebugMode: 0
 --- !u!4 &281756321
@@ -897,6 +904,7 @@ MonoBehaviour:
   gameCountdownText: {fileID: 1985273625}
   gameOverUI: {fileID: 2026567441}
   pickupStatusUI: {fileID: 1789183826}
+  wavesCounterText: {fileID: 1708115333}
   pickupTypeSprites:
     _serializedList:
     - Key: 1
@@ -2603,7 +2611,7 @@ BoxCollider2D:
   m_UsedByEffector: 0
   m_CompositeOperation: 0
   m_CompositeOrder: 0
-  m_Offset: {x: 0, y: 0}
+  m_Offset: {x: 0, y: -3.5}
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0, y: 0}
@@ -2613,7 +2621,7 @@ BoxCollider2D:
     drawMode: 0
     adaptiveTiling: 0
   m_AutoTiling: 0
-  m_Size: {x: 57.48, y: 20.18}
+  m_Size: {x: 57.48, y: 13.18}
   m_EdgeRadius: 0
 --- !u!4 &1551202079
 Transform:
@@ -2967,7 +2975,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 1, y: 1}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: -40, y: -22.055054}
+  m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 381.65002, y: 50}
   m_Pivot: {x: 1, y: 1}
 --- !u!114 &1708115333
@@ -3017,15 +3025,15 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 25
-  m_fontSizeBase: 25
+  m_fontSize: 17.89
+  m_fontSizeBase: 17.89
   m_fontWeight: 400
   m_enableAutoSizing: 0
   m_fontSizeMin: 18
   m_fontSizeMax: 72
   m_fontStyle: 0
   m_HorizontalAlignment: 4
-  m_VerticalAlignment: 512
+  m_VerticalAlignment: 1024
   m_textAlignment: 65535
   m_characterSpacing: 0
   m_characterHorizontalScale: 1
@@ -3056,7 +3064,7 @@ MonoBehaviour:
   m_VertexBufferAutoSizeReduction: 0
   m_useMaxVisibleDescender: 1
   m_pageToDisplay: 1
-  m_margin: {x: 0, y: 0, z: 0, w: 0}
+  m_margin: {x: 0, y: 0, z: 10.04, w: 0}
   m_isUsingLegacyAnimationComponent: 0
   m_isVolumetricText: 0
   m_hasFontAssetChanged: 0

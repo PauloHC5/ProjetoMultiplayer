@@ -9,7 +9,7 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 using Hashtable = ExitGames.Client.Photon.Hashtable;
 
-public class Mosquitos : MonoBehaviourPunCallbacks
+public class MosquitosHorde : MonoBehaviourPunCallbacks
 {
     private enum BoundariesSideHit
     {

@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using _Game.Scripts.SpaceInvaders;
 using Photon.Pun;
 using Photon.Realtime;
@@ -19,18 +20,28 @@ namespace _Game.Scripts
     [RequireComponent(typeof(PhotonView))]
     public class GameMode : SceneSingleton<GameMode>
     {
+        [Serializable]
+        private struct PickupSpawnInterval
+        {
+            public float Min;
+            public float Max;
+        }
+        
         [Header("Game Mode")]
         [SerializeField] private int startGameDelay = 3;
         [SerializeField] private int startingLives = 3;
         [SerializeField] private PlayerController playerControllerPrefab;
         [SerializeField] private PlayerCharacter[] playerCharacterPrefabs = new PlayerCharacter[3];
-        [SerializeField] private Mosquitos mosquitosPrefab;
+        [SerializeField] private MosquitosHorde mosquitosHordePrefab;
+        [SerializeField] private int hordesPerWave = 3;
+        [SerializeField] private float hordeSpawnDelay = 1.0f;
         
         [Header("Pickups")]
         [SerializeField] private Pickup[] pickupPrefabs = new Pickup[6];
         [SerializeField] private BoxCollider2D pickupsSpawnArea;
-        [SerializeField] private float pickupMinSpawnInterval = 10.0f;
-        [SerializeField] private float pickupMaxSpawnInterval = 20.0f;
+        [SerializeField] private PickupSpawnInterval pickupSpawnIntervalHordeFirstHorde;
+        [SerializeField] private PickupSpawnInterval pickupSpawnIntervalHordeSecondHorde;
+        [SerializeField] private PickupSpawnInterval pickupSpawnIntervalHordeThirdHorde;
         [SerializeField] private int oneUpSpawnChance = 10; // 10% chance to spawn a 1UP pickup
         [SerializeField] private int toolboxSpawnChance = 10; // 10% chance to spawn a Toolbox pickup
         
@@ -40,11 +51,13 @@ namespace _Game.Scripts
         private PhotonView _photonView;
         private int _gameCountdown;
         private int _currentLives;
-        private Mosquitos _mosquitosInTheScene;
+        private List<MosquitosHorde> _mosquitosHordesInTheScene = new List<MosquitosHorde>();
         private Dictionary<PlayerType, PlayerCharacter> _playerCharacters = new Dictionary<PlayerType, PlayerCharacter>();
         private readonly Vector3 _playerSpawnPosition = new Vector3(0, -18.2f, 0);
         private bool _bGameCountdownRunning = false;
         private Pickup.PickupType _lastPickupTypeSpawned = Pickup.PickupType.Default;
+        private int _hordesCounter = 0;
+        private int _currentWave = 0;
         
         public static readonly string PlayerTypeKey = "AvailablePlayerTypes";
         public static readonly string PlayerScoreKey = "PlayerScore";
@@ -61,6 +74,7 @@ namespace _Game.Scripts
         public static Action<Player, PlayerCharacter> OnPlayerCharacterSpawned;
         public static Action<Player> OnPlayerLeft;
         public static Action RoomReady;
+        public static Action<int> OnWaveChanged;
 
         protected override void Awake()
         {
@@ -250,9 +264,9 @@ namespace _Game.Scripts
 
             photonView.RPC(nameof(RpcReplicateGameCooldown), newPlayer, _gameCountdown);
 
-            if (_mosquitosInTheScene)
+            if (_mosquitosHordesInTheScene != null && _mosquitosHordesInTheScene.Count > 0)
             {
-                photonView.RPC(nameof(RpcSubscribeToInvadersEvents), newPlayer);
+                photonView.RPC(nameof(RpcSubscribeToMosquitosHordeEvents), newPlayer);
             }
         }
 
@@ -278,8 +292,32 @@ namespace _Game.Scripts
                 yield return new WaitForSeconds(1.0f);
             }
 
-            _mosquitosInTheScene = PhotonNetwork.InstantiateRoomObject(mosquitosPrefab.name, mosquitosPrefab.transform.position, Quaternion.identity).GetComponent<Mosquitos>();
-            _photonView.RPC(nameof(RpcSubscribeToInvadersEvents), RpcTarget.All);
+            SpawnMosquitosHorde();
+        }
+
+        private void SpawnMosquitosHorde()
+        {
+            _hordesCounter = Mathf.Clamp(++_hordesCounter, 1, hordesPerWave);
+
+            int hordesToSpawn = _hordesCounter switch
+            {
+                1 => 1,
+                2 => 2,
+                3 => 3,
+                _ => 1
+            };
+
+            for (int i = 0; i < hordesToSpawn; i++)
+            {
+                Vector3 spawnPositionOffset = Vector3.zero;
+                if(i > 0)
+                {
+                    spawnPositionOffset = new Vector3(UnityEngine.Random.Range(-6.5f, 6.5f), UnityEngine.Random.Range(-6.5f, 6.5f), 0f);
+                }
+                
+                _mosquitosHordesInTheScene.Add(PhotonNetwork.InstantiateRoomObject(mosquitosHordePrefab.name, mosquitosHordePrefab.transform.position + spawnPositionOffset, Quaternion.identity).GetComponent<MosquitosHorde>());
+                _photonView.RPC(nameof(RpcSubscribeToMosquitosHordeEvents), RpcTarget.All);
+            }
         }
 
         [PunRPC]
@@ -301,21 +339,70 @@ namespace _Game.Scripts
             if (bDebugMode)
                 Debug.Log("GameMode.StartGameContdown: Game Started");
             
+            _currentWave++;
+            OnWaveChanged?.Invoke(_currentWave);
+            
             _bGameCountdownRunning = false;
             
             GameStartedEvent?.Invoke();     
             
-            Invoke(nameof(SpawnPickup), UnityEngine.Random.Range(pickupMinSpawnInterval, pickupMaxSpawnInterval));
+            InvokePickupSpawn();
         }
         
         [PunRPC]
-        private void RpcSubscribeToInvadersEvents()
+        private void RpcSubscribeToMosquitosHordeEvents()
         {
-            if(!_mosquitosInTheScene)
-                _mosquitosInTheScene = FindAnyObjectByType<Mosquitos>();
+            _mosquitosHordesInTheScene = FindObjectsByType<MosquitosHorde>(FindObjectsSortMode.None).ToList();
+
+            for (var index = 0; index < _mosquitosHordesInTheScene.Count; index++)
+            {
+                _mosquitosHordesInTheScene[index].AllMosquitosDestroyedEvent += HordeCompleted;
+                _mosquitosHordesInTheScene[index].OnMosquitoKilled += InvaderKilled;
+            }
+        }
+        
+        private void HordeCompleted()
+        {
+            if(bDebugMode)
+                Debug.Log("GameMode.HordeCompleted");
             
-            _mosquitosInTheScene.AllMosquitosDestroyedEvent += WaveCompleted;
-            _mosquitosInTheScene.OnMosquitoKilled += InvaderKilled;
+            _mosquitosHordesInTheScene.RemoveAll(x => x.AmountAlive <= 0);
+            
+            if(_hordesCounter >= hordesPerWave)
+            {
+                if(_mosquitosHordesInTheScene.Count != 0) return;
+                
+                 WaveCompleted();
+            }
+            else
+            {
+                if(_mosquitosHordesInTheScene.Count != 0) return;
+                    
+                Invoke(nameof(SpawnMosquitosHorde), hordeSpawnDelay);
+            }
+        }
+        
+        private void WaveCompleted()
+        {
+            if(bDebugMode)
+                Debug.Log("GameMode.WaveCompleted");
+            
+            _hordesCounter = 0;
+            
+            CancelInvoke(nameof(SpawnPickup));
+            photonView.RPC(nameof(RpcReplicateUnsubscribeFromMosquitosHordeEvents), RpcTarget.All);
+            
+            StartCoroutine(StartGameCountdown());
+        }
+        
+        [PunRPC]
+        private void RpcReplicateUnsubscribeFromMosquitosHordeEvents()
+        {
+            for (int i = 0; i < _mosquitosHordesInTheScene.Count; i++)
+            {
+                _mosquitosHordesInTheScene[i].AllMosquitosDestroyedEvent -= WaveCompleted;
+                _mosquitosHordesInTheScene[i].OnMosquitoKilled -= InvaderKilled;
+            }
         }
         
         private void InvaderKilled(int playerID, int points)
@@ -340,24 +427,6 @@ namespace _Game.Scripts
                 OnScoreChanged?.Invoke();
             }
         }
-
-        private void WaveCompleted()
-        {
-            if(bDebugMode)
-                Debug.Log("GameMode.WaveCompleted");
-            
-            CancelInvoke(nameof(SpawnPickup));
-            photonView.RPC(nameof(RpcReplicateUnsubscribeFromInvadersEvents), RpcTarget.All);
-        }
-        
-        [PunRPC]
-        private void RpcReplicateUnsubscribeFromInvadersEvents()
-        {
-            _mosquitosInTheScene.AllMosquitosDestroyedEvent -= WaveCompleted;
-            _mosquitosInTheScene.OnMosquitoKilled -= InvaderKilled;
-            
-            StartCoroutine(StartGameCountdown());
-        }
         
         private void OnInvadersReachedLimit()
         {
@@ -370,8 +439,11 @@ namespace _Game.Scripts
         [PunRPC]
         private void RpcReplicateInvadersReachedLimit()
         {
-            _mosquitosInTheScene.OnMosquitoKilled -= InvaderKilled;
-            _mosquitosInTheScene.AllMosquitosDestroyedEvent -= WaveCompleted;
+            for (int i = 0; i < _mosquitosHordesInTheScene.Count; i++)
+            {
+                _mosquitosHordesInTheScene[i].OnMosquitoKilled -= InvaderKilled;
+                _mosquitosHordesInTheScene[i].AllMosquitosDestroyedEvent -= WaveCompleted;
+            }
             InvadersLimit.OnInvadersLimitReached -= OnInvadersReachedLimit;
             
             OnPlayerCharacterSpawned = null;
@@ -395,9 +467,14 @@ namespace _Game.Scripts
             
             OnLivesChanged?.Invoke(_currentLives);
 
-            if(PhotonNetwork.CurrentRoom.PlayerCount == 1 && _mosquitosInTheScene)
-                _mosquitosInTheScene.stopMovement = true;
-
+            if (PhotonNetwork.CurrentRoom.PlayerCount == 1 && _mosquitosHordesInTheScene.Count > 0)
+            {
+                for(int i = 0; i < _mosquitosHordesInTheScene.Count; i++)
+                {
+                    _mosquitosHordesInTheScene[i].stopMovement = true;
+                }
+            }
+            
             if (_currentLives <= 0)
             {
                 GameOver(playerCharactersAlive);
@@ -431,8 +508,13 @@ namespace _Game.Scripts
         {
             yield return new WaitForSeconds(2.0f);                       
 
-            if (PhotonNetwork.CurrentRoom.PlayerCount == 1 && _mosquitosInTheScene)
-                _mosquitosInTheScene.stopMovement = false;
+            if (PhotonNetwork.CurrentRoom.PlayerCount == 1 && _mosquitosHordesInTheScene.Count > 0)
+            {
+                for(int i = 0; i < _mosquitosHordesInTheScene.Count; i++)
+                {
+                    _mosquitosHordesInTheScene[i].stopMovement = false;
+                }
+            }
 
             PlayerType playerType = PlayerType.Player1;
             if (PhotonNetwork.LocalPlayer.CustomProperties.TryGetValue(PlayerTypeKey, out var index))
@@ -468,6 +550,19 @@ namespace _Game.Scripts
             OnLivesChanged?.Invoke(_currentLives);
         }
         
+        private void InvokePickupSpawn()
+        {
+            PickupSpawnInterval hordeSpawnInterval = _hordesCounter switch
+            {
+                1 => pickupSpawnIntervalHordeFirstHorde,
+                2 =>  pickupSpawnIntervalHordeSecondHorde,
+                3 => pickupSpawnIntervalHordeThirdHorde,
+                _ => pickupSpawnIntervalHordeFirstHorde
+            };
+
+            Invoke(nameof(SpawnPickup), UnityEngine.Random.Range(hordeSpawnInterval.Min, hordeSpawnInterval.Max));
+        }
+        
         private void SpawnPickup()
         {
             if (PhotonNetwork.IsMasterClient)
@@ -487,7 +582,7 @@ namespace _Game.Scripts
                     var chance = UnityEngine.Random.Range(0, 100);
                     if (chance >= oneUpSpawnChance)
                     {
-                        Invoke(nameof(SpawnPickup), UnityEngine.Random.Range(pickupMinSpawnInterval, pickupMaxSpawnInterval));
+                        SpawnPickup();
                         return;
                     }
                 }
@@ -501,16 +596,15 @@ namespace _Game.Scripts
                         var chance = UnityEngine.Random.Range(0, 100);
                         if (chance >= toolboxSpawnChance)
                         {
-                            Invoke(nameof(SpawnPickup),
-                                UnityEngine.Random.Range(pickupMinSpawnInterval, pickupMaxSpawnInterval));
+                            SpawnPickup();
                             return;
                         }
                         Debug.Log("GameMode.SpawnPickup: Spawning Toolbox pickup because at least one barrier has been destroyed.");
                     }
                     else
                     {
-                        randomPickupIndex = (randomPickupIndex - 1) % pickupPrefabs.Length;
-                        randomPickupPrefab = pickupPrefabs[randomPickupIndex];
+                        SpawnPickup();
+                        return;
                     }
                 }
                 
@@ -524,7 +618,7 @@ namespace _Game.Scripts
                 PhotonNetwork.InstantiateRoomObject(randomPickupPrefab.name, randomPosition, Quaternion.identity);
             }
 
-            Invoke(nameof(SpawnPickup), UnityEngine.Random.Range(pickupMinSpawnInterval, pickupMaxSpawnInterval));
+            InvokePickupSpawn();
         }
 
         protected override void OnDestroy()
@@ -533,10 +627,13 @@ namespace _Game.Scripts
             
             InvadersLimit.OnInvadersLimitReached -= OnInvadersReachedLimit;
 
-            if (_mosquitosInTheScene == null) return;
+            if (_mosquitosHordesInTheScene == null) return;
             
-            _mosquitosInTheScene.AllMosquitosDestroyedEvent -= WaveCompleted;
-            _mosquitosInTheScene.OnMosquitoKilled -= InvaderKilled;
+            for(int i = 0; i < _mosquitosHordesInTheScene.Count; i++)
+            {
+                _mosquitosHordesInTheScene[i].AllMosquitosDestroyedEvent -= WaveCompleted;
+                _mosquitosHordesInTheScene[i].OnMosquitoKilled -= InvaderKilled;
+            }
         }
     }
 }

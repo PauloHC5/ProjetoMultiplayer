@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 5313734984663642673}
   - component: {fileID: 6164410096703705953}
   m_Layer: 0
-  m_Name: Mosquitos
+  m_Name: MosquitosHorde
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

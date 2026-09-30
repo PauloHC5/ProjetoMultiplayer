@@ -27,6 +27,7 @@ public class UI_Game : MonoBehaviour
     public TextMeshProUGUI gameCountdownText;
     public GameObject gameOverUI;
     public Transform pickupStatusUI;
+    public TextMeshProUGUI wavesCounterText;
 
     [SerializedDictionary("Pickup Type", "Sprite")]
     public AYellowpaper.SerializedCollections.SerializedDictionary<Pickup.PickupType, Sprite> pickupTypeSprites;
@@ -208,6 +209,13 @@ public class UI_Game : MonoBehaviour
 
         Destroy(pickupImage.gameObject);
     }
+    
+    private void OnWaveChanged(int currentWave)
+    {
+        wavesCounterText.gameObject.SetActive(true);
+        
+        wavesCounterText.text = $"Wave: {currentWave}";
+    }
 
     private void OnEnable()
     {
@@ -217,6 +225,7 @@ public class UI_Game : MonoBehaviour
         GameMode.OnPlayerCharacterSpawned += OnPlayerCharacterSpawned;
         GameMode.GameStartedEvent += OnGameStarted;
         GameMode.GameOverEvent += OnGameOver;
+        GameMode.OnWaveChanged += OnWaveChanged;
     }
 
     private void OnDisable()
@@ -227,5 +236,6 @@ public class UI_Game : MonoBehaviour
         GameMode.OnPlayerCharacterSpawned -= OnPlayerCharacterSpawned;
         GameMode.GameStartedEvent -= OnGameStarted;
         GameMode.GameOverEvent -= OnGameOver;
+        GameMode.OnWaveChanged -= OnWaveChanged;
     }
 }
