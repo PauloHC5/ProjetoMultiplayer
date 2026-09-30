@@ -41,11 +41,6 @@ public class Mosquitos : MonoBehaviourPunCallbacks
     public float PercentKilled => (float)this.AmountKilled / (float)this.TotalMosquitos;
     public int AmountAlive => this.TotalMosquitos - this.AmountKilled;
     
-    private bool _bPercentKilled25Triggered = false;
-    private bool _bPercentKilled50Triggered = false;
-    private bool _bPercentKilled75Triggered = false;
-    private bool _bPercentKilled99Triggered = false;
-    
     
     public Action<int, int> OnMosquitoKilled;
     public event Action AllMosquitosDestroyedEvent;
