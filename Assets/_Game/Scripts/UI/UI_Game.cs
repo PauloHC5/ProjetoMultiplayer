@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using _Game.Scripts;
@@ -24,6 +25,7 @@ public class UI_Game : MonoBehaviour
     [Header("UI Elements")]
     public GameObject playerStatusPrefab;
     public GameObject statusBarUI;
+    public TextMeshProUGUI waveCounterText;
     public TextMeshProUGUI gameCountdownText;
     public GameObject gameOverUI;
     public Transform pickupStatusUI;
@@ -32,6 +34,7 @@ public class UI_Game : MonoBehaviour
     public AYellowpaper.SerializedCollections.SerializedDictionary<Pickup.PickupType, Sprite> pickupTypeSprites;
 
     private PlayerUIStatus _localPlayerStatus;
+    private bool _bGameIsRunning = false;
 
     // Constants for finding child components in the player status prefab
     private const string PlayerNicknameTextComponentName = "Player Nickname Text (TMP)";
@@ -48,8 +51,13 @@ public class UI_Game : MonoBehaviour
             ScoreCounterText = null,
             LivesCounterText = null
         };        
-    }    
-    
+    }
+
+    private void Start()
+    {
+        _bGameIsRunning = true;
+    }
+
     private void OnGameCountdownChanged(int countdown)
     {
         gameCountdownText.text = countdown.ToString();
@@ -139,6 +147,8 @@ public class UI_Game : MonoBehaviour
     
     private void OnPlayerCharacterDestroyed(PlayerCharacter playerCharacter)
     {
+        if(!_bGameIsRunning) return;
+        
         StopAllCoroutines();
         for(int i = pickupStatusUI.childCount - 1; i >= 0; i--)
         {
@@ -208,6 +218,13 @@ public class UI_Game : MonoBehaviour
 
         Destroy(pickupImage.gameObject);
     }
+    
+    private void OnWaveCompleted(int waveNumber)
+    {
+        waveCounterText.gameObject.SetActive(true);
+        
+        waveCounterText.text = $"Wave: {waveNumber}";
+    }
 
     private void OnEnable()
     {
@@ -217,6 +234,7 @@ public class UI_Game : MonoBehaviour
         GameMode.OnPlayerCharacterSpawned += OnPlayerCharacterSpawned;
         GameMode.GameStartedEvent += OnGameStarted;
         GameMode.GameOverEvent += OnGameOver;
+        GameMode.OnWaveCompleted += OnWaveCompleted;
     }
 
     private void OnDisable()
@@ -227,5 +245,11 @@ public class UI_Game : MonoBehaviour
         GameMode.OnPlayerCharacterSpawned -= OnPlayerCharacterSpawned;
         GameMode.GameStartedEvent -= OnGameStarted;
         GameMode.GameOverEvent -= OnGameOver;
+        GameMode.OnWaveCompleted -= OnWaveCompleted;
+    }
+
+    private void OnApplicationQuit()
+    {
+        _bGameIsRunning = false;
     }
 }

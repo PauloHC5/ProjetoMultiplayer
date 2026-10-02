@@ -7,7 +7,7 @@ namespace _Game.Scripts
     public abstract class SceneSingleton<T> : MonoBehaviourPunCallbacks where T : MonoBehaviourPunCallbacks
     {
         private static T _uniqueInstance;
-        private static bool bIsRunning = true;
+        protected static bool bIsRunning = true;
 
         public static T Instance
         {

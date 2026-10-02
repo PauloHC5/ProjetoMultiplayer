@@ -22,12 +22,16 @@ namespace _Game.Scripts
         [Header("Game Mode")]
         [SerializeField] private int startGameDelay = 3;
         [SerializeField] private int startingLives = 3;
+        [SerializeField] private int hordesPerWave = 3;
+        [SerializeField] private float intervalBetweenHordes = 2.0f;
+        
+        [Header("Prefabs")]
         [SerializeField] private PlayerController playerControllerPrefab;
-        [SerializeField] private PlayerCharacter[] playerCharacterPrefabs = new PlayerCharacter[3];
         [SerializeField] private Mosquitos mosquitosPrefab;
+        [SerializeField] private PlayerCharacter[] playerCharacterPrefabs = new PlayerCharacter[3];
+        [SerializeField] private Pickup[] pickupPrefabs = new Pickup[6];
         
         [Header("Pickups")]
-        [SerializeField] private Pickup[] pickupPrefabs = new Pickup[6];
         [SerializeField] private BoxCollider2D pickupsSpawnArea;
         [SerializeField] private float pickupMinSpawnInterval = 10.0f;
         [SerializeField] private float pickupMaxSpawnInterval = 20.0f;
@@ -41,6 +45,8 @@ namespace _Game.Scripts
         private int _gameCountdown;
         private int _currentLives;
         private Mosquitos _mosquitosInTheScene;
+        private int _hordesSpawnedInCurrentWave = 0;
+        private int _currentWave = 1;
         private Dictionary<PlayerType, PlayerCharacter> _playerCharacters = new Dictionary<PlayerType, PlayerCharacter>();
         private readonly Vector3 _playerSpawnPosition = new Vector3(0, -18.2f, 0);
         private bool _bGameCountdownRunning = false;
@@ -61,6 +67,7 @@ namespace _Game.Scripts
         public static Action<Player, PlayerCharacter> OnPlayerCharacterSpawned;
         public static Action<Player> OnPlayerLeft;
         public static Action RoomReady;
+        public static Action<int> OnWaveCompleted;
 
         protected override void Awake()
         {
@@ -252,8 +259,17 @@ namespace _Game.Scripts
 
             if (_mosquitosInTheScene)
             {
-                photonView.RPC(nameof(RpcSubscribeToInvadersEvents), newPlayer);
+                photonView.RPC(nameof(RpcSubscribeToMosquitosHordeEvents), newPlayer);
             }
+            
+            photonView.RPC(nameof(RpcReplicateWaveStatus), newPlayer, _currentWave, _hordesSpawnedInCurrentWave);
+        }
+        
+        [PunRPC]
+        private void RpcReplicateWaveStatus(int waveNumber, int hordesSpawned)
+        {
+            _currentWave = waveNumber;
+            _hordesSpawnedInCurrentWave = hordesSpawned;
         }
 
         public override void OnPlayerLeftRoom(Player otherPlayer)
@@ -278,8 +294,15 @@ namespace _Game.Scripts
                 yield return new WaitForSeconds(1.0f);
             }
 
+            SpawnHorde();
+        }
+        
+        private void SpawnHorde()
+        {
+            if(!PhotonNetwork.IsMasterClient) return;
+            
             _mosquitosInTheScene = PhotonNetwork.InstantiateRoomObject(mosquitosPrefab.name, mosquitosPrefab.transform.position, Quaternion.identity).GetComponent<Mosquitos>();
-            _photonView.RPC(nameof(RpcSubscribeToInvadersEvents), RpcTarget.All);
+            _photonView.RPC(nameof(RpcSubscribeToMosquitosHordeEvents), RpcTarget.All);
         }
 
         [PunRPC]
@@ -309,12 +332,12 @@ namespace _Game.Scripts
         }
         
         [PunRPC]
-        private void RpcSubscribeToInvadersEvents()
+        private void RpcSubscribeToMosquitosHordeEvents()
         {
             if(!_mosquitosInTheScene)
                 _mosquitosInTheScene = FindAnyObjectByType<Mosquitos>();
             
-            _mosquitosInTheScene.AllMosquitosDestroyedEvent += WaveCompleted;
+            _mosquitosInTheScene.AllMosquitosDestroyedEvent += HordeKilled;
             _mosquitosInTheScene.OnMosquitoKilled += InvaderKilled;
         }
         
@@ -332,12 +355,23 @@ namespace _Game.Scripts
             SetPlayerScore(player, playerScore);
         }
 
-        public override void OnPlayerPropertiesUpdate(Player targetPlayer, Hashtable changedProps)
+        private void HordeKilled()
         {
-            // if the changed property is the PlayerScoreKey, invoke the OnScoreChanged event
-            if (changedProps.ContainsKey(PlayerScoreKey))
+            if(bDebugMode)
+                Debug.Log("GameMode.HordeKilled");
+            
+            _hordesSpawnedInCurrentWave++;
+            
+            if (_hordesSpawnedInCurrentWave >= hordesPerWave)
             {
-                OnScoreChanged?.Invoke();
+                _hordesSpawnedInCurrentWave = 0;
+                _currentWave++;
+                WaveCompleted();
+                OnWaveCompleted?.Invoke(_currentWave);
+            }
+            else
+            {
+                Invoke(nameof(SpawnHorde), intervalBetweenHordes);
             }
         }
 
@@ -347,16 +381,25 @@ namespace _Game.Scripts
                 Debug.Log("GameMode.WaveCompleted");
             
             CancelInvoke(nameof(SpawnPickup));
-            photonView.RPC(nameof(RpcReplicateUnsubscribeFromInvadersEvents), RpcTarget.All);
+            photonView.RPC(nameof(RpcReplicateUnsubscribeFromMosquitosHordeEvents), RpcTarget.All);
+            
+            StartCoroutine(StartGameCountdown());
         }
         
         [PunRPC]
-        private void RpcReplicateUnsubscribeFromInvadersEvents()
+        private void RpcReplicateUnsubscribeFromMosquitosHordeEvents()
         {
-            _mosquitosInTheScene.AllMosquitosDestroyedEvent -= WaveCompleted;
+            _mosquitosInTheScene.AllMosquitosDestroyedEvent -= HordeKilled;
             _mosquitosInTheScene.OnMosquitoKilled -= InvaderKilled;
-            
-            StartCoroutine(StartGameCountdown());
+        }
+        
+        public override void OnPlayerPropertiesUpdate(Player targetPlayer, Hashtable changedProps)
+        {
+            // if the changed property is the PlayerScoreKey, invoke the OnScoreChanged event
+            if (changedProps.ContainsKey(PlayerScoreKey))
+            {
+                OnScoreChanged?.Invoke();
+            }
         }
         
         private void OnInvadersReachedLimit()
@@ -382,6 +425,8 @@ namespace _Game.Scripts
         }
         private void OnPlayerDestroyed(PlayerCharacter playerCharacterDestroyed)
         {            
+            if(!bIsRunning) return;
+            
             if(bDebugMode)
                 Debug.Log("GameMode.OnPlayerDestroyed");
             
@@ -487,11 +532,10 @@ namespace _Game.Scripts
                     var chance = UnityEngine.Random.Range(0, 100);
                     if (chance >= oneUpSpawnChance)
                     {
-                        Invoke(nameof(SpawnPickup), UnityEngine.Random.Range(pickupMinSpawnInterval, pickupMaxSpawnInterval));
+                        SpawnPickup();
                         return;
                     }
                 }
-                
                 
                 if(randomPickupPrefab.Type == Pickup.PickupType.Toolbox)
                 {
@@ -501,19 +545,17 @@ namespace _Game.Scripts
                         var chance = UnityEngine.Random.Range(0, 100);
                         if (chance >= toolboxSpawnChance)
                         {
-                            Invoke(nameof(SpawnPickup),
-                                UnityEngine.Random.Range(pickupMinSpawnInterval, pickupMaxSpawnInterval));
+                            SpawnPickup();
                             return;
                         }
                         Debug.Log("GameMode.SpawnPickup: Spawning Toolbox pickup because at least one barrier has been destroyed.");
                     }
                     else
                     {
-                        randomPickupIndex = (randomPickupIndex - 1) % pickupPrefabs.Length;
-                        randomPickupPrefab = pickupPrefabs[randomPickupIndex];
+                        SpawnPickup();
+                        return;
                     }
                 }
-                
 
                 _lastPickupTypeSpawned = randomPickupPrefab.Type;
 

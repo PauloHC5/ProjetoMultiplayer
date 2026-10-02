@@ -152,8 +152,6 @@ public class Mosquitos : MonoBehaviourPunCallbacks
         bool[] activeMosquitos = _mosquitos.Select(mosquito => mosquito.gameObject.activeInHierarchy).ToArray();
         
         int[] mosquitoTypes = _mosquitoTypes.Select(mosquitoType => (int)mosquitoType).ToArray();
-        
-        Debug.Log("Is _mosquitoTypes empty? " + (_mosquitoTypes.Count == 0));
 
         photonView.RPC(nameof(RpcSyncMosquitosState), newPlayer, activeMosquitos, mosquitoTypes);
     }
@@ -162,8 +160,6 @@ public class Mosquitos : MonoBehaviourPunCallbacks
     private void RpcSyncMosquitosState(bool[] activeMosquitos, int[] mosquitoTypes)
     {
         _mosquitoTypes = new Queue<MosquitoType>(mosquitoTypes.Select(t => (MosquitoType)t).ToArray());
-        
-        Debug.Log("Is _mosquitoTypes empty? " + (_mosquitoTypes.Count == 0));
         
         SpawnMosquitos();
         SubscribeToMosquitosEvents();
@@ -224,11 +220,12 @@ public class Mosquitos : MonoBehaviourPunCallbacks
 
         AmountKilled++;
         
-        if(PhotonNetwork.IsMasterClient && AmountKilled >= TotalMosquitos)
+        if(AmountKilled >= TotalMosquitos)
         {
             AllMosquitosDestroyedEvent?.Invoke();
 
-            PhotonNetwork.Destroy(gameObject);
+            if(PhotonNetwork.IsMasterClient)
+                PhotonNetwork.Destroy(gameObject);
         }
         
         GameManager.Instance.AudioManager.PlaySfx(killedSfx);
@@ -244,6 +241,8 @@ public class Mosquitos : MonoBehaviourPunCallbacks
 
     private void ChangeMosquitosZigZagMovement()
     {
+        if(AmountAlive == 0) return;
+        
         if(AmountAlive == 10 || AmountAlive == 7 || AmountAlive == 5 || AmountAlive == 3 || AmountAlive == 1)
         {
             for (var index = 0; index < _mosquitos.Length; index++)

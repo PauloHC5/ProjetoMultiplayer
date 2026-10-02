@@ -463,8 +463,6 @@ MonoBehaviour:
   - {fileID: 294747283}
   - {fileID: 413720333}
   - {fileID: 1097004816}
-  barrierInitialHealth: 1
-  damagePerHit: 1
 --- !u!4 &274422553
 Transform:
   m_ObjectHideFlags: 0
@@ -535,12 +533,14 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::_Game.Scripts.GameMode
   startGameDelay: 3
   startingLives: 3
+  hordesPerWave: 3
+  intervalBetweenHordes: 1.5
   playerControllerPrefab: {fileID: 7145116076282536125, guid: b8ac1bb3e2e04e649afa5032e52a1b6f, type: 3}
+  mosquitosPrefab: {fileID: 7380585379183910588, guid: 2cdd92942844e9544828eece9b9cef8b, type: 3}
   playerCharacterPrefabs:
   - {fileID: 4051483603578224192, guid: 1e3f0df2fdec36d4aab6f25c54807f18, type: 3}
   - {fileID: 4051483603578224192, guid: 0b77bcc530e612645bbd159a63f428e5, type: 3}
   - {fileID: 4051483603578224192, guid: 67beb969ec87d5046af57e5d9172d8b1, type: 3}
-  mosquitosPrefab: {fileID: 7380585379183910588, guid: 2cdd92942844e9544828eece9b9cef8b, type: 3}
   pickupPrefabs:
   - {fileID: 6800254474395900506, guid: 3f3c401c4b8fc3947974eaee7b17fbfd, type: 3}
   - {fileID: 1372803624718939100, guid: 8e4ba7b0373b782488eb067a8d1962cf, type: 3}
@@ -554,7 +554,7 @@ MonoBehaviour:
   pickupMaxSpawnInterval: 15
   oneUpSpawnChance: 15
   toolboxSpawnChance: 25
-  bDebugMode: 0
+  bDebugMode: 1
 --- !u!4 &281756321
 Transform:
   m_ObjectHideFlags: 0
@@ -894,6 +894,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::UI_Game
   playerStatusPrefab: {fileID: 7177965442330558712, guid: 996d9d058aeca5f4b864e2211111b3c5, type: 3}
   statusBarUI: {fileID: 480027233}
+  waveCounterText: {fileID: 1708115333}
   gameCountdownText: {fileID: 1985273625}
   gameOverUI: {fileID: 2026567441}
   pickupStatusUI: {fileID: 1789183826}
@@ -2950,7 +2951,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &1708115332
 RectTransform:
   m_ObjectHideFlags: 0
@@ -2990,7 +2991,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: Wave 100
+  m_text: Wave 1
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: c6c0a65388fd02e448988d1ce6f2fd00, type: 2}
   m_sharedMaterial: {fileID: -5060138518038165327, guid: c6c0a65388fd02e448988d1ce6f2fd00, type: 2}
