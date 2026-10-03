@@ -537,7 +537,7 @@ MonoBehaviour:
   intervalBetweenHordes: 1.5
   playerDeathCooldown: 2
   playerControllerPrefab: {fileID: 7145116076282536125, guid: b8ac1bb3e2e04e649afa5032e52a1b6f, type: 3}
-  mosquitosPrefab: {fileID: 7380585379183910588, guid: 2cdd92942844e9544828eece9b9cef8b, type: 3}
+  mosquitosHordePrefab: {fileID: 7380585379183910588, guid: 2cdd92942844e9544828eece9b9cef8b, type: 3}
   playerCharacterPrefabs:
   - {fileID: 4051483603578224192, guid: 1e3f0df2fdec36d4aab6f25c54807f18, type: 3}
   - {fileID: 4051483603578224192, guid: 0b77bcc530e612645bbd159a63f428e5, type: 3}

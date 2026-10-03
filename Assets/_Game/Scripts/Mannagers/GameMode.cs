@@ -37,7 +37,7 @@ namespace _Game.Scripts
         
         [Header("Prefabs")]
         [SerializeField] private PlayerController playerControllerPrefab;
-        [SerializeField] private Mosquitos mosquitosPrefab;
+        [SerializeField] private MosquitosHorde mosquitosHordePrefab;
         [SerializeField] private PlayerCharacter[] playerCharacterPrefabs = new PlayerCharacter[3];
         [SerializeField] private Pickup[] pickupPrefabs = new Pickup[6];
         
@@ -53,7 +53,7 @@ namespace _Game.Scripts
         private PhotonView _photonView;
         private int _gameCountdown;
         private int _currentLives;
-        private Mosquitos _mosquitosInTheScene;
+        private MosquitosHorde _mosquitosHordeInTheScene;
         private int _hordesSpawnedInCurrentWave = 0;
         private int _currentWave = 1;
         private Dictionary<PlayerType, PlayerCharacter> _playerCharacters = new Dictionary<PlayerType, PlayerCharacter>();
@@ -280,7 +280,7 @@ namespace _Game.Scripts
             
             photonView.RPC(nameof(RpcReplicateGameCooldown), newPlayer, _gameCountdown);
 
-            if (_mosquitosInTheScene)
+            if (_mosquitosHordeInTheScene)
             {
                 photonView.RPC(nameof(RpcSubscribeToMosquitosHordeEvents), newPlayer);
             }
@@ -327,7 +327,7 @@ namespace _Game.Scripts
         {
             if(!PhotonNetwork.IsMasterClient) return;
             
-            _mosquitosInTheScene = PhotonNetwork.InstantiateRoomObject(mosquitosPrefab.name, mosquitosPrefab.transform.position, Quaternion.identity).GetComponent<Mosquitos>();
+            _mosquitosHordeInTheScene = PhotonNetwork.InstantiateRoomObject(mosquitosHordePrefab.name, mosquitosHordePrefab.transform.position, Quaternion.identity).GetComponent<MosquitosHorde>();
             _photonView.RPC(nameof(RpcSubscribeToMosquitosHordeEvents), RpcTarget.All);
         }
 
@@ -360,11 +360,11 @@ namespace _Game.Scripts
         [PunRPC]
         private void RpcSubscribeToMosquitosHordeEvents()
         {
-            if(!_mosquitosInTheScene)
-                _mosquitosInTheScene = FindAnyObjectByType<Mosquitos>();
+            if(!_mosquitosHordeInTheScene)
+                _mosquitosHordeInTheScene = FindAnyObjectByType<MosquitosHorde>();
             
-            _mosquitosInTheScene.AllMosquitosDestroyedEvent += HordeKilled;
-            _mosquitosInTheScene.OnMosquitoKilled += InvaderKilled;
+            _mosquitosHordeInTheScene.AllMosquitosDestroyedEvent += HordeKilled;
+            _mosquitosHordeInTheScene.OnMosquitoKilled += InvaderKilled;
         }
         
         private void InvaderKilled(int playerID, int points)
@@ -415,8 +415,8 @@ namespace _Game.Scripts
         [PunRPC]
         private void RpcReplicateUnsubscribeFromMosquitosHordeEvents()
         {
-            _mosquitosInTheScene.AllMosquitosDestroyedEvent -= HordeKilled;
-            _mosquitosInTheScene.OnMosquitoKilled -= InvaderKilled;
+            _mosquitosHordeInTheScene.AllMosquitosDestroyedEvent -= HordeKilled;
+            _mosquitosHordeInTheScene.OnMosquitoKilled -= InvaderKilled;
         }
         
         public override void OnPlayerPropertiesUpdate(Player targetPlayer, Hashtable changedProps)
@@ -439,8 +439,8 @@ namespace _Game.Scripts
         [PunRPC]
         private void RpcReplicateInvadersReachedLimit()
         {
-            _mosquitosInTheScene.OnMosquitoKilled -= InvaderKilled;
-            _mosquitosInTheScene.AllMosquitosDestroyedEvent -= WaveCompleted;
+            _mosquitosHordeInTheScene.OnMosquitoKilled -= InvaderKilled;
+            _mosquitosHordeInTheScene.AllMosquitosDestroyedEvent -= WaveCompleted;
             InvadersLimit.OnInvadersLimitReached -= OnInvadersReachedLimit;
             
             OnPlayerCharacterSpawned = null;
@@ -468,8 +468,8 @@ namespace _Game.Scripts
             
             OnLivesChanged?.Invoke(_currentLives);
 
-            if(PhotonNetwork.CurrentRoom.PlayerCount == 1 && _mosquitosInTheScene)
-                _mosquitosInTheScene.stopMovement = true;
+            if(PhotonNetwork.CurrentRoom.PlayerCount == 1 && _mosquitosHordeInTheScene)
+                _mosquitosHordeInTheScene.stopMovement = true;
 
             if (_currentLives <= 0)
             {
@@ -504,8 +504,8 @@ namespace _Game.Scripts
         {
             yield return new WaitForSeconds(playerDeathCooldown);                       
 
-            if (PhotonNetwork.CurrentRoom.PlayerCount == 1 && _mosquitosInTheScene)
-                _mosquitosInTheScene.stopMovement = false;
+            if (PhotonNetwork.CurrentRoom.PlayerCount == 1 && _mosquitosHordeInTheScene)
+                _mosquitosHordeInTheScene.stopMovement = false;
 
             PlayerType playerType = PlayerType.Player1;
             if (PhotonNetwork.LocalPlayer.CustomProperties.TryGetValue(PlayerTypeKey, out var index))
@@ -625,10 +625,10 @@ namespace _Game.Scripts
             
             InvadersLimit.OnInvadersLimitReached -= OnInvadersReachedLimit;
 
-            if (_mosquitosInTheScene == null) return;
+            if (_mosquitosHordeInTheScene == null) return;
             
-            _mosquitosInTheScene.AllMosquitosDestroyedEvent -= WaveCompleted;
-            _mosquitosInTheScene.OnMosquitoKilled -= InvaderKilled;
+            _mosquitosHordeInTheScene.AllMosquitosDestroyedEvent -= WaveCompleted;
+            _mosquitosHordeInTheScene.OnMosquitoKilled -= InvaderKilled;
         }
     }
 }
