@@ -278,27 +278,25 @@ public class PlayerCharacter : MonoBehaviourPun
         }
 
         _invincible = false;
-        SpriteRenderer.color = Color.white; // Reset to original color
+        SpriteRenderer.enabled = true;
     }
     
     private IEnumerator Invincible(float duration = 3.0f)
     {
         _invincible = true;
-        
+        SpriteRenderer.enabled = true;
+
         float elapsedTime = 0.0f;
-        Color originalColor = SpriteRenderer.color;
 
         while (elapsedTime < duration)
         {
-            // Oscillate the alpha value between 0 and 1 to create a blinking effect
-            float alpha = Mathf.PingPong(Time.time * 3, 1f);
-            SpriteRenderer.color = new Color(originalColor.r, originalColor.g, originalColor.b, alpha);
+            SpriteRenderer.enabled = !SpriteRenderer.enabled;
 
             yield return new WaitForSeconds(0.2f);
             elapsedTime += 0.2f;
         }
 
-        SpriteRenderer.color = originalColor;
+        SpriteRenderer.enabled = true;
         _invincible = false;
         
         photonView.RPC(nameof(RpcEndInvincible), RpcTarget.OthersBuffered);
