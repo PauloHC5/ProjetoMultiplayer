@@ -19,6 +19,15 @@ namespace _Game.Scripts
     [RequireComponent(typeof(PhotonView))]
     public class GameMode : SceneSingleton<GameMode>
     {
+        [Serializable]
+        private struct PickupSpawnSettings
+        {
+            public float MinSpawnInterval;
+            public float MaxSpawnInterval;
+            public int OneUpSpawnChance;
+            public int ToolboxSpawnChance;
+        }
+        
         [Header("Game Mode")]
         [SerializeField] private int startGameDelay = 3;
         [SerializeField] private int startingLives = 3;
@@ -33,10 +42,9 @@ namespace _Game.Scripts
         
         [Header("Pickups")]
         [SerializeField] private BoxCollider2D pickupsSpawnArea;
-        [SerializeField] private float pickupMinSpawnInterval = 10.0f;
-        [SerializeField] private float pickupMaxSpawnInterval = 20.0f;
-        [SerializeField] private int oneUpSpawnChance = 10; // 10% chance to spawn a 1UP pickup
-        [SerializeField] private int toolboxSpawnChance = 10; // 10% chance to spawn a Toolbox pickup
+        [SerializeField] private PickupSpawnSettings pickupSpawnSettingsWith1CharacterAlive;
+        [SerializeField] private PickupSpawnSettings pickupSpawnSettingsWith2CharactersAlive;
+        [SerializeField] private PickupSpawnSettings pickupSpawnSettingsWith3CharactersAlive;
         
         [Header("Debug")]
         public bool bDebugMode = false;
@@ -289,9 +297,13 @@ namespace _Game.Scripts
         {
             OnPlayerLeft?.Invoke(otherPlayer);
             
+            if(!PhotonNetwork.IsMasterClient) return;
+            
             // If countdown is running and the master client leaves, the new master client should start the countdown again
-            if (_bGameCountdownRunning && PhotonNetwork.IsMasterClient)
+            if (_bGameCountdownRunning )
                 StartCoroutine(StartGameCountdown());
+            
+            SetPlayerCharactersAlive(GetOrInitPlayerCharactersAlive() - 1);
         }
 
         private IEnumerator StartGameCountdown()
@@ -341,7 +353,7 @@ namespace _Game.Scripts
             
             GameStartedEvent?.Invoke(_currentWave);     
             
-            Invoke(nameof(SpawnPickup), UnityEngine.Random.Range(pickupMinSpawnInterval, pickupMaxSpawnInterval));
+            InvokePickupSpawn();
         }
         
         [PunRPC]
@@ -526,11 +538,33 @@ namespace _Game.Scripts
             OnLivesChanged?.Invoke(_currentLives);
         }
         
+        private void InvokePickupSpawn()
+        {
+            PickupSpawnSettings spawnSettings = GetCurrentPickupSpawnSettings();
+            
+            Invoke(nameof(SpawnPickup), UnityEngine.Random.Range(spawnSettings.MinSpawnInterval, spawnSettings.MaxSpawnInterval));
+        }
+        
+        private PickupSpawnSettings GetCurrentPickupSpawnSettings()
+        {
+            switch (GetOrInitPlayerCharactersAlive())
+            {
+                case 1:
+                    return pickupSpawnSettingsWith1CharacterAlive;
+                case 2:
+                    return pickupSpawnSettingsWith2CharactersAlive;
+                case 3:
+                    return pickupSpawnSettingsWith3CharactersAlive;
+                default:
+                    return pickupSpawnSettingsWith1CharacterAlive;
+            }
+        }
+        
         private void SpawnPickup()
         {
+            PickupSpawnSettings spawnSettings = GetCurrentPickupSpawnSettings();
             if (PhotonNetwork.IsMasterClient)
             {
-
                 var randomPickupIndex = UnityEngine.Random.Range(0, pickupPrefabs.Length);
                 var randomPickupPrefab = pickupPrefabs[randomPickupIndex];
 
@@ -543,7 +577,7 @@ namespace _Game.Scripts
                 if(randomPickupPrefab.Type == Pickup.PickupType._1UP)
                 {
                     var chance = UnityEngine.Random.Range(0, 100);
-                    if (chance >= oneUpSpawnChance)
+                    if (chance >= spawnSettings.OneUpSpawnChance)
                     {
                         SpawnPickup();
                         return;
@@ -556,7 +590,7 @@ namespace _Game.Scripts
                     {
 
                         var chance = UnityEngine.Random.Range(0, 100);
-                        if (chance >= toolboxSpawnChance)
+                        if (chance >= spawnSettings.ToolboxSpawnChance)
                         {
                             SpawnPickup();
                             return;
@@ -579,7 +613,7 @@ namespace _Game.Scripts
                 PhotonNetwork.InstantiateRoomObject(randomPickupPrefab.name, randomPosition, Quaternion.identity);
             }
 
-            Invoke(nameof(SpawnPickup), UnityEngine.Random.Range(pickupMinSpawnInterval, pickupMaxSpawnInterval));
+            InvokePickupSpawn();
         }
 
         protected override void OnDestroy()

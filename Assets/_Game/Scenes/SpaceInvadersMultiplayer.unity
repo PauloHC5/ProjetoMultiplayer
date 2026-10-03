@@ -550,10 +550,21 @@ MonoBehaviour:
   - {fileID: 6605038136104068284, guid: 2f9fc2d6ceea7614a8c9b6cebebc0559, type: 3}
   - {fileID: 3203711729101826982, guid: efaaaf0b3303a8a4b9a8d5a078c2b9b9, type: 3}
   pickupsSpawnArea: {fileID: 1551202078}
-  pickupMinSpawnInterval: 5
-  pickupMaxSpawnInterval: 15
-  oneUpSpawnChance: 15
-  toolboxSpawnChance: 25
+  pickupSpawnSettingsWith1CharacterAlive:
+    MinSpawnInterval: 5
+    MaxSpawnInterval: 12
+    OneUpSpawnChance: 10
+    ToolboxSpawnChance: 25
+  pickupSpawnSettingsWith2CharactersAlive:
+    MinSpawnInterval: 4
+    MaxSpawnInterval: 8
+    OneUpSpawnChance: 10
+    ToolboxSpawnChance: 25
+  pickupSpawnSettingsWith3CharactersAlive:
+    MinSpawnInterval: 3
+    MaxSpawnInterval: 8
+    OneUpSpawnChance: 15
+    ToolboxSpawnChance: 25
   bDebugMode: 1
 --- !u!4 &281756321
 Transform:

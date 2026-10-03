@@ -213,8 +213,7 @@ public class UI_Game : MonoBehaviour
         
         waveCounterText.text = $"Wave: {waveNumber}";
         
-        _waveProgressBar.WaveSlider.value = 0;
-        _waveProgressBar.WaveProgressText.text = $"0%";
+        UpdateProgressBar(GameMode.Instance.HordeProgressPercentage);
     }
     
     private IEnumerator PickupIconRoutine(Image pickupImage, float duration)
@@ -239,7 +238,7 @@ public class UI_Game : MonoBehaviour
         Destroy(pickupImage.gameObject);
     }
     
-    private void OnHordeProgressChanged(float progress)
+    private void UpdateProgressBar(float progress)
     {
         int wholeProgress = Mathf.FloorToInt(progress);
 
@@ -255,7 +254,7 @@ public class UI_Game : MonoBehaviour
         GameMode.OnPlayerCharacterSpawned += OnPlayerCharacterSpawned;
         GameMode.GameStartedEvent += OnGameStarted;
         GameMode.GameOverEvent += OnGameOver;
-        GameMode.OnHordeProgressChanged += OnHordeProgressChanged;
+        GameMode.OnHordeProgressChanged += UpdateProgressBar;
     }
 
     private void OnDisable()
@@ -266,7 +265,7 @@ public class UI_Game : MonoBehaviour
         GameMode.OnPlayerCharacterSpawned -= OnPlayerCharacterSpawned;
         GameMode.GameStartedEvent -= OnGameStarted;
         GameMode.GameOverEvent -= OnGameOver;
-        GameMode.OnHordeProgressChanged -= OnHordeProgressChanged;
+        GameMode.OnHordeProgressChanged -= UpdateProgressBar;
     }
 
     private void OnApplicationQuit()
