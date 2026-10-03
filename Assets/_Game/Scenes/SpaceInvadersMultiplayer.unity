@@ -1945,7 +1945,7 @@ GameObject:
   - component: {fileID: 602366389}
   - component: {fileID: 602366390}
   m_Layer: 0
-  m_Name: InvadersLimit
+  m_Name: MosquitosLimit
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

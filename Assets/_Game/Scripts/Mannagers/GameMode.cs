@@ -100,7 +100,7 @@ namespace _Game.Scripts
             
             _currentLives = startingLives;            
             
-            InvadersLimit.OnInvadersLimitReached += OnInvadersReachedLimit;
+            MosquitosLimit.OnMosquitosReachedLimit += OnMosquitosReachedLimit;
 
             StartCoroutine(WaitForRoomBeReady());
         }
@@ -428,7 +428,7 @@ namespace _Game.Scripts
             }
         }
         
-        private void OnInvadersReachedLimit()
+        private void OnMosquitosReachedLimit()
         {
             if(bDebugMode)
                 Debug.Log("GameMode.OnInvadersReachedLimit");
@@ -441,7 +441,7 @@ namespace _Game.Scripts
         {
             _mosquitosHordeInTheScene.OnMosquitoKilled -= InvaderKilled;
             _mosquitosHordeInTheScene.AllMosquitosDestroyedEvent -= WaveCompleted;
-            InvadersLimit.OnInvadersLimitReached -= OnInvadersReachedLimit;
+            MosquitosLimit.OnMosquitosReachedLimit -= OnMosquitosReachedLimit;
             
             OnPlayerCharacterSpawned = null;
          
@@ -623,7 +623,7 @@ namespace _Game.Scripts
         {
             base.OnDestroy();
             
-            InvadersLimit.OnInvadersLimitReached -= OnInvadersReachedLimit;
+            MosquitosLimit.OnMosquitosReachedLimit -= OnMosquitosReachedLimit;
 
             if (_mosquitosHordeInTheScene == null) return;
             

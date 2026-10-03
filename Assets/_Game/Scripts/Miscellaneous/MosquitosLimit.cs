@@ -3,7 +3,7 @@ using System;
 using Unity.VisualScripting;
 using UnityEngine;
 
-public class InvadersLimit : MonoBehaviourPun
+public class MosquitosLimit : MonoBehaviourPun
 {
     private PhotonView _photonView;
 
@@ -12,12 +12,12 @@ public class InvadersLimit : MonoBehaviourPun
         _photonView = GetComponent<PhotonView>();
     }
 
-    public static event Action OnInvadersLimitReached;
+    public static event Action OnMosquitosReachedLimit;
     
     private void OnTriggerEnter2D(Collider2D other)
     {
         if(!PhotonNetwork.IsMasterClient) return;
 
-        OnInvadersLimitReached?.Invoke();
+        OnMosquitosReachedLimit?.Invoke();
     }
 }
