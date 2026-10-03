@@ -44,12 +44,13 @@ public class PlayerCharacter : MonoBehaviourPun
     private int _pickupsLayer;
     private Coroutine _invincibleCoroutine;
     
-    public Action<PlayerCharacter> OnPlayerDestroyed;
+    public Action<PlayerCharacter> OnPlayerDeath;
     public Action<Pickup.PickupType, float> OnPickupCollected;
     
     private readonly int MoveXHash = Animator.StringToHash("MoveX");
     private readonly int MoveYHash = Animator.StringToHash("MoveY");
     private readonly int IsMovingHash = Animator.StringToHash("IsMoving");
+    private readonly int IsDeadHash = Animator.StringToHash("IsDead");
     
     // Buffs & Status
     private bool _invincible;
@@ -99,7 +100,7 @@ public class PlayerCharacter : MonoBehaviourPun
         if (!photonView.IsMine) return;
         
         if(Keyboard.current.fKey.wasPressedThisFrame)
-            photonView.RPC(nameof(RpcExplodeSfx), RpcTarget.All);
+            photonView.RPC(nameof(RpcDeath), RpcTarget.All);
 
         if (bBotMode)
             BotMovement();
@@ -208,18 +209,7 @@ public class PlayerCharacter : MonoBehaviourPun
         {
             if (_invincible) return;
             
-            photonView.RPC(nameof(RpcExplodeSfx), RpcTarget.All);
-            
-            var player = photonView.Owner;
-            
-            if (Equals(PhotonNetwork.MasterClient, player))
-            {
-                PhotonNetwork.Destroy(gameObject);
-            }
-            else
-            {
-                photonView.RPC(nameof(RpcExplode), player);
-            }
+            photonView.RPC(nameof(RpcDeath), RpcTarget.All);
         }
         
         if(other.gameObject.layer == _pickupsLayer)
@@ -242,20 +232,51 @@ public class PlayerCharacter : MonoBehaviourPun
     }
 
     [PunRPC]
-    private void RpcExplode()
+    private void RpcDeath()
     {
-        PhotonNetwork.Destroy(gameObject);
-    }
-
-    [PunRPC]
-    public void RpcExplodeSfx()
-    {                    
+        _rigidbody2D.linearVelocity = Vector2.zero;
+        
+        _characterAnimator.SetBool(IsDeadHash, true);
+        
         GameManager.Instance.AudioManager.PlaySfx(explosionSfx);
+        
+        OnPlayerDeath?.Invoke(this);
+        
+        StartCoroutine(DeathRoutine());
     }
 
-    private void OnDestroy()
+    private IEnumerator DeathRoutine()
     {
-        OnPlayerDestroyed?.Invoke(this);
+        SpriteRenderer.enabled = true;
+        float elapsedTime = 0f;
+
+        float deathDuration = GameMode.Instance.playerDeathCooldown;
+
+        while (elapsedTime < deathDuration)
+        {
+            if(elapsedTime >= deathDuration / 2f)
+            {
+                // Blink effect
+                StartCoroutine(DeathBlinkEffect(0.05f));
+            }
+
+            yield return new WaitForSeconds(0.05f);
+            elapsedTime += 0.1f;
+        }
+        
+        if(photonView.IsMine)
+        {
+            PhotonNetwork.Destroy(gameObject);
+        }
+    }
+    
+    private IEnumerator DeathBlinkEffect(float interval)
+    {
+        while (true)
+        {
+            SpriteRenderer.enabled = !SpriteRenderer.enabled;
+            yield return new WaitForSeconds(interval);
+        }
     }
 
     [PunRPC]
@@ -300,14 +321,6 @@ public class PlayerCharacter : MonoBehaviourPun
         _invincible = false;
         
         photonView.RPC(nameof(RpcEndInvincible), RpcTarget.OthersBuffered);
-    }
-    
-    private void OnGameOver(int playerCharactersAlive)
-    {
-        if(photonView.IsMine && playerCharactersAlive <= 0)
-        {
-            PhotonNetwork.Destroy(gameObject);
-        }
     }
     
     [PunRPC]
@@ -376,12 +389,21 @@ public class PlayerCharacter : MonoBehaviourPun
                 break;
         }
     }
+    
+    private void OnGameOver(int playerCharactersAlive)
+    {
+        if(!photonView.IsMine) return;
+        
+        _rigidbody2D.linearVelocity = Vector2.zero;
+        _rigidbody2D.isKinematic = true;
+        _characterAnimator.SetBool(IsDeadHash, true);
+    }
 
     private void OnEnable()
     {
         GameMode.GameOverEvent += OnGameOver;
     }
-
+    
     private void OnDisable()
     {
         GameMode.GameOverEvent -= OnGameOver;

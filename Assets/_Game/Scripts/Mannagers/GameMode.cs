@@ -33,6 +33,7 @@ namespace _Game.Scripts
         [SerializeField] private int startingLives = 3;
         [SerializeField] private int hordesPerWave = 3;
         [SerializeField] private float intervalBetweenHordes = 2.0f;
+        public float playerDeathCooldown = 3.0f;
         
         [Header("Prefabs")]
         [SerializeField] private PlayerController playerControllerPrefab;
@@ -249,7 +250,7 @@ namespace _Game.Scripts
             
             SetPlayerCharactersAlive(playerCharactersAlive);
 
-            playerCharacter.OnPlayerDestroyed += OnPlayerDestroyed;
+            playerCharacter.OnPlayerDeath += OnPlayerDestroyed;
         }
 
         public static int GetOrInitPlayerCharactersAlive()
@@ -455,7 +456,9 @@ namespace _Game.Scripts
             if(bDebugMode)
                 Debug.Log("GameMode.OnPlayerDestroyed");
             
-            playerCharacterDestroyed.OnPlayerDestroyed -= OnPlayerDestroyed;
+            playerCharacterDestroyed.OnPlayerDeath -= OnPlayerDestroyed;
+            
+            PlayerController.Local.UnPossess();
             
             _currentLives--;
 
@@ -474,7 +477,7 @@ namespace _Game.Scripts
                 return;
             }
 
-            StartCoroutine(PlayerDestroyedCooldown());
+            StartCoroutine(PlayerDeathCooldown());
         }
 
         private void GameOver(int playerCharactersAlive)
@@ -497,9 +500,9 @@ namespace _Game.Scripts
             GameOverEvent?.Invoke(playerCharactersAlive);
         }
         
-        private IEnumerator PlayerDestroyedCooldown()
+        private IEnumerator PlayerDeathCooldown()
         {
-            yield return new WaitForSeconds(2.0f);                       
+            yield return new WaitForSeconds(playerDeathCooldown);                       
 
             if (PhotonNetwork.CurrentRoom.PlayerCount == 1 && _mosquitosInTheScene)
                 _mosquitosInTheScene.stopMovement = false;

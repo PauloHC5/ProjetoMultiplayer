@@ -113,7 +113,7 @@ public class UI_Game : MonoBehaviour
         {
             SpawnPlayerStatusUI(player, playerCharacter);
             playerCharacter.OnPickupCollected += OnPickupCollected;
-            playerCharacter.OnPlayerDestroyed += OnPlayerCharacterDestroyed;
+            playerCharacter.OnPlayerDeath += OnPlayerCharacterDestroyed;
         }
     }
 
@@ -168,7 +168,7 @@ public class UI_Game : MonoBehaviour
             Destroy(pickupStatusUI.GetChild(i).gameObject);
         }
         
-        playerCharacter.OnPlayerDestroyed -= OnPlayerCharacterDestroyed;
+        playerCharacter.OnPlayerDeath -= OnPlayerCharacterDestroyed;
         playerCharacter.OnPickupCollected -= OnPickupCollected;
     }
     
@@ -210,6 +210,7 @@ public class UI_Game : MonoBehaviour
         gameCountdownText.enabled = false;
         
         waveCounterText.gameObject.SetActive(true);
+        waveProgressBarObj.SetActive(true);
         
         waveCounterText.text = $"Wave: {waveNumber}";
         
