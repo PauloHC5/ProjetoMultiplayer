@@ -58,16 +58,17 @@ namespace _Game.Scripts
         
         public int StartingLives => startingLives;
         public int StartGameDelay => startGameDelay;
+        public float HordeProgressPercentage => (_hordesSpawnedInCurrentWave/ (float)hordesPerWave) * 100f;
         
         public static Action<int> OnGameCooldownChanged;
         public static Action<int> OnLivesChanged;
         public static Action OnScoreChanged;
-        public static Action GameStartedEvent;
+        public static Action<int> GameStartedEvent;
         public static Action<int> GameOverEvent;
         public static Action<Player, PlayerCharacter> OnPlayerCharacterSpawned;
         public static Action<Player> OnPlayerLeft;
         public static Action RoomReady;
-        public static Action<int> OnWaveCompleted;
+        public static Action<float> OnHordeProgressChanged;
 
         protected override void Awake()
         {
@@ -111,6 +112,17 @@ namespace _Game.Scripts
 
         public override void OnLeftRoom()
         {
+            // Remove Player Type and Player Score custom properties when leaving the room
+            if (PhotonNetwork.LocalPlayer.CustomProperties.ContainsKey(PlayerTypeKey))
+            {
+                PhotonNetwork.LocalPlayer.CustomProperties.Remove(PlayerTypeKey);
+            }
+
+            if (PhotonNetwork.LocalPlayer.CustomProperties.ContainsKey(PlayerScoreKey))
+            {
+                PhotonNetwork.LocalPlayer.CustomProperties.Remove(PlayerScoreKey);
+            }
+
             GameManager.LoadMainMenu();
         }
 
@@ -255,6 +267,8 @@ namespace _Game.Scripts
         {
             if (!PhotonNetwork.IsMasterClient) return;
 
+            photonView.RPC(nameof(RpcReplicateWaveStatus), newPlayer, _currentWave, _hordesSpawnedInCurrentWave);
+            
             photonView.RPC(nameof(RpcReplicateGameCooldown), newPlayer, _gameCountdown);
 
             if (_mosquitosInTheScene)
@@ -262,7 +276,6 @@ namespace _Game.Scripts
                 photonView.RPC(nameof(RpcSubscribeToMosquitosHordeEvents), newPlayer);
             }
             
-            photonView.RPC(nameof(RpcReplicateWaveStatus), newPlayer, _currentWave, _hordesSpawnedInCurrentWave);
         }
         
         [PunRPC]
@@ -326,7 +339,7 @@ namespace _Game.Scripts
             
             _bGameCountdownRunning = false;
             
-            GameStartedEvent?.Invoke();     
+            GameStartedEvent?.Invoke(_currentWave);     
             
             Invoke(nameof(SpawnPickup), UnityEngine.Random.Range(pickupMinSpawnInterval, pickupMaxSpawnInterval));
         }
@@ -361,13 +374,13 @@ namespace _Game.Scripts
                 Debug.Log("GameMode.HordeKilled");
             
             _hordesSpawnedInCurrentWave++;
+            OnHordeProgressChanged?.Invoke(HordeProgressPercentage);
             
             if (_hordesSpawnedInCurrentWave >= hordesPerWave)
             {
                 _hordesSpawnedInCurrentWave = 0;
                 _currentWave++;
                 WaveCompleted();
-                OnWaveCompleted?.Invoke(_currentWave);
             }
             else
             {

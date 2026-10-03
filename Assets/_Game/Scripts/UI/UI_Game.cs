@@ -22,10 +22,17 @@ public class UI_Game : MonoBehaviour
         public TextMeshProUGUI LivesCounterText;
     }
     
+    private struct WaveProgressBar
+    {
+        public Slider WaveSlider;
+        public TextMeshProUGUI WaveProgressText;
+    }
+    
     [Header("UI Elements")]
     public GameObject playerStatusPrefab;
     public GameObject statusBarUI;
     public TextMeshProUGUI waveCounterText;
+    public GameObject waveProgressBarObj;
     public TextMeshProUGUI gameCountdownText;
     public GameObject gameOverUI;
     public Transform pickupStatusUI;
@@ -35,6 +42,7 @@ public class UI_Game : MonoBehaviour
 
     private PlayerUIStatus _localPlayerStatus;
     private bool _bGameIsRunning = false;
+    private WaveProgressBar _waveProgressBar;
 
     // Constants for finding child components in the player status prefab
     private const string PlayerNicknameTextComponentName = "Player Nickname Text (TMP)";
@@ -51,6 +59,12 @@ public class UI_Game : MonoBehaviour
             ScoreCounterText = null,
             LivesCounterText = null
         };        
+        
+        _waveProgressBar = new WaveProgressBar
+        {
+            WaveSlider = waveProgressBarObj.GetComponentInChildren<Slider>(),
+            WaveProgressText = waveProgressBarObj.GetComponentInChildren<TextMeshProUGUI>()
+        };
     }
 
     private void Start()
@@ -66,8 +80,7 @@ public class UI_Game : MonoBehaviour
         {
             gameCountdownText.text = "GO!";
         }
-
-
+        
         gameCountdownText.enabled = countdown >= 0;
     }
 
@@ -192,9 +205,16 @@ public class UI_Game : MonoBehaviour
         PhotonNetwork.LeaveRoom();                
     }
     
-    private void OnGameStarted()
+    private void OnGameStarted(int waveNumber)
     {
         gameCountdownText.enabled = false;
+        
+        waveCounterText.gameObject.SetActive(true);
+        
+        waveCounterText.text = $"Wave: {waveNumber}";
+        
+        _waveProgressBar.WaveSlider.value = 0;
+        _waveProgressBar.WaveProgressText.text = $"0%";
     }
     
     private IEnumerator PickupIconRoutine(Image pickupImage, float duration)
@@ -219,11 +239,12 @@ public class UI_Game : MonoBehaviour
         Destroy(pickupImage.gameObject);
     }
     
-    private void OnWaveCompleted(int waveNumber)
+    private void OnHordeProgressChanged(float progress)
     {
-        waveCounterText.gameObject.SetActive(true);
-        
-        waveCounterText.text = $"Wave: {waveNumber}";
+        int wholeProgress = Mathf.FloorToInt(progress);
+
+        _waveProgressBar.WaveSlider.value = wholeProgress;
+        _waveProgressBar.WaveProgressText.text = $"{wholeProgress}%";
     }
 
     private void OnEnable()
@@ -234,7 +255,7 @@ public class UI_Game : MonoBehaviour
         GameMode.OnPlayerCharacterSpawned += OnPlayerCharacterSpawned;
         GameMode.GameStartedEvent += OnGameStarted;
         GameMode.GameOverEvent += OnGameOver;
-        GameMode.OnWaveCompleted += OnWaveCompleted;
+        GameMode.OnHordeProgressChanged += OnHordeProgressChanged;
     }
 
     private void OnDisable()
@@ -245,7 +266,7 @@ public class UI_Game : MonoBehaviour
         GameMode.OnPlayerCharacterSpawned -= OnPlayerCharacterSpawned;
         GameMode.GameStartedEvent -= OnGameStarted;
         GameMode.GameOverEvent -= OnGameOver;
-        GameMode.OnWaveCompleted -= OnWaveCompleted;
+        GameMode.OnHordeProgressChanged -= OnHordeProgressChanged;
     }
 
     private void OnApplicationQuit()
