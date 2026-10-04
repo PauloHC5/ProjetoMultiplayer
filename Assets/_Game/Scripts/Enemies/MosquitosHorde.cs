@@ -318,10 +318,26 @@ public class MosquitosHorde : MonoBehaviourPunCallbacks
         
         Vector3 newPosition = transform.position;
         
-        newPosition.y -= 2.0f;
+        StartCoroutine(InterpolateToNewYPosition(newPosition.y - 2.0f, 0.5f));
         
         transform.position = newPosition;
         StartCoroutine(FinishRowAdvance());
+    }
+    
+    private IEnumerator InterpolateToNewYPosition(float newYPosition, float duration)
+    {
+        float elapsedTime = 0f;
+        Vector3 startingPosition = transform.position;
+        Vector3 targetPosition = new Vector3(startingPosition.x, newYPosition, startingPosition.z);
+
+        while (elapsedTime < duration)
+        {
+            transform.position = Vector3.Lerp(startingPosition, targetPosition, elapsedTime / duration);
+            elapsedTime += Time.deltaTime;
+            yield return null;
+        }
+
+        transform.position = targetPosition;
     }
     
     private IEnumerator FinishRowAdvance()

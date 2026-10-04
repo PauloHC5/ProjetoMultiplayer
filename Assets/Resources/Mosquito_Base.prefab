@@ -178,7 +178,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::Mosquito
   points: 10
   type: 0
-  standardZigZagMovement: {fileID: 11400000, guid: 3f0cd42cac7e6634dbfaedbdb254bb31, type: 2}
+  zigZagMovement: {fileID: 11400000, guid: 3f0cd42cac7e6634dbfaedbdb254bb31, type: 2}
+  bInterpolateZigZagMovement: 1
   zigZagInterpolationDuration: 1
   mosquitoIndex: 0
 --- !u!114 &4563279182175837554
