@@ -17,6 +17,7 @@ public class MosquitosHorde : MonoBehaviourPunCallbacks
         Right
     }
     
+    [Header("Settings")]
     public Mosquito[] prefabs = new Mosquito[3];
     public int rows = 5;
     public int columns = 11;
@@ -26,6 +27,13 @@ public class MosquitosHorde : MonoBehaviourPunCallbacks
     public AudioCue killedSfx;
     [SerializeField] private LayerMask laserLayerMask;
     public bool stopMovement = false;
+    
+    [Header("ZigZag Movement Settings when the horde is at 10%, 7%, 5%, 3% and 1% of mosquitos alive")]
+    public MosquitoZigZagMovement Last10ZigZag;
+    public MosquitoZigZagMovement Last7ZigZag;
+    public MosquitoZigZagMovement Last5ZigZag;
+    public MosquitoZigZagMovement Last3ZigZag;
+    public MosquitoZigZagMovement LastZigZag;
     
     private Vector3 _direction = Vector3.right;    
     private Mosquito[] _mosquitos;
@@ -229,26 +237,60 @@ public class MosquitosHorde : MonoBehaviourPunCallbacks
         }
         
         GameManager.Instance.AudioManager.PlaySfx(killedSfx);
-        
-        ChangeMosquitosZigZagMovement();
 
         if (AmountAlive == 1)
         {
             CancelInvoke(nameof(RequestMissileAttack));
             InvokeRepeating(nameof(RequestMissileAttack), missileAttackRate / 2, missileAttackRate / 2);
         }
-    }
 
-    private void ChangeMosquitosZigZagMovement()
-    {
-        if(AmountAlive == 0) return;
-        
-        if(AmountAlive == 10 || AmountAlive == 7 || AmountAlive == 5 || AmountAlive == 3 || AmountAlive == 1)
+        switch (AmountAlive)
         {
-            for (var index = 0; index < _mosquitos.Length; index++)
-            {
-                _mosquitos[index].ChangeZigZagMovement();
-            }
+            case 10:
+                foreach (var mosquito in _mosquitos)
+                {
+                    if (mosquito != null && mosquito.gameObject.activeInHierarchy)
+                    {
+                        mosquito.SetZigZagMovementSettings(Last10ZigZag);
+                    }
+                }
+                break;
+            case 7:
+                foreach (var mosquito in _mosquitos)
+                {
+                    if (mosquito != null && mosquito.gameObject.activeInHierarchy)
+                    {
+                        mosquito.SetZigZagMovementSettings(Last7ZigZag);
+                    }
+                }
+                break;
+            case 5:
+                foreach (var mosquito in _mosquitos)
+                {
+                    if (mosquito != null && mosquito.gameObject.activeInHierarchy)
+                    {
+                        mosquito.SetZigZagMovementSettings(Last5ZigZag);
+                    }
+                }
+                break;
+            case 3:
+                foreach (var mosquito in _mosquitos)
+                {
+                    if (mosquito != null && mosquito.gameObject.activeInHierarchy)
+                    {
+                        mosquito.SetZigZagMovementSettings(Last3ZigZag);
+                    }
+                }
+                break;
+            case 1:
+                foreach (var mosquito in _mosquitos)
+                {
+                    if (mosquito != null && mosquito.gameObject.activeInHierarchy)
+                    {
+                        mosquito.SetZigZagMovementSettings(LastZigZag);
+                    }
+                }
+                break;
         }
     }
     

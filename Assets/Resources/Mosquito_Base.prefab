@@ -13,6 +13,8 @@ GameObject:
   - component: {fileID: 7791026170484750557}
   - component: {fileID: 7866726089032111292}
   - component: {fileID: -2141858161189176034}
+  - component: {fileID: 4563279182175837554}
+  - component: {fileID: 4327132872581799508}
   m_Layer: 6
   m_Name: Mosquito_Base
   m_TagString: Untagged
@@ -81,7 +83,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: 583268991
-  m_SortingLayer: 1
+  m_SortingLayer: 2
   m_SortingOrder: 0
   m_MaskInteraction: 0
   m_Sprite: {fileID: 21300000, guid: e5472953031c6d140ac05d4b9a87653b, type: 3}
@@ -176,11 +178,45 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::Mosquito
   points: 10
   type: 0
-  horizontalZigzagFrequency: 10
-  horizontalZigzagAmplitude: 0.5
-  verticalZigzagFrequency: 23.7
-  verticalZigzagAmplitude: 0.15
-  amountToIncreaseAmplitude: 1
-  amplitudeIncreaseDuration: 3
-  frequencyDecreaseAmount: 5
+  standardZigZagMovement: {fileID: 11400000, guid: 3f0cd42cac7e6634dbfaedbdb254bb31, type: 2}
+  zigZagInterpolationDuration: 1
   mosquitoIndex: 0
+--- !u!114 &4563279182175837554
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2850217529171155301}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: aa584fbee541324448dd18d8409c7a41, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: PhotonUnityNetworking::Photon.Pun.PhotonView
+  ObservedComponentsFoldoutOpen: 1
+  Group: 0
+  prefixField: -1
+  Synchronization: 3
+  OwnershipTransfer: 0
+  observableSearch: 2
+  ObservedComponents:
+  - {fileID: 4327132872581799508}
+  sceneViewId: 0
+  InstantiationId: 0
+  isRuntimeInstantiated: 0
+--- !u!114 &4327132872581799508
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2850217529171155301}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 627855c7f81362d41938ffe0b1475957, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: PhotonUnityNetworking::Photon.Pun.PhotonTransformView
+  m_SynchronizePosition: 1
+  m_SynchronizeRotation: 0
+  m_SynchronizeScale: 0
+  m_UseLocal: 1
