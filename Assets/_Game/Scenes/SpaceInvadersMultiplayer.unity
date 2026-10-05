@@ -566,7 +566,7 @@ MonoBehaviour:
     MaxSpawnInterval: 8
     OneUpSpawnChance: 15
     ToolboxSpawnChance: 25
-  bDebugMode: 1
+  bDebugMode: 0
 --- !u!4 &281756321
 Transform:
   m_ObjectHideFlags: 0

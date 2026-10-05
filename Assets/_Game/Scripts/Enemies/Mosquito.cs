@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using _Game.Scripts;
 using Photon.Pun;
+using Photon.Realtime;
 using UnityEngine;
 
 public enum MosquitoType
@@ -25,10 +26,9 @@ public class Mosquito : MonoBehaviour
     private float _lastY;
     private float _horizontalPhase;
     private float _verticalPhase;
-    private int _animationFrame;
-    private float phaseOffset;
-    // Current per-instance zigzag values (we keep these separate from the ScriptableObject so
-    // each Mosquito can smoothly interpolate independently)
+    private float _phaseOffset;
+    private PhotonView _photonView;
+    
     private float _currentHorizontalFrequency;
     private float _currentHorizontalAmplitude;
     private float _currentVerticalFrequency;
@@ -48,11 +48,14 @@ public class Mosquito : MonoBehaviour
         _projectilesLayer = LayerMask.NameToLayer("Projectiles");
         _defaultLayer = LayerMask.NameToLayer("Default");
         _barrierLayer = LayerMask.NameToLayer("Barrier");
+        
+        _photonView = GetComponent<PhotonView>();
+        _photonView.Synchronization = ViewSynchronization.Off;
     }
 
     private void Start()
     {
-        phaseOffset = (mosquitoIndex * 137.5f) % (Mathf.PI * 2f);
+        _phaseOffset = (mosquitoIndex * 137.5f) % (Mathf.PI * 2f);
         // Initialize per-instance current values from the ScriptableObject
         if (zigZagMovement != null)
         {
@@ -76,20 +79,48 @@ public class Mosquito : MonoBehaviour
 
         if(bInterpolateZigZagMovement)
         {
-            x = (float)(Math.Sin(t * _currentHorizontalFrequency + phaseOffset)) * _currentHorizontalAmplitude;
-            y = (float)(Math.Cos(t * _currentVerticalFrequency + phaseOffset)) * _currentVerticalAmplitude;
+            x = (float)(Math.Sin(t * _currentHorizontalFrequency + _phaseOffset)) * _currentHorizontalAmplitude;
+            y = (float)(Math.Cos(t * _currentVerticalFrequency + _phaseOffset)) * _currentVerticalAmplitude;
         }
         else
         {
-            x = (float)(Math.Sin(t * zigZagMovement.HorizontalZigzagFrequency + phaseOffset)) * zigZagMovement.HorizontalZigzagAmplitude;
-            y = (float)(Math.Cos(t * zigZagMovement.VerticalZigzagFrequency + phaseOffset)) * zigZagMovement.VerticalZigzagAmplitude;
+            x = (float)(Math.Sin(t * zigZagMovement.HorizontalZigzagFrequency + _phaseOffset)) * zigZagMovement.HorizontalZigzagAmplitude;
+            y = (float)(Math.Cos(t * zigZagMovement.VerticalZigzagFrequency + _phaseOffset)) * zigZagMovement.VerticalZigzagAmplitude;
         }
 
         transform.localPosition += new Vector3(x - _lastX, y - _lastY, 0);
         _lastX = x;
         _lastY = y;
     }
+
+    public void SyncMosquitoWithMasterClient()
+    {
+        _photonView.RPC(nameof(RpcRequestSyncState), RpcTarget.MasterClient, mosquitoIndex);
+    }
     
+    [PunRPC]
+    private void RpcRequestSyncState(int index, PhotonMessageInfo info)
+    {
+        _photonView.RPC(nameof(SendSyncState), info.Sender, _lastX, _lastY, _horizontalPhase, _verticalPhase, _currentHorizontalFrequency, _currentHorizontalAmplitude, _currentVerticalFrequency, _currentVerticalAmplitude, _phaseOffset, index, gameObject.activeSelf, transform.position.x, transform.position.y);
+    }
+    
+    [PunRPC]
+    private void SendSyncState(float lastX, float lastY, float horizontalPhase, float verticalPhase, float currentHorizontalFrequency, float currentHorizontalAmplitude, float currentVerticalFrequency, float currentVerticalAmplitude, float phaseOffset, int index, bool isActive, float posX, float posY)
+    {
+        _lastX = lastX;
+        _lastY = lastY;
+        _horizontalPhase = horizontalPhase;
+        _verticalPhase = verticalPhase;
+        _currentHorizontalFrequency = currentHorizontalFrequency;
+        _currentHorizontalAmplitude = currentHorizontalAmplitude;
+        _currentVerticalFrequency = currentVerticalFrequency;
+        _currentVerticalAmplitude = currentVerticalAmplitude;
+        _phaseOffset = phaseOffset;
+        mosquitoIndex = index;
+        gameObject.SetActive(isActive);
+        transform.position = new Vector3(posX, posY, transform.localPosition.z);
+    }
+
     public void SetZigZagMovementSettings(MosquitoZigZagMovement newSettings)
     {
         _lastX = 0f;
@@ -111,7 +142,7 @@ public class Mosquito : MonoBehaviour
         {
             var laser = other.GetComponent<Projectile>();
             
-            OnMosquitoKilled?.Invoke(mosquitoIndex, laser.InstigatorId);
+            _photonView.RPC(nameof(RpcReplicateDeath), RpcTarget.All, laser.InstigatorId);
         }
         
         if(other.gameObject.layer == _defaultLayer)
@@ -121,9 +152,15 @@ public class Mosquito : MonoBehaviour
         
         if(other.gameObject.layer == _barrierLayer)
         {
-            OnMosquitoKilled?.Invoke(mosquitoIndex, -1);
-            BarriersManager.Instance.DamageBarrier(other.gameObject);
+            _photonView.RPC(nameof(RpcReplicateDeath), RpcTarget.All, -1); // -1 indicates no specific instigator
         }
+    }
+
+    [PunRPC]
+    private void RpcReplicateDeath(int instigatorId)
+    {
+        OnMosquitoKilled?.Invoke(points, instigatorId);
+        gameObject.SetActive(false);
     }
     
     private IEnumerator InterpolateToNewZigZagSettings(MosquitoZigZagMovement newSettings, float duration)
