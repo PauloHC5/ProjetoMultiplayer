@@ -74,11 +74,6 @@ MonoBehaviour:
   - RpcSubscribeToMosquitosHordeEvents
   - RpcReplicateWaveStatus
   - RpcDeath
-  - RequestSyncState
-  - SendSyncState
-  - RpcSyncMosquitosHordeState
-  - RpcReplicateDeath
-  - RpcRequestSyncState
   DisableAutoOpenWizard: 1
   ShowSettings: 1
   DevRegionSetOnce: 0
