@@ -6,7 +6,9 @@ using _Game.Scripts;
 using Photon.Pun;
 using Photon.Realtime;
 using UnityEngine;
+using UnityEngine.InputSystem;
 using UnityEngine.SceneManagement;
+using UnityEngine.Serialization;
 using Hashtable = ExitGames.Client.Photon.Hashtable;
 
 public class MosquitosHorde : MonoBehaviourPunCallbacks
@@ -28,12 +30,12 @@ public class MosquitosHorde : MonoBehaviourPunCallbacks
     [SerializeField] private LayerMask laserLayerMask;
     public bool stopMovement = false;
     
-    [Header("ZigZag Movement Settings when the horde is at 10%, 7%, 5%, 3% and 1% of mosquitos alive")]
-    public MosquitoZigZagMovement Last10ZigZag;
-    public MosquitoZigZagMovement Last7ZigZag;
-    public MosquitoZigZagMovement Last5ZigZag;
-    public MosquitoZigZagMovement Last3ZigZag;
-    public MosquitoZigZagMovement LastZigZag;
+    [FormerlySerializedAs("Last10ZigZag")] [Header("ZigZag Movement Settings when the horde is at 10%, 7%, 5%, 3% and 1% of mosquitos alive")]
+    public MosquitoMovementSettings last10;
+    [FormerlySerializedAs("Last7ZigZag")] public MosquitoMovementSettings last7;
+    [FormerlySerializedAs("Last5ZigZag")] public MosquitoMovementSettings last5;
+    [FormerlySerializedAs("Last3ZigZag")] public MosquitoMovementSettings last3;
+    [FormerlySerializedAs("LastZigZag")] public MosquitoMovementSettings last;
     
     private Vector3 _direction = Vector3.right;    
     private Mosquito[] _mosquitos;
@@ -69,7 +71,7 @@ public class MosquitosHorde : MonoBehaviourPunCallbacks
         
         int[] mosquitoTypes = _mosquitoTypes.Select(mosquitoType => (int)mosquitoType).ToArray();
         
-        //photonView.RPC(nameof(RpcSyncMosquitosState), RpcTarget.Others, mosquitosActive, mosquitoTypes, AmountKilled);
+        photonView.RPC(nameof(RpcSyncMosquitosState), RpcTarget.Others, mosquitosActive, mosquitoTypes, AmountKilled);
     }
 
     private void SubscribeToMosquitosEvents()
@@ -258,7 +260,7 @@ public class MosquitosHorde : MonoBehaviourPunCallbacks
                 {
                     if (mosquito != null && mosquito.gameObject.activeInHierarchy)
                     {
-                        mosquito.SetZigZagMovementSettings(Last10ZigZag);
+                        mosquito.MosquitoMovement.SwitchMovementSettings(last10);
                     }
                 }
                 break;
@@ -267,7 +269,7 @@ public class MosquitosHorde : MonoBehaviourPunCallbacks
                 {
                     if (mosquito != null && mosquito.gameObject.activeInHierarchy)
                     {
-                        mosquito.SetZigZagMovementSettings(Last7ZigZag);
+                        mosquito.MosquitoMovement.SwitchMovementSettings(last7);
                     }
                 }
                 break;
@@ -276,7 +278,7 @@ public class MosquitosHorde : MonoBehaviourPunCallbacks
                 {
                     if (mosquito != null && mosquito.gameObject.activeInHierarchy)
                     {
-                        mosquito.SetZigZagMovementSettings(Last5ZigZag);
+                        mosquito.MosquitoMovement.SwitchMovementSettings(last5);
                     }
                 }
                 break;
@@ -285,7 +287,7 @@ public class MosquitosHorde : MonoBehaviourPunCallbacks
                 {
                     if (mosquito != null && mosquito.gameObject.activeInHierarchy)
                     {
-                        mosquito.SetZigZagMovementSettings(Last3ZigZag);
+                        mosquito.MosquitoMovement.SwitchMovementSettings(last3);
                     }
                 }
                 break;
@@ -294,7 +296,7 @@ public class MosquitosHorde : MonoBehaviourPunCallbacks
                 {
                     if (mosquito != null && mosquito.gameObject.activeInHierarchy)
                     {
-                        mosquito.SetZigZagMovementSettings(LastZigZag);
+                        mosquito.MosquitoMovement.SwitchMovementSettings(last);
                     }
                 }
                 break;

@@ -576,6 +576,14 @@ PrefabInstance:
       propertyPath: standardZigZagMovement
       value: 
       objectReference: {fileID: 11400000, guid: 64ffcaf4a41e5914d8b16e5eb2cf687b, type: 2}
+    - target: {fileID: -2141858161189176034, guid: 9e2412c119f379d47bb0ec19dd06c263, type: 3}
+      propertyPath: mosquitoMovement.debugMovement
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: -2141858161189176034, guid: 9e2412c119f379d47bb0ec19dd06c263, type: 3}
+      propertyPath: mosquitoMovement.bInterpolateMovement
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 364302238411201926, guid: 9e2412c119f379d47bb0ec19dd06c263, type: 3}
       propertyPath: m_LocalPosition.x
       value: -0.03

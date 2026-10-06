@@ -1,8 +1,10 @@
 using System;
 using System.Collections;
 using _Game.Scripts;
+using _Game.Scripts.Enemies;
 using Photon.Pun;
 using UnityEngine;
+using UnityEngine.Serialization;
 
 public enum MosquitoType
 {
@@ -17,22 +19,15 @@ public class Mosquito : MonoBehaviour
     [Header("Settings")]
     public int points;
     public MosquitoType type;
-    public MosquitoZigZagMovement zigZagMovement;
-    public bool bInterpolateZigZagMovement = true;
-    public float zigZagInterpolationDuration = 3.0f;
+    [SerializeField] private MosquitoMovement mosquitoMovement;
+    public MosquitoMovement MosquitoMovement => mosquitoMovement;
     
-    private float _lastX;
-    private float _lastY;
+    
     private float _horizontalPhase;
     private float _verticalPhase;
     private int _animationFrame;
     private float phaseOffset;
-    // Current per-instance zigzag values (we keep these separate from the ScriptableObject so
-    // each Mosquito can smoothly interpolate independently)
-    private float _currentHorizontalFrequency;
-    private float _currentHorizontalAmplitude;
-    private float _currentVerticalFrequency;
-    private float _currentVerticalAmplitude;
+    
     
     [HideInInspector] public int mosquitoIndex;
     
@@ -56,22 +51,16 @@ public class Mosquito : MonoBehaviour
         _originalPos = transform.localPosition;
 
         phaseOffset = (mosquitoIndex * 137.5f) % (Mathf.PI * 2f);
-        // Initialize per-instance current values from the ScriptableObject
-        if (zigZagMovement != null)
-        {
-            _currentHorizontalFrequency = zigZagMovement.HorizontalZigzagFrequency;
-            _currentHorizontalAmplitude = zigZagMovement.HorizontalZigzagAmplitude;
-            _currentVerticalFrequency = zigZagMovement.VerticalZigzagFrequency;
-            _currentVerticalAmplitude = zigZagMovement.VerticalZigzagAmplitude;
-        }
+        
+        mosquitoMovement.OnStart(phaseOffset, this);
     }
 
     private void Update()
     {
-        ZigZagMovement();
+        transform.localPosition = mosquitoMovement.Movement(PhotonNetwork.Time) + _originalPos;
     }
 
-    private void ZigZagMovement()
+    /*private void ZigZagMovement()
     {
         double t = PhotonNetwork.Time;
         float x = 0;
@@ -84,30 +73,12 @@ public class Mosquito : MonoBehaviour
         }
         else
         {
-            x = (float)(Math.Sin(t * zigZagMovement.HorizontalZigzagFrequency + phaseOffset)) * zigZagMovement.HorizontalZigzagAmplitude;
-            y = (float)(Math.Cos(t * zigZagMovement.VerticalZigzagFrequency + phaseOffset)) * zigZagMovement.VerticalZigzagAmplitude;
+            x = (float)(Math.Sin(t * movementSettings.HorizontalZigzagFrequency + phaseOffset)) * movementSettings.HorizontalZigzagAmplitude;
+            y = (float)(Math.Cos(t * movementSettings.VerticalZigzagFrequency + phaseOffset)) * movementSettings.VerticalZigzagAmplitude;
         }
 
         transform.localPosition = new Vector2(x, y) + _originalPos;
-        
-        _lastX = x;
-        _lastY = y;
-    }
-    
-    public void SetZigZagMovementSettings(MosquitoZigZagMovement newSettings)
-    {
-        _lastX = 0f;
-        _lastY = 0f;
-
-        if(bInterpolateZigZagMovement)
-        {
-            StartCoroutine(InterpolateToNewZigZagSettings(newSettings, zigZagInterpolationDuration));
-        }
-        else
-        {
-            zigZagMovement = newSettings;
-        }
-    }
+    }*/
 
     private void OnTriggerEnter2D(Collider2D other)
     {
@@ -128,54 +99,5 @@ public class Mosquito : MonoBehaviour
             OnMosquitoKilled?.Invoke(mosquitoIndex, -1);
             BarriersManager.Instance.DamageBarrier(other.gameObject);
         }
-    }
-    
-    private IEnumerator InterpolateToNewZigZagSettings(MosquitoZigZagMovement newSettings, float duration)
-    {
-        // Start from the current per-instance values and interpolate towards the target settings
-        float initialHorizontalAmplitude = _currentHorizontalAmplitude;
-        float initialVerticalAmplitude = _currentVerticalAmplitude;
-
-        float targetHorizontalAmplitude = newSettings.HorizontalZigzagAmplitude;
-        float targetVerticalAmplitude = newSettings.VerticalZigzagAmplitude;
-
-        float elapsedTime = 0f;
-
-        // Interpolate amplitude to 0
-        while (elapsedTime < duration)
-        {
-            elapsedTime += Time.deltaTime;
-            float t = Mathf.Clamp01(elapsedTime / duration);
-            
-            // Lerp per-instance current values towards 0
-            _currentHorizontalAmplitude = Mathf.Lerp(initialHorizontalAmplitude, 0f, t);
-            _currentVerticalAmplitude = Mathf.Lerp(initialVerticalAmplitude, 0f, t);
-            
-            yield return null;
-        }
-        
-        _currentHorizontalFrequency = newSettings.HorizontalZigzagFrequency;
-        _currentVerticalFrequency = newSettings.VerticalZigzagFrequency;
-        
-        elapsedTime = 0f; // Reset elapsed time for the next interpolation
-
-        // Interpolate to the new settings
-        while (elapsedTime < duration)
-        {
-            elapsedTime += Time.deltaTime;
-            float t = Mathf.Clamp01(elapsedTime / duration);
-
-            // Lerp per-instance current values
-            _currentHorizontalAmplitude = Mathf.Lerp(0f, targetHorizontalAmplitude, t);
-            _currentVerticalAmplitude = Mathf.Lerp(0f, targetVerticalAmplitude, t);
-
-            yield return null;
-        }
-
-        // Ensure the final values are set
-        // Ensure the final per-instance values are set to the targets
-        _currentHorizontalAmplitude = targetHorizontalAmplitude;
-        _currentVerticalAmplitude = targetVerticalAmplitude;
-        
     }
 }

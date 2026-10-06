@@ -82,11 +82,11 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 128
   stopMovement: 0
-  Last10ZigZag: {fileID: 11400000, guid: c585778de280f5445a32c8a383ff130d, type: 2}
-  Last7ZigZag: {fileID: 11400000, guid: da1a604d53ce41143932bbfd3dd3f496, type: 2}
-  Last5ZigZag: {fileID: 11400000, guid: fe6db9c85dde15c49aede4f5f6c0ed98, type: 2}
-  Last3ZigZag: {fileID: 11400000, guid: b7ac2ad08c11e34469576ab566c9bfcd, type: 2}
-  LastZigZag: {fileID: 11400000, guid: 75a71bd4fae93fb4282d4927e1178ce5, type: 2}
+  last10: {fileID: 11400000, guid: c585778de280f5445a32c8a383ff130d, type: 2}
+  last7: {fileID: 11400000, guid: da1a604d53ce41143932bbfd3dd3f496, type: 2}
+  last5: {fileID: 11400000, guid: fe6db9c85dde15c49aede4f5f6c0ed98, type: 2}
+  last3: {fileID: 11400000, guid: b7ac2ad08c11e34469576ab566c9bfcd, type: 2}
+  last: {fileID: 11400000, guid: 75a71bd4fae93fb4282d4927e1178ce5, type: 2}
 --- !u!114 &5313734984663642673
 MonoBehaviour:
   m_ObjectHideFlags: 0
