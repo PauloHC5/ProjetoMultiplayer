@@ -69,7 +69,7 @@ public class MosquitosHorde : MonoBehaviourPunCallbacks
         
         int[] mosquitoTypes = _mosquitoTypes.Select(mosquitoType => (int)mosquitoType).ToArray();
         
-        photonView.RPC(nameof(RpcSyncMosquitosState), RpcTarget.Others, mosquitosActive, mosquitoTypes);
+        //photonView.RPC(nameof(RpcSyncMosquitosState), RpcTarget.Others, mosquitosActive, mosquitoTypes, AmountKilled);
     }
 
     private void SubscribeToMosquitosEvents()
@@ -161,11 +161,11 @@ public class MosquitosHorde : MonoBehaviourPunCallbacks
         
         int[] mosquitoTypes = _mosquitoTypes.Select(mosquitoType => (int)mosquitoType).ToArray();
 
-        photonView.RPC(nameof(RpcSyncMosquitosState), newPlayer, activeMosquitos, mosquitoTypes);
+        photonView.RPC(nameof(RpcSyncMosquitosState), newPlayer, activeMosquitos, mosquitoTypes, AmountKilled);
     }
 
     [PunRPC]
-    private void RpcSyncMosquitosState(bool[] activeMosquitos, int[] mosquitoTypes)
+    private void RpcSyncMosquitosState(bool[] activeMosquitos, int[] mosquitoTypes, int amountKilled)
     {
         _mosquitoTypes = new Queue<MosquitoType>(mosquitoTypes.Select(t => (MosquitoType)t).ToArray());
         
@@ -176,6 +176,9 @@ public class MosquitosHorde : MonoBehaviourPunCallbacks
         {
             _mosquitos[i].gameObject.SetActive(activeMosquitos[i]);
         }
+
+        AmountKilled = amountKilled;
+        UpdateMosquitosMovement();
     }
 
     private void RequestMissileAttack()
@@ -217,27 +220,31 @@ public class MosquitosHorde : MonoBehaviourPunCallbacks
     private void RpcReplicateKill(int mosquitoIndex, int instigatorPlayerId)
     {
         if (!_mosquitos[mosquitoIndex].gameObject.activeInHierarchy) return;
-        
+
         var mosquitoKilled = _mosquitos[mosquitoIndex];
 
         OnMosquitoKilled?.Invoke(instigatorPlayerId, mosquitoKilled.points);
-        
+
         mosquitoKilled.gameObject.SetActive(false);
-        
+
         mosquitoKilled.OnMosquitoKilled -= MosquitoKilled;
 
         AmountKilled++;
-        
-        if(AmountKilled >= TotalMosquitos)
+
+        if (AmountKilled >= TotalMosquitos)
         {
             AllMosquitosDestroyedEvent?.Invoke();
 
-            if(PhotonNetwork.IsMasterClient)
+            if (PhotonNetwork.IsMasterClient)
                 PhotonNetwork.Destroy(gameObject);
         }
-        
-        GameManager.Instance.AudioManager.PlaySfx(killedSfx);
 
+        GameManager.Instance.AudioManager.PlaySfx(killedSfx);
+        UpdateMosquitosMovement();
+    }
+
+    private void UpdateMosquitosMovement()
+    {
         if (AmountAlive == 1)
         {
             CancelInvoke(nameof(RequestMissileAttack));
@@ -293,7 +300,7 @@ public class MosquitosHorde : MonoBehaviourPunCallbacks
                 break;
         }
     }
-    
+
     public void MosquitoHitBoundaries()
     {
         if(!PhotonNetwork.IsMasterClient || _bRequestedRowAdvance) return;

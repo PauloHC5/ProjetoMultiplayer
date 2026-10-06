@@ -39,6 +39,7 @@ public class Mosquito : MonoBehaviour
     private int _projectilesLayer;
     private int _defaultLayer;
     private int _barrierLayer;
+    private Vector2 _originalPos;
     
     public event Action OnMosquitoHitBoundaries;
     public event Action<int, int> OnMosquitoKilled;
@@ -47,11 +48,13 @@ public class Mosquito : MonoBehaviour
     {
         _projectilesLayer = LayerMask.NameToLayer("Projectiles");
         _defaultLayer = LayerMask.NameToLayer("Default");
-        _barrierLayer = LayerMask.NameToLayer("Barrier");
+        _barrierLayer = LayerMask.NameToLayer("Barrier");        
     }
 
     private void Start()
     {
+        _originalPos = transform.localPosition;
+
         phaseOffset = (mosquitoIndex * 137.5f) % (Mathf.PI * 2f);
         // Initialize per-instance current values from the ScriptableObject
         if (zigZagMovement != null)
@@ -85,7 +88,8 @@ public class Mosquito : MonoBehaviour
             y = (float)(Math.Cos(t * zigZagMovement.VerticalZigzagFrequency + phaseOffset)) * zigZagMovement.VerticalZigzagAmplitude;
         }
 
-        transform.localPosition += new Vector3(x - _lastX, y - _lastY, 0);
+        transform.localPosition = new Vector2(x, y) + _originalPos;
+        
         _lastX = x;
         _lastY = y;
     }
