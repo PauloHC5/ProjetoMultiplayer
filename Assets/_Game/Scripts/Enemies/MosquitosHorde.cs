@@ -6,10 +6,6 @@ using _Game.Scripts;
 using Photon.Pun;
 using Photon.Realtime;
 using UnityEngine;
-using UnityEngine.InputSystem;
-using UnityEngine.SceneManagement;
-using UnityEngine.Serialization;
-using Hashtable = ExitGames.Client.Photon.Hashtable;
 
 public class MosquitosHorde : MonoBehaviourPunCallbacks
 {
@@ -17,6 +13,34 @@ public class MosquitosHorde : MonoBehaviourPunCallbacks
     {
         Left,
         Right
+    }
+
+    [Serializable]
+    public struct HordePositionKey : IEquatable<HordePositionKey>
+    {
+        public int row;
+        public int column;
+
+        public HordePositionKey(int row, int column)
+        {
+            this.row = row;
+            this.column = column;
+        }
+
+        public bool Equals(HordePositionKey other)
+        {
+            return row == other.row && column == other.column;
+        }
+
+        public override bool Equals(object obj)
+        {
+            return obj is HordePositionKey other && Equals(other);
+        }
+
+        public override int GetHashCode()
+        {
+            return HashCode.Combine(row, column);
+        }
     }
     
     [Header("Settings")]
@@ -29,13 +53,18 @@ public class MosquitosHorde : MonoBehaviourPunCallbacks
     public AudioCue killedSfx;
     [SerializeField] private LayerMask laserLayerMask;
     public bool stopMovement = false;
+    public Vector2 mosquitoStartPosition = new Vector2(0.0f, 15.0f);
     
-    [FormerlySerializedAs("Last10ZigZag")] [Header("ZigZag Movement Settings when the horde is at 10%, 7%, 5%, 3% and 1% of mosquitos alive")]
+    [Header("ZigZag Movement Settings when the horde is at 10%, 7%, 5%, 3% and 1% of mosquitos alive")]
     public MosquitoMovementSettings last10;
-    [FormerlySerializedAs("Last7ZigZag")] public MosquitoMovementSettings last7;
-    [FormerlySerializedAs("Last5ZigZag")] public MosquitoMovementSettings last5;
-    [FormerlySerializedAs("Last3ZigZag")] public MosquitoMovementSettings last3;
-    [FormerlySerializedAs("LastZigZag")] public MosquitoMovementSettings last;
+    public MosquitoMovementSettings last7;
+    public MosquitoMovementSettings last5;
+    public MosquitoMovementSettings last3;
+    public MosquitoMovementSettings last;
+    
+    [Header("Debug")]
+    public bool bDrawDebugGizmos = false;
+    public HordePositionKey debugHordePositionKey;
     
     private Vector3 _direction = Vector3.right;    
     private Mosquito[] _mosquitos;
@@ -45,6 +74,7 @@ public class MosquitosHorde : MonoBehaviourPunCallbacks
     private BoundariesSideHit _lastBoundariesSideHit;
     public const int MosquitosInstigatorId = 451;
     private Queue<MosquitoType> _mosquitoTypes;
+    private Dictionary<HordePositionKey, Vector2> _hordePositions;
     
     public int AmountKilled { get; private set; }
     public int TotalMosquitos => this.rows * this.columns;
@@ -59,12 +89,42 @@ public class MosquitosHorde : MonoBehaviourPunCallbacks
     {        
         _mosquitos = new Mosquito[this.rows * this.columns];
         _photonView = GetComponent<PhotonView>();
+
+        if (PhotonNetwork.InRoom)
+        {
+            if (!PhotonNetwork.IsMasterClient) return;
         
-        if(!PhotonNetwork.IsMasterClient) return;
+            _mosquitoTypes = new Queue<MosquitoType>();
+        
+            SpawnHordePositions();
+            SpawnMosquitoForEachHordePosition();
+            SubscribeToMosquitosEvents();
+        
+            bool[] mosquitosActive = _mosquitos.Select(mosquito => mosquito.gameObject.activeInHierarchy).ToArray();
+        
+            int[] mosquitoTypes = _mosquitoTypes.Select(mosquitoType => (int)mosquitoType).ToArray();
+        
+            photonView.RPC(nameof(RpcSyncMosquitosState), RpcTarget.Others, mosquitosActive, mosquitoTypes, AmountKilled);
+        }
+        else
+        {
+            StartCoroutine(WaitForRoomBeReady());
+        }
+        
+    }
+
+    private IEnumerator WaitForRoomBeReady()
+    {
+        yield return new WaitUntil(() => PhotonNetwork.InRoom);
+        
+        yield return new WaitForSeconds(1f); // Wait for a short delay to ensure the room is fully ready;
+
+        if (!PhotonNetwork.IsMasterClient) yield return null;
         
         _mosquitoTypes = new Queue<MosquitoType>();
         
-        SpawnMosquitos();
+        SpawnHordePositions();
+        SpawnMosquitoForEachHordePosition();
         SubscribeToMosquitosEvents();
         
         bool[] mosquitosActive = _mosquitos.Select(mosquito => mosquito.gameObject.activeInHierarchy).ToArray();
@@ -84,7 +144,7 @@ public class MosquitosHorde : MonoBehaviourPunCallbacks
         }
     }
 
-    private void SpawnMosquitos()
+    private void SpawnHordePositions()
     {
         // Make a copy of _mosquitoTypes to avoid modifying the original queue while iterating
         Queue<MosquitoType> mosquitoTypes = new Queue<MosquitoType>(_mosquitoTypes);
@@ -96,26 +156,53 @@ public class MosquitosHorde : MonoBehaviourPunCallbacks
             Vector2 centering = new Vector2(-width / 2, -height / 2);
             Vector3 rowPosition = new Vector3(centering.x, centering.y + (row * 4.0f), 0.0f);
             
-            for(int col = 0; col < this.columns; col++)
+            for(int col = 0; col < this.columns; col++) 
             {
                 Mosquito mosquitoPrefab;
+
+                if (!PhotonNetwork.IsMasterClient) continue;
                 
-                if (PhotonNetwork.IsMasterClient)
-                {
-                    MosquitoType mosquitoType = RandomizeMosquitoType(row);
-                    mosquitoPrefab = prefabs[(int)mosquitoType];
-                    _mosquitoTypes.Enqueue(mosquitoType);
-                }
-                else
-                {
-                    mosquitoPrefab = prefabs[(int)mosquitoTypes.Dequeue()];
-                }
-                
-                SpawnMosquito(mosquitoPrefab, row, rowPosition, col);
+                _hordePositions ??= new Dictionary<HordePositionKey, Vector2>();
+                _hordePositions.Add(new HordePositionKey(row, col), new Vector2(rowPosition.x + (col * 4.0f), rowPosition.y));
             }
         }
     }
     
+    private void SpawnMosquitoForEachHordePosition()
+    {
+        for (int i = 0; i < _hordePositions.Count; i++)
+        {
+            if(!_hordePositions.TryGetValue(new HordePositionKey(i / this.columns, i % this.columns), out Vector2 rowPosition))
+            {
+                Debug.LogError($"Horde position not found for index {i}");
+                continue;
+            }
+
+            Mosquito mosquitoPrefab = null;
+            
+            if (PhotonNetwork.IsMasterClient)
+            {
+                MosquitoType mosquitoType = RandomizeMosquitoType(_hordePositions.ElementAt(i).Key.row);
+                mosquitoPrefab = prefabs[(int)mosquitoType];
+                _mosquitoTypes.Enqueue(mosquitoType);
+            }
+            else
+            {
+                mosquitoPrefab = prefabs[(int)_mosquitoTypes.Dequeue()];
+            }
+            
+            Mosquito mosquito = Instantiate(mosquitoPrefab, transform);
+            mosquito.transform.localPosition = _hordePositions.ElementAt(i).Value;
+            _mosquitos[i] = mosquito;
+            
+            /*var startingPosition = mosquito.transform.position + (Vector3)mosquitoStartPosition;
+            
+            var mosquitoHordePositionKey = new HordePositionKey(i / this.columns, i % this.columns);
+            var mosquitoHordePosition = _hordePositions[mosquitoHordePositionKey];
+            
+            mosquito.ChangeMosquitoHordePosition(mosquitoHordePositionKey, mosquitoHordePosition, PhotonNetwork.Time + 0.1f,startingPosition);*/
+        }
+    }
     private MosquitoType RandomizeMosquitoType(int row)
     {
         // if we are in the last row, we want to spawn the infected mosquito type
@@ -131,15 +218,6 @@ public class MosquitosHorde : MonoBehaviourPunCallbacks
             return randomValue < infectedChance ? MosquitoType.Infected : MosquitoType.Normal;
         }
         
-    }
-
-    private void SpawnMosquito(Mosquito mosquitoPrefab,int row, Vector3 rowPosition, int col)
-    {
-        Mosquito mosquito = Instantiate(mosquitoPrefab, this.transform);
-        Vector3 position = rowPosition;
-        position.x += col * 4.0f;
-        mosquito.transform.localPosition = position;
-        _mosquitos[row * this.columns + col] = mosquito;
     }
 
     private void Start()
@@ -171,7 +249,8 @@ public class MosquitosHorde : MonoBehaviourPunCallbacks
     {
         _mosquitoTypes = new Queue<MosquitoType>(mosquitoTypes.Select(t => (MosquitoType)t).ToArray());
         
-        SpawnMosquitos();
+        SpawnHordePositions();
+        SpawnMosquitoForEachHordePosition();
         SubscribeToMosquitosEvents();
         
         for (int i = 0; i < activeMosquitos.Length; i++)
@@ -186,8 +265,8 @@ public class MosquitosHorde : MonoBehaviourPunCallbacks
     private void RequestMissileAttack()
     {
         if(!PhotonNetwork.IsMasterClient) return;
-
-        if(_mosquitos.All(mosquito => mosquito.type != MosquitoType.Infected)) return;
+        
+        if(_mosquitos.All(mosquito => mosquito == null || mosquito.type != MosquitoType.Infected)) return;
 
         var infectedMosquitos = _mosquitos.Where(mosquito => mosquito.type == MosquitoType.Infected && mosquito.gameObject.activeInHierarchy).ToArray();
         
@@ -380,5 +459,27 @@ public class MosquitosHorde : MonoBehaviourPunCallbacks
     {
         base.OnDisable();
         GameMode.GameOverEvent -= OnGameOver;
+    }
+
+    private void OnDrawGizmos()
+    {
+        if(!enabled || !bDrawDebugGizmos || _hordePositions == null) return;
+        
+        Gizmos.color = Color.white;
+        for(int i = 0; i < _hordePositions.Count; i++)
+        {
+            var key = _hordePositions.ElementAt(i).Key;
+            var position = _hordePositions.ElementAt(i).Value;
+            Gizmos.DrawSphere(transform.position + (Vector3)position, 0.5f);
+        }
+        
+        if(debugHordePositionKey.row >= 0 && debugHordePositionKey.column >= 0)
+        {
+            if(_hordePositions.TryGetValue(debugHordePositionKey, out Vector2 position))
+            {
+                Gizmos.color = Color.red;
+                Gizmos.DrawSphere(transform.position + (Vector3)position, 0.5f);
+            }
+        }
     }
 }

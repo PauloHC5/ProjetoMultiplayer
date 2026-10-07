@@ -13,28 +13,35 @@ public enum MosquitoType
     Queen
 }
 
-[RequireComponent(typeof(PhotonView), typeof(PhotonTransformView))]
 public class Mosquito : MonoBehaviour
 {
     [Header("Settings")]
     public int points;
     public MosquitoType type;
+    public float positionInterpolationDuration = 0.5f;
     [SerializeField] private MosquitoMovement mosquitoMovement;
     public MosquitoMovement MosquitoMovement => mosquitoMovement;
     
+    [Header("Debug")]
+    public bool debugMode;
+    public Vector2 debugGoToPosition;
     
-    private float _horizontalPhase;
-    private float _verticalPhase;
-    private int _animationFrame;
-    private float phaseOffset;
     
+    private float _phaseOffset;
+    private Vector2 _anchorPos;
+    private Vector2 _moveStartPos;
+    private Vector2 _moveTargetPos;
+    private double _moveStartTime;
+    private bool _isMoving;
+    private MosquitosHorde.HordePositionKey _currentHordePosition;
+    public MosquitosHorde.HordePositionKey CurrentHordePosition => _currentHordePosition;
     
     [HideInInspector] public int mosquitoIndex;
     
     private int _projectilesLayer;
     private int _defaultLayer;
     private int _barrierLayer;
-    private Vector2 _originalPos;
+    private Coroutine _moveRoutine;
     
     public event Action OnMosquitoHitBoundaries;
     public event Action<int, int> OnMosquitoKilled;
@@ -48,16 +55,23 @@ public class Mosquito : MonoBehaviour
 
     private void Start()
     {
-        _originalPos = transform.localPosition;
-
-        phaseOffset = (mosquitoIndex * 137.5f) % (Mathf.PI * 2f);
-        
-        mosquitoMovement.OnStart(phaseOffset, this);
+        _anchorPos = transform.localPosition;
+        _phaseOffset = (mosquitoIndex * 137.5f) % (Mathf.PI * 2f);
+        mosquitoMovement.OnStart(_phaseOffset, this);
     }
 
     private void Update()
     {
-        transform.localPosition = mosquitoMovement.Movement(PhotonNetwork.Time, _originalPos);
+        double now = PhotonNetwork.Time;
+        
+        if (_isMoving)
+        {
+            float t = Mathf.Clamp01((float)((now - _moveStartTime) / positionInterpolationDuration));
+            _anchorPos = Vector2.Lerp(_moveStartPos, _moveTargetPos, Mathf.SmoothStep(0f, 1f, t));
+            if (t >= 1f) _isMoving = false;
+        }
+        
+        transform.localPosition = mosquitoMovement.Movement(PhotonNetwork.Time, _anchorPos);
     }
 
     private void OnTriggerEnter2D(Collider2D other)
@@ -80,11 +94,34 @@ public class Mosquito : MonoBehaviour
             BarriersManager.Instance.DamageBarrier(other.gameObject);
         }
     }
+    
+    public void ChangeMosquitoHordePosition(MosquitosHorde.HordePositionKey hordePositionKey, Vector2 newPos, double startTime, Vector2 newAnchorPos = default(Vector2))
+    {
+        if(newAnchorPos != default(Vector2))
+        {
+            _anchorPos = newAnchorPos;
+        }
+        
+        _currentHordePosition = hordePositionKey;
+        GoToNewPosition(newPos, startTime);
+    }
+    
+    public void GoToNewPosition(Vector2 newPos, double startTime)
+    {
+        _moveStartPos = _anchorPos;
+        _moveTargetPos = newPos;
+        _moveStartTime = startTime;
+        _isMoving = true;
+    }
 
 #if UNITY_EDITOR
     private void OnValidate()
     {
+        if(!debugMode) return;
+        
         mosquitoMovement.OnValidate();
+        
+        GoToNewPosition(debugGoToPosition, PhotonNetwork.Time + 0.1f);
     }
 #endif
 }
