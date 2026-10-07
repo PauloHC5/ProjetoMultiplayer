@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using UnityEngine;
+using UnityEngine.UI;
 
 namespace _Game.Scripts.Enemies
 {
@@ -26,6 +27,7 @@ namespace _Game.Scripts.Enemies
         private float _phaseOffset;
         private Mosquito _mosquitoOwner;
         private Coroutine _interpolationCoroutine;
+        private MosquitoMovementSettings _targetSettings;
         
         public void OnStart(float phaseOffset, Mosquito mosquitoOwner)
         {
@@ -38,7 +40,7 @@ namespace _Game.Scripts.Enemies
             _currentVerticalAmplitude = movementSettings.VerticalZigzagAmplitude;
         }
 
-        public Vector2 Movement(double time)
+        public Vector2 Movement(double time, Vector2 currentPosition)
         {
             float x = 0;
             float y = 0;
@@ -55,11 +57,13 @@ namespace _Game.Scripts.Enemies
                 y = (float)(Math.Cos(t * movementSettings.VerticalZigzagFrequency + _phaseOffset)) * movementSettings.VerticalZigzagAmplitude;
             }
 
-            return new Vector2(x, y);
+            return new Vector2(x, y) + currentPosition;
         }
         
         public void SwitchMovementSettings(MosquitoMovementSettings newSettings)
         {
+            _targetSettings = newSettings;
+            
             if(bInterpolateMovement)
             {
                 if(_interpolationCoroutine != null)
@@ -125,6 +129,18 @@ namespace _Game.Scripts.Enemies
             movementSettings = newSettings; // Update the ScriptableObject reference to the new settings
             
             _interpolationCoroutine = null; // Clear the coroutine reference
+        }
+        
+        public void OnValidate()
+        {
+            // Só faz sentido em Play Mode, depois do OnStart
+            if (!Application.isPlaying || _mosquitoOwner == null || movementSettings == null) return;
+
+            // O Inspector trocou o asset: dispara a interpolação para o novo
+            if (movementSettings != _targetSettings)
+            {
+                SwitchMovementSettings(movementSettings);
+            }
         }
     }
 }

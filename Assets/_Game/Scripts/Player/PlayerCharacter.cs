@@ -170,31 +170,27 @@ public class PlayerCharacter : MonoBehaviourPun
 
         Vector3 fixedPositionToSpawn = projectileSpawnPosition + shooterVelocity * lag;
 
-        Projectile projectile = Instantiate(projectilePrefab, fixedPositionToSpawn, Quaternion.identity);
-        projectile.Destroyed += OnProjectileDestroyed;
-        
-        projectile.Init(photonView.OwnerActorNr, shotId, _piercingProjectilesActive, _fasterFireActive);
-        projectile.Collider2D.enabled = photonView.IsMine;
-        _projectilesActive++;
+        SpawnLaserProjectile(shotId, fixedPositionToSpawn, 0);
 
         if (_tripleShootActive)
         {
-            var leftProjectile = Instantiate(projectilePrefab, fixedPositionToSpawn, Quaternion.Euler(0, 0, 35));
-            leftProjectile.Destroyed += OnProjectileDestroyed;
-            leftProjectile.Init(photonView.OwnerActorNr, shotId, _piercingProjectilesActive, _fasterFireActive);
-            leftProjectile.Collider2D.enabled = photonView.IsMine;
-            _projectilesActive++;
+            SpawnLaserProjectile(shotId, fixedPositionToSpawn, 35);
 
-            var rightProjectile = Instantiate(projectilePrefab, fixedPositionToSpawn, Quaternion.Euler(0, 0, -35));
-            rightProjectile.Destroyed += OnProjectileDestroyed;
-            rightProjectile.Init(photonView.OwnerActorNr, shotId, _piercingProjectilesActive, _fasterFireActive);
-            rightProjectile.Collider2D.enabled = photonView.IsMine;
-            _projectilesActive++;
+            SpawnLaserProjectile(shotId, fixedPositionToSpawn, -35);
         }
 
         GameManager.Instance.AudioManager.PlaySfx(shootSfx);
     }
-    
+
+    private void SpawnLaserProjectile(int shotId, Vector3 fixedPositionToSpawn, int zRotation)
+    {
+        Projectile leftProjectile = Instantiate(projectilePrefab, fixedPositionToSpawn, Quaternion.Euler(0, 0, zRotation));
+        leftProjectile.Destroyed += OnProjectileDestroyed;
+        leftProjectile.Init(photonView.OwnerActorNr, shotId, _piercingProjectilesActive, _fasterFireActive);
+        leftProjectile.Collider2D.enabled = photonView.IsMine;
+        _projectilesActive++;
+    }
+
     private void OnProjectileDestroyed(Projectile projectile)
     {
         _projectilesActive--;
@@ -234,6 +230,8 @@ public class PlayerCharacter : MonoBehaviourPun
     [PunRPC]
     private void RpcDeath()
     {
+        bBotMode = false;
+        
         _rigidbody2D.linearVelocity = Vector2.zero;
         
         _characterAnimator.SetBool(IsDeadHash, true);
@@ -394,8 +392,10 @@ public class PlayerCharacter : MonoBehaviourPun
     {
         if(!photonView.IsMine) return;
         
+        bBotMode = false;
+        
         _rigidbody2D.linearVelocity = Vector2.zero;
-        _rigidbody2D.isKinematic = true;
+        _rigidbody2D.bodyType = RigidbodyType2D.Kinematic;
         _characterAnimator.SetBool(IsDeadHash, true);
     }
 

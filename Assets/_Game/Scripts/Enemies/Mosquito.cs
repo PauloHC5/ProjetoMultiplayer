@@ -57,28 +57,8 @@ public class Mosquito : MonoBehaviour
 
     private void Update()
     {
-        transform.localPosition = mosquitoMovement.Movement(PhotonNetwork.Time) + _originalPos;
+        transform.localPosition = mosquitoMovement.Movement(PhotonNetwork.Time, _originalPos);
     }
-
-    /*private void ZigZagMovement()
-    {
-        double t = PhotonNetwork.Time;
-        float x = 0;
-        float y = 0;
-
-        if(bInterpolateZigZagMovement)
-        {
-            x = (float)(Math.Sin(t * _currentHorizontalFrequency + phaseOffset)) * _currentHorizontalAmplitude;
-            y = (float)(Math.Cos(t * _currentVerticalFrequency + phaseOffset)) * _currentVerticalAmplitude;
-        }
-        else
-        {
-            x = (float)(Math.Sin(t * movementSettings.HorizontalZigzagFrequency + phaseOffset)) * movementSettings.HorizontalZigzagAmplitude;
-            y = (float)(Math.Cos(t * movementSettings.VerticalZigzagFrequency + phaseOffset)) * movementSettings.VerticalZigzagAmplitude;
-        }
-
-        transform.localPosition = new Vector2(x, y) + _originalPos;
-    }*/
 
     private void OnTriggerEnter2D(Collider2D other)
     {
@@ -100,4 +80,11 @@ public class Mosquito : MonoBehaviour
             BarriersManager.Instance.DamageBarrier(other.gameObject);
         }
     }
+
+#if UNITY_EDITOR
+    private void OnValidate()
+    {
+        mosquitoMovement.OnValidate();
+    }
+#endif
 }

@@ -557,8 +557,8 @@ MonoBehaviour:
     OneUpSpawnChance: 10
     ToolboxSpawnChance: 25
   pickupSpawnSettingsWith2CharactersAlive:
-    MinSpawnInterval: 4
-    MaxSpawnInterval: 8
+    MinSpawnInterval: 3
+    MaxSpawnInterval: 10
     OneUpSpawnChance: 10
     ToolboxSpawnChance: 25
   pickupSpawnSettingsWith3CharactersAlive:
@@ -566,7 +566,7 @@ MonoBehaviour:
     MaxSpawnInterval: 8
     OneUpSpawnChance: 15
     ToolboxSpawnChance: 25
-  bDebugMode: 1
+  bDebugMode: 0
 --- !u!4 &281756321
 Transform:
   m_ObjectHideFlags: 0
