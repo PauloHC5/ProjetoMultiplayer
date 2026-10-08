@@ -45,10 +45,11 @@ public class MosquitosHorde : MonoBehaviourPunCallbacks
     
     [Header("Settings")]
     public Mosquito[] prefabs = new Mosquito[3];
-    public int rows = 5;
-    public int columns = 11;
-    public AnimationCurve speed;
-    public float missileAttackRate = 1.0f;
+    [SerializeField] public int rows = 5;
+    [SerializeField] int columns = 11;
+    public float hordeVerticalInterpolationDuration = 0.5f;
+    [SerializeField] private AnimationCurve speed;
+    [SerializeField] private float missileAttackRate = 1.0f;
     public Projectile missilePrefab;
     public AudioCue killedSfx;
     [SerializeField] private LayerMask laserLayerMask;
@@ -386,7 +387,7 @@ public class MosquitosHorde : MonoBehaviourPunCallbacks
 
     public void MosquitoHitBoundaries()
     {
-        if(!PhotonNetwork.IsMasterClient || _bRequestedRowAdvance) return;
+        if(_bRequestedRowAdvance) return;
         
         BoundariesSideHit sideHit = transform.position.x > 0 ? BoundariesSideHit.Right : BoundariesSideHit.Left;
         
@@ -394,35 +395,38 @@ public class MosquitosHorde : MonoBehaviourPunCallbacks
         
         _lastBoundariesSideHit = sideHit;
         
+        if(!PhotonNetwork.IsMasterClient) return;
+        
         _bRequestedRowAdvance = true;
+
         _photonView.RPC(nameof(AdvanceRow), RpcTarget.All);
     }
     
     [PunRPC]
     private void AdvanceRow()
     {
+        // Reverse the direction of the mosquitos
+        _direction.x *= -1.0f;
+
         if (!PhotonNetwork.IsMasterClient) return;
 
-        // Reverse the direction of the mosquitos and move them down by 2 units
-        _direction.x *= -1.0f;
-        
         Vector3 newPosition = transform.position;
-        
-        StartCoroutine(InterpolateToNewYPosition(newPosition.y - 2.0f, 0.5f));
-        
+
+        StartCoroutine(InterpolateToNewYPosition(newPosition.y - 2.0f));
+
         transform.position = newPosition;
         StartCoroutine(FinishRowAdvance());
     }
     
-    private IEnumerator InterpolateToNewYPosition(float newYPosition, float duration)
+    private IEnumerator InterpolateToNewYPosition(float newYPosition)
     {
         float elapsedTime = 0f;
         Vector3 startingPosition = transform.position;
         Vector3 targetPosition = new Vector3(startingPosition.x, newYPosition, startingPosition.z);
 
-        while (elapsedTime < duration)
+        while (elapsedTime < hordeVerticalInterpolationDuration)
         {
-            transform.position = Vector3.Lerp(startingPosition, targetPosition, elapsedTime / duration);
+            transform.position = Vector3.Lerp(startingPosition, targetPosition, elapsedTime / hordeVerticalInterpolationDuration);
             elapsedTime += Time.deltaTime;
             yield return null;
         }
