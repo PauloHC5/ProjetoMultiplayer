@@ -71,6 +71,8 @@ public class MosquitosHorde : MonoBehaviourPunCallbacks
     private Mosquito[] _mosquitos;
     private PhotonView _photonView;
     private bool _bRequestedRowAdvance = false;
+    private bool _bAlreadySpawnedHordePositions = false;
+    private bool _bAlreadySpawnedMosquitos = false;
     private int _shotCounter;
     private BoundariesSideHit _lastBoundariesSideHit;
     public const int MosquitosInstigatorId = 451;
@@ -147,6 +149,8 @@ public class MosquitosHorde : MonoBehaviourPunCallbacks
 
     private void SpawnHordePositions()
     {
+        if(_bAlreadySpawnedHordePositions) return;
+        
         // Make a copy of _mosquitoTypes to avoid modifying the original queue while iterating
         Queue<MosquitoType> mosquitoTypes = new Queue<MosquitoType>(_mosquitoTypes);
         
@@ -163,10 +167,16 @@ public class MosquitosHorde : MonoBehaviourPunCallbacks
                 _hordePositions.Add(new HordePositionKey(row, col), new Vector2(rowPosition.x + (col * 4.0f), rowPosition.y));
             }
         }
+        
+        _bAlreadySpawnedHordePositions = true;
     }
     
     private void SpawnMosquitoForEachHordePosition(bool bInterToPosition)
     {
+        if(_bAlreadySpawnedMosquitos) return;
+        
+        Queue<MosquitoType> mosquitoTypes = new Queue<MosquitoType>(_mosquitoTypes);
+        
         for (int i = 0; i < _hordePositions.Count; i++)
         {
             if(!_hordePositions.TryGetValue(new HordePositionKey(i / this.columns, i % this.columns), out Vector2 rowPosition))
@@ -185,7 +195,7 @@ public class MosquitosHorde : MonoBehaviourPunCallbacks
             }
             else
             {
-                mosquitoPrefab = prefabs[(int)_mosquitoTypes.Dequeue()];
+                mosquitoPrefab = prefabs[(int)mosquitoTypes.Dequeue()];
             }
             
             Mosquito mosquito = Instantiate(mosquitoPrefab, transform);
@@ -205,6 +215,8 @@ public class MosquitosHorde : MonoBehaviourPunCallbacks
                 mosquito.transform.localPosition = _hordePositions.ElementAt(i).Value;
             }
         }
+        
+        _bAlreadySpawnedMosquitos = true;
     }
     private MosquitoType RandomizeMosquitoType(int row)
     {
@@ -243,14 +255,29 @@ public class MosquitosHorde : MonoBehaviourPunCallbacks
         bool[] activeMosquitos = _mosquitos.Select(mosquito => mosquito.gameObject.activeInHierarchy).ToArray();
         
         int[] mosquitoTypes = _mosquitoTypes.Select(mosquitoType => (int)mosquitoType).ToArray();
+        
+        Debug.LogWarning("Sending mosquito types with length: " + mosquitoTypes.Length);
 
-        photonView.RPC(nameof(RpcSyncMosquitosState), newPlayer, activeMosquitos, mosquitoTypes, AmountKilled, false);
+        photonView.RPC(nameof(RpcSyncMosquitosState), newPlayer, activeMosquitos, mosquitoTypes, AmountKilled, false, _direction.x, (int)_lastBoundariesSideHit);
+    }
+
+    public override void OnLeftRoom()
+    {
+        if(!PhotonNetwork.IsMasterClient) return;
+        
+        bool[] activeMosquitos = _mosquitos.Select(mosquito => mosquito.gameObject.activeInHierarchy).ToArray();
+        
+        int[] mosquitoTypes = _mosquitoTypes.Select(mosquitoType => (int)mosquitoType).ToArray();
+        
+        photonView.RPC(nameof(RpcSyncMosquitosState), RpcTarget.Others, activeMosquitos, mosquitoTypes, AmountKilled, false, _direction.x, (int)_lastBoundariesSideHit);
     }
 
     [PunRPC]
-    private void RpcSyncMosquitosState(bool[] activeMosquitos, int[] mosquitoTypes, int amountKilled, bool bInterpMosquitosWhenSpawn)
+    private void RpcSyncMosquitosState(bool[] activeMosquitos, int[] mosquitoTypes, int amountKilled, bool bInterpMosquitosWhenSpawn, float directionX, int lastBoundariesSideHit)
     {
         _mosquitoTypes = new Queue<MosquitoType>(mosquitoTypes.Select(t => (MosquitoType)t).ToArray());
+        
+        Debug.LogWarning("Received mosquito types with length: " + mosquitoTypes.Length);
         
         SpawnHordePositions();
         SpawnMosquitoForEachHordePosition(bInterpMosquitosWhenSpawn);
@@ -263,6 +290,9 @@ public class MosquitosHorde : MonoBehaviourPunCallbacks
 
         AmountKilled = amountKilled;
         UpdateMosquitosMovement();
+        
+        _direction.x = directionX;
+        _lastBoundariesSideHit = (BoundariesSideHit)lastBoundariesSideHit;
     }
 
     private void RequestMissileAttack()
