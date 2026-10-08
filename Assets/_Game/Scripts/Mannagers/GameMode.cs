@@ -53,6 +53,7 @@ namespace _Game.Scripts
         private PhotonView _photonView;
         private int _gameCountdown;
         private int _currentLives;
+        private int _playerCharactersAlive;
         private MosquitosHorde _mosquitosHordeInTheScene;
         private int _hordesSpawnedInCurrentWave = 0;
         private int _currentWave = 1;
@@ -63,7 +64,6 @@ namespace _Game.Scripts
         
         public static readonly string PlayerTypeKey = "AvailablePlayerTypes";
         public static readonly string PlayerScoreKey = "PlayerScore";
-        public static readonly string PlayerCharactersAliveKey = "PlayerCharactersAlive";
         
         public int StartingLives => startingLives;
         public int StartGameDelay => startGameDelay;
@@ -165,7 +165,6 @@ namespace _Game.Scripts
         {
             var playersInTheRoom = PhotonNetwork.CurrentRoom.PlayerCount;
             
-            // If there is only one player in the room, assign PlayerType.Player1 to the requesting player
             if(playersInTheRoom != 1)
             {
                 List<PlayerType> availablePlayerTypes = new List<PlayerType>();
@@ -246,30 +245,21 @@ namespace _Game.Scripts
             
             OnPlayerCharacterSpawned?.Invoke(PhotonNetwork.LocalPlayer, playerCharacter);
             
-            var playerCharactersAlive = GetOrInitPlayerCharactersAlive() + 1;
-            
-            SetPlayerCharactersAlive(playerCharactersAlive);
+            SetPlayerCharactersAlive( _playerCharactersAlive + 1);
 
             playerCharacter.OnPlayerDeath += OnPlayerDestroyed;
-        }
-
-        public static int GetOrInitPlayerCharactersAlive()
-        {
-            if (PhotonNetwork.CurrentRoom.CustomProperties.TryGetValue(PlayerCharactersAliveKey, out var index))
-            {
-                return (int)index;
-            }
-            else
-            {
-                return 0;
-            }
         }
         
         private void SetPlayerCharactersAlive(int count)
         {
-            if(!PhotonNetwork.InRoom || !PhotonNetwork.IsConnectedAndReady) return;
-            
-            PhotonNetwork.CurrentRoom.SetCustomProperties(new Hashtable { { PlayerCharactersAliveKey, count } });
+            _playerCharactersAlive = count;
+            _photonView.RPC(nameof(RpcReplicatePlayerCharactersAlive), RpcTarget.All, _playerCharactersAlive);
+        }
+        
+        [PunRPC]
+        private void RpcReplicatePlayerCharactersAlive(int count)
+        {
+            _playerCharactersAlive = count;
         }
 
         public override void OnPlayerEnteredRoom(Player newPlayer)
@@ -284,6 +274,8 @@ namespace _Game.Scripts
             {
                 photonView.RPC(nameof(RpcSubscribeToMosquitosHordeEvents), newPlayer);
             }
+            
+            photonView.RPC(nameof(RpcReplicatePlayerCharactersAlive), newPlayer, _playerCharactersAlive);
             
         }
         
@@ -304,7 +296,7 @@ namespace _Game.Scripts
             if (_bGameCountdownRunning )
                 StartCoroutine(StartGameCountdown());
             
-            SetPlayerCharactersAlive(GetOrInitPlayerCharactersAlive() - 1);
+            //SetPlayerCharactersAlive(_playerCharactersAlive - 1);
         }
 
         private IEnumerator StartGameCountdown()
@@ -461,10 +453,8 @@ namespace _Game.Scripts
             PlayerController.Local.UnPossess();
             
             _currentLives--;
-
-            var playerCharactersAlive = GetOrInitPlayerCharactersAlive() - 1;
             
-            SetPlayerCharactersAlive(playerCharactersAlive);
+            SetPlayerCharactersAlive(_playerCharactersAlive - 1);
             
             OnLivesChanged?.Invoke(_currentLives);
 
@@ -473,7 +463,7 @@ namespace _Game.Scripts
 
             if (_currentLives <= 0)
             {
-                GameOver(playerCharactersAlive);
+                GameOver(_playerCharactersAlive);
                 return;
             }
 
@@ -483,12 +473,12 @@ namespace _Game.Scripts
         private void GameOver(int playerCharactersAlive)
         {
             if(bDebugMode)
-                Debug.Log("GameMode.OnPlayerDestroyed: Game Over");
+                Debug.Log("GameMode.OnPlayerDestroyed: Local Game Over");
 
             if (playerCharactersAlive <= 0)
             {
                 if(bDebugMode)
-                    Debug.Log("GameMode.OnPlayerDestroyed: No more player characters alive, closing room.");
+                    Debug.Log("General GameOver: No players alive. Closing room.");
 
                 if (PhotonNetwork.CurrentRoom.IsOpen)
                     PhotonNetwork.CurrentRoom.IsOpen = false;
@@ -550,7 +540,7 @@ namespace _Game.Scripts
         
         private PickupSpawnSettings GetCurrentPickupSpawnSettings()
         {
-            switch (GetOrInitPlayerCharactersAlive())
+            switch (_playerCharactersAlive)
             {
                 case 1:
                     return pickupSpawnSettingsWith1CharacterAlive;
