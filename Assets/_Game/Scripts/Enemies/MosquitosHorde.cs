@@ -256,8 +256,6 @@ public class MosquitosHorde : MonoBehaviourPunCallbacks
         
         int[] mosquitoTypes = _mosquitoTypes.Select(mosquitoType => (int)mosquitoType).ToArray();
         
-        Debug.LogWarning("Sending mosquito types with length: " + mosquitoTypes.Length);
-
         photonView.RPC(nameof(RpcSyncMosquitosState), newPlayer, activeMosquitos, mosquitoTypes, AmountKilled, false, _direction.x, (int)_lastBoundariesSideHit);
     }
 
@@ -276,8 +274,6 @@ public class MosquitosHorde : MonoBehaviourPunCallbacks
     private void RpcSyncMosquitosState(bool[] activeMosquitos, int[] mosquitoTypes, int amountKilled, bool bInterpMosquitosWhenSpawn, float directionX, int lastBoundariesSideHit)
     {
         _mosquitoTypes = new Queue<MosquitoType>(mosquitoTypes.Select(t => (MosquitoType)t).ToArray());
-        
-        Debug.LogWarning("Received mosquito types with length: " + mosquitoTypes.Length);
         
         SpawnHordePositions();
         SpawnMosquitoForEachHordePosition(bInterpMosquitosWhenSpawn);
