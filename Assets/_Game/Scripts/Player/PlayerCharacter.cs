@@ -394,9 +394,9 @@ public class PlayerCharacter : MonoBehaviourPun
         
         bBotMode = false;
         
-        _rigidbody2D.linearVelocity = Vector2.zero;
-        _rigidbody2D.bodyType = RigidbodyType2D.Kinematic;
-        _characterAnimator.SetBool(IsDeadHash, true);
+        photonView.RPC(nameof(RpcDeath), RpcTarget.All);
+        
+        
     }
 
     private void OnEnable()
