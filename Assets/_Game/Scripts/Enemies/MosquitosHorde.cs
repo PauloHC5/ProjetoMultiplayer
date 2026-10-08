@@ -107,7 +107,7 @@ public class MosquitosHorde : MonoBehaviourPunCallbacks
 
             int[] mosquitoTypes = _mosquitoTypes.Select(mosquitoType => (int)mosquitoType).ToArray();
 
-            photonView.RPC(nameof(RpcSyncMosquitosState), RpcTarget.Others, mosquitosActive, mosquitoTypes, AmountKilled, true);
+            photonView.RPC(nameof(RpcSyncMosquitosState), RpcTarget.Others, mosquitosActive, mosquitoTypes, AmountKilled, true, _direction.x, (int)_lastBoundariesSideHit);
         }
         else
         {
@@ -333,6 +333,8 @@ public class MosquitosHorde : MonoBehaviourPunCallbacks
     [PunRPC]
     private void RpcReplicateKill(int mosquitoIndex, int instigatorPlayerId)
     {
+        if(_mosquitos == null || _mosquitos.Length == 0) return;
+        
         if (!_mosquitos[mosquitoIndex].gameObject.activeInHierarchy) return;
 
         var mosquitoKilled = _mosquitos[mosquitoIndex];
