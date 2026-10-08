@@ -17,8 +17,12 @@ public class Mosquito : MonoBehaviour
 {
     [Header("Settings")]
     public int points;
-    public MosquitoType type;
+
+    [SerializeField] private MosquitoType type;
+    public MosquitoType Type => type;
+
     public float positionInterpolationDuration = 0.5f;
+    public float scaleUpDuration = 0.5f;
     [SerializeField] private MosquitoMovement mosquitoMovement;
     public MosquitoMovement MosquitoMovement => mosquitoMovement;
     
@@ -26,11 +30,11 @@ public class Mosquito : MonoBehaviour
     public bool debugMode;
     public Vector2 debugGoToPosition;
     
-    
     private float _phaseOffset;
     private Vector2 _anchorPos;
     private Vector2 _moveStartPos;
     private Vector2 _moveTargetPos;
+    private Vector3 _originalScale;
     private double _moveStartTime;
     private bool _isMoving;
     private MosquitosHorde.HordePositionKey _currentHordePosition;
@@ -50,7 +54,8 @@ public class Mosquito : MonoBehaviour
     {
         _projectilesLayer = LayerMask.NameToLayer("Projectiles");
         _defaultLayer = LayerMask.NameToLayer("Default");
-        _barrierLayer = LayerMask.NameToLayer("Barrier");        
+        _barrierLayer = LayerMask.NameToLayer("Barrier");
+        _originalScale = transform.localScale;
     }
 
     private void Start()
@@ -58,6 +63,8 @@ public class Mosquito : MonoBehaviour
         _anchorPos = transform.localPosition;
         _phaseOffset = (mosquitoIndex * 137.5f) % (Mathf.PI * 2f);
         mosquitoMovement.OnStart(_phaseOffset, this);
+
+        StartCoroutine(ScaleFrom0T1Interpolation());
     }
 
     private void Update()
@@ -112,6 +119,24 @@ public class Mosquito : MonoBehaviour
         _moveTargetPos = newPos;
         _moveStartTime = startTime;
         _isMoving = true;
+    }
+
+    private IEnumerator ScaleFrom0T1Interpolation()
+    {
+        float elapsedTime = 0f;
+
+        transform.localScale = Vector3.zero;
+
+        while (elapsedTime < scaleUpDuration)
+        {
+            float t = elapsedTime / scaleUpDuration;
+            transform.localScale = Vector3.Lerp(Vector3.zero, _originalScale, Mathf.SmoothStep(0f, 1f, t));
+            elapsedTime += Time.deltaTime;
+            yield return null;
+        }
+
+        transform.localScale = _originalScale;
+
     }
 
 #if UNITY_EDITOR

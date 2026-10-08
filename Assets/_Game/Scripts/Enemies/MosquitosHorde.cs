@@ -93,18 +93,18 @@ public class MosquitosHorde : MonoBehaviourPunCallbacks
         if (PhotonNetwork.InRoom)
         {
             if (!PhotonNetwork.IsMasterClient) return;
-        
+
             _mosquitoTypes = new Queue<MosquitoType>();
-        
+
             SpawnHordePositions();
-            SpawnMosquitoForEachHordePosition();
+            SpawnMosquitoForEachHordePosition(true);
             SubscribeToMosquitosEvents();
-        
+
             bool[] mosquitosActive = _mosquitos.Select(mosquito => mosquito.gameObject.activeInHierarchy).ToArray();
-        
+
             int[] mosquitoTypes = _mosquitoTypes.Select(mosquitoType => (int)mosquitoType).ToArray();
-        
-            photonView.RPC(nameof(RpcSyncMosquitosState), RpcTarget.Others, mosquitosActive, mosquitoTypes, AmountKilled);
+
+            photonView.RPC(nameof(RpcSyncMosquitosState), RpcTarget.Others, mosquitosActive, mosquitoTypes, AmountKilled, true);
         }
         else
         {
@@ -124,7 +124,7 @@ public class MosquitosHorde : MonoBehaviourPunCallbacks
         _mosquitoTypes = new Queue<MosquitoType>();
         
         SpawnHordePositions();
-        SpawnMosquitoForEachHordePosition();
+        SpawnMosquitoForEachHordePosition(true);
         SubscribeToMosquitosEvents();
         
         bool[] mosquitosActive = _mosquitos.Select(mosquito => mosquito.gameObject.activeInHierarchy).ToArray();
@@ -157,18 +157,14 @@ public class MosquitosHorde : MonoBehaviourPunCallbacks
             Vector3 rowPosition = new Vector3(centering.x, centering.y + (row * 4.0f), 0.0f);
             
             for(int col = 0; col < this.columns; col++) 
-            {
-                Mosquito mosquitoPrefab;
-
-                if (!PhotonNetwork.IsMasterClient) continue;
-                
+            {                                                
                 _hordePositions ??= new Dictionary<HordePositionKey, Vector2>();
                 _hordePositions.Add(new HordePositionKey(row, col), new Vector2(rowPosition.x + (col * 4.0f), rowPosition.y));
             }
         }
     }
     
-    private void SpawnMosquitoForEachHordePosition()
+    private void SpawnMosquitoForEachHordePosition(bool bInterToPosition)
     {
         for (int i = 0; i < _hordePositions.Count; i++)
         {
@@ -192,15 +188,21 @@ public class MosquitosHorde : MonoBehaviourPunCallbacks
             }
             
             Mosquito mosquito = Instantiate(mosquitoPrefab, transform);
-            mosquito.transform.localPosition = _hordePositions.ElementAt(i).Value;
             _mosquitos[i] = mosquito;
-            
-            /*var startingPosition = mosquito.transform.position + (Vector3)mosquitoStartPosition;
-            
-            var mosquitoHordePositionKey = new HordePositionKey(i / this.columns, i % this.columns);
-            var mosquitoHordePosition = _hordePositions[mosquitoHordePositionKey];
-            
-            mosquito.ChangeMosquitoHordePosition(mosquitoHordePositionKey, mosquitoHordePosition, PhotonNetwork.Time + 0.1f,startingPosition);*/
+
+            if (bInterToPosition)
+            {
+                var startingPosition = transform.position + (Vector3)mosquitoStartPosition;
+
+                var mosquitoHordePositionKey = new HordePositionKey(i / this.columns, i % this.columns);
+                var mosquitoHordePosition = _hordePositions[mosquitoHordePositionKey];
+
+                mosquito.ChangeMosquitoHordePosition(mosquitoHordePositionKey, mosquitoHordePosition, PhotonNetwork.Time + 0.1f);                
+            }
+            else
+            {
+                mosquito.transform.localPosition = _hordePositions.ElementAt(i).Value;
+            }
         }
     }
     private MosquitoType RandomizeMosquitoType(int row)
@@ -241,16 +243,16 @@ public class MosquitosHorde : MonoBehaviourPunCallbacks
         
         int[] mosquitoTypes = _mosquitoTypes.Select(mosquitoType => (int)mosquitoType).ToArray();
 
-        photonView.RPC(nameof(RpcSyncMosquitosState), newPlayer, activeMosquitos, mosquitoTypes, AmountKilled);
+        photonView.RPC(nameof(RpcSyncMosquitosState), newPlayer, activeMosquitos, mosquitoTypes, AmountKilled, false);
     }
 
     [PunRPC]
-    private void RpcSyncMosquitosState(bool[] activeMosquitos, int[] mosquitoTypes, int amountKilled)
+    private void RpcSyncMosquitosState(bool[] activeMosquitos, int[] mosquitoTypes, int amountKilled, bool bInterpMosquitosWhenSpawn)
     {
         _mosquitoTypes = new Queue<MosquitoType>(mosquitoTypes.Select(t => (MosquitoType)t).ToArray());
         
         SpawnHordePositions();
-        SpawnMosquitoForEachHordePosition();
+        SpawnMosquitoForEachHordePosition(bInterpMosquitosWhenSpawn);
         SubscribeToMosquitosEvents();
         
         for (int i = 0; i < activeMosquitos.Length; i++)
@@ -266,9 +268,9 @@ public class MosquitosHorde : MonoBehaviourPunCallbacks
     {
         if(!PhotonNetwork.IsMasterClient) return;
         
-        if(_mosquitos.All(mosquito => mosquito == null || mosquito.type != MosquitoType.Infected)) return;
+        if(_mosquitos.All(mosquito => mosquito == null || mosquito.Type != MosquitoType.Infected)) return;
 
-        var infectedMosquitos = _mosquitos.Where(mosquito => mosquito.type == MosquitoType.Infected && mosquito.gameObject.activeInHierarchy).ToArray();
+        var infectedMosquitos = _mosquitos.Where(mosquito => mosquito.Type == MosquitoType.Infected && mosquito.gameObject.activeInHierarchy).ToArray();
         
         if(infectedMosquitos.Length == 0) return;
         

@@ -626,7 +626,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7380585379183910588, guid: 2cdd92942844e9544828eece9b9cef8b, type: 3}
       propertyPath: mosquitoStartPosition.y
-      value: 20
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 7751632355803559981, guid: 2cdd92942844e9544828eece9b9cef8b, type: 3}
       propertyPath: m_Name
