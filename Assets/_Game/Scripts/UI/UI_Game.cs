@@ -28,14 +28,29 @@ public class UI_Game : MonoBehaviour
         public TextMeshProUGUI WaveProgressText;
     }
     
+    private struct MatchPreparationUI
+    {
+        public Button StartGameButton;
+        public TextMeshProUGUI AwaitingHostText;
+    }
+    
     [Header("UI Elements")]
-    public GameObject playerStatusPrefab;
-    public GameObject statusBarUI;
+    public TextMeshProUGUI gameCountdownText;
+    
+    [Header("UI Screens")]
+    public GameObject gameOverUIScreen;
+    public GameObject matchPreparationUIScreen;
+    
+    [Header("Wave UI Elements")]
     public TextMeshProUGUI waveCounterText;
     public GameObject waveProgressBarObj;
-    public TextMeshProUGUI gameCountdownText;
-    public GameObject gameOverUI;
+    
+    [Header("Player Status UI Elements")]
+    public GameObject statusBarUI;
     public Transform pickupStatusUI;
+    
+    [Header("UI Prefabs")]
+    public GameObject playerStatusPrefab;
 
     [SerializedDictionary("Pickup Type", "Sprite")]
     public AYellowpaper.SerializedCollections.SerializedDictionary<Pickup.PickupType, Sprite> pickupTypeSprites;
@@ -43,6 +58,7 @@ public class UI_Game : MonoBehaviour
     private PlayerUIStatus _localPlayerStatus;
     private bool _bGameIsRunning = false;
     private WaveProgressBar _waveProgressBar;
+    private MatchPreparationUI _matchPreparationUI;
 
     // Constants for finding child components in the player status prefab
     private const string PlayerNicknameTextComponentName = "Player Nickname Text (TMP)";
@@ -51,6 +67,10 @@ public class UI_Game : MonoBehaviour
 
     private void Awake()
     {
+        gameCountdownText.enabled = false;
+        waveCounterText.gameObject.SetActive(false);
+        waveProgressBarObj.SetActive(false);
+        
         _localPlayerStatus = new PlayerUIStatus
         {
             PlayerUIStatusObject = null,
@@ -60,28 +80,50 @@ public class UI_Game : MonoBehaviour
             LivesCounterText = null
         };        
         
+        
         _waveProgressBar = new WaveProgressBar
         {
             WaveSlider = waveProgressBarObj.GetComponentInChildren<Slider>(),
             WaveProgressText = waveProgressBarObj.GetComponentInChildren<TextMeshProUGUI>()
+        };
+        
+        for(int i = 0; i < matchPreparationUIScreen.transform.childCount; i++)
+        {
+            Debug.LogWarning(matchPreparationUIScreen.transform.GetChild(i).gameObject.name);
+        }
+        
+        _matchPreparationUI = new MatchPreparationUI
+        {
+            StartGameButton = matchPreparationUIScreen.transform.GetChild(0).GetComponent<Button>(),
+            AwaitingHostText = matchPreparationUIScreen.transform.GetChild(1).GetComponent<TextMeshProUGUI>()
         };
     }
 
     private void Start()
     {
         _bGameIsRunning = true;
+        
+        if(PhotonNetwork.IsMasterClient)
+        {
+            _matchPreparationUI.StartGameButton.gameObject.SetActive(true);
+            _matchPreparationUI.AwaitingHostText.gameObject.SetActive(false);
+        }
+        else
+        {
+            _matchPreparationUI.StartGameButton.gameObject.SetActive(false);
+            _matchPreparationUI.AwaitingHostText.gameObject.SetActive(true);
+        }
     }
 
     private void OnGameCountdownChanged(int countdown)
     {
+        gameCountdownText.enabled = countdown >= 0;
         gameCountdownText.text = countdown.ToString();
         
         if(countdown == 0)
         {
             gameCountdownText.text = "GO!";
         }
-        
-        gameCountdownText.enabled = countdown >= 0;
     }
 
     private void UpdateScore()
@@ -197,7 +239,7 @@ public class UI_Game : MonoBehaviour
     private void OnGameOver(int playerCharactersAlive)
     {
         gameCountdownText.enabled = false;
-        gameOverUI.SetActive(true);
+        gameOverUIScreen.SetActive(true);
     }
     
     public void ReturnToMainMenu()

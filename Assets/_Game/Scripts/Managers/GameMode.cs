@@ -115,8 +115,7 @@ namespace _Game.Scripts
             _photonView.RPC(nameof(RpcRegisterPlayer), RpcTarget.MasterClient,
                 PhotonNetwork.LocalPlayer.ActorNumber);
             
-            
-            StartCoroutine(StartGameCountdown());
+            //StartCoroutine(StartGameCountdown());
         }
 
         public override void OnLeftRoom()
@@ -293,10 +292,8 @@ namespace _Game.Scripts
             if(!PhotonNetwork.IsMasterClient) return;
             
             // If countdown is running and the master client leaves, the new master client should start the countdown again
-            if (_bGameCountdownRunning )
-                StartCoroutine(StartGameCountdown());
-            
-            //SetPlayerCharactersAlive(_playerCharactersAlive - 1);
+            /*if (_bGameCountdownRunning )
+                StartCoroutine(StartGameCountdown());*/
         }
 
         private IEnumerator StartGameCountdown()
@@ -401,7 +398,7 @@ namespace _Game.Scripts
             CancelInvoke(nameof(SpawnPickup));
             photonView.RPC(nameof(RpcReplicateUnsubscribeFromMosquitosHordeEvents), RpcTarget.All);
             
-            StartCoroutine(StartGameCountdown());
+            //StartCoroutine(StartGameCountdown());
         }
         
         [PunRPC]
