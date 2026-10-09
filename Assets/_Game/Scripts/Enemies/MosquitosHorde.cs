@@ -82,6 +82,8 @@ public class MosquitosHorde : MonoBehaviourPunCallbacks
     
     private Vector3 _direction = Vector3.right;    
     private Mosquito[] _mosquitos;
+    private Mosquito[] _last10Mosquitos;
+    private Mosquito _lastMosquito;
     private PhotonView _photonView;
     private bool _bRequestedRowAdvance = false;
     private bool _bAlreadySpawnedHordePositions = false;
@@ -308,13 +310,38 @@ public class MosquitosHorde : MonoBehaviourPunCallbacks
     {
         if(!PhotonNetwork.IsMasterClient) return;
         
-        if(_mosquitos.All(mosquito => mosquito == null || mosquito.Type != MosquitoType.Infected)) return;
+        Mosquito mosquitoToAttack = null;
+        
+        if (_lastMosquito == null || !_lastMosquito.gameObject.activeInHierarchy)
+        {
+            // Check if we are in the last 10 mosquitos
+            bool areWeInTheLast10Mosquitos =
+                AmountAlive <= 10 && _last10Mosquitos != null && _last10Mosquitos.Length > 0;
 
-        var infectedMosquitos = _mosquitos.Where(mosquito => mosquito.Type == MosquitoType.Infected && mosquito.gameObject.activeInHierarchy).ToArray();
-        
-        if(infectedMosquitos.Length == 0) return;
-        
-        var mosquitoToAttack = infectedMosquitos[UnityEngine.Random.Range(0, infectedMosquitos.Length - 1)];
+            if (areWeInTheLast10Mosquitos)
+            {
+                var infectedMosquitos = _last10Mosquitos.Where(mosquito => mosquito != null &&
+                    mosquito.Type == MosquitoType.Infected && mosquito.gameObject.activeInHierarchy).ToArray();
+
+                if (infectedMosquitos.Length == 0) return;
+
+                mosquitoToAttack = infectedMosquitos[UnityEngine.Random.Range(0, infectedMosquitos.Length - 1)];
+            }
+            else
+            {
+                var infectedMosquitos = _mosquitos.Where(mosquito => mosquito != null &&
+                    mosquito.Type == MosquitoType.Infected && mosquito.gameObject.activeInHierarchy).ToArray();
+
+                if (infectedMosquitos.Length == 0) return;
+
+                mosquitoToAttack = infectedMosquitos[UnityEngine.Random.Range(0, infectedMosquitos.Length - 1)];
+            }
+        }
+        else
+        {
+            mosquitoToAttack = _lastMosquito;
+        }
+
         _shotCounter++;
         
         _photonView.RPC(nameof(MissileAttack), RpcTarget.All, mosquitoToAttack.mosquitoIndex, _shotCounter);
@@ -325,13 +352,11 @@ public class MosquitosHorde : MonoBehaviourPunCallbacks
     {
         if(stopMovement) return;
         
-        // Find all alive mosquitos
+        // Get the selected mosquito from the array using the index
         var selectedMosquito = _mosquitos[mosquitosIndex];
-        if (selectedMosquito != null && selectedMosquito.gameObject.activeInHierarchy)
-        {
-            var missile = Instantiate(missilePrefab, selectedMosquito.transform.position, Quaternion.identity);
-            missile.Init(MosquitosInstigatorId, shotId);
-        }
+        
+        var missile = Instantiate(missilePrefab, selectedMosquito.transform.position, Quaternion.identity);
+        missile.Init(MosquitosInstigatorId, shotId);
     }
     
     private void MosquitoKilled(int mosquitoIndex, int instigatorPlayerId)
@@ -363,6 +388,11 @@ public class MosquitosHorde : MonoBehaviourPunCallbacks
             if (PhotonNetwork.IsMasterClient)
                 PhotonNetwork.Destroy(gameObject);
         }
+        
+        if(AmountAlive == 1)
+        {
+            _lastMosquito = _mosquitos.FirstOrDefault(mosquito => mosquito != null && mosquito.gameObject.activeInHierarchy);
+        }
 
         GameManager.Instance.AudioManager.PlaySfx(killedSfx);
         UpdateMosquitosMovement();
@@ -375,53 +405,65 @@ public class MosquitosHorde : MonoBehaviourPunCallbacks
             CancelInvoke(nameof(RequestMissileAttack));
             InvokeRepeating(nameof(RequestMissileAttack), missileAttackRate / 2, missileAttackRate / 2);
         }
+        
+        if(_last10Mosquitos == null && AmountAlive <= 10)
+        {
+            _last10Mosquitos = _mosquitos.Where(mosquito => mosquito != null && mosquito.gameObject.activeInHierarchy).ToArray();
+        }
+        
+        if(_last10Mosquitos == null || _last10Mosquitos.Length == 0) return;
 
         switch (AmountAlive)
         {
             case 10:
-                foreach (var mosquito in _mosquitos)
+                for (var i = 0; i < _last10Mosquitos.Length; i++)
                 {
-                    if (mosquito != null && mosquito.gameObject.activeInHierarchy)
+                    if (_last10Mosquitos[i] != null && _last10Mosquitos[i].gameObject.activeInHierarchy)
                     {
-                        mosquito.MosquitoMovement.SwitchMovementSettings(last10);
+                        _last10Mosquitos[i].MosquitoMovement.SwitchMovementSettings(last10);
                     }
                 }
+
                 break;
             case 7:
-                foreach (var mosquito in _mosquitos)
+                for (var i = 0; i < _last10Mosquitos.Length; i++)
                 {
-                    if (mosquito != null && mosquito.gameObject.activeInHierarchy)
+                    if (_last10Mosquitos[i] != null && _last10Mosquitos[i].gameObject.activeInHierarchy)
                     {
-                        mosquito.MosquitoMovement.SwitchMovementSettings(last7);
+                        _last10Mosquitos[i].MosquitoMovement.SwitchMovementSettings(last7);
                     }
                 }
+
                 break;
             case 5:
-                foreach (var mosquito in _mosquitos)
+                for (var i = 0; i < _last10Mosquitos.Length; i++)
                 {
-                    if (mosquito != null && mosquito.gameObject.activeInHierarchy)
+                    if (_last10Mosquitos[i] != null && _last10Mosquitos[i].gameObject.activeInHierarchy)
                     {
-                        mosquito.MosquitoMovement.SwitchMovementSettings(last5);
+                        _last10Mosquitos[i].MosquitoMovement.SwitchMovementSettings(last5);
                     }
                 }
+
                 break;
             case 3:
-                foreach (var mosquito in _mosquitos)
+                for (var i = 0; i < _last10Mosquitos.Length; i++)
                 {
-                    if (mosquito != null && mosquito.gameObject.activeInHierarchy)
+                    if (_last10Mosquitos[i] != null && _last10Mosquitos[i].gameObject.activeInHierarchy)
                     {
-                        mosquito.MosquitoMovement.SwitchMovementSettings(last3);
+                        _last10Mosquitos[i].MosquitoMovement.SwitchMovementSettings(last3);
                     }
                 }
+
                 break;
             case 1:
-                foreach (var mosquito in _mosquitos)
+                for (var i = 0; i < _last10Mosquitos.Length; i++)
                 {
-                    if (mosquito != null && mosquito.gameObject.activeInHierarchy)
+                    if (_last10Mosquitos[i] != null && _last10Mosquitos[i].gameObject.activeInHierarchy)
                     {
-                        mosquito.MosquitoMovement.SwitchMovementSettings(last);
+                        _last10Mosquitos[i].MosquitoMovement.SwitchMovementSettings(last);
                     }
                 }
+
                 break;
         }
     }
