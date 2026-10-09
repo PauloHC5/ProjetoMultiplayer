@@ -344,6 +344,20 @@ public class UI_Game : MonoBehaviour
         _waveProgressBar.WaveSlider.value = wholeProgress;
         _waveProgressBar.WaveProgressText.text = $"{wholeProgress}%";
     }
+    
+    private void OnRoomReady()
+    {
+        if (PhotonNetwork.IsMasterClient)
+        {
+            _matchPreparationUI.StartGameButton.gameObject.SetActive(true);
+            _matchPreparationUI.AwaitingHostText.gameObject.SetActive(false);
+        }
+        else
+        {
+            _matchPreparationUI.StartGameButton.gameObject.SetActive(false);
+            _matchPreparationUI.AwaitingHostText.gameObject.SetActive(true);
+        }
+    }
 
     private void OnEnable()
     {
@@ -356,6 +370,8 @@ public class UI_Game : MonoBehaviour
         GameMode.OnHordeProgressChanged += UpdateProgressBar;
         GameMode.OnMasterClientChanged += OnMasterClientChanged;
         GameMode.WaveCompletedEvent += OnWaveCompleted;
+        
+        GameMode.RoomReady += OnRoomReady;
     }
 
     private void OnDisable()
@@ -369,6 +385,7 @@ public class UI_Game : MonoBehaviour
         GameMode.OnHordeProgressChanged -= UpdateProgressBar;
         GameMode.OnMasterClientChanged -= OnMasterClientChanged;
         GameMode.WaveCompletedEvent -= OnWaveCompleted;
+        GameMode.RoomReady -= OnRoomReady;
     }
 
     private void OnApplicationQuit()
