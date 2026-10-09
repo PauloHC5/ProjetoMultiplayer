@@ -7,7 +7,7 @@ using UnityEngine.UI;
 namespace _Game.Scripts.Enemies
 {
     [Serializable]
-    public class MosquitoMovement
+    public class MosquitoZigZagMovement
     {
         [Header("ZigZag Movement Settings")]
         [SerializeField] private MosquitoZigZagMovementSettings zigZagMovementSettings;
@@ -15,7 +15,7 @@ namespace _Game.Scripts.Enemies
         public float interpolationDuration = 3.0f;
         
         [Header("Debug")]
-        [SerializeField] private bool debugMovement = false;
+        [SerializeField] private bool debugZigZagMovement = false;
         [SerializeField] private double debugTime = 0f;
         
         // Current per-instance zigzag values (we keep these separate from the ScriptableObject so
@@ -45,7 +45,7 @@ namespace _Game.Scripts.Enemies
         {
             float x = 0;
             float y = 0;
-            double t = debugMovement ? debugTime : time;
+            double t = debugZigZagMovement ? debugTime : time;
 
             if(bInterpolateMovement)
             {

@@ -420,7 +420,7 @@ public class MosquitosHorde : MonoBehaviourPunCallbacks
                 {
                     if (_last10Mosquitos[i] != null && _last10Mosquitos[i].gameObject.activeInHierarchy)
                     {
-                        _last10Mosquitos[i].MosquitoMovement.SwitchMovementSettings(last10);
+                        _last10Mosquitos[i].MosquitoZigZagMovement.SwitchMovementSettings(last10);
                     }
                 }
 
@@ -430,7 +430,7 @@ public class MosquitosHorde : MonoBehaviourPunCallbacks
                 {
                     if (_last10Mosquitos[i] != null && _last10Mosquitos[i].gameObject.activeInHierarchy)
                     {
-                        _last10Mosquitos[i].MosquitoMovement.SwitchMovementSettings(last7);
+                        _last10Mosquitos[i].MosquitoZigZagMovement.SwitchMovementSettings(last7);
                     }
                 }
 
@@ -440,7 +440,7 @@ public class MosquitosHorde : MonoBehaviourPunCallbacks
                 {
                     if (_last10Mosquitos[i] != null && _last10Mosquitos[i].gameObject.activeInHierarchy)
                     {
-                        _last10Mosquitos[i].MosquitoMovement.SwitchMovementSettings(last5);
+                        _last10Mosquitos[i].MosquitoZigZagMovement.SwitchMovementSettings(last5);
                     }
                 }
 
@@ -450,7 +450,7 @@ public class MosquitosHorde : MonoBehaviourPunCallbacks
                 {
                     if (_last10Mosquitos[i] != null && _last10Mosquitos[i].gameObject.activeInHierarchy)
                     {
-                        _last10Mosquitos[i].MosquitoMovement.SwitchMovementSettings(last3);
+                        _last10Mosquitos[i].MosquitoZigZagMovement.SwitchMovementSettings(last3);
                     }
                 }
 
@@ -460,7 +460,7 @@ public class MosquitosHorde : MonoBehaviourPunCallbacks
                 {
                     if (_last10Mosquitos[i] != null && _last10Mosquitos[i].gameObject.activeInHierarchy)
                     {
-                        _last10Mosquitos[i].MosquitoMovement.SwitchMovementSettings(last);
+                        _last10Mosquitos[i].MosquitoZigZagMovement.SwitchMovementSettings(last);
                     }
                 }
 

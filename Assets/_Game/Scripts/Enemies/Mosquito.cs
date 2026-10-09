@@ -23,8 +23,8 @@ public class Mosquito : MonoBehaviour
 
     public float positionInterpolationDuration = 0.5f;
     public float scaleUpDuration = 0.5f;
-    [SerializeField] private MosquitoMovement mosquitoMovement;
-    public MosquitoMovement MosquitoMovement => mosquitoMovement;
+    [SerializeField] private MosquitoZigZagMovement zigZagMovement;
+    public MosquitoZigZagMovement MosquitoZigZagMovement => zigZagMovement;
     
     [Header("Debug")]
     public bool debugMode;
@@ -40,7 +40,7 @@ public class Mosquito : MonoBehaviour
     private MosquitosHorde.HordePositionKey _currentHordePosition;
     public MosquitosHorde.HordePositionKey CurrentHordePosition => _currentHordePosition;
     
-    [HideInInspector] public int mosquitoIndex;
+    public int mosquitoIndex;
     
     private int _projectilesLayer;
     private int _defaultLayer;
@@ -62,14 +62,16 @@ public class Mosquito : MonoBehaviour
     {
         _anchorPos = transform.localPosition;
         _phaseOffset = (mosquitoIndex * 137.5f) % (Mathf.PI * 2f);
-        mosquitoMovement.OnStart(_phaseOffset, this);
+        zigZagMovement.OnStart(_phaseOffset, this);
 
         StartCoroutine(ScaleFrom0T1Interpolation());
     }
 
     private void Update()
     {
-        double now = PhotonNetwork.Time;
+        double now = PhotonNetwork.IsConnected || PhotonNetwork.OfflineMode ? PhotonNetwork.Time : Time.timeAsDouble;
+
+        Debug.Log("Now: " + now);
         
         if (_isMoving)
         {
@@ -78,7 +80,7 @@ public class Mosquito : MonoBehaviour
             if (t >= 1f) _isMoving = false;
         }
         
-        transform.localPosition = mosquitoMovement.Movement(PhotonNetwork.Time, _anchorPos);
+        transform.localPosition = zigZagMovement.Movement(now, _anchorPos);
     }
 
     private void OnTriggerEnter2D(Collider2D other)
@@ -144,9 +146,11 @@ public class Mosquito : MonoBehaviour
     {
         if(!debugMode) return;
         
-        mosquitoMovement.OnValidate();
+        zigZagMovement.OnValidate();
         
-        GoToNewPosition(debugGoToPosition, PhotonNetwork.Time + 0.1f);
+        double now = PhotonNetwork.IsConnected || PhotonNetwork.OfflineMode ? PhotonNetwork.Time : Time.timeAsDouble;
+        
+        GoToNewPosition(debugGoToPosition, now + 0.1f);
     }
 #endif
 }
