@@ -1,7 +1,7 @@
 using UnityEngine;
 
 [CreateAssetMenu(fileName = "MosquitoZigZagMovement", menuName = "Scriptable Objects/MosquitoZigZagMovement")]
-public class MosquitoMovementSettings : ScriptableObject
+public class MosquitoZigZagMovementSettings : ScriptableObject
 {
     [Header("Horizontal Movement")]
     [Range(0f, 50f)]

@@ -177,8 +177,9 @@ MonoBehaviour:
   points: 10
   type: 0
   positionInterpolationDuration: 1.5
+  scaleUpDuration: 0.5
   mosquitoMovement:
-    movementSettings: {fileID: 11400000, guid: 3f0cd42cac7e6634dbfaedbdb254bb31, type: 2}
+    zigZagMovementSettings: {fileID: 11400000, guid: 3f0cd42cac7e6634dbfaedbdb254bb31, type: 2}
     bInterpolateMovement: 1
     interpolationDuration: 0.7
     debugMovement: 0

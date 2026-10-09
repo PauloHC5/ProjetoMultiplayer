@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using UnityEngine;
+using UnityEngine.Serialization;
 using UnityEngine.UI;
 
 namespace _Game.Scripts.Enemies
@@ -8,8 +9,8 @@ namespace _Game.Scripts.Enemies
     [Serializable]
     public class MosquitoMovement
     {
-        [Header("Movement Settings")]
-        [SerializeField] private MosquitoMovementSettings movementSettings;
+        [Header("ZigZag Movement Settings")]
+        [SerializeField] private MosquitoZigZagMovementSettings zigZagMovementSettings;
         public bool bInterpolateMovement = true;
         public float interpolationDuration = 3.0f;
         
@@ -27,17 +28,17 @@ namespace _Game.Scripts.Enemies
         private float _phaseOffset;
         private Mosquito _mosquitoOwner;
         private Coroutine _interpolationCoroutine;
-        private MosquitoMovementSettings _targetSettings;
+        private MosquitoZigZagMovementSettings _targetSettings;
         
         public void OnStart(float phaseOffset, Mosquito mosquitoOwner)
         {
             _phaseOffset = phaseOffset;
             _mosquitoOwner = mosquitoOwner;
 
-            _currentHorizontalFrequency = movementSettings.HorizontalZigzagFrequency;
-            _currentHorizontalAmplitude = movementSettings.HorizontalZigzagAmplitude;
-            _currentVerticalFrequency = movementSettings.VerticalZigzagFrequency;
-            _currentVerticalAmplitude = movementSettings.VerticalZigzagAmplitude;
+            _currentHorizontalFrequency = zigZagMovementSettings.HorizontalZigzagFrequency;
+            _currentHorizontalAmplitude = zigZagMovementSettings.HorizontalZigzagAmplitude;
+            _currentVerticalFrequency = zigZagMovementSettings.VerticalZigzagFrequency;
+            _currentVerticalAmplitude = zigZagMovementSettings.VerticalZigzagAmplitude;
         }
 
         public Vector2 Movement(double time, Vector2 currentPosition)
@@ -53,14 +54,14 @@ namespace _Game.Scripts.Enemies
             }
             else
             {
-                x = (float)(Math.Sin(t * movementSettings.HorizontalZigzagFrequency + _phaseOffset)) * movementSettings.HorizontalZigzagAmplitude;
-                y = (float)(Math.Cos(t * movementSettings.VerticalZigzagFrequency + _phaseOffset)) * movementSettings.VerticalZigzagAmplitude;
+                x = (float)(Math.Sin(t * zigZagMovementSettings.HorizontalZigzagFrequency + _phaseOffset)) * zigZagMovementSettings.HorizontalZigzagAmplitude;
+                y = (float)(Math.Cos(t * zigZagMovementSettings.VerticalZigzagFrequency + _phaseOffset)) * zigZagMovementSettings.VerticalZigzagAmplitude;
             }
 
             return new Vector2(x, y) + currentPosition;
         }
         
-        public void SwitchMovementSettings(MosquitoMovementSettings newSettings)
+        public void SwitchMovementSettings(MosquitoZigZagMovementSettings newSettings)
         {
             _targetSettings = newSettings;
             
@@ -74,11 +75,11 @@ namespace _Game.Scripts.Enemies
             }
             else
             {
-                movementSettings = newSettings;
+                zigZagMovementSettings = newSettings;
             }
         }
         
-        private IEnumerator InterpolateToNewZigZagSettings(MosquitoMovementSettings newSettings)
+        private IEnumerator InterpolateToNewZigZagSettings(MosquitoZigZagMovementSettings newSettings)
         {
             // Start from the current per-instance values and interpolate towards the target settings
             float initialHorizontalAmplitude = _currentHorizontalAmplitude;
@@ -126,7 +127,7 @@ namespace _Game.Scripts.Enemies
             _currentHorizontalAmplitude = targetHorizontalAmplitude;
             _currentVerticalAmplitude = targetVerticalAmplitude;
             
-            movementSettings = newSettings; // Update the ScriptableObject reference to the new settings
+            zigZagMovementSettings = newSettings; // Update the ScriptableObject reference to the new settings
             
             _interpolationCoroutine = null; // Clear the coroutine reference
         }
@@ -134,12 +135,12 @@ namespace _Game.Scripts.Enemies
         public void OnValidate()
         {
             // Só faz sentido em Play Mode, depois do OnStart
-            if (!Application.isPlaying || _mosquitoOwner == null || movementSettings == null) return;
+            if (!Application.isPlaying || _mosquitoOwner == null || zigZagMovementSettings == null) return;
 
             // O Inspector trocou o asset: dispara a interpolação para o novo
-            if (movementSettings != _targetSettings)
+            if (zigZagMovementSettings != _targetSettings)
             {
-                SwitchMovementSettings(movementSettings);
+                SwitchMovementSettings(zigZagMovementSettings);
             }
         }
     }

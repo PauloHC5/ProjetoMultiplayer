@@ -62,15 +62,15 @@ public class MosquitosHorde : MonoBehaviourPunCallbacks
     [Header("ZigZag Movement Settings")]
     [Space]
     [Header("Movement Settings for the last 10 mosquitos")]
-    public MosquitoMovementSettings last10;
+    public MosquitoZigZagMovementSettings last10;
     [Header("Movement Settings for the last 7 mosquitos")]
-    public MosquitoMovementSettings last7;
+    public MosquitoZigZagMovementSettings last7;
     [Header("Movement Settings for the last 5 mosquitos")]
-    public MosquitoMovementSettings last5;
+    public MosquitoZigZagMovementSettings last5;
     [Header("Movement Settings for the last 3 mosquitos")]
-    public MosquitoMovementSettings last3;
+    public MosquitoZigZagMovementSettings last3;
     [Header("Movement Settings for the last mosquito")]
-    public MosquitoMovementSettings last;
+    public MosquitoZigZagMovementSettings last;
     
     [Header("Prefabs")]
     public Mosquito[] prefabs = new Mosquito[3];
