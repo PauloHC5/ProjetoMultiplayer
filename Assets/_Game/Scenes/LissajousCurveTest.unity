@@ -220,7 +220,7 @@ TrailRenderer:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 964899305}
-  m_Enabled: 0
+  m_Enabled: 1
   m_CastShadows: 1
   m_ReceiveShadows: 1
   m_DynamicOccludee: 1
@@ -334,8 +334,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c5553055eb426ab40b24f358d028b29f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::LissajousCurve
+  settings: {fileID: 11400000, guid: 6bb0b0b78e9124a4aa8b0dc86653fbc3, type: 2}
   t: 0
-  settings: {fileID: 11400000, guid: b75a173c782f8d24e85a5a8d2614ee0f, type: 2}
   tr: {fileID: 964899308}
 --- !u!1 &2056153754
 GameObject:

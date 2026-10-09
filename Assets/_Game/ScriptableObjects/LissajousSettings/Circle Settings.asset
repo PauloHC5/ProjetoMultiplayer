@@ -22,7 +22,7 @@ MonoBehaviour:
   D_Random: 0
   delta: 1.57
   delta_Random: 0
-  t_multipler: 1
-  multiplier: 1
+  t_multipler: 2.47
+  multiplier: 3.54
   xOffset: 0
   yOffset: 0

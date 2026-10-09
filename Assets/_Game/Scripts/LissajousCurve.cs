@@ -13,23 +13,10 @@ using UnityEngine;
 
 public class LissajousCurve : MonoBehaviour
 {
-    /*[Range(0,20)] public float A = 4f;
-    public bool A_Random = false;
-    [Range(0,20)] public float B = 4f;
-    public bool B_Random = false;
-    [Range(0,20)] public float C = 5f;
-    public bool C_Random = false;
-    [Range(0,20)] public float D = 4f;
-    public bool D_Random = false;
-    [Range(0,20)] public float delta = 2.3f;
-    public bool delta_Random = false;
-    [Range(1,5)] public float t_multipler = 2f;
-    [Range(0,20)] public float multiplier = 1f;
-    [Range(-20,20)] public float xOffset = 0f;    
-    [Range(-20,20)] public float yOffset = 0f;*/
-    public float t = 0f;
-
+    [Header("Lissajous Curve Settings")]
     public LissajousSettings settings;
+    
+    public float t = 0f;
 
     public TrailRenderer tr;
 
@@ -80,5 +67,19 @@ public class LissajousCurve : MonoBehaviour
             tr.startWidth = 0.02f;
             tr.endWidth = 0.02f;
         }
+    }
+
+    private void OnValidate()
+    {
+        tr.Clear();
+
+        tr.enabled = false;
+
+        Invoke(nameof(EnableTrailRenderer), 0.1f);
+    }
+
+    private void EnableTrailRenderer()
+    {
+        tr.enabled = true;
     }
 }
