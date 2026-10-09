@@ -13,7 +13,7 @@ using UnityEngine;
 
 public class LissajousCurve : MonoBehaviour
 {
-    [Range(0,20)] public float A = 4f;
+    /*[Range(0,20)] public float A = 4f;
     public bool A_Random = false;
     [Range(0,20)] public float B = 4f;
     public bool B_Random = false;
@@ -23,11 +23,13 @@ public class LissajousCurve : MonoBehaviour
     public bool D_Random = false;
     [Range(0,20)] public float delta = 2.3f;
     public bool delta_Random = false;
-    public float t = 0f;
     [Range(1,5)] public float t_multipler = 2f;
     [Range(0,20)] public float multiplier = 1f;
     [Range(-20,20)] public float xOffset = 0f;    
-    [Range(-20,20)] public float yOffset = 0f;
+    [Range(-20,20)] public float yOffset = 0f;*/
+    public float t = 0f;
+
+    public LissajousSettings settings;
 
     public TrailRenderer tr;
 
@@ -39,11 +41,11 @@ public class LissajousCurve : MonoBehaviour
         // it's best to set up the Trail Renderer component yourself from the inspector.
         CheckTrailRenderer();
 
-        A = A_Random ? Random.Range(0f, 5f) : A;
-        B = B_Random ? Random.Range(0f, 5f) : B;
-        C = C_Random ? Random.Range(0f, 10f) : C;
-        D = D_Random ? Random.Range(0f, 10f) : D;
-        delta = delta_Random ? Random.Range(0f, 5f) : delta;
+        settings.A = settings.A_Random ? Random.Range(0f, 5f) : settings.A;
+        settings.B = settings.B_Random ? Random.Range(0f, 5f) : settings.B;
+        settings.C = settings.C_Random ? Random.Range(0f, 10f) : settings.C;
+        settings.D = settings.D_Random ? Random.Range(0f, 10f) : settings.D;
+        settings.delta = settings.delta_Random ? Random.Range(0f, 5f) : settings.delta;
         
         Calculate();
         if(tr.enabled == false) tr.enabled = true;
@@ -57,14 +59,14 @@ public class LissajousCurve : MonoBehaviour
 
     void Calculate()
     {
-        t = Time.time * t_multipler;
+        t = Time.time * settings.t_multipler;
         Vector3 finalPos = transform.position;
 
-        finalPos.x = (A * Mathf.Sin((C * t) + delta)) * multiplier;
-        finalPos.y = (B * Mathf.Sin(D * t)) * multiplier;
+        finalPos.x = (settings.A * Mathf.Sin((settings.C * t) + settings.delta)) * settings.multiplier;
+        finalPos.y = (settings.B * Mathf.Sin(settings.D * t)) * settings.multiplier;
 
-        finalPos.x += xOffset;
-        finalPos.y += yOffset;
+        finalPos.x += settings.xOffset;
+        finalPos.y += settings.yOffset;
         transform.position = finalPos;
     }
 

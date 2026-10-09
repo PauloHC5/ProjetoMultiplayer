@@ -261,7 +261,7 @@ TrailRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_MaskInteraction: 0
-  m_Time: 1000
+  m_Time: 5
   m_PreviewTimeScale: 1
   m_Parameters:
     serializedVersion: 3
@@ -334,21 +334,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c5553055eb426ab40b24f358d028b29f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::LissajousCurve
-  A: 4
-  A_Random: 0
-  B: 4
-  B_Random: 0
-  C: 5
-  C_Random: 0
-  D: 4
-  D_Random: 0
-  delta: 2.3
-  delta_Random: 0
   t: 0
-  t_multipler: 2
-  multiplier: 1
-  xOffset: 0
-  yOffset: 0
+  settings: {fileID: 11400000, guid: b75a173c782f8d24e85a5a8d2614ee0f, type: 2}
   tr: {fileID: 964899308}
 --- !u!1 &2056153754
 GameObject:
