@@ -75,7 +75,6 @@ namespace _Game.Scripts
             new Dictionary<PlayerType, PlayerCharacter>();
 
         private readonly Vector3 _playerSpawnPosition = new Vector3(0, -18.2f, 0);
-        private bool _bGameCountdownRunning = false;
         private Pickup.PickupType _lastPickupTypeSpawned = Pickup.PickupType.Default;
 
         public static readonly string PlayerTypeKey = "AvailablePlayerTypes";
@@ -331,7 +330,6 @@ namespace _Game.Scripts
         private void RpcReplicateGameCooldown(int countdown)
         {
             _gameCountdown = countdown;
-            _bGameCountdownRunning = true;
 
             if (_gameCountdown > -1)
             {
@@ -346,8 +344,7 @@ namespace _Game.Scripts
 
             if (bDebugMode)
                 Debug.Log("GameMode.StartGameContdown: Game Started");
-
-            _bGameCountdownRunning = false;
+            
             _currentGameState = GameState.InProgress;
 
             WaveStartedEvent?.Invoke(_currentWave);
