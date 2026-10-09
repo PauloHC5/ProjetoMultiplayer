@@ -6,6 +6,7 @@ using _Game.Scripts;
 using Photon.Pun;
 using Photon.Realtime;
 using UnityEngine;
+using UnityEngine.Serialization;
 
 public class MosquitosHorde : MonoBehaviourPunCallbacks
 {
@@ -43,25 +44,37 @@ public class MosquitosHorde : MonoBehaviourPunCallbacks
         }
     }
     
-    [Header("Settings")]
-    public Mosquito[] prefabs = new Mosquito[3];
+    [Header("Horde Settings")]
     [SerializeField] public int rows = 5;
     [SerializeField] int columns = 11;
-    public float hordeVerticalInterpolationDuration = 0.5f;
-    [SerializeField] private AnimationCurve speed;
     [SerializeField] private float missileAttackRate = 1.0f;
-    public Projectile missilePrefab;
-    public AudioCue killedSfx;
-    [SerializeField] private LayerMask laserLayerMask;
-    public bool stopMovement = false;
     public Vector2 mosquitoStartPosition = new Vector2(0.0f, 15.0f);
+    [SerializeField] private LayerMask laserLayerMask;
     
-    [Header("ZigZag Movement Settings when the horde is at 10%, 7%, 5%, 3% and 1% of mosquitos alive")]
+    [Header("Movement Settings")]
+    [FormerlySerializedAs("speed")] [SerializeField] private AnimationCurve hordeSpeedCurve;
+    public bool stopMovement = false;
+    public float hordeVerticalInterpolationDuration = 0.5f;
+    
+    [Header("Audio")]
+    public AudioCue killedSfx;
+    
+    [Header("ZigZag Movement Settings")]
+    [Space]
+    [Header("Movement Settings for the last 10 mosquitos")]
     public MosquitoMovementSettings last10;
+    [Header("Movement Settings for the last 7 mosquitos")]
     public MosquitoMovementSettings last7;
+    [Header("Movement Settings for the last 5 mosquitos")]
     public MosquitoMovementSettings last5;
+    [Header("Movement Settings for the last 3 mosquitos")]
     public MosquitoMovementSettings last3;
+    [Header("Movement Settings for the last mosquito")]
     public MosquitoMovementSettings last;
+    
+    [Header("Prefabs")]
+    public Mosquito[] prefabs = new Mosquito[3];
+    public Projectile missilePrefab;
     
     [Header("Debug")]
     public bool bDrawDebugGizmos = false;
@@ -245,7 +258,7 @@ public class MosquitosHorde : MonoBehaviourPunCallbacks
         if (!PhotonNetwork.IsMasterClient) return;
         if (stopMovement) return;
 
-        transform.position += _direction * (speed.Evaluate(PercentKilled) * Time.fixedDeltaTime);
+        transform.position += _direction * (hordeSpeedCurve.Evaluate(PercentKilled) * Time.fixedDeltaTime);
     }
 
     public override void OnPlayerEnteredRoom(Player newPlayer)
