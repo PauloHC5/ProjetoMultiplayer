@@ -92,7 +92,6 @@ namespace _Game.Scripts
         public static Action<int> WaveCompletedEvent;
         public static Action<GameOverReason> GameOverEvent;
         public static Action<Player, PlayerCharacter> OnPlayerCharacterSpawned;
-        public static Action<Player> OnPlayerLeft;
         public static Action RoomReady;
         public static Action<float> OnHordeProgressChanged;
         public static Action<bool> OnMasterClientChanged;
@@ -133,13 +132,6 @@ namespace _Game.Scripts
             SpawnPlayerController();
             _photonView.RPC(nameof(RpcRegisterPlayer), RpcTarget.MasterClient,
                 PhotonNetwork.LocalPlayer.ActorNumber);
-
-            bool isLocalPlayerMasterClient =
-                PhotonNetwork.LocalPlayer.ActorNumber == PhotonNetwork.MasterClient.ActorNumber;
-
-            OnMasterClientChanged?.Invoke(isLocalPlayerMasterClient);
-
-            //StartCoroutine(StartGameCountdown());
         }
 
         public override void OnLeftRoom()
@@ -150,6 +142,7 @@ namespace _Game.Scripts
                 PhotonNetwork.LocalPlayer.CustomProperties.Remove(PlayerTypeKey);
             }
 
+            // Remove Player Score custom property when leaving the room
             if (PhotonNetwork.LocalPlayer.CustomProperties.ContainsKey(PlayerScoreKey))
             {
                 PhotonNetwork.LocalPlayer.CustomProperties.Remove(PlayerScoreKey);
@@ -235,8 +228,6 @@ namespace _Game.Scripts
             }
             else
             {
-                Debug.LogWarning("GameMode.GetPlayerType: Player " + player.NickName +
-                                 " does not have a PlayerType custom property.");
                 return PlayerType.Player1;
             }
         }
@@ -303,13 +294,6 @@ namespace _Game.Scripts
 
             photonView.RPC(nameof(RpcReplicateWaveStatus), newPlayer, _currentWave, _hordesSpawnedInCurrentWave);
 
-            /*photonView.RPC(nameof(RpcReplicateGameCooldown), newPlayer, _gameCountdown);
-
-            if (_mosquitosHordeInTheScene)
-            {
-                photonView.RPC(nameof(RpcSubscribeToMosquitosHordeEvents), newPlayer);
-            }*/
-
             photonView.RPC(nameof(RpcReplicatePlayerCharactersAlive), newPlayer, _playerCharactersAlive);
         }
 
@@ -318,17 +302,6 @@ namespace _Game.Scripts
         {
             _currentWave = waveNumber;
             _hordesSpawnedInCurrentWave = hordesSpawned;
-        }
-
-        public override void OnPlayerLeftRoom(Player otherPlayer)
-        {
-            OnPlayerLeft?.Invoke(otherPlayer);
-
-            if (!PhotonNetwork.IsMasterClient) return;
-
-            // If countdown is running and the master client leaves, the new master client should start the countdown again
-            /*if (_bGameCountdownRunning )
-                StartCoroutine(StartGameCountdown());*/
         }
 
         public void StartWave()
