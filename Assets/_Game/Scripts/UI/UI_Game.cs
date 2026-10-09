@@ -86,37 +86,47 @@ public class UI_Game : MonoBehaviour
             WaveSlider = waveProgressBarObj.GetComponentInChildren<Slider>(),
             WaveProgressText = waveProgressBarObj.GetComponentInChildren<TextMeshProUGUI>()
         };
-        
-        for(int i = 0; i < matchPreparationUIScreen.transform.childCount; i++)
-        {
-            Debug.LogWarning(matchPreparationUIScreen.transform.GetChild(i).gameObject.name);
-        }
-        
+
         _matchPreparationUI = new MatchPreparationUI
         {
             StartGameButton = matchPreparationUIScreen.transform.GetChild(0).GetComponent<Button>(),
             AwaitingHostText = matchPreparationUIScreen.transform.GetChild(1).GetComponent<TextMeshProUGUI>()
         };
+
+        _matchPreparationUI.StartGameButton.onClick.AddListener(StartWave);
     }
 
     private void Start()
     {
-        _bGameIsRunning = true;
-        
-        if(PhotonNetwork.IsMasterClient)
+        _bGameIsRunning = true;                
+    }
+
+    private void OnMasterClientChanged(bool isMasterClient)
+    {
+        if (isMasterClient)
         {
             _matchPreparationUI.StartGameButton.gameObject.SetActive(true);
             _matchPreparationUI.AwaitingHostText.gameObject.SetActive(false);
+            Debug.Log("You are the host. You can start the game.");
         }
         else
         {
             _matchPreparationUI.StartGameButton.gameObject.SetActive(false);
             _matchPreparationUI.AwaitingHostText.gameObject.SetActive(true);
+            Debug.Log("You are not the host. Waiting for the host to start the game.");
         }
+    }
+
+    private void StartWave()
+    {
+        //GameMode.Start
+        GameMode.Instance.StartWave();
     }
 
     private void OnGameCountdownChanged(int countdown)
     {
+        matchPreparationUIScreen.SetActive(false);
+
         gameCountdownText.enabled = countdown >= 0;
         gameCountdownText.text = countdown.ToString();
         
@@ -124,6 +134,21 @@ public class UI_Game : MonoBehaviour
         {
             gameCountdownText.text = "GO!";
         }
+    }
+
+    private void OnWaveCompleted(int waveNumber)
+    {
+        gameCountdownText.enabled = true;
+        gameCountdownText.text = $"Wave {waveNumber} Completed!";
+
+        StartCoroutine(HideWaveCompletedMessageAfterDelay(3f));
+    }
+
+    private IEnumerator HideWaveCompletedMessageAfterDelay(float delay)
+    {
+        yield return new WaitForSeconds(delay);
+        gameCountdownText.enabled = false;
+        matchPreparationUIScreen.SetActive(true);
     }
 
     private void UpdateScore()
@@ -247,8 +272,8 @@ public class UI_Game : MonoBehaviour
         PhotonNetwork.LeaveRoom();                
     }
     
-    private void OnGameStarted(int waveNumber)
-    {
+    private void OnWaveStarted(int waveNumber)
+    {        
         gameCountdownText.enabled = false;
         
         waveCounterText.gameObject.SetActive(true);
@@ -295,9 +320,11 @@ public class UI_Game : MonoBehaviour
         GameMode.OnGameCooldownChanged += OnGameCountdownChanged;
         GameMode.OnScoreChanged += UpdateScore;
         GameMode.OnPlayerCharacterSpawned += OnPlayerCharacterSpawned;
-        GameMode.GameStartedEvent += OnGameStarted;
+        GameMode.WaveStartedEvent += OnWaveStarted;
         GameMode.GameOverEvent += OnGameOver;
         GameMode.OnHordeProgressChanged += UpdateProgressBar;
+        GameMode.OnMasterClientChanged += OnMasterClientChanged;
+        GameMode.WaveCompletedEvent += OnWaveCompleted;
     }
 
     private void OnDisable()
@@ -306,13 +333,23 @@ public class UI_Game : MonoBehaviour
         GameMode.OnGameCooldownChanged -= OnGameCountdownChanged;
         GameMode.OnLivesChanged -= OnLivesChanged;
         GameMode.OnPlayerCharacterSpawned -= OnPlayerCharacterSpawned;
-        GameMode.GameStartedEvent -= OnGameStarted;
+        GameMode.WaveStartedEvent -= OnWaveStarted;
         GameMode.GameOverEvent -= OnGameOver;
         GameMode.OnHordeProgressChanged -= UpdateProgressBar;
+        GameMode.OnMasterClientChanged -= OnMasterClientChanged;
+        GameMode.WaveCompletedEvent -= OnWaveCompleted;
     }
 
     private void OnApplicationQuit()
     {
         _bGameIsRunning = false;
+    }
+
+    private void OnDestroy()
+    {
+        if (_matchPreparationUI.StartGameButton != null)
+        {
+            _matchPreparationUI.StartGameButton.onClick.RemoveListener(StartWave);
+        }
     }
 }

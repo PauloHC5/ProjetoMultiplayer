@@ -27,7 +27,15 @@ namespace _Game.Scripts
             public int OneUpSpawnChance;
             public int ToolboxSpawnChance;
         }
-        
+
+        public enum GameState
+        {
+            WaitingForPlayers,
+            Countdown,
+            InProgress,
+            GameOver
+        }
+
         [Header("Game Mode")]
         [SerializeField] private int startGameDelay = 3;
         [SerializeField] private int startingLives = 3;
@@ -49,7 +57,10 @@ namespace _Game.Scripts
         
         [Header("Debug")]
         public bool bDebugMode = false;
-        
+
+        private GameState _currentGameState;
+        public GameState CurrentGameState => _currentGameState;
+
         private PhotonView _photonView;
         private int _gameCountdown;
         private int _currentLives;
@@ -72,12 +83,14 @@ namespace _Game.Scripts
         public static Action<int> OnGameCooldownChanged;
         public static Action<int> OnLivesChanged;
         public static Action OnScoreChanged;
-        public static Action<int> GameStartedEvent;
+        public static Action<int> WaveStartedEvent;
+        public static Action<int> WaveCompletedEvent;
         public static Action<int> GameOverEvent;
         public static Action<Player, PlayerCharacter> OnPlayerCharacterSpawned;
         public static Action<Player> OnPlayerLeft;
         public static Action RoomReady;
         public static Action<float> OnHordeProgressChanged;
+        public static Action<bool> OnMasterClientChanged;
 
         protected override void Awake()
         {
@@ -97,10 +110,11 @@ namespace _Game.Scripts
         {
             if(bDebugMode)
                 Debug.Log("GameMode.Start");
-            
-            _currentLives = startingLives;            
-            
-            MosquitosLimit.OnMosquitosReachedLimit += OnMosquitosReachedLimit;
+
+            _currentLives = startingLives;
+            _currentGameState = GameState.WaitingForPlayers;
+
+            MosquitosLimit.OnMosquitosReachedLimit += OnMosquitosReachedLimit;        
 
             StartCoroutine(WaitForRoomBeReady());
         }
@@ -114,7 +128,11 @@ namespace _Game.Scripts
             SpawnPlayerController();
             _photonView.RPC(nameof(RpcRegisterPlayer), RpcTarget.MasterClient,
                 PhotonNetwork.LocalPlayer.ActorNumber);
-            
+
+            bool isLocalPlayerMasterClient = PhotonNetwork.LocalPlayer.ActorNumber == PhotonNetwork.MasterClient.ActorNumber;
+
+            OnMasterClientChanged?.Invoke(isLocalPlayerMasterClient);
+
             //StartCoroutine(StartGameCountdown());
         }
 
@@ -134,6 +152,12 @@ namespace _Game.Scripts
             GameManager.LoadMainMenu();
         }
 
+        public override void OnMasterClientSwitched(Player newMasterClient)
+        {
+            bool isLocalPlayerMasterClient = PhotonNetwork.LocalPlayer.ActorNumber == newMasterClient.ActorNumber;
+
+            OnMasterClientChanged?.Invoke(isLocalPlayerMasterClient);
+        }
 
         private void SpawnPlayerController()
         {
@@ -267,12 +291,12 @@ namespace _Game.Scripts
 
             photonView.RPC(nameof(RpcReplicateWaveStatus), newPlayer, _currentWave, _hordesSpawnedInCurrentWave);
             
-            photonView.RPC(nameof(RpcReplicateGameCooldown), newPlayer, _gameCountdown);
+            /*photonView.RPC(nameof(RpcReplicateGameCooldown), newPlayer, _gameCountdown);
 
             if (_mosquitosHordeInTheScene)
             {
                 photonView.RPC(nameof(RpcSubscribeToMosquitosHordeEvents), newPlayer);
-            }
+            }*/
             
             photonView.RPC(nameof(RpcReplicatePlayerCharactersAlive), newPlayer, _playerCharactersAlive);
             
@@ -296,11 +320,18 @@ namespace _Game.Scripts
                 StartCoroutine(StartGameCountdown());*/
         }
 
-        private IEnumerator StartGameCountdown()
-        {     
-            if(!PhotonNetwork.IsMasterClient) yield break;
-            
-            _gameCountdown = startGameDelay;
+        public void StartWave()
+        {
+            if (!PhotonNetwork.IsMasterClient || _currentGameState != GameState.WaitingForPlayers) return;
+
+            PhotonNetwork.CurrentRoom.IsOpen = false;
+
+            StartCoroutine(StartWaveCountdown());
+        }
+
+        private IEnumerator StartWaveCountdown()
+        {                             
+            _gameCountdown = startGameDelay + 1;
             
             OnGameCooldownChanged?.Invoke(_gameCountdown);
             while (_gameCountdown > -1)
@@ -311,23 +342,16 @@ namespace _Game.Scripts
 
             SpawnHorde();
         }
-        
-        private void SpawnHorde()
-        {
-            if(!PhotonNetwork.IsMasterClient) return;
-            
-            _mosquitosHordeInTheScene = PhotonNetwork.InstantiateRoomObject(mosquitosHordePrefab.name, mosquitosHordePrefab.transform.position, Quaternion.identity).GetComponent<MosquitosHorde>();
-            _photonView.RPC(nameof(RpcSubscribeToMosquitosHordeEvents), RpcTarget.All);
-        }
 
         [PunRPC]
         private void RpcReplicateGameCooldown(int countdown)
         {
             _gameCountdown = countdown;
             _bGameCountdownRunning = true;
-            
-            if(_gameCountdown > -1)
-            {                
+
+            if (_gameCountdown > -1)
+            {
+                _currentGameState = GameState.Countdown;
                 OnGameCooldownChanged?.Invoke(_gameCountdown);
 
                 if (bDebugMode)
@@ -338,12 +362,21 @@ namespace _Game.Scripts
 
             if (bDebugMode)
                 Debug.Log("GameMode.StartGameContdown: Game Started");
-            
+
             _bGameCountdownRunning = false;
-            
-            GameStartedEvent?.Invoke(_currentWave);     
-            
+            _currentGameState = GameState.InProgress;
+
+            WaveStartedEvent?.Invoke(_currentWave);
+
             InvokePickupSpawn();
+        }
+
+        private void SpawnHorde()
+        {
+            if(!PhotonNetwork.IsMasterClient) return;
+            
+            _mosquitosHordeInTheScene = PhotonNetwork.InstantiateRoomObject(mosquitosHordePrefab.name, mosquitosHordePrefab.transform.position, Quaternion.identity).GetComponent<MosquitosHorde>();
+            _photonView.RPC(nameof(RpcSubscribeToMosquitosHordeEvents), RpcTarget.All);
         }
         
         [PunRPC]
@@ -380,8 +413,7 @@ namespace _Game.Scripts
             
             if (_hordesSpawnedInCurrentWave >= hordesPerWave)
             {
-                _hordesSpawnedInCurrentWave = 0;
-                _currentWave++;
+                _hordesSpawnedInCurrentWave = 0;                
                 WaveCompleted();
             }
             else
@@ -394,7 +426,15 @@ namespace _Game.Scripts
         {
             if(bDebugMode)
                 Debug.Log("GameMode.WaveCompleted");
-            
+
+            WaveCompletedEvent?.Invoke(_currentWave);
+
+            _currentWave++;
+
+            PhotonNetwork.CurrentRoom.IsOpen = true;
+
+            _currentGameState = GameState.WaitingForPlayers;
+
             CancelInvoke(nameof(SpawnPickup));
             photonView.RPC(nameof(RpcReplicateUnsubscribeFromMosquitosHordeEvents), RpcTarget.All);
             
@@ -431,11 +471,12 @@ namespace _Game.Scripts
             _mosquitosHordeInTheScene.OnMosquitoKilled -= InvaderKilled;
             _mosquitosHordeInTheScene.AllMosquitosDestroyedEvent -= WaveCompleted;
             MosquitosLimit.OnMosquitosReachedLimit -= OnMosquitosReachedLimit;
-            
+
             OnPlayerCharacterSpawned = null;
-         
+
             _currentLives = 0;
-            
+            _currentGameState = GameState.GameOver;
+
             GameOver(0);
         }
         private void OnPlayerDestroyed(PlayerCharacter playerCharacterDestroyed)
@@ -472,6 +513,8 @@ namespace _Game.Scripts
             if(bDebugMode)
                 Debug.Log("GameMode.OnPlayerDestroyed: Local Game Over");
 
+            _currentGameState = GameState.GameOver;
+
             if (playerCharactersAlive <= 0)
             {
                 if(bDebugMode)
@@ -479,11 +522,11 @@ namespace _Game.Scripts
 
                 if (PhotonNetwork.CurrentRoom.IsOpen)
                     PhotonNetwork.CurrentRoom.IsOpen = false;
-                
+
                 StopAllCoroutines();
                 CancelInvoke(nameof(SpawnPickup));
             }
-                
+
             GameOverEvent?.Invoke(playerCharactersAlive);
         }
         
