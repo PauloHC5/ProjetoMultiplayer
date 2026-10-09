@@ -36,6 +36,8 @@ public class UI_Game : MonoBehaviour
     
     [Header("UI Elements")]
     public TextMeshProUGUI gameCountdownText;
+    public TextMeshProUGUI outOfLivesText;
+    public TextMeshProUGUI gameOverReasonText;
     
     [Header("UI Screens")]
     public GameObject gameOverUIScreen;
@@ -70,6 +72,7 @@ public class UI_Game : MonoBehaviour
         gameCountdownText.enabled = false;
         waveCounterText.gameObject.SetActive(false);
         waveProgressBarObj.SetActive(false);
+        outOfLivesText.gameObject.SetActive(false);
         
         _localPlayerStatus = new PlayerUIStatus
         {
@@ -78,8 +81,7 @@ public class UI_Game : MonoBehaviour
             PlayerNicknameText = null,
             ScoreCounterText = null,
             LivesCounterText = null
-        };        
-        
+        };       
         
         _waveProgressBar = new WaveProgressBar
         {
@@ -167,8 +169,11 @@ public class UI_Game : MonoBehaviour
         if(lives <= 0)
         {            
             _localPlayerStatus.LivesCounterText.text = "0";
+            outOfLivesText.gameObject.SetActive(true);
             return;
         }
+        
+        outOfLivesText.gameObject.SetActive(false);
         _localPlayerStatus.LivesCounterText.text = lives.ToString();
     }
     
@@ -261,9 +266,35 @@ public class UI_Game : MonoBehaviour
         StartCoroutine(PickupIconRoutine(pickupImage, duration));
     }
 
-    private void OnGameOver(int playerCharactersAlive)
+    private void OnGameOver(GameMode.GameOverReason reason)
     {
+        // Hide all other UI elements
         gameCountdownText.enabled = false;
+        outOfLivesText.gameObject.SetActive(false);
+        matchPreparationUIScreen.SetActive(false);
+        waveCounterText.gameObject.SetActive(false);
+        waveProgressBarObj.SetActive(false);
+        
+        // Unsubscribe from events to prevent further updates
+        GameMode.OnLivesChanged -= OnLivesChanged;
+        GameMode.OnGameCooldownChanged -= OnGameCountdownChanged;
+        GameMode.OnScoreChanged -= UpdateScore;
+        GameMode.OnPlayerCharacterSpawned -= OnPlayerCharacterSpawned;
+        GameMode.WaveStartedEvent -= OnWaveStarted;
+        GameMode.GameOverEvent -= OnGameOver;
+        GameMode.OnHordeProgressChanged -= UpdateProgressBar;
+        GameMode.OnMasterClientChanged -= OnMasterClientChanged;
+
+        switch (reason)
+        {
+            case GameMode.GameOverReason.AllPlayersDied:
+                gameOverReasonText.text = "All Players Died";
+                break;
+            case GameMode.GameOverReason.MosquitosReachedLimit:
+                gameOverReasonText.text = "Mosquitos Reached Limit";
+                break;
+        }
+        
         gameOverUIScreen.SetActive(true);
     }
     

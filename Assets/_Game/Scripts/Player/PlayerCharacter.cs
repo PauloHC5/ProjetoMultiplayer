@@ -388,15 +388,13 @@ public class PlayerCharacter : MonoBehaviourPun
         }
     }
     
-    private void OnGameOver(int playerCharactersAlive)
+    private void OnGameOver(GameMode.GameOverReason reason)
     {
         if(!photonView.IsMine) return;
         
         bBotMode = false;
         
         photonView.RPC(nameof(RpcDeath), RpcTarget.All);
-        
-        
     }
 
     private void OnEnable()

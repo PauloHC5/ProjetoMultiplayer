@@ -468,10 +468,8 @@ public class MosquitosHorde : MonoBehaviourPunCallbacks
         _bRequestedRowAdvance = false;
     }
     
-    private void OnGameOver(int playerCharactersAlive)
+    private void OnGameOver(GameMode.GameOverReason reason)
     {
-        if(playerCharactersAlive > 0) return;
-        
         _photonView.RPC(nameof(RpcReplicateGameOver), RpcTarget.All);
     }
     

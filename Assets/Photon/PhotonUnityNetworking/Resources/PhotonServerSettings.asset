@@ -75,6 +75,8 @@ MonoBehaviour:
   - RpcReplicateWaveStatus
   - RpcDeath
   - RpcReplicatePlayerCharactersAlive
+  - RpcReplicateMosquitosReachedLimit
+  - RpcGameOver
   DisableAutoOpenWizard: 1
   ShowSettings: 1
   DevRegionSetOnce: 0
