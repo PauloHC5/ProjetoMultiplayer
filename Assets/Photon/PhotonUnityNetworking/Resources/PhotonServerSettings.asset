@@ -78,6 +78,10 @@ MonoBehaviour:
   - RpcReplicateMosquitosReachedLimit
   - RpcGameOver
   - SpawnMosquito
+  - RpcHordeState
+  - SpawnMosquitoAtHorde
+  - SpawnHordePositions
+  - SetHordePositions
   DisableAutoOpenWizard: 1
   ShowSettings: 1
   DevRegionSetOnce: 0

@@ -39,10 +39,8 @@ public class Mosquito : MonoBehaviour
     private Vector3 _originalScale;
     private double _moveStartTime;
     private bool _isMoving;
-    private MosquitosHorde.HordePositionKey _currentHordePosition;
-    public MosquitosHorde.HordePositionKey CurrentHordePosition => _currentHordePosition;
     
-    public int mosquitoIndex;
+    public int mosquitoId;
     
     private int _projectilesLayer;
     private int _defaultLayer;
@@ -62,8 +60,8 @@ public class Mosquito : MonoBehaviour
 
     private void Start()
     {
-        _anchorPos = transform.position;
-        _phaseOffset = (mosquitoIndex * 137.5f) % (Mathf.PI * 2f);
+        _anchorPos = transform.localPosition;
+        _phaseOffset = (mosquitoId * 137.5f) % (Mathf.PI * 2f);
         zigZagMovement.OnStart(_phaseOffset, this);
         
         if(debugMode)
@@ -83,7 +81,7 @@ public class Mosquito : MonoBehaviour
             if (t >= 1f) _isMoving = false;
         }
 
-        transform.localPosition = zigZagMovement.Movement(now, _anchorPos);        
+        transform.localPosition = _anchorPos + zigZagMovement.Movement(now);
     }
 
     private void OnTriggerEnter2D(Collider2D other)
@@ -92,7 +90,7 @@ public class Mosquito : MonoBehaviour
         {
             var laser = other.GetComponent<Projectile>();
             
-            OnMosquitoKilled?.Invoke(mosquitoIndex, laser.InstigatorId);
+            OnMosquitoKilled?.Invoke(mosquitoId, laser.InstigatorId);
         }
         
         if(other.gameObject.layer == _defaultLayer)
@@ -102,25 +100,14 @@ public class Mosquito : MonoBehaviour
         
         if(other.gameObject.layer == _barrierLayer)
         {
-            OnMosquitoKilled?.Invoke(mosquitoIndex, -1);
+            OnMosquitoKilled?.Invoke(mosquitoId, -1);
             BarriersManager.Instance.DamageBarrier(other.gameObject);
         }
     }
     
-    public void ChangeMosquitoHordePosition(MosquitosHorde.HordePositionKey hordePositionKey, Vector2 newPos, double startTime, Vector2 newAnchorPos = default(Vector2))
+    public void GoToNewPosition(Vector2 newPos, double startTime, Vector2? startPos = null)
     {
-        if(newAnchorPos != default(Vector2))
-        {
-            _anchorPos = newAnchorPos;
-        }
-        
-        _currentHordePosition = hordePositionKey;
-        GoToNewPosition(newPos, startTime);
-    }    
-    
-    public void GoToNewPosition(Vector2 newPos, double startTime)
-    {
-        _moveStartPos = _anchorPos;
+        _moveStartPos = startPos ?? _anchorPos;
         _moveTargetPos = newPos;
         _moveStartTime = startTime;
         _isMoving = true;

@@ -228,6 +228,10 @@ PrefabInstance:
       propertyPath: roomName
       value: TestHorde
       objectReference: {fileID: 0}
+    - target: {fileID: 2099510694666122821, guid: a1e6f1149f2fd5d488a020f246ae572a, type: 3}
+      propertyPath: roomMaxPlayers
+      value: 2
+      objectReference: {fileID: 0}
     - target: {fileID: 7141550595203632916, guid: a1e6f1149f2fd5d488a020f246ae572a, type: 3}
       propertyPath: m_Name
       value: AutoHost
@@ -271,6 +275,7 @@ MonoBehaviour:
   moquitoPrefabs:
   - {fileID: 5750136513495760424, guid: c27f82190daed0543816a4df5edd6210, type: 3}
   - {fileID: 7325369050134065556, guid: 19fa160092d14e54592c80f08b436869, type: 3}
+  debugMode: 1
 --- !u!114 &663278521
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -361,7 +366,7 @@ Transform:
   m_GameObject: {fileID: 663278519}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 14.036973, y: -14.373225, z: 0}
+  m_LocalPosition: {x: 23.85, y: -17.35, z: 0}
   m_LocalScale: {x: 0.5, y: 0.5, z: 0.5}
   m_ConstrainProportionsScale: 1
   m_Children: []
@@ -632,7 +637,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6910397273489476099, guid: 2cdd92942844e9544828eece9b9cef8b, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 33.9
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 6910397273489476099, guid: 2cdd92942844e9544828eece9b9cef8b, type: 3}
       propertyPath: m_LocalPosition.z

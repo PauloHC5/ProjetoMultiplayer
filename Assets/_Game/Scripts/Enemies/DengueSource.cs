@@ -7,9 +7,14 @@ using UnityEngine;
 public class DengueSource : MonoBehaviour
 {
     public GameObject[] moquitoPrefabs;
+    
+    [Header("Debug")]
+    public bool debugMode;
 
     private PhotonView _photonView;
     private MosquitosHorde _mosquitosHorde;
+
+    private int test = 0;
 
     private void Awake()
     {
@@ -32,30 +37,9 @@ public class DengueSource : MonoBehaviour
     {
         if(!PhotonNetwork.IsMasterClient) return;
 
-        _photonView.RPC(nameof(SpawnMosquito), RpcTarget.All);        
-    }
+        if (debugMode)
+            Debug.Log($"Requesting spawn mosquito");
 
-
-    [PunRPC]
-    private void SpawnMosquito()
-    {
-        var mosquitoToSpawn = moquitoPrefabs[UnityEngine.Random.Range(0, moquitoPrefabs.Length)];        
-
-        Mosquito mosquitoSpawned = Instantiate(mosquitoToSpawn, transform.transform.position, Quaternion.identity).GetComponent<Mosquito>();                 
-        
-        StartCoroutine(MoveMosquito(mosquitoSpawned));
-
-        //mosquitoSpawned.GoToNewPosition(new Vector2(-14f, 10f), PhotonNetwork.Time + 0.1f);
-    }
-
-    private IEnumerator MoveMosquito(Mosquito mosquito)
-    {
-        yield return new WaitForSeconds(0.3f);
-
-        mosquito.GoToNewPosition(new Vector2(-14f, 10f), PhotonNetwork.Time + 0.1f);
-
-        yield return new WaitForSeconds(3f);
-
-        mosquito.transform.SetParent(_mosquitosHorde.transform);
+        _mosquitosHorde.RequestSpawnMosquito(this);
     }
 }

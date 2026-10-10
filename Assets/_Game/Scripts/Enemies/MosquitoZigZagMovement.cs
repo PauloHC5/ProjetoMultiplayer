@@ -41,7 +41,7 @@ namespace _Game.Scripts.Enemies
             _currentVerticalAmplitude = zigZagMovementSettings.VerticalZigzagAmplitude;
         }
 
-        public Vector2 Movement(double time, Vector2 currentPosition)
+        public Vector2 Movement(double time)
         {
             float x = 0;
             float y = 0;
@@ -58,14 +58,14 @@ namespace _Game.Scripts.Enemies
                 y = (float)(Math.Cos(t * zigZagMovementSettings.VerticalZigzagFrequency + _phaseOffset)) * zigZagMovementSettings.VerticalZigzagAmplitude;
             }
 
-            return new Vector2(x, y) + currentPosition;
+            return new Vector2(x, y);
         }
         
         public void SwitchMovementSettings(MosquitoZigZagMovementSettings newSettings)
         {
             _targetSettings = newSettings;
             
-            if(bInterpolateMovement)
+            if(bInterpolateMovement && _mosquitoOwner != null)
             {
                 if(_interpolationCoroutine != null)
                 {
