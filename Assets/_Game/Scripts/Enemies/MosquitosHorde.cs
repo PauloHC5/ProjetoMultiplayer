@@ -6,6 +6,7 @@ using _Game.Scripts;
 using Photon.Pun;
 using Photon.Realtime;
 using UnityEngine;
+using UnityEngine.InputSystem;
 using UnityEngine.Serialization;
 
 public class MosquitosHorde : MonoBehaviourPunCallbacks
@@ -217,9 +218,7 @@ public class MosquitosHorde : MonoBehaviourPunCallbacks
             _mosquitos[i] = mosquito;
 
             if (bInterToPosition)
-            {
-                var startingPosition = transform.position + (Vector3)mosquitoStartPosition;
-
+            {               
                 var mosquitoHordePositionKey = new HordePositionKey(i / this.columns, i % this.columns);
                 var mosquitoHordePosition = _hordePositions[mosquitoHordePositionKey];
 
@@ -254,7 +253,22 @@ public class MosquitosHorde : MonoBehaviourPunCallbacks
     {
         InvokeRepeating(nameof(RequestMissileAttack), missileAttackRate, missileAttackRate);
     }
-    
+
+#if UNITY_EDITOR
+    private void Update()
+    {
+        if(Keyboard.current.kKey.wasPressedThisFrame)
+        {
+            
+            var mosquitosAlive = _mosquitos.Where(mosquito => mosquito != null && mosquito.gameObject.activeInHierarchy).ToArray();
+            var randomMosquitoIndex = UnityEngine.Random.Range(0, mosquitosAlive.Length);
+            var randomMosquito = mosquitosAlive[randomMosquitoIndex];
+
+            MosquitoKilled(randomMosquito.mosquitoIndex, -1);
+        }
+    }
+#endif
+
     private void FixedUpdate()  
     {
         if (!PhotonNetwork.IsMasterClient) return;

@@ -23,6 +23,8 @@ public class Mosquito : MonoBehaviour
 
     public float positionInterpolationDuration = 0.5f;
     public float scaleUpDuration = 0.5f;
+
+    [Header("Zig Zag Movement Settings")]
     [SerializeField] private MosquitoZigZagMovement zigZagMovement;
     public MosquitoZigZagMovement MosquitoZigZagMovement => zigZagMovement;
     
@@ -55,23 +57,24 @@ public class Mosquito : MonoBehaviour
         _projectilesLayer = LayerMask.NameToLayer("Projectiles");
         _defaultLayer = LayerMask.NameToLayer("Default");
         _barrierLayer = LayerMask.NameToLayer("Barrier");
-        _originalScale = transform.localScale;
+        _originalScale = transform.localScale;        
     }
 
     private void Start()
     {
-        _anchorPos = transform.localPosition;
+        _anchorPos = transform.position;
         _phaseOffset = (mosquitoIndex * 137.5f) % (Mathf.PI * 2f);
         zigZagMovement.OnStart(_phaseOffset, this);
+        
+        if(debugMode)
+            _moveStartPos = _anchorPos;
 
         StartCoroutine(ScaleFrom0T1Interpolation());
     }
 
     private void Update()
     {
-        double now = PhotonNetwork.IsConnected || PhotonNetwork.OfflineMode ? PhotonNetwork.Time : Time.timeAsDouble;
-
-        Debug.Log("Now: " + now);
+        double now = PhotonNetwork.IsConnected || PhotonNetwork.OfflineMode ? PhotonNetwork.Time : Time.timeAsDouble;        
         
         if (_isMoving)
         {
@@ -79,8 +82,8 @@ public class Mosquito : MonoBehaviour
             _anchorPos = Vector2.Lerp(_moveStartPos, _moveTargetPos, Mathf.SmoothStep(0f, 1f, t));
             if (t >= 1f) _isMoving = false;
         }
-        
-        transform.localPosition = zigZagMovement.Movement(now, _anchorPos);
+
+        transform.localPosition = zigZagMovement.Movement(now, _anchorPos);        
     }
 
     private void OnTriggerEnter2D(Collider2D other)
@@ -113,7 +116,7 @@ public class Mosquito : MonoBehaviour
         
         _currentHordePosition = hordePositionKey;
         GoToNewPosition(newPos, startTime);
-    }
+    }    
     
     public void GoToNewPosition(Vector2 newPos, double startTime)
     {

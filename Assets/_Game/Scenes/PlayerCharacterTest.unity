@@ -119,115 +119,6 @@ NavMeshSettings:
     debug:
       m_Flags: 0
   m_NavMeshData: {fileID: 0}
---- !u!1001 &69334909
-PrefabInstance:
-  m_ObjectHideFlags: 0
-  serializedVersion: 2
-  m_Modification:
-    serializedVersion: 3
-    m_TransformParent: {fileID: 0}
-    m_Modifications:
-    - target: {fileID: -2141858161189176034, guid: 9e2412c119f379d47bb0ec19dd06c263, type: 3}
-      propertyPath: debugMode
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: -2141858161189176034, guid: 9e2412c119f379d47bb0ec19dd06c263, type: 3}
-      propertyPath: mosquitoIndex
-      value: 66
-      objectReference: {fileID: 0}
-    - target: {fileID: -2141858161189176034, guid: 9e2412c119f379d47bb0ec19dd06c263, type: 3}
-      propertyPath: zigZagMovement
-      value: 
-      objectReference: {fileID: 11400000, guid: 64ffcaf4a41e5914d8b16e5eb2cf687b, type: 2}
-    - target: {fileID: -2141858161189176034, guid: 9e2412c119f379d47bb0ec19dd06c263, type: 3}
-      propertyPath: debugGoToPosition.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: -2141858161189176034, guid: 9e2412c119f379d47bb0ec19dd06c263, type: 3}
-      propertyPath: standardZigZagMovement
-      value: 
-      objectReference: {fileID: 11400000, guid: 64ffcaf4a41e5914d8b16e5eb2cf687b, type: 2}
-    - target: {fileID: -2141858161189176034, guid: 9e2412c119f379d47bb0ec19dd06c263, type: 3}
-      propertyPath: positionInterpolationDuration
-      value: 0.5
-      objectReference: {fileID: 0}
-    - target: {fileID: -2141858161189176034, guid: 9e2412c119f379d47bb0ec19dd06c263, type: 3}
-      propertyPath: mosquitoMovement.debugMovement
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: -2141858161189176034, guid: 9e2412c119f379d47bb0ec19dd06c263, type: 3}
-      propertyPath: mosquitoMovement.bInterpolateMovement
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: -2141858161189176034, guid: 9e2412c119f379d47bb0ec19dd06c263, type: 3}
-      propertyPath: zigZagMovement.zigZagMovementSettings
-      value: 
-      objectReference: {fileID: 11400000, guid: da1a604d53ce41143932bbfd3dd3f496, type: 2}
-    - target: {fileID: -2141858161189176034, guid: 9e2412c119f379d47bb0ec19dd06c263, type: 3}
-      propertyPath: mosquitoZigZagMovement.debugZigZagMovement
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: -2141858161189176034, guid: 9e2412c119f379d47bb0ec19dd06c263, type: 3}
-      propertyPath: mosquitoZigZagMovement.bInterpolateMovement
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 364302238411201926, guid: 9e2412c119f379d47bb0ec19dd06c263, type: 3}
-      propertyPath: m_LocalPosition.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 364302238411201926, guid: 9e2412c119f379d47bb0ec19dd06c263, type: 3}
-      propertyPath: m_LocalPosition.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 364302238411201926, guid: 9e2412c119f379d47bb0ec19dd06c263, type: 3}
-      propertyPath: m_LocalPosition.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 364302238411201926, guid: 9e2412c119f379d47bb0ec19dd06c263, type: 3}
-      propertyPath: m_LocalRotation.w
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 364302238411201926, guid: 9e2412c119f379d47bb0ec19dd06c263, type: 3}
-      propertyPath: m_LocalRotation.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 364302238411201926, guid: 9e2412c119f379d47bb0ec19dd06c263, type: 3}
-      propertyPath: m_LocalRotation.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 364302238411201926, guid: 9e2412c119f379d47bb0ec19dd06c263, type: 3}
-      propertyPath: m_LocalRotation.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 364302238411201926, guid: 9e2412c119f379d47bb0ec19dd06c263, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 364302238411201926, guid: 9e2412c119f379d47bb0ec19dd06c263, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 364302238411201926, guid: 9e2412c119f379d47bb0ec19dd06c263, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 2850217529171155301, guid: 9e2412c119f379d47bb0ec19dd06c263, type: 3}
-      propertyPath: m_Name
-      value: Mosquito_Base (4)
-      objectReference: {fileID: 0}
-    - target: {fileID: 2850217529171155301, guid: 9e2412c119f379d47bb0ec19dd06c263, type: 3}
-      propertyPath: m_IsActive
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 4563279182175837554, guid: 9e2412c119f379d47bb0ec19dd06c263, type: 3}
-      propertyPath: sceneViewId
-      value: 3
-      objectReference: {fileID: 0}
-    m_RemovedComponents: []
-    m_RemovedGameObjects: []
-    m_AddedGameObjects: []
-    m_AddedComponents: []
-  m_SourcePrefab: {fileID: 100100000, guid: 9e2412c119f379d47bb0ec19dd06c263, type: 3}
 --- !u!1001 &145433994
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -450,7 +341,7 @@ Transform:
   m_GameObject: {fileID: 852094897}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: 17.27, y: -1.7, z: 0}
   m_LocalScale: {x: 0.57, y: 0.57, z: 0.57}
   m_ConstrainProportionsScale: 1
   m_Children: []
@@ -778,7 +669,11 @@ PrefabInstance:
       objectReference: {fileID: 11400000, guid: 64ffcaf4a41e5914d8b16e5eb2cf687b, type: 2}
     - target: {fileID: -2141858161189176034, guid: 9e2412c119f379d47bb0ec19dd06c263, type: 3}
       propertyPath: debugGoToPosition.x
-      value: 4
+      value: -14
+      objectReference: {fileID: 0}
+    - target: {fileID: -2141858161189176034, guid: 9e2412c119f379d47bb0ec19dd06c263, type: 3}
+      propertyPath: debugGoToPosition.y
+      value: 8.11
       objectReference: {fileID: 0}
     - target: {fileID: -2141858161189176034, guid: 9e2412c119f379d47bb0ec19dd06c263, type: 3}
       propertyPath: standardZigZagMovement
@@ -810,11 +705,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 364302238411201926, guid: 9e2412c119f379d47bb0ec19dd06c263, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 0
+      value: 17.49
       objectReference: {fileID: 0}
     - target: {fileID: 364302238411201926, guid: 9e2412c119f379d47bb0ec19dd06c263, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 0
+      value: -1.7
       objectReference: {fileID: 0}
     - target: {fileID: 364302238411201926, guid: 9e2412c119f379d47bb0ec19dd06c263, type: 3}
       propertyPath: m_LocalPosition.z
@@ -1140,5 +1035,4 @@ SceneRoots:
   - {fileID: 204278967}
   - {fileID: 1132252717}
   - {fileID: 1246276536}
-  - {fileID: 69334909}
   - {fileID: 852094899}

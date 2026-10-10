@@ -369,15 +369,15 @@ namespace _Game.Scripts
                 _mosquitosHordeInTheScene = FindAnyObjectByType<MosquitosHorde>();
 
             _mosquitosHordeInTheScene.AllMosquitosDestroyedEvent += HordeKilled;
-            _mosquitosHordeInTheScene.OnMosquitoKilled += InvaderKilled;
+            _mosquitosHordeInTheScene.OnMosquitoKilled += MosquitoKilled;
         }
 
-        private void InvaderKilled(int playerID, int points)
+        private void MosquitoKilled(int playerID, int points)
         {
             if (!PhotonNetwork.IsMasterClient || playerID == -1) return;
 
             if (bDebugMode)
-                Debug.Log($"GameMode.InvaderKilled: Player {playerID} killed an invader for {points} points");
+                Debug.Log($"GameMode.MosquitoKilled: Player {playerID} killed an invader for {points} points");
 
             Player player = PhotonNetwork.CurrentRoom.GetPlayer(playerID);
             if (player == null) return;
@@ -436,7 +436,7 @@ namespace _Game.Scripts
         private void RpcReplicateUnsubscribeFromMosquitosHordeEvents()
         {
             _mosquitosHordeInTheScene.AllMosquitosDestroyedEvent -= HordeKilled;
-            _mosquitosHordeInTheScene.OnMosquitoKilled -= InvaderKilled;
+            _mosquitosHordeInTheScene.OnMosquitoKilled -= MosquitoKilled;
         }
 
         public override void OnPlayerPropertiesUpdate(Player targetPlayer, Hashtable changedProps)
@@ -461,7 +461,7 @@ namespace _Game.Scripts
         [PunRPC]
         private void RpcReplicateMosquitosReachedLimit()
         {
-            _mosquitosHordeInTheScene.OnMosquitoKilled -= InvaderKilled;
+            _mosquitosHordeInTheScene.OnMosquitoKilled -= MosquitoKilled;
             _mosquitosHordeInTheScene.AllMosquitosDestroyedEvent -= WaveCompleted;
             MosquitosLimit.OnMosquitosReachedLimit -= OnMosquitosReachedLimit;
 
@@ -656,7 +656,7 @@ namespace _Game.Scripts
             if (_mosquitosHordeInTheScene == null) return;
 
             _mosquitosHordeInTheScene.AllMosquitosDestroyedEvent -= WaveCompleted;
-            _mosquitosHordeInTheScene.OnMosquitoKilled -= InvaderKilled;
+            _mosquitosHordeInTheScene.OnMosquitoKilled -= MosquitoKilled;
         }
     }
 }
