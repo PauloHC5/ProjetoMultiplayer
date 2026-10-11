@@ -40,6 +40,6 @@ public class DengueSource : MonoBehaviour
         if (debugMode)
             Debug.Log($"Requesting spawn mosquito");
 
-        _mosquitosHorde.RequestSpawnMosquito(this);
+        _mosquitosHorde.RequestSpawnMosquito(transform.position);
     }
 }

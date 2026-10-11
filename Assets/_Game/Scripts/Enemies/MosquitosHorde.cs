@@ -62,6 +62,8 @@ public class MosquitosHorde : MonoBehaviourPunCallbacks
     
     [Header("ZigZag Movement Settings")]
     [Space]
+    [Header("Movement Settings for the standard mosquitos")]
+    public MosquitoZigZagMovementSettings StandardZigZag;
     [Header("Movement Settings for the last 10 mosquitos")]
     public MosquitoZigZagMovementSettings last10;
     [Header("Movement Settings for the last 7 mosquitos")]
@@ -78,6 +80,7 @@ public class MosquitosHorde : MonoBehaviourPunCallbacks
     public Projectile missilePrefab;
     
     [Header("Debug")]
+    public bool debugLogs = false;
     public bool bDrawDebugGizmos = false;
     public HordePositionKey debugHordePositionKey;
     
@@ -185,7 +188,7 @@ public class MosquitosHorde : MonoBehaviourPunCallbacks
             HordePositionKey hordePositionKey = new HordePositionKey(i / this.columns, i % this.columns);
             
             _photonView.RPC(nameof(SpawnMosquitoAtHorde), RpcTarget.AllBuffered, mosquitoType,
-                hordePositionKey.row, hordePositionKey.col);
+                hordePositionKey.row, hordePositionKey.col, 0f, 0f);
         }
         
         _bAlreadySpawnedMosquitos = true;
@@ -209,7 +212,7 @@ public class MosquitosHorde : MonoBehaviourPunCallbacks
     }
     
     [PunRPC]
-    private void SpawnMosquitoAtHorde(MosquitoType mosquitoType, int row, int col)
+    private void SpawnMosquitoAtHorde(MosquitoType mosquitoType, int row, int col, float starPosX, float starPosY)
     {
         HordePositionKey hordePositionKey = new HordePositionKey(row, col);
 
@@ -223,11 +226,15 @@ public class MosquitosHorde : MonoBehaviourPunCallbacks
         
         Mosquito mosquito = Instantiate(mosquitoPrefab, transform);
         
+        mosquito.transform.localPosition = transform.InverseTransformPoint(new Vector3(starPosX, starPosY, 0f));
+        
         int index = hordePositionKey.row * this.columns + hordePositionKey.col;
         
         if(_mosquitos[index] != null)
         {
-            Debug.LogWarning($"Mosquito already exists at index {index}. Replacing it.");
+            if(debugLogs)
+                Debug.Log($"Mosquito already exists at index {index}. Replacing it.");
+            
             Destroy(_mosquitos[index].gameObject);
         }
         _mosquitos[index] = mosquito;
@@ -237,9 +244,24 @@ public class MosquitosHorde : MonoBehaviourPunCallbacks
         _mosquitos[index].OnMosquitoKilled += MosquitoKilled;
         
         MoveMosquitoToNewHordePosition(mosquito, hordePositionKey, PhotonNetwork.Time + 0.1f);
+        
+        // If we are in the last 10 mosquitos, we want to add this mosquito to the last 10 mosquitos array
+        if(_last10Mosquitos != null && _last10Mosquitos.Length > 0)
+        {
+            // Find the index of the mosquito that was destroyed when replacing it with the new mosquito in the mosquitos array
+            int indexOfDeadMosquito = _last10Mosquitos.Where(m => m != null).Select((m, i) => i).FirstOrDefault();
+            
+            // If we found a dead mosquito, replace it with the new mosquito
+            if(indexOfDeadMosquito >= 0 && indexOfDeadMosquito < _last10Mosquitos.Length)
+            {
+                _last10Mosquitos[indexOfDeadMosquito] = mosquito;
+            }
+            
+            UpdateMosquitosMovement();
+        }
     }
     
-    public void RequestSpawnMosquito(DengueSource dengueSource)
+    public void RequestSpawnMosquito(Vector2 dengueSourcePosition)
     {
         if(!PhotonNetwork.IsMasterClient || AmountAlive >= TotalMosquitos) return;
         
@@ -253,7 +275,7 @@ public class MosquitosHorde : MonoBehaviourPunCallbacks
         MosquitoType mosquitoType = RandomizeMosquitoType(availablePosition.row);
 
         _photonView.RPC(nameof(SpawnMosquitoAtHorde), RpcTarget.AllBuffered, mosquitoType,
-            availablePosition.row, availablePosition.col);
+            availablePosition.row, availablePosition.col, dengueSourcePosition.x, dengueSourcePosition.y);
     }
     
     private HordePositionKey GetAvailableHordePositionKey()
@@ -424,6 +446,21 @@ public class MosquitosHorde : MonoBehaviourPunCallbacks
             InvokeRepeating(nameof(RequestMissileAttack), missileAttackRate / 2, missileAttackRate / 2);
         }
         
+        // If we have more than 10 mosquitos alive, we want to reset the last 10 mosquitos movement settings to the standard settings
+        if(_last10Mosquitos != null && _last10Mosquitos.Length > 0 && AmountAlive > 10)
+        {
+            _last10Mosquitos = null;
+            for(var i = 0; i < _mosquitos.Length; i++)
+            {
+                if (_mosquitos[i] != null && _mosquitos[i].gameObject.activeInHierarchy)
+                {
+                    _mosquitos[i].MosquitoZigZagMovement.SwitchMovementSettings(StandardZigZag);
+                }
+            }
+        }
+        
+        
+        // If we have 10 or less mosquitos alive, we want to store the last 10 mosquitos in the _last10Mosquitos array
         if(_last10Mosquitos == null && AmountAlive <= 10)
         {
             _last10Mosquitos = _mosquitos.Where(mosquito => mosquito != null && mosquito.gameObject.activeInHierarchy).ToArray();
@@ -481,7 +518,6 @@ public class MosquitosHorde : MonoBehaviourPunCallbacks
                         _last10Mosquitos[i].MosquitoZigZagMovement.SwitchMovementSettings(last);
                     }
                 }
-
                 break;
         }
     }
@@ -493,12 +529,6 @@ public class MosquitosHorde : MonoBehaviourPunCallbacks
             Debug.LogError($"Horde position not found for key {newHordePositionKey.row}, {newHordePositionKey.col}");
             return;
         }
-
-        /*if (!_mosquitos.Contains(mosquito))
-        {
-            Debug.LogWarning($"Mosquito {mosquito.name} is not part of the horde.");
-            return;
-        }*/
         
         var hordePosition = _hordePositions[newHordePositionKey];
         
