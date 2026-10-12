@@ -58,6 +58,8 @@ public class PlayerCharacter : MonoBehaviourPun
     private bool _piercingProjectilesActive = false;
     private bool _fasterFireActive = false;
     private bool _speedBuffActive = false;
+    
+    public int GetPlayerId() => photonView.OwnerActorNr;
 
     private void Awake()
     {
@@ -388,15 +390,13 @@ public class PlayerCharacter : MonoBehaviourPun
         }
     }
     
-    private void OnGameOver(int playerCharactersAlive)
+    private void OnGameOver(GameMode.GameOverReason reason)
     {
         if(!photonView.IsMine) return;
         
         bBotMode = false;
         
         photonView.RPC(nameof(RpcDeath), RpcTarget.All);
-        
-        
     }
 
     private void OnEnable()

@@ -28,14 +28,31 @@ public class UI_Game : MonoBehaviour
         public TextMeshProUGUI WaveProgressText;
     }
     
+    private struct MatchPreparationUI
+    {
+        public Button StartGameButton;
+        public TextMeshProUGUI AwaitingHostText;
+    }
+    
     [Header("UI Elements")]
-    public GameObject playerStatusPrefab;
-    public GameObject statusBarUI;
+    public TextMeshProUGUI gameCountdownText;
+    public TextMeshProUGUI outOfLivesText;
+    public TextMeshProUGUI gameOverReasonText;
+    
+    [Header("UI Screens")]
+    public GameObject gameOverUIScreen;
+    public GameObject matchPreparationUIScreen;
+    
+    [Header("Wave UI Elements")]
     public TextMeshProUGUI waveCounterText;
     public GameObject waveProgressBarObj;
-    public TextMeshProUGUI gameCountdownText;
-    public GameObject gameOverUI;
+    
+    [Header("Player Status UI Elements")]
+    public GameObject statusBarUI;
     public Transform pickupStatusUI;
+    
+    [Header("UI Prefabs")]
+    public GameObject playerStatusPrefab;
 
     [SerializedDictionary("Pickup Type", "Sprite")]
     public AYellowpaper.SerializedCollections.SerializedDictionary<Pickup.PickupType, Sprite> pickupTypeSprites;
@@ -43,6 +60,7 @@ public class UI_Game : MonoBehaviour
     private PlayerUIStatus _localPlayerStatus;
     private bool _bGameIsRunning = false;
     private WaveProgressBar _waveProgressBar;
+    private MatchPreparationUI _matchPreparationUI;
 
     // Constants for finding child components in the player status prefab
     private const string PlayerNicknameTextComponentName = "Player Nickname Text (TMP)";
@@ -51,6 +69,11 @@ public class UI_Game : MonoBehaviour
 
     private void Awake()
     {
+        gameCountdownText.enabled = false;
+        waveCounterText.gameObject.SetActive(false);
+        waveProgressBarObj.SetActive(false);
+        outOfLivesText.gameObject.SetActive(false);
+        
         _localPlayerStatus = new PlayerUIStatus
         {
             PlayerUIStatusObject = null,
@@ -58,30 +81,76 @@ public class UI_Game : MonoBehaviour
             PlayerNicknameText = null,
             ScoreCounterText = null,
             LivesCounterText = null
-        };        
+        };       
         
         _waveProgressBar = new WaveProgressBar
         {
             WaveSlider = waveProgressBarObj.GetComponentInChildren<Slider>(),
             WaveProgressText = waveProgressBarObj.GetComponentInChildren<TextMeshProUGUI>()
         };
+
+        _matchPreparationUI = new MatchPreparationUI
+        {
+            StartGameButton = matchPreparationUIScreen.transform.GetChild(0).GetComponent<Button>(),
+            AwaitingHostText = matchPreparationUIScreen.transform.GetChild(1).GetComponent<TextMeshProUGUI>()
+        };
+
+        _matchPreparationUI.StartGameButton.onClick.AddListener(StartWave);
     }
 
     private void Start()
     {
-        _bGameIsRunning = true;
+        _bGameIsRunning = true;                
+    }
+
+    private void OnMasterClientChanged(bool isMasterClient)
+    {
+        if (isMasterClient)
+        {
+            _matchPreparationUI.StartGameButton.gameObject.SetActive(true);
+            _matchPreparationUI.AwaitingHostText.gameObject.SetActive(false);
+            Debug.Log("You are the host. You can start the game.");
+        }
+        else
+        {
+            _matchPreparationUI.StartGameButton.gameObject.SetActive(false);
+            _matchPreparationUI.AwaitingHostText.gameObject.SetActive(true);
+            Debug.Log("You are not the host. Waiting for the host to start the game.");
+        }
+    }
+
+    private void StartWave()
+    {
+        //GameMode.Start
+        GameMode.Instance.StartWave();
     }
 
     private void OnGameCountdownChanged(int countdown)
     {
+        matchPreparationUIScreen.SetActive(false);
+
+        gameCountdownText.enabled = countdown >= 0;
         gameCountdownText.text = countdown.ToString();
         
         if(countdown == 0)
         {
             gameCountdownText.text = "GO!";
         }
-        
-        gameCountdownText.enabled = countdown >= 0;
+    }
+
+    private void OnWaveCompleted(int waveNumber)
+    {
+        gameCountdownText.enabled = true;
+        gameCountdownText.text = $"Wave {waveNumber} Completed!";
+
+        StartCoroutine(HideWaveCompletedMessageAfterDelay(3f));
+    }
+
+    private IEnumerator HideWaveCompletedMessageAfterDelay(float delay)
+    {
+        yield return new WaitForSeconds(delay);
+        gameCountdownText.enabled = false;
+        matchPreparationUIScreen.SetActive(true);
     }
 
     private void UpdateScore()
@@ -100,8 +169,11 @@ public class UI_Game : MonoBehaviour
         if(lives <= 0)
         {            
             _localPlayerStatus.LivesCounterText.text = "0";
+            outOfLivesText.gameObject.SetActive(true);
             return;
         }
+        
+        outOfLivesText.gameObject.SetActive(false);
         _localPlayerStatus.LivesCounterText.text = lives.ToString();
     }
     
@@ -194,10 +266,36 @@ public class UI_Game : MonoBehaviour
         StartCoroutine(PickupIconRoutine(pickupImage, duration));
     }
 
-    private void OnGameOver(int playerCharactersAlive)
+    private void OnGameOver(GameMode.GameOverReason reason)
     {
+        // Hide all other UI elements
         gameCountdownText.enabled = false;
-        gameOverUI.SetActive(true);
+        outOfLivesText.gameObject.SetActive(false);
+        matchPreparationUIScreen.SetActive(false);
+        waveCounterText.gameObject.SetActive(false);
+        waveProgressBarObj.SetActive(false);
+        
+        // Unsubscribe from events to prevent further updates
+        GameMode.OnLivesChanged -= OnLivesChanged;
+        GameMode.OnGameCooldownChanged -= OnGameCountdownChanged;
+        GameMode.OnScoreChanged -= UpdateScore;
+        GameMode.OnPlayerCharacterSpawned -= OnPlayerCharacterSpawned;
+        GameMode.WaveStartedEvent -= OnWaveStarted;
+        GameMode.GameOverEvent -= OnGameOver;
+        GameMode.OnHordeProgressChanged -= UpdateProgressBar;
+        GameMode.OnMasterClientChanged -= OnMasterClientChanged;
+
+        switch (reason)
+        {
+            case GameMode.GameOverReason.AllPlayersDied:
+                gameOverReasonText.text = "All Players Died";
+                break;
+            case GameMode.GameOverReason.MosquitosReachedLimit:
+                gameOverReasonText.text = "Mosquitos Reached Limit";
+                break;
+        }
+        
+        gameOverUIScreen.SetActive(true);
     }
     
     public void ReturnToMainMenu()
@@ -205,8 +303,8 @@ public class UI_Game : MonoBehaviour
         PhotonNetwork.LeaveRoom();                
     }
     
-    private void OnGameStarted(int waveNumber)
-    {
+    private void OnWaveStarted(int waveNumber)
+    {        
         gameCountdownText.enabled = false;
         
         waveCounterText.gameObject.SetActive(true);
@@ -246,6 +344,20 @@ public class UI_Game : MonoBehaviour
         _waveProgressBar.WaveSlider.value = wholeProgress;
         _waveProgressBar.WaveProgressText.text = $"{wholeProgress}%";
     }
+    
+    private void OnRoomReady()
+    {
+        if (PhotonNetwork.IsMasterClient)
+        {
+            _matchPreparationUI.StartGameButton.gameObject.SetActive(true);
+            _matchPreparationUI.AwaitingHostText.gameObject.SetActive(false);
+        }
+        else
+        {
+            _matchPreparationUI.StartGameButton.gameObject.SetActive(false);
+            _matchPreparationUI.AwaitingHostText.gameObject.SetActive(true);
+        }
+    }
 
     private void OnEnable()
     {
@@ -253,9 +365,13 @@ public class UI_Game : MonoBehaviour
         GameMode.OnGameCooldownChanged += OnGameCountdownChanged;
         GameMode.OnScoreChanged += UpdateScore;
         GameMode.OnPlayerCharacterSpawned += OnPlayerCharacterSpawned;
-        GameMode.GameStartedEvent += OnGameStarted;
+        GameMode.WaveStartedEvent += OnWaveStarted;
         GameMode.GameOverEvent += OnGameOver;
         GameMode.OnHordeProgressChanged += UpdateProgressBar;
+        GameMode.OnMasterClientChanged += OnMasterClientChanged;
+        GameMode.WaveCompletedEvent += OnWaveCompleted;
+        
+        GameMode.RoomReady += OnRoomReady;
     }
 
     private void OnDisable()
@@ -264,13 +380,24 @@ public class UI_Game : MonoBehaviour
         GameMode.OnGameCooldownChanged -= OnGameCountdownChanged;
         GameMode.OnLivesChanged -= OnLivesChanged;
         GameMode.OnPlayerCharacterSpawned -= OnPlayerCharacterSpawned;
-        GameMode.GameStartedEvent -= OnGameStarted;
+        GameMode.WaveStartedEvent -= OnWaveStarted;
         GameMode.GameOverEvent -= OnGameOver;
         GameMode.OnHordeProgressChanged -= UpdateProgressBar;
+        GameMode.OnMasterClientChanged -= OnMasterClientChanged;
+        GameMode.WaveCompletedEvent -= OnWaveCompleted;
+        GameMode.RoomReady -= OnRoomReady;
     }
 
     private void OnApplicationQuit()
     {
         _bGameIsRunning = false;
+    }
+
+    private void OnDestroy()
+    {
+        if (_matchPreparationUI.StartGameButton != null)
+        {
+            _matchPreparationUI.StartGameButton.onClick.RemoveListener(StartWave);
+        }
     }
 }

@@ -123,7 +123,7 @@ BoxCollider2D:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2850217529171155301}
-  m_Enabled: 1
+  m_Enabled: 0
   serializedVersion: 3
   m_Density: 1
   m_Material: {fileID: 0}
@@ -176,13 +176,14 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::Mosquito
   points: 10
   type: 0
-  positionInterpolationDuration: 1.5
-  mosquitoMovement:
-    movementSettings: {fileID: 11400000, guid: 3f0cd42cac7e6634dbfaedbdb254bb31, type: 2}
+  positionInterpolationDuration: 1
+  scaleUpDuration: 0.8
+  zigZagMovement:
+    zigZagMovementSettings: {fileID: 11400000, guid: 3f0cd42cac7e6634dbfaedbdb254bb31, type: 2}
     bInterpolateMovement: 1
-    interpolationDuration: 0.7
-    debugMovement: 0
+    interpolationDuration: 0.5
+    debugZigZagMovement: 0
     debugTime: 0
   debugMode: 0
   debugGoToPosition: {x: 0, y: 0}
-  mosquitoIndex: 0
+  mosquitoId: 0

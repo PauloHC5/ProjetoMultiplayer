@@ -46,48 +46,55 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 83b1db522b8b5f04a958ae6fc49632a3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Invaders
-  prefabs:
-  - {fileID: 721702209136384595, guid: c27f82190daed0543816a4df5edd6210, type: 3}
-  - {fileID: 2332977524222137839, guid: 19fa160092d14e54592c80f08b436869, type: 3}
   rows: 6
   columns: 11
-  speed:
+  missileAttackRate: 1
+  mosquitoStartPosition: {x: 0, y: 0}
+  laserLayerMask:
+    serializedVersion: 2
+    m_Bits: 128
+  hordeSpeedCurve:
     serializedVersion: 2
     m_Curve:
     - serializedVersion: 3
       time: 0
-      value: 1
-      inSlope: 7
-      outSlope: 7
-      tangentMode: 34
-      weightedMode: 0
-      inWeight: 0
-      outWeight: 0.33333334
-    - serializedVersion: 3
-      time: 1
-      value: 8
-      inSlope: 7
-      outSlope: 7
+      value: 10
+      inSlope: -0.09
+      outSlope: -0.09
       tangentMode: 34
       weightedMode: 0
       inWeight: 0.33333334
-      outWeight: 0
+      outWeight: 0.33333334
+    - serializedVersion: 3
+      time: 100
+      value: 1
+      inSlope: -0.09
+      outSlope: -0.09
+      tangentMode: 34
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
-  missileAttackRate: 1
-  missilePrefab: {fileID: 1057425784480642454, guid: d198b54e17c98b444b89b16a77eadcf9, type: 3}
-  killedSfx: {fileID: 11400000, guid: f7b9e99808bb87147b11252c15101374, type: 2}
-  laserLayerMask:
-    serializedVersion: 2
-    m_Bits: 128
   stopMovement: 0
+  hordeVerticalInterpolationDuration: 0.5
+  killedSfx: {fileID: 11400000, guid: f7b9e99808bb87147b11252c15101374, type: 2}
+  StandardZigZag: {fileID: 11400000, guid: 3f0cd42cac7e6634dbfaedbdb254bb31, type: 2}
   last10: {fileID: 11400000, guid: c585778de280f5445a32c8a383ff130d, type: 2}
   last7: {fileID: 11400000, guid: da1a604d53ce41143932bbfd3dd3f496, type: 2}
   last5: {fileID: 11400000, guid: fe6db9c85dde15c49aede4f5f6c0ed98, type: 2}
   last3: {fileID: 11400000, guid: b7ac2ad08c11e34469576ab566c9bfcd, type: 2}
   last: {fileID: 11400000, guid: 75a71bd4fae93fb4282d4927e1178ce5, type: 2}
+  prefabs:
+  - {fileID: 721702209136384595, guid: c27f82190daed0543816a4df5edd6210, type: 3}
+  - {fileID: 2332977524222137839, guid: 19fa160092d14e54592c80f08b436869, type: 3}
+  missilePrefab: {fileID: 1057425784480642454, guid: d198b54e17c98b444b89b16a77eadcf9, type: 3}
+  debugLogs: 1
   bDrawDebugGizmos: 1
+  debugHordePositionKey:
+    row: 0
+    col: 0
 --- !u!114 &5313734984663642673
 MonoBehaviour:
   m_ObjectHideFlags: 0

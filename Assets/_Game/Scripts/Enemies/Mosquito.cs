@@ -23,8 +23,10 @@ public class Mosquito : MonoBehaviour
 
     public float positionInterpolationDuration = 0.5f;
     public float scaleUpDuration = 0.5f;
-    [SerializeField] private MosquitoMovement mosquitoMovement;
-    public MosquitoMovement MosquitoMovement => mosquitoMovement;
+
+    [Header("Zig Zag Movement Settings")]
+    [SerializeField] private MosquitoZigZagMovement zigZagMovement;
+    public MosquitoZigZagMovement MosquitoZigZagMovement => zigZagMovement;
     
     [Header("Debug")]
     public bool debugMode;
@@ -37,10 +39,9 @@ public class Mosquito : MonoBehaviour
     private Vector3 _originalScale;
     private double _moveStartTime;
     private bool _isMoving;
-    private MosquitosHorde.HordePositionKey _currentHordePosition;
-    public MosquitosHorde.HordePositionKey CurrentHordePosition => _currentHordePosition;
+    private Collider2D _collider;
     
-    [HideInInspector] public int mosquitoIndex;
+    public int mosquitoId;
     
     private int _projectilesLayer;
     private int _defaultLayer;
@@ -56,20 +57,24 @@ public class Mosquito : MonoBehaviour
         _defaultLayer = LayerMask.NameToLayer("Default");
         _barrierLayer = LayerMask.NameToLayer("Barrier");
         _originalScale = transform.localScale;
+        _collider = GetComponent<Collider2D>();
     }
 
     private void Start()
     {
         _anchorPos = transform.localPosition;
-        _phaseOffset = (mosquitoIndex * 137.5f) % (Mathf.PI * 2f);
-        mosquitoMovement.OnStart(_phaseOffset, this);
+        _phaseOffset = (mosquitoId * 137.5f) % (Mathf.PI * 2f);
+        zigZagMovement.OnStart(_phaseOffset, this);
+        
+        if(debugMode)
+            _moveStartPos = _anchorPos;
 
         StartCoroutine(ScaleFrom0T1Interpolation());
     }
 
     private void Update()
     {
-        double now = PhotonNetwork.Time;
+        double now = PhotonNetwork.IsConnected || PhotonNetwork.OfflineMode ? PhotonNetwork.Time : Time.timeAsDouble;        
         
         if (_isMoving)
         {
@@ -77,8 +82,8 @@ public class Mosquito : MonoBehaviour
             _anchorPos = Vector2.Lerp(_moveStartPos, _moveTargetPos, Mathf.SmoothStep(0f, 1f, t));
             if (t >= 1f) _isMoving = false;
         }
-        
-        transform.localPosition = mosquitoMovement.Movement(PhotonNetwork.Time, _anchorPos);
+
+        transform.localPosition = _anchorPos + zigZagMovement.Movement(now);
     }
 
     private void OnTriggerEnter2D(Collider2D other)
@@ -87,7 +92,7 @@ public class Mosquito : MonoBehaviour
         {
             var laser = other.GetComponent<Projectile>();
             
-            OnMosquitoKilled?.Invoke(mosquitoIndex, laser.InstigatorId);
+            OnMosquitoKilled?.Invoke(mosquitoId, laser.InstigatorId);
         }
         
         if(other.gameObject.layer == _defaultLayer)
@@ -97,25 +102,14 @@ public class Mosquito : MonoBehaviour
         
         if(other.gameObject.layer == _barrierLayer)
         {
-            OnMosquitoKilled?.Invoke(mosquitoIndex, -1);
+            OnMosquitoKilled?.Invoke(mosquitoId, -1);
             BarriersManager.Instance.DamageBarrier(other.gameObject);
         }
     }
     
-    public void ChangeMosquitoHordePosition(MosquitosHorde.HordePositionKey hordePositionKey, Vector2 newPos, double startTime, Vector2 newAnchorPos = default(Vector2))
+    public void GoToNewPosition(Vector2 newPos, double startTime, Vector2? startPos = null)
     {
-        if(newAnchorPos != default(Vector2))
-        {
-            _anchorPos = newAnchorPos;
-        }
-        
-        _currentHordePosition = hordePositionKey;
-        GoToNewPosition(newPos, startTime);
-    }
-    
-    public void GoToNewPosition(Vector2 newPos, double startTime)
-    {
-        _moveStartPos = _anchorPos;
+        _moveStartPos = startPos ?? _anchorPos;
         _moveTargetPos = newPos;
         _moveStartTime = startTime;
         _isMoving = true;
@@ -136,6 +130,7 @@ public class Mosquito : MonoBehaviour
         }
 
         transform.localScale = _originalScale;
+        _collider.enabled = true;
 
     }
 
@@ -144,9 +139,11 @@ public class Mosquito : MonoBehaviour
     {
         if(!debugMode) return;
         
-        mosquitoMovement.OnValidate();
+        zigZagMovement.OnValidate();
         
-        GoToNewPosition(debugGoToPosition, PhotonNetwork.Time + 0.1f);
+        double now = PhotonNetwork.IsConnected || PhotonNetwork.OfflineMode ? PhotonNetwork.Time : Time.timeAsDouble;
+        
+        GoToNewPosition(debugGoToPosition, now + 0.1f);
     }
 #endif
 }
