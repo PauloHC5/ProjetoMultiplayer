@@ -1,7 +1,7 @@
 using UnityEngine;
 
 [CreateAssetMenu(fileName = "LissajousSettings", menuName = "Scriptable Objects/LissajousSettings")]
-public class LissajousSettings : ScriptableObject
+public class LissajouCurveSettings : ScriptableObject
 {
     [Range(0, 20)] public float A = 4f;
     public bool A_Random = false;

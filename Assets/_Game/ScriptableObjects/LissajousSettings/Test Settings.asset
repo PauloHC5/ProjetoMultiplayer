@@ -10,7 +10,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 60625ea6e76c82b4192e5b066cbcd501, type: 3}
-  m_Name: Circle Settings
+  m_Name: Test Settings
   m_EditorClassIdentifier: Assembly-CSharp::LissajousSettings
   A: 1
   A_Random: 0
@@ -18,11 +18,11 @@ MonoBehaviour:
   B_Random: 0
   C: 2
   C_Random: 0
-  D: 2
+  D: 1
   D_Random: 0
-  delta: 1.57
+  delta: 0.785
   delta_Random: 0
-  t_multipler: 2.47
-  multiplier: 3.54
+  t_multipler: 3.9
+  multiplier: 9.57
   xOffset: 0
   yOffset: 0
