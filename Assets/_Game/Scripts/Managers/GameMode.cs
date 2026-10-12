@@ -53,15 +53,18 @@ namespace _Game.Scripts
         private struct DebugPlayerCheck
         {
             public Vector2 pos;
+            public float checkRadius;
             public bool isPlayerAround;
             public float timeLimit;
         }
 
-        [Header("Game Mode")] [SerializeField] private int startGameDelay = 3;
+        [Header("Game Mode")] 
+        [SerializeField] private int startGameDelay = 3;
         [SerializeField] private int startingLives = 3;
         [SerializeField] private int hordesPerWave = 3;
         [SerializeField] private float intervalBetweenHordes = 2.0f;
         public float playerDeathCooldown = 3.0f;
+        [SerializeField] private LayerMask playerLayerMask;
 
         [Header("Prefabs")] [SerializeField] private PlayerController playerControllerPrefab;
         [SerializeField] private MosquitosHorde mosquitosHordePrefab;
@@ -74,6 +77,7 @@ namespace _Game.Scripts
         [SerializeField] private PickupSpawnSettings pickupSpawnSettingsWith1CharacterAlive;
         [SerializeField] private PickupSpawnSettings pickupSpawnSettingsWith2CharactersAlive;
         [SerializeField] private PickupSpawnSettings pickupSpawnSettingsWith3CharactersAlive;
+        [SerializeField] private float radiusCheckPlayerPickup = 5.0f;
         
         [Header("Dengue Source")]
         [SerializeField] private BoxCollider2D dengueSourceSpawnArea;
@@ -81,8 +85,7 @@ namespace _Game.Scripts
         [SerializeField] private DengueSourceSpawnSettings dengueSourceSpawnSettingsWith1CharacterAlive;
         [SerializeField] private DengueSourceSpawnSettings dengueSourceSpawnSettingsWith2CharactersAlive;
         [SerializeField] private DengueSourceSpawnSettings dengueSourceSpawnSettingsWith3CharactersAlive;
-        [SerializeField] private float checkPlayerAroundCircleRadius = 5.0f;
-        [SerializeField] private LayerMask playerLayerMask;
+        [SerializeField] private float radiusCheckPlayerDengueSource = 5.0f;
 
         [Header("Debug")] 
         public bool bDebugMode = false;
@@ -644,60 +647,69 @@ namespace _Game.Scripts
         private void SpawnPickup()
         {
             PickupSpawnSettings spawnSettings = GetCurrentPickupSpawnSettings();
+            
             if (PhotonNetwork.IsMasterClient)
             {
-                var randomPickupIndex = UnityEngine.Random.Range(0, pickupPrefabs.Length);
-                var randomPickupPrefab = pickupPrefabs[randomPickupIndex];
-
-                if (randomPickupPrefab.Type == _lastPickupTypeSpawned)
+                var randomPickupPrefab = ChooseARandomPickup();
+                
+                Vector3 randomPosition;
+                do
                 {
-                    randomPickupIndex = (randomPickupIndex + 1) % pickupPrefabs.Length;
-                    randomPickupPrefab = pickupPrefabs[randomPickupIndex];
-                }
-
-                if (randomPickupPrefab.Type == Pickup.PickupType._1UP)
-                {
-                    var chance = UnityEngine.Random.Range(0, 100);
-                    if (chance >= spawnSettings.OneUpSpawnChance)
-                    {
-                        SpawnPickup();
-                        return;
-                    }
-                }
-
-                if (randomPickupPrefab.Type == Pickup.PickupType.Toolbox)
-                {
-                    if (BarriersManager.IsAnyBarrierDestroyed())
-                    {
-                        var chance = UnityEngine.Random.Range(0, 100);
-                        if (chance >= spawnSettings.ToolboxSpawnChance)
-                        {
-                            SpawnPickup();
-                            return;
-                        }
-
-                        Debug.Log(
-                            "GameMode.SpawnPickup: Spawning Toolbox pickup because at least one barrier has been destroyed.");
-                    }
-                    else
-                    {
-                        SpawnPickup();
-                        return;
-                    }
-                }
-
-                _lastPickupTypeSpawned = randomPickupPrefab.Type;
-
-                var randomX = UnityEngine.Random.Range(pickupsSpawnArea.bounds.min.x, pickupsSpawnArea.bounds.max.x);
-                var randomY = UnityEngine.Random.Range(pickupsSpawnArea.bounds.min.y, pickupsSpawnArea.bounds.max.y);
-                var randomPosition = new Vector3(randomX, randomY, 0f);
+                    var randomX = UnityEngine.Random.Range(pickupsSpawnArea.bounds.min.x, pickupsSpawnArea.bounds.max.x);
+                    var randomY = UnityEngine.Random.Range(pickupsSpawnArea.bounds.min.y, pickupsSpawnArea.bounds.max.y);
+                    randomPosition = new Vector3(randomX, randomY, 0f);
+                } while(CheckIfPlayerIsAround(randomPosition, radiusCheckPlayerPickup));
 
                 PhotonNetwork.InstantiateRoomObject(randomPickupPrefab.name, randomPosition, Quaternion.identity);
+                
+                _lastPickupTypeSpawned = randomPickupPrefab.Type;
             }
 
             InvokePickupSpawn();
         }
+
+        private Pickup ChooseARandomPickup(Pickup.PickupType[] excludedPickupTypes = null)
+        {
+            Pickup chosenPickupPrefab;
+            bool isOfExcludedType;
+
+            do
+            {
+                var randomPickupIndex = UnityEngine.Random.Range(0, pickupPrefabs.Length);
+                chosenPickupPrefab = pickupPrefabs[randomPickupIndex];
+                isOfExcludedType = excludedPickupTypes != null && excludedPickupTypes.Contains(chosenPickupPrefab.Type);
+            } 
+            while (chosenPickupPrefab.Type == _lastPickupTypeSpawned || isOfExcludedType || !CanSpawnPickup(chosenPickupPrefab.Type));
+
+            return chosenPickupPrefab;
+        }
         
+        private bool CanSpawnPickup(Pickup.PickupType pickupType)
+        {
+            if (pickupType == Pickup.PickupType._1UP)
+            {
+                var spawnSettings = GetCurrentPickupSpawnSettings();
+                var chance = UnityEngine.Random.Range(0, 100);
+                return chance < spawnSettings.OneUpSpawnChance;
+            }
+
+            if (pickupType == Pickup.PickupType.Toolbox)
+            {
+                if (BarriersManager.IsAnyBarrierDestroyed())
+                {
+                    var spawnSettings = GetCurrentPickupSpawnSettings();
+                    var chance = UnityEngine.Random.Range(0, 100);
+                    return chance < spawnSettings.ToolboxSpawnChance;
+                }
+                else
+                {
+                    return false;
+                }
+            }
+
+            return true;
+        }
+
         private void InvokeDengueSourceSpawn()
         {
             DengueSourceSpawnSettings spawnSettings = GetCurrentDengueSourceSpawnSettings();
@@ -742,7 +754,7 @@ namespace _Game.Scripts
                     var randomY = UnityEngine.Random.Range(dengueSourceSpawnArea.bounds.min.y, dengueSourceSpawnArea.bounds.max.y);
                     randomPosition = new Vector3(randomX, randomY, 0f);
                 }
-                while(CheckIfPlayerIsAround(randomPosition));
+                while(CheckIfPlayerIsAround(randomPosition, radiusCheckPlayerDengueSource));
                 
                 if(bDebugMode)
                     Debug.Log($"GameMode.SpawnDengueSource: Found valid position for dengue source spawn: {randomPosition}");
@@ -758,9 +770,9 @@ namespace _Game.Scripts
             InvokeDengueSourceSpawn();
         }
         
-        private bool CheckIfPlayerIsAround(Vector3 position)
+        private bool CheckIfPlayerIsAround(Vector3 position, float checkRadius)
         {
-            Collider2D[] colliders = Physics2D.OverlapCircleAll(position, checkPlayerAroundCircleRadius, playerLayerMask);
+            Collider2D[] colliders = Physics2D.OverlapCircleAll(position, checkRadius, playerLayerMask);
             
             bool isPlayerAround = colliders.Length > 0;
 
@@ -769,6 +781,7 @@ namespace _Game.Scripts
                 _debugCheckPlayerAround.Add(new DebugPlayerCheck
                 {
                     pos = position, 
+                    checkRadius = checkRadius,
                     isPlayerAround = colliders.Length > 0,
                     timeLimit = Time.time + playerAroundCheckDebugTime
                 });
@@ -798,7 +811,7 @@ namespace _Game.Scripts
             for (var i = 0; i < _debugCheckPlayerAround.Count; i++)
             {
                 Gizmos.color = _debugCheckPlayerAround[i].isPlayerAround ? colorWhenPlayerAround : colorWhenPlayerNotAround;
-                Gizmos.DrawWireSphere(_debugCheckPlayerAround[i].pos, checkPlayerAroundCircleRadius);
+                Gizmos.DrawWireSphere(_debugCheckPlayerAround[i].pos, _debugCheckPlayerAround[i].checkRadius);
             }
         }
     }

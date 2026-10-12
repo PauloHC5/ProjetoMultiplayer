@@ -536,6 +536,9 @@ MonoBehaviour:
   hordesPerWave: 2
   intervalBetweenHordes: 0.5
   playerDeathCooldown: 2
+  playerLayerMask:
+    serializedVersion: 2
+    m_Bits: 8
   playerControllerPrefab: {fileID: 7145116076282536125, guid: b8ac1bb3e2e04e649afa5032e52a1b6f, type: 3}
   mosquitosHordePrefab: {fileID: 7380585379183910588, guid: 2cdd92942844e9544828eece9b9cef8b, type: 3}
   playerCharacterPrefabs:
@@ -572,6 +575,7 @@ MonoBehaviour:
     MaxSpawnInterval: 8
     OneUpSpawnChance: 15
     ToolboxSpawnChance: 25
+  radiusCheckPlayerPickup: 5
   dengueSourceSpawnArea: {fileID: 1244994348}
   maxDengueSourcesInScene: 3
   dengueSourceSpawnSettingsWith1CharacterAlive:
@@ -583,10 +587,7 @@ MonoBehaviour:
   dengueSourceSpawnSettingsWith3CharactersAlive:
     MinSpawnInterval: 5
     MaxSpawnInterval: 15
-  checkPlayerAroundCircleRadius: 10
-  playerLayerMask:
-    serializedVersion: 2
-    m_Bits: 8
+  radiusCheckPlayerDengueSource: 10
   bDebugMode: 1
   playerAroundCheckDebugTime: 3
   colorWhenPlayerAround: {r: 0, g: 1, b: 0, a: 0.5019608}
