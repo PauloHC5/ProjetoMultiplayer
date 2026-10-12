@@ -176,12 +176,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::Mosquito
   points: 10
   type: 0
-  positionInterpolationDuration: 1.5
+  positionInterpolationDuration: 1
   scaleUpDuration: 0.8
   zigZagMovement:
     zigZagMovementSettings: {fileID: 11400000, guid: 3f0cd42cac7e6634dbfaedbdb254bb31, type: 2}
     bInterpolateMovement: 1
-    interpolationDuration: 0.6
+    interpolationDuration: 0.5
     debugZigZagMovement: 0
     debugTime: 0
   debugMode: 0
