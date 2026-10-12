@@ -58,6 +58,8 @@ public class PlayerCharacter : MonoBehaviourPun
     private bool _piercingProjectilesActive = false;
     private bool _fasterFireActive = false;
     private bool _speedBuffActive = false;
+    
+    public int GetPlayerId() => photonView.OwnerActorNr;
 
     private void Awake()
     {
