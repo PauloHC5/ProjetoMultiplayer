@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using _Game.Scripts.SpaceInvaders;
 using Photon.Pun;
 using Photon.Realtime;
@@ -48,6 +49,13 @@ namespace _Game.Scripts
             AllPlayersDied,
             MosquitosReachedLimit,
         }
+        
+        private struct DebugPlayerCheck
+        {
+            public Vector2 pos;
+            public bool isPlayerAround;
+            public float timeLimit;
+        }
 
         [Header("Game Mode")] [SerializeField] private int startGameDelay = 3;
         [SerializeField] private int startingLives = 3;
@@ -73,8 +81,14 @@ namespace _Game.Scripts
         [SerializeField] private DengueSourceSpawnSettings dengueSourceSpawnSettingsWith1CharacterAlive;
         [SerializeField] private DengueSourceSpawnSettings dengueSourceSpawnSettingsWith2CharactersAlive;
         [SerializeField] private DengueSourceSpawnSettings dengueSourceSpawnSettingsWith3CharactersAlive;
+        [SerializeField] private float checkPlayerAroundCircleRadius = 5.0f;
+        [SerializeField] private LayerMask playerLayerMask;
 
-        [Header("Debug")] public bool bDebugMode = false;
+        [Header("Debug")] 
+        public bool bDebugMode = false;
+        public float playerAroundCheckDebugTime = 3.0f;
+        public Color colorWhenPlayerAround = Color.green;
+        public Color colorWhenPlayerNotAround = Color.red;
 
         private GameState _currentGameState;
         public GameState CurrentGameState => _currentGameState;
@@ -90,6 +104,8 @@ namespace _Game.Scripts
 
         private Dictionary<PlayerType, PlayerCharacter> _playerCharacters =
             new Dictionary<PlayerType, PlayerCharacter>();
+
+        private List<DebugPlayerCheck> _debugCheckPlayerAround;
 
         private readonly Vector3 _playerSpawnPosition = new Vector3(0, -18.2f, 0);
         private Pickup.PickupType _lastPickupTypeSpawned = Pickup.PickupType.Default;
@@ -124,6 +140,9 @@ namespace _Game.Scripts
                 { PlayerType.Player2, playerCharacterPrefabs[1] },
                 { PlayerType.Player3, playerCharacterPrefabs[2] }
             };
+            
+            if(bDebugMode)
+                _debugCheckPlayerAround = new List<DebugPlayerCheck>();
         }
 
         private void Start()
@@ -392,6 +411,19 @@ namespace _Game.Scripts
 
         private void MosquitoKilled(int playerID, int points)
         {
+            AddScoreToPlayer(playerID, points);
+        }
+        
+        private void OnDengueSourceDestroyed(DengueSource dengueSource, int playerID, int points)
+        {
+            dengueSource.OnDengueSourceDestroyed -= OnDengueSourceDestroyed;
+            _dengueSourcesInScene--;
+            
+            AddScoreToPlayer(playerID, points);
+        }
+
+        private void AddScoreToPlayer(int playerID, int points)
+        {
             if (!PhotonNetwork.IsMasterClient || playerID == -1) return;
 
             if (bDebugMode)
@@ -402,6 +434,27 @@ namespace _Game.Scripts
 
             var playerScore = GetPlayerScore(player) + points;
             SetPlayerScore(player, playerScore);
+        }
+        
+        public static int GetPlayerScore(Player player)
+        {
+            if (player.CustomProperties.TryGetValue(PlayerScoreKey, out var index))
+            {
+                return (int)index;
+            }
+            else
+            {
+                Debug.LogError("GameMode.GetPlayerScore: Player " + player.NickName +
+                               " does not have a PlayerScore custom property. This should not happen.");
+                return 0;
+            }
+        }
+
+        private void SetPlayerScore(Player player, int score)
+        {
+            if (!PhotonNetwork.InRoom || !PhotonNetwork.IsConnectedAndReady) return;
+
+            player.SetCustomProperties(new Hashtable { { PlayerScoreKey, score } });
         }
 
         private void HordeKilled()
@@ -559,27 +612,6 @@ namespace _Game.Scripts
             RpcSpawnPlayerCharacter(playerType);
         }
 
-        public static int GetPlayerScore(Player player)
-        {
-            if (player.CustomProperties.TryGetValue(PlayerScoreKey, out var index))
-            {
-                return (int)index;
-            }
-            else
-            {
-                Debug.LogError("GameMode.GetPlayerScore: Player " + player.NickName +
-                               " does not have a PlayerScore custom property. This should not happen.");
-                return 0;
-            }
-        }
-
-        private void SetPlayerScore(Player player, int score)
-        {
-            if (!PhotonNetwork.InRoom || !PhotonNetwork.IsConnectedAndReady) return;
-
-            player.SetCustomProperties(new Hashtable { { PlayerScoreKey, score } });
-        }
-
         public void AddExtraLife()
         {
             _currentLives++;
@@ -700,10 +732,21 @@ namespace _Game.Scripts
             DengueSourceSpawnSettings spawnSettings = GetCurrentDengueSourceSpawnSettings();
             if (PhotonNetwork.IsMasterClient)
             {
-                var randomX = UnityEngine.Random.Range(dengueSourceSpawnArea.bounds.min.x, dengueSourceSpawnArea.bounds.max.x);
-                var randomY = UnityEngine.Random.Range(dengueSourceSpawnArea.bounds.min.y, dengueSourceSpawnArea.bounds.max.y);
-                var randomPosition = new Vector3(randomX, randomY, 0f);
+                Vector3 randomPosition;
                 
+                if(bDebugMode)
+                    Debug.Log("GameMode.SpawnDengueSource: Finding random position for dengue source spawn.");
+                do
+                {
+                    var randomX = UnityEngine.Random.Range(dengueSourceSpawnArea.bounds.min.x, dengueSourceSpawnArea.bounds.max.x);
+                    var randomY = UnityEngine.Random.Range(dengueSourceSpawnArea.bounds.min.y, dengueSourceSpawnArea.bounds.max.y);
+                    randomPosition = new Vector3(randomX, randomY, 0f);
+                }
+                while(CheckIfPlayerIsAround(randomPosition));
+                
+                if(bDebugMode)
+                    Debug.Log($"GameMode.SpawnDengueSource: Found valid position for dengue source spawn: {randomPosition}");
+
                 int randomIndex = UnityEngine.Random.Range(0, dengueSourcePrefabs.Length);
 
                 DengueSource dengueSource = PhotonNetwork.InstantiateRoomObject(dengueSourcePrefabs[randomIndex].name, randomPosition, Quaternion.identity).GetComponent<DengueSource>();
@@ -715,10 +758,23 @@ namespace _Game.Scripts
             InvokeDengueSourceSpawn();
         }
         
-        private void OnDengueSourceDestroyed(DengueSource dengueSource)
+        private bool CheckIfPlayerIsAround(Vector3 position)
         {
-            dengueSource.OnDengueSourceDestroyed -= OnDengueSourceDestroyed;
-            _dengueSourcesInScene--;
+            Collider2D[] colliders = Physics2D.OverlapCircleAll(position, checkPlayerAroundCircleRadius, playerLayerMask);
+            
+            bool isPlayerAround = colliders.Length > 0;
+
+            if (bDebugMode)
+            {
+                _debugCheckPlayerAround.Add(new DebugPlayerCheck
+                {
+                    pos = position, 
+                    isPlayerAround = colliders.Length > 0,
+                    timeLimit = Time.time + playerAroundCheckDebugTime
+                });
+            }
+
+            return isPlayerAround;
         }
 
         protected override void OnDestroy()
@@ -731,6 +787,19 @@ namespace _Game.Scripts
 
             _mosquitosHordeInTheScene.AllMosquitosDestroyedEvent -= WaveCompleted;
             _mosquitosHordeInTheScene.OnMosquitoKilled -= MosquitoKilled;
+        }
+
+        private void OnDrawGizmos()
+        {
+            if(!bDebugMode || _debugCheckPlayerAround == null || _debugCheckPlayerAround.Count == 0) return;
+            
+            _debugCheckPlayerAround.RemoveAll(check => Time.time > check.timeLimit);
+
+            for (var i = 0; i < _debugCheckPlayerAround.Count; i++)
+            {
+                Gizmos.color = _debugCheckPlayerAround[i].isPlayerAround ? colorWhenPlayerAround : colorWhenPlayerNotAround;
+                Gizmos.DrawWireSphere(_debugCheckPlayerAround[i].pos, checkPlayerAroundCircleRadius);
+            }
         }
     }
 }

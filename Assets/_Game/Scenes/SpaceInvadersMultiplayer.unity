@@ -573,6 +573,7 @@ MonoBehaviour:
     OneUpSpawnChance: 15
     ToolboxSpawnChance: 25
   dengueSourceSpawnArea: {fileID: 1244994348}
+  maxDengueSourcesInScene: 3
   dengueSourceSpawnSettingsWith1CharacterAlive:
     MinSpawnInterval: 8
     MaxSpawnInterval: 20
@@ -582,7 +583,14 @@ MonoBehaviour:
   dengueSourceSpawnSettingsWith3CharactersAlive:
     MinSpawnInterval: 5
     MaxSpawnInterval: 15
-  bDebugMode: 0
+  checkPlayerAroundCircleRadius: 10
+  playerLayerMask:
+    serializedVersion: 2
+    m_Bits: 8
+  bDebugMode: 1
+  playerAroundCheckDebugTime: 3
+  colorWhenPlayerAround: {r: 0, g: 1, b: 0, a: 0.5019608}
+  colorWhenPlayerNotAround: {r: 1, g: 0, b: 0, a: 0.5019608}
 --- !u!4 &281756321
 Transform:
   m_ObjectHideFlags: 0
@@ -1002,7 +1010,7 @@ BoxCollider2D:
   m_UsedByEffector: 0
   m_CompositeOperation: 0
   m_CompositeOrder: 0
-  m_Offset: {x: 32.5, y: 0}
+  m_Offset: {x: 82, y: 0}
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0, y: 0}
@@ -1012,7 +1020,7 @@ BoxCollider2D:
     drawMode: 0
     adaptiveTiling: 0
   m_AutoTiling: 0
-  m_Size: {x: 1, y: 100}
+  m_Size: {x: 100, y: 100}
   m_EdgeRadius: 0
 --- !u!61 &380685513
 BoxCollider2D:
@@ -1048,7 +1056,7 @@ BoxCollider2D:
   m_UsedByEffector: 0
   m_CompositeOperation: 0
   m_CompositeOrder: 0
-  m_Offset: {x: -32.5, y: 0}
+  m_Offset: {x: -82, y: 0}
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0, y: 0}
@@ -1058,7 +1066,7 @@ BoxCollider2D:
     drawMode: 0
     adaptiveTiling: 0
   m_AutoTiling: 0
-  m_Size: {x: 1, y: 100.3}
+  m_Size: {x: 100, y: 100.3}
   m_EdgeRadius: 0
 --- !u!61 &380685514
 BoxCollider2D:
