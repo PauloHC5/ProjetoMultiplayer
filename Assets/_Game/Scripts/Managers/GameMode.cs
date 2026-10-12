@@ -27,6 +27,13 @@ namespace _Game.Scripts
             public int OneUpSpawnChance;
             public int ToolboxSpawnChance;
         }
+        
+        [Serializable]
+        private struct DengueSourceSpawnSettings
+        {
+            public float MinSpawnInterval;
+            public float MaxSpawnInterval;
+        }
 
         public enum GameState
         {
@@ -52,11 +59,20 @@ namespace _Game.Scripts
         [SerializeField] private MosquitosHorde mosquitosHordePrefab;
         [SerializeField] private PlayerCharacter[] playerCharacterPrefabs = new PlayerCharacter[3];
         [SerializeField] private Pickup[] pickupPrefabs = new Pickup[6];
+        [SerializeField] private DengueSource[] dengueSourcePrefabs;
 
-        [Header("Pickups")] [SerializeField] private BoxCollider2D pickupsSpawnArea;
+        [Header("Pickups")] 
+        [SerializeField] private BoxCollider2D pickupsSpawnArea;
         [SerializeField] private PickupSpawnSettings pickupSpawnSettingsWith1CharacterAlive;
         [SerializeField] private PickupSpawnSettings pickupSpawnSettingsWith2CharactersAlive;
         [SerializeField] private PickupSpawnSettings pickupSpawnSettingsWith3CharactersAlive;
+        
+        [Header("Dengue Source")]
+        [SerializeField] private BoxCollider2D dengueSourceSpawnArea;
+        [SerializeField] private int maxDengueSourcesInScene = 3;
+        [SerializeField] private DengueSourceSpawnSettings dengueSourceSpawnSettingsWith1CharacterAlive;
+        [SerializeField] private DengueSourceSpawnSettings dengueSourceSpawnSettingsWith2CharactersAlive;
+        [SerializeField] private DengueSourceSpawnSettings dengueSourceSpawnSettingsWith3CharactersAlive;
 
         [Header("Debug")] public bool bDebugMode = false;
 
@@ -70,6 +86,7 @@ namespace _Game.Scripts
         private MosquitosHorde _mosquitosHordeInTheScene;
         private int _hordesSpawnedInCurrentWave = 0;
         private int _currentWave = 1;
+        private int _dengueSourcesInScene = 0;
 
         private Dictionary<PlayerType, PlayerCharacter> _playerCharacters =
             new Dictionary<PlayerType, PlayerCharacter>();
@@ -350,6 +367,7 @@ namespace _Game.Scripts
             WaveStartedEvent?.Invoke(_currentWave);
 
             InvokePickupSpawn();
+            InvokeDengueSourceSpawn();
         }
 
         private void SpawnHorde()
@@ -429,6 +447,7 @@ namespace _Game.Scripts
             _currentGameState = GameState.WaitingForPlayers;
 
             CancelInvoke(nameof(SpawnPickup));
+            CancelInvoke(nameof(SpawnDengueSource));
             photonView.RPC(nameof(RpcReplicateUnsubscribeFromMosquitosHordeEvents), RpcTarget.All);
         }
 
@@ -645,6 +664,61 @@ namespace _Game.Scripts
             }
 
             InvokePickupSpawn();
+        }
+        
+        private void InvokeDengueSourceSpawn()
+        {
+            DengueSourceSpawnSettings spawnSettings = GetCurrentDengueSourceSpawnSettings();
+
+            Invoke(nameof(SpawnDengueSource),
+                UnityEngine.Random.Range(spawnSettings.MinSpawnInterval, spawnSettings.MaxSpawnInterval));
+        }
+        
+        private DengueSourceSpawnSettings GetCurrentDengueSourceSpawnSettings()
+        {
+            switch (_playerCharactersAlive)
+            {
+                case 1:
+                    return dengueSourceSpawnSettingsWith1CharacterAlive;
+                case 2:
+                    return dengueSourceSpawnSettingsWith2CharactersAlive;
+                case 3:
+                    return dengueSourceSpawnSettingsWith3CharactersAlive;
+                default:
+                    return dengueSourceSpawnSettingsWith1CharacterAlive;
+            }
+        }
+
+        private void SpawnDengueSource()
+        {
+            if(_dengueSourcesInScene >= maxDengueSourcesInScene)
+            {
+                InvokeDengueSourceSpawn();
+                return;
+            }
+            
+            DengueSourceSpawnSettings spawnSettings = GetCurrentDengueSourceSpawnSettings();
+            if (PhotonNetwork.IsMasterClient)
+            {
+                var randomX = UnityEngine.Random.Range(dengueSourceSpawnArea.bounds.min.x, dengueSourceSpawnArea.bounds.max.x);
+                var randomY = UnityEngine.Random.Range(dengueSourceSpawnArea.bounds.min.y, dengueSourceSpawnArea.bounds.max.y);
+                var randomPosition = new Vector3(randomX, randomY, 0f);
+                
+                int randomIndex = UnityEngine.Random.Range(0, dengueSourcePrefabs.Length);
+
+                DengueSource dengueSource = PhotonNetwork.InstantiateRoomObject(dengueSourcePrefabs[randomIndex].name, randomPosition, Quaternion.identity).GetComponent<DengueSource>();
+                _dengueSourcesInScene++;
+                
+                dengueSource.OnDengueSourceDestroyed += OnDengueSourceDestroyed;
+            }
+
+            InvokeDengueSourceSpawn();
+        }
+        
+        private void OnDengueSourceDestroyed(DengueSource dengueSource)
+        {
+            dengueSource.OnDengueSourceDestroyed -= OnDengueSourceDestroyed;
+            _dengueSourcesInScene--;
         }
 
         protected override void OnDestroy()

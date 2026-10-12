@@ -39,6 +39,7 @@ public class Mosquito : MonoBehaviour
     private Vector3 _originalScale;
     private double _moveStartTime;
     private bool _isMoving;
+    private Collider2D _collider;
     
     public int mosquitoId;
     
@@ -55,7 +56,8 @@ public class Mosquito : MonoBehaviour
         _projectilesLayer = LayerMask.NameToLayer("Projectiles");
         _defaultLayer = LayerMask.NameToLayer("Default");
         _barrierLayer = LayerMask.NameToLayer("Barrier");
-        _originalScale = transform.localScale;        
+        _originalScale = transform.localScale;
+        _collider = GetComponent<Collider2D>();
     }
 
     private void Start()
@@ -128,6 +130,7 @@ public class Mosquito : MonoBehaviour
         }
 
         transform.localScale = _originalScale;
+        _collider.enabled = true;
 
     }
 

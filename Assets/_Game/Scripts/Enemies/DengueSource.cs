@@ -6,6 +6,10 @@ using UnityEngine;
 [RequireComponent(typeof(PhotonView))]
 public class DengueSource : MonoBehaviour
 {
+    [Header("Settings")]
+    [SerializeField] private float spawnInterval = 3f;
+    
+    [Header("Prefabs")]
     public GameObject[] moquitoPrefabs;
     
     [Header("Debug")]
@@ -14,7 +18,7 @@ public class DengueSource : MonoBehaviour
     private PhotonView _photonView;
     private MosquitosHorde _mosquitosHorde;
 
-    private int test = 0;
+    public Action<DengueSource> OnDengueSourceDestroyed;
 
     private void Awake()
     {
@@ -27,10 +31,11 @@ public class DengueSource : MonoBehaviour
 
         if(_mosquitosHorde == null)
         {
-            //PhotonNetwork.Destroy(gameObject);
+            OnDengueSourceDestroyed?.Invoke(this);
+            PhotonNetwork.Destroy(gameObject);
         }                  
 
-        InvokeRepeating(nameof(RequestSpawnMosquito), 3f, 3f);
+        InvokeRepeating(nameof(RequestSpawnMosquito), spawnInterval, spawnInterval);
     }
 
     private void RequestSpawnMosquito()
@@ -41,5 +46,11 @@ public class DengueSource : MonoBehaviour
             Debug.Log($"Requesting spawn mosquito");
 
         _mosquitosHorde.RequestSpawnMosquito(transform.position);
+    }
+
+    private void OnTriggerEnter2D(Collider2D other)
+    {
+        OnDengueSourceDestroyed?.Invoke(this);
+        PhotonNetwork.Destroy(gameObject);
     }
 }

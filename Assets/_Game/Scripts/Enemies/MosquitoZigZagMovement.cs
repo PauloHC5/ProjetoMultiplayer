@@ -65,7 +65,7 @@ namespace _Game.Scripts.Enemies
         {
             _targetSettings = newSettings;
             
-            if(bInterpolateMovement && _mosquitoOwner != null)
+            if(bInterpolateMovement && _mosquitoOwner != null && newSettings != zigZagMovementSettings)
             {
                 if(_interpolationCoroutine != null)
                 {

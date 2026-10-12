@@ -58,22 +58,22 @@ MonoBehaviour:
     m_Curve:
     - serializedVersion: 3
       time: 0
-      value: 1
-      inSlope: 7
-      outSlope: 7
-      tangentMode: 34
-      weightedMode: 0
-      inWeight: 0
-      outWeight: 0.33333334
-    - serializedVersion: 3
-      time: 1
-      value: 8
-      inSlope: 7
-      outSlope: 7
+      value: 10
+      inSlope: -0.09
+      outSlope: -0.09
       tangentMode: 34
       weightedMode: 0
       inWeight: 0.33333334
-      outWeight: 0
+      outWeight: 0.33333334
+    - serializedVersion: 3
+      time: 100
+      value: 1
+      inSlope: -0.09
+      outSlope: -0.09
+      tangentMode: 34
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
@@ -90,7 +90,7 @@ MonoBehaviour:
   - {fileID: 721702209136384595, guid: c27f82190daed0543816a4df5edd6210, type: 3}
   - {fileID: 2332977524222137839, guid: 19fa160092d14e54592c80f08b436869, type: 3}
   missilePrefab: {fileID: 1057425784480642454, guid: d198b54e17c98b444b89b16a77eadcf9, type: 3}
-  debugLogs: 0
+  debugLogs: 1
   bDrawDebugGizmos: 1
   debugHordePositionKey:
     row: 0
