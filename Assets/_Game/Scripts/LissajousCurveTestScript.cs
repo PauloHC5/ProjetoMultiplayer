@@ -1,34 +1,66 @@
 
+using System;
+using System.Collections.Generic;
 using _Game.Scripts;
+using Photon.Pun;
 using UnityEngine;
 
 public class LissajousCurveTestScript : MonoBehaviour
 {
     public LissajousCurve lissajousCurve;
+    
+    private PhotonView _photonView;
 
-    // Start is called before the first frame update
+    private void Awake()
+    {
+        _photonView = GetComponent<PhotonView>();
+    }
+
     void Start()
     {
-        lissajousCurve.OnStart(gameObject);
+        lissajousCurve.OnStart(this);
     }
 
-    // Update is called once per frame
-    void Update()
+    void FixedUpdate()
     {
-        transform.position = lissajousCurve.Calculate(transform);
+        transform.localPosition = lissajousCurve.Calculate(transform, GetTime());
     }
     
+    private double GetTime()
+    {
+        return PhotonNetwork.IsConnected ? PhotonNetwork.Time : Time.timeAsDouble;
+    }
+    
+#if UNITY_EDITOR
     private void OnValidate()
     {
-        if(lissajousCurve == null || lissajousCurve.tr == null) return;
-        
-        lissajousCurve.tr.Clear();
+        if (PhotonNetwork.IsConnected && PhotonNetwork.IsMasterClient)
+        {
+            if (_photonView == null || !_photonView.IsMine) return;
 
-        Invoke(nameof(EnableTrailRenderer), 0.1f);
+            _photonView.RPC(nameof(OnValuesChanged), RpcTarget.AllBuffered, lissajousCurve.settings.name);
+        }
+        else
+        {
+            if(lissajousCurve.settings != null)
+            {
+                OnValuesChanged(lissajousCurve.settings.name);
+            }
+            else
+            {
+                OnValuesChanged(string.Empty);
+            }
+        }
     }
-
-    private void EnableTrailRenderer()
+#endif
+    
+    [PunRPC]
+    private void OnValuesChanged(string curveSettingsName)
     {
-        lissajousCurve?.CheckTrailRenderer();
+        LissajouCurveSettings newSettings = curveSettingsName != string.Empty ? Resources.Load<LissajouCurveSettings>("LissajousSettings/" + curveSettingsName) : null;
+        
+        lissajousCurve.settings = newSettings;
+        
+        lissajousCurve.SwitchCurveSettings(lissajousCurve.settings);
     }
 }

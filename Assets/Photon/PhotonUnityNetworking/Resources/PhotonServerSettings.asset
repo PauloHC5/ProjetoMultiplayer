@@ -82,6 +82,7 @@ MonoBehaviour:
   - SpawnMosquitoAtHorde
   - SpawnHordePositions
   - SetHordePositions
+  - OnValuesChanged
   DisableAutoOpenWizard: 1
   ShowSettings: 1
   DevRegionSetOnce: 0
