@@ -67,7 +67,7 @@ public class AutoHostARoom : MonoBehaviourPunCallbacks
     public override void OnJoinedRoom()
     {
         if(bDebugMode)
-            Debug.Log("Host holding the room: " + PhotonNetwork.CurrentRoom.Name);
+            Debug.Log("Joined room: " + PhotonNetwork.CurrentRoom.Name);
         
         if (PhotonNetwork.IsMasterClient && SceneManager.GetActiveScene().name != PhotonNetwork.CurrentRoom.CustomProperties["sceneName"].ToString())
         {
