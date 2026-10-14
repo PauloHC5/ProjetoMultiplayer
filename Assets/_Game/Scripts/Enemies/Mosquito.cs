@@ -23,11 +23,16 @@ public class Mosquito : MonoBehaviour
 
     public float positionInterpolationDuration = 0.5f;
     public float scaleUpDuration = 0.5f;
+    public bool moveAroundAnchor = true;
 
     [Header("Zig Zag Movement Settings")]
     [SerializeField] private MosquitoZigZagMovement zigZagMovement;
     public MosquitoZigZagMovement MosquitoZigZagMovement => zigZagMovement;
     
+    [Header("Lissajous Curve Settings")]
+    [SerializeField] private LissajousCurve lissajousCurve;
+    public LissajousCurve LissajousCurve => lissajousCurve;
+
     [Header("Debug")]
     public bool debugMode;
     public Vector2 debugGoToPosition;
@@ -64,7 +69,9 @@ public class Mosquito : MonoBehaviour
     {
         _anchorPos = transform.localPosition;
         _phaseOffset = (mosquitoId * 137.5f) % (Mathf.PI * 2f);
+        
         zigZagMovement.OnStart(_phaseOffset, this);
+        lissajousCurve.OnStart(this);
         
         if(debugMode)
             _moveStartPos = _anchorPos;
@@ -83,7 +90,17 @@ public class Mosquito : MonoBehaviour
             if (t >= 1f) _isMoving = false;
         }
 
-        transform.localPosition = _anchorPos + zigZagMovement.Movement(now);
+        Vector2 zigZagOffset = zigZagMovement.Movement(now);
+        Vector2 lissajousOffset = lissajousCurve.Calculate(transform, now);
+
+        if(moveAroundAnchor)
+        {
+            transform.localPosition = _anchorPos + zigZagOffset + lissajousOffset;
+        }
+        else
+        {
+            transform.localPosition = zigZagOffset + lissajousOffset;
+        }
     }
 
     private void OnTriggerEnter2D(Collider2D other)
@@ -137,9 +154,10 @@ public class Mosquito : MonoBehaviour
 #if UNITY_EDITOR
     private void OnValidate()
     {
-        if(!debugMode) return;
-        
         zigZagMovement.OnValidate();
+        lissajousCurve.SwitchCurveSettings(lissajousCurve.Settings);
+        
+        if(!debugMode) return;
         
         double now = PhotonNetwork.IsConnected || PhotonNetwork.OfflineMode ? PhotonNetwork.Time : Time.timeAsDouble;
         

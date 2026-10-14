@@ -27,7 +27,8 @@ namespace _Game.Scripts
     public class LissajousCurve
     {
         [Header("Lissajous Curve Settings")]
-        public LissajouCurveSettings settings;
+        [SerializeField] private LissajouCurveSettings settings;
+        public LissajouCurveSettings Settings => settings;
         public bool interpolateToNewSettings = true;
         public CurveTransitionMode transitionMode = CurveTransitionMode.Blend;
         public float interpolationDuration = 3.0f;
@@ -60,6 +61,7 @@ namespace _Game.Scripts
         Coroutine _transitionCoroutine;
         Params _from, _to;
         float _progress = 1f;
+        bool _bAlredySwitched = false;
 
         public void OnStart(MonoBehaviour ownerObject)
         {
@@ -87,6 +89,12 @@ namespace _Game.Scripts
 
         public void SwitchCurveSettings(LissajouCurveSettings newSettings)
         {
+            if (settings != null && newSettings != settings)
+            {
+                settings.OnChange -= () => SwitchCurveSettings(settings);
+                _bAlredySwitched = false;
+            }
+
             if (_transitionCoroutine != null)
             {
                 _owner.StopCoroutine(_transitionCoroutine);
@@ -97,6 +105,11 @@ namespace _Game.Scripts
             
             _to = Resolve(newSettings);
             settings = newSettings;
+            
+            if(settings != null && !_bAlredySwitched)
+                settings.OnChange += () => SwitchCurveSettings(settings);
+            
+            _bAlredySwitched = true;
 
             if (interpolateToNewSettings && _owner != null)
                 _transitionCoroutine = _owner.StartCoroutine(Transition());
@@ -125,7 +138,7 @@ namespace _Game.Scripts
         }
 
         // time = PhotonNetwork.Time (ou Time.timeAsDouble offline)
-        public Vector3 Calculate(Transform transform, double time)
+        public Vector2 Calculate(Transform transform, double time)
         {
             Vector2 osc;
             Vector2 offset;

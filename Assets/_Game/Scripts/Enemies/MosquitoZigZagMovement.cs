@@ -32,6 +32,8 @@ namespace _Game.Scripts.Enemies
         
         public void OnStart(float phaseOffset, Mosquito mosquitoOwner)
         {
+            if(zigZagMovementSettings == null) return;
+            
             _phaseOffset = phaseOffset;
             _mosquitoOwner = mosquitoOwner;
 
@@ -43,6 +45,8 @@ namespace _Game.Scripts.Enemies
 
         public Vector2 Movement(double time)
         {
+            if(zigZagMovementSettings == null) return Vector2.zero;
+            
             float x = 0;
             float y = 0;
             double t = debugZigZagMovement ? debugTime : time;

@@ -506,7 +506,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6910397273489476099, guid: 2cdd92942844e9544828eece9b9cef8b, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 20.09
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 6910397273489476099, guid: 2cdd92942844e9544828eece9b9cef8b, type: 3}
       propertyPath: m_LocalPosition.z
@@ -541,9 +541,33 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 7380585379183910588, guid: 2cdd92942844e9544828eece9b9cef8b, type: 3}
+      propertyPath: last
+      value: 
+      objectReference: {fileID: 11400000, guid: 75a71bd4fae93fb4282d4927e1178ce5, type: 2}
+    - target: {fileID: 7380585379183910588, guid: 2cdd92942844e9544828eece9b9cef8b, type: 3}
+      propertyPath: last3
+      value: 
+      objectReference: {fileID: 11400000, guid: b7ac2ad08c11e34469576ab566c9bfcd, type: 2}
+    - target: {fileID: 7380585379183910588, guid: 2cdd92942844e9544828eece9b9cef8b, type: 3}
+      propertyPath: last5
+      value: 
+      objectReference: {fileID: 11400000, guid: fe6db9c85dde15c49aede4f5f6c0ed98, type: 2}
+    - target: {fileID: 7380585379183910588, guid: 2cdd92942844e9544828eece9b9cef8b, type: 3}
+      propertyPath: last7
+      value: 
+      objectReference: {fileID: 11400000, guid: da1a604d53ce41143932bbfd3dd3f496, type: 2}
+    - target: {fileID: 7380585379183910588, guid: 2cdd92942844e9544828eece9b9cef8b, type: 3}
+      propertyPath: last10
+      value: 
+      objectReference: {fileID: 11400000, guid: c585778de280f5445a32c8a383ff130d, type: 2}
+    - target: {fileID: 7380585379183910588, guid: 2cdd92942844e9544828eece9b9cef8b, type: 3}
       propertyPath: stopMovement
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 7380585379183910588, guid: 2cdd92942844e9544828eece9b9cef8b, type: 3}
+      propertyPath: StandardZigZag
+      value: 
+      objectReference: {fileID: 11400000, guid: 3f0cd42cac7e6634dbfaedbdb254bb31, type: 2}
     - target: {fileID: 7380585379183910588, guid: 2cdd92942844e9544828eece9b9cef8b, type: 3}
       propertyPath: mosquitoStartPosition.y
       value: 0
@@ -709,6 +733,10 @@ PrefabInstance:
     - target: {fileID: 4726976605300119692, guid: 940b7e7c9b88dd4428d9e380b85a8f46, type: 3}
       propertyPath: m_Name
       value: DS Water Jar
+      objectReference: {fileID: 0}
+    - target: {fileID: 4726976605300119692, guid: 940b7e7c9b88dd4428d9e380b85a8f46, type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 4852986267106582334, guid: 940b7e7c9b88dd4428d9e380b85a8f46, type: 3}
       propertyPath: sceneViewId

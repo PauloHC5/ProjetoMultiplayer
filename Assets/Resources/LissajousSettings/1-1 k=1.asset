@@ -23,6 +23,10 @@ MonoBehaviour:
   delta: 0.785
   delta_Random: 0
   t_multipler: 3.9
-  multiplier: 9.57
   xOffset: 0
   yOffset: 0
+  multiplier: 9.57
+  pulseMultiplier: 0
+  pulseMin: 0.5
+  pulseMax: 1.5
+  pulseFrequency: 0.5

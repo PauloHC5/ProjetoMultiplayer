@@ -15,7 +15,10 @@ public class LissajouCurveSettings : ScriptableObject
     [Range(0, 20)] public float delta = 2.3f;
     public bool delta_Random = false;
     
-    [Range(0, 5)] public float t_multipler = 2f;
+    [Header("Time Multiplier")]
+    [Range(0, 20)] public float t_multipler = 2f;
+    
+    [Header("Offset")]
     [Range(-20, 20)] public float xOffset = 0f;
     [Range(-20, 20)] public float yOffset = 0f;
     
@@ -34,5 +37,6 @@ public class LissajouCurveSettings : ScriptableObject
     private void OnValidate()
     {
         OnChange?.Invoke();
+        Debug.LogWarning("LissajouCurveSettings - OnValidate");
     }
 }

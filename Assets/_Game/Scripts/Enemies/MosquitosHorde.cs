@@ -145,6 +145,8 @@ public class MosquitosHorde : MonoBehaviourPunCallbacks
         _photonView.RPC(nameof(SetHordePositions), RpcTarget.AllBuffered);
         
         SpawnMosquitoForEachHordePosition();
+        
+        _photonView.RPC(nameof(GiveATimeOffsetToAllMosquitos), RpcTarget.AllBuffered);
     }
 
     [PunRPC]
@@ -235,6 +237,7 @@ public class MosquitosHorde : MonoBehaviourPunCallbacks
             if(debugLogs)
                 Debug.Log($"Mosquito already exists at index {index}. Replacing it.");
             
+            mosquito.LissajousCurve.timeOffset = _mosquitos[index].LissajousCurve.timeOffset;
             Destroy(_mosquitos[index].gameObject);
         }
         _mosquitos[index] = mosquito;
@@ -292,6 +295,18 @@ public class MosquitosHorde : MonoBehaviourPunCallbacks
         }
 
         return new HordePositionKey(-1, -1); // No available position
+    }
+    
+    [PunRPC]
+    private void GiveATimeOffsetToAllMosquitos()
+    {
+        for (int i = 0; i < _mosquitos.Length; i++)
+        {
+            if (_mosquitos[i] != null && _mosquitos[i].gameObject.activeInHierarchy)
+            {
+                _mosquitos[i].LissajousCurve.timeOffset = UnityEngine.Random.Range(0f, 2f * Mathf.PI);
+            }
+        }
     }
 
     private void Start()
@@ -472,6 +487,11 @@ public class MosquitosHorde : MonoBehaviourPunCallbacks
         {
             if (_last10Mosquitos[i] != null && _last10Mosquitos[i].gameObject.activeInHierarchy)
             {
+                if(_last10Mosquitos[i].LissajousCurve.Settings != null)
+                {
+                    _last10Mosquitos[i].LissajousCurve.SwitchCurveSettings(null);
+                }
+                
                 var zigZagSettings = GetZigZagMovementSettingsForMosquito(_last10Mosquitos[i]);
                 _last10Mosquitos[i].MosquitoZigZagMovement.SwitchMovementSettings(zigZagSettings);
             }
