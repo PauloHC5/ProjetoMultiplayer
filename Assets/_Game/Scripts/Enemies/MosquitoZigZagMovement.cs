@@ -25,16 +25,16 @@ namespace _Game.Scripts.Enemies
         private float _currentVerticalFrequency;
         private float _currentVerticalAmplitude;
         
-        private float _phaseOffset;
+        public float phaseOffset;
+        
         private Mosquito _mosquitoOwner;
         private Coroutine _interpolationCoroutine;
         private MosquitoZigZagMovementSettings _targetSettings;
         
-        public void OnStart(float phaseOffset, Mosquito mosquitoOwner)
+        public void OnStart(Mosquito mosquitoOwner)
         {
             if(zigZagMovementSettings == null) return;
             
-            _phaseOffset = phaseOffset;
             _mosquitoOwner = mosquitoOwner;
 
             _currentHorizontalFrequency = zigZagMovementSettings.HorizontalZigzagFrequency;
@@ -53,13 +53,13 @@ namespace _Game.Scripts.Enemies
 
             if(bInterpolateMovement)
             {
-                x = (float)(Math.Sin(t * _currentHorizontalFrequency + _phaseOffset)) * _currentHorizontalAmplitude;
-                y = (float)(Math.Cos(t * _currentVerticalFrequency + _phaseOffset)) * _currentVerticalAmplitude;
+                x = (float)(Math.Sin(t * _currentHorizontalFrequency + phaseOffset)) * _currentHorizontalAmplitude;
+                y = (float)(Math.Cos(t * _currentVerticalFrequency + phaseOffset)) * _currentVerticalAmplitude;
             }
             else
             {
-                x = (float)(Math.Sin(t * zigZagMovementSettings.HorizontalZigzagFrequency + _phaseOffset)) * zigZagMovementSettings.HorizontalZigzagAmplitude;
-                y = (float)(Math.Cos(t * zigZagMovementSettings.VerticalZigzagFrequency + _phaseOffset)) * zigZagMovementSettings.VerticalZigzagAmplitude;
+                x = (float)(Math.Sin(t * zigZagMovementSettings.HorizontalZigzagFrequency + phaseOffset)) * zigZagMovementSettings.HorizontalZigzagAmplitude;
+                y = (float)(Math.Cos(t * zigZagMovementSettings.VerticalZigzagFrequency + phaseOffset)) * zigZagMovementSettings.VerticalZigzagAmplitude;
             }
 
             return new Vector2(x, y);
@@ -69,7 +69,7 @@ namespace _Game.Scripts.Enemies
         {
             _targetSettings = newSettings;
             
-            if(bInterpolateMovement && _mosquitoOwner != null && newSettings != zigZagMovementSettings)
+            if(bInterpolateMovement && _mosquitoOwner != null)
             {
                 if(_interpolationCoroutine != null)
                 {

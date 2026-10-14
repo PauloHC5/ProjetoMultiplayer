@@ -23,7 +23,6 @@ public class Mosquito : MonoBehaviour
 
     public float positionInterpolationDuration = 0.5f;
     public float scaleUpDuration = 0.5f;
-    public bool moveAroundAnchor = true;
 
     [Header("Zig Zag Movement Settings")]
     [SerializeField] private MosquitoZigZagMovement zigZagMovement;
@@ -37,7 +36,6 @@ public class Mosquito : MonoBehaviour
     public bool debugMode;
     public Vector2 debugGoToPosition;
     
-    private float _phaseOffset;
     private Vector2 _anchorPos;
     private Vector2 _moveStartPos;
     private Vector2 _moveTargetPos;
@@ -68,9 +66,8 @@ public class Mosquito : MonoBehaviour
     private void Start()
     {
         _anchorPos = transform.localPosition;
-        _phaseOffset = (mosquitoId * 137.5f) % (Mathf.PI * 2f);
         
-        zigZagMovement.OnStart(_phaseOffset, this);
+        zigZagMovement.OnStart(this);
         lissajousCurve.OnStart(this);
         
         if(debugMode)
@@ -93,14 +90,9 @@ public class Mosquito : MonoBehaviour
         Vector2 zigZagOffset = zigZagMovement.Movement(now);
         Vector2 lissajousOffset = lissajousCurve.Calculate(transform, now);
 
-        if(moveAroundAnchor)
-        {
-            transform.localPosition = _anchorPos + zigZagOffset + lissajousOffset;
-        }
-        else
-        {
-            transform.localPosition = zigZagOffset + lissajousOffset;
-        }
+        
+        transform.localPosition = _anchorPos + zigZagOffset + lissajousOffset;
+        
     }
 
     private void OnTriggerEnter2D(Collider2D other)
@@ -114,6 +106,8 @@ public class Mosquito : MonoBehaviour
         
         if(other.gameObject.layer == _defaultLayer)
         {
+            if(lissajousCurve.HasMovementSettings) return;
+            
             OnMosquitoHitBoundaries?.Invoke();
         }
         

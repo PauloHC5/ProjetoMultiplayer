@@ -75,6 +75,9 @@ public class MosquitosHorde : MonoBehaviourPunCallbacks
     [Header("Movement Settings for the last mosquito")]
     public MosquitoZigZagMovementSettings last;
     
+    [Header("Custom Movement Settings")]
+    public float timeToChooseARowOrColum = 10f;
+    
     [Header("Prefabs")]
     public Mosquito[] prefabs = new Mosquito[3];
     public Projectile missilePrefab;
@@ -121,11 +124,7 @@ public class MosquitosHorde : MonoBehaviourPunCallbacks
 
         if (PhotonNetwork.InRoom)
         {
-            if (!PhotonNetwork.IsMasterClient) return;
-            
-            _photonView.RPC(nameof(SetHordePositions), RpcTarget.AllBuffered);
-            
-            SpawnMosquitoForEachHordePosition();
+            StartSettingUpHorde();
         }
         else
         {
@@ -140,7 +139,12 @@ public class MosquitosHorde : MonoBehaviourPunCallbacks
         
         yield return new WaitForSeconds(1f); // Wait for a short delay to ensure the room is fully ready;
         
-        if (!PhotonNetwork.IsMasterClient) yield break;
+        StartSettingUpHorde();
+    }
+
+    private void StartSettingUpHorde()
+    {
+        if (!PhotonNetwork.IsMasterClient) return;
         
         _photonView.RPC(nameof(SetHordePositions), RpcTarget.AllBuffered);
         
@@ -232,11 +236,14 @@ public class MosquitosHorde : MonoBehaviourPunCallbacks
         
         int index = hordePositionKey.row * this.columns + hordePositionKey.col;
         
+        // If a mosquito already exists at this index, we want to replace it with the new mosquito,
+        // but we want to keep the time offset of the old mosquito
         if(_mosquitos[index] != null)
         {
             if(debugLogs)
                 Debug.Log($"Mosquito already exists at index {index}. Replacing it.");
-            
+
+            mosquito.MosquitoZigZagMovement.phaseOffset = _mosquitos[index].MosquitoZigZagMovement.phaseOffset;
             mosquito.LissajousCurve.timeOffset = _mosquitos[index].LissajousCurve.timeOffset;
             Destroy(_mosquitos[index].gameObject);
         }
@@ -304,7 +311,9 @@ public class MosquitosHorde : MonoBehaviourPunCallbacks
         {
             if (_mosquitos[i] != null && _mosquitos[i].gameObject.activeInHierarchy)
             {
-                _mosquitos[i].LissajousCurve.timeOffset = UnityEngine.Random.Range(0f, 2f * Mathf.PI);
+                var offset = (i * 137.5f) % (Mathf.PI * 2f);
+                _mosquitos[i].MosquitoZigZagMovement.phaseOffset = offset;
+                _mosquitos[i].LissajousCurve.timeOffset = offset;
             }
         }
     }
@@ -312,6 +321,8 @@ public class MosquitosHorde : MonoBehaviourPunCallbacks
     private void Start()
     {
         InvokeRepeating(nameof(RequestMissileAttack), missileAttackRate, missileAttackRate);
+        
+        Invoke(nameof(ChooseARowOrColumToAddCustomMovementSettings), timeToChooseARowOrColum);
     }
 
 #if UNITY_EDITOR
@@ -346,6 +357,13 @@ public class MosquitosHorde : MonoBehaviourPunCallbacks
         if (stopMovement) return;
 
         transform.position += _direction * (hordeSpeedCurve.Evaluate(PercentAlive) * Time.fixedDeltaTime);
+    }
+    
+    private void ChooseARowOrColumToAddCustomMovementSettings()
+    {
+        if(!PhotonNetwork.IsMasterClient || AmountAlive <= 10 || GameMode.Instance.HordesSpawnedInCurrentWave <= 0) return;
+        
+        
     }
 
     public override void OnMasterClientSwitched(Player newMasterClient)
@@ -487,7 +505,7 @@ public class MosquitosHorde : MonoBehaviourPunCallbacks
         {
             if (_last10Mosquitos[i] != null && _last10Mosquitos[i].gameObject.activeInHierarchy)
             {
-                if(_last10Mosquitos[i].LissajousCurve.Settings != null)
+                if(_last10Mosquitos[i].LissajousCurve.HasMovementSettings)
                 {
                     _last10Mosquitos[i].LissajousCurve.SwitchCurveSettings(null);
                 }
