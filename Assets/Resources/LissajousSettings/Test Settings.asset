@@ -12,17 +12,26 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 60625ea6e76c82b4192e5b066cbcd501, type: 3}
   m_Name: Test Settings
   m_EditorClassIdentifier: Assembly-CSharp::LissajousSettings
-  A: 1
+  A: 3.41
   A_Random: 0
-  B: 1
+  B: 2
   B_Random: 0
   C: 2
   C_Random: 0
   D: 1
   D_Random: 0
-  delta: 0.785
+  delta: 0
   delta_Random: 0
-  t_multipler: 3.9
-  multiplier: 9.57
-  xOffset: 0
-  yOffset: 0
+  animateDelta: 1
+  deltaMode: 1
+  deltaMin: 0
+  deltaMax: 6.06
+  deltaFrequency: 0.35
+  t_multipler: 6.07
+  xOffset: 0.5
+  yOffset: 0.3
+  multiplier: 3.86
+  pulseMultiplier: 0
+  pulseMin: 0.5
+  pulseMax: 3.27
+  pulseFrequency: 0.5
