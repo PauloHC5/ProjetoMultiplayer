@@ -89,8 +89,12 @@ public class Projectile : MonoBehaviour
         
         DestroyProjectile();
         
-        if(PhotonNetwork.IsConnected)
+        if(PhotonNetwork.IsConnected && ProjectileNetwork.Instance != null)
             ProjectileNetwork.RequestDestroy(InstigatorId, ShotId);
+        else
+        {
+            DestroyRemote(InstigatorId, ShotId);
+        }
     }
     
     public static void DestroyRemote(int instigatorId, int shotId)
