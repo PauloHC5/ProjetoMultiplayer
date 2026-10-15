@@ -38,27 +38,25 @@ public class LissajousCurveTestScript : MonoBehaviour
         {
             if (_photonView == null || !_photonView.IsMine) return;
 
-            _photonView.RPC(nameof(OnValuesChanged), RpcTarget.AllBuffered, lissajousCurve.Settings.name);
+            _photonView.RPC(nameof(RpcValuesChanged), RpcTarget.AllBuffered, lissajousCurve.Settings.name);
         }
         else
         {
-            if(lissajousCurve.Settings != null)
-            {
-                OnValuesChanged(lissajousCurve.Settings.name);
-            }
-            else
-            {
-                OnValuesChanged(string.Empty);
-            }
+            ValuesChanged(lissajousCurve.Settings);
         }
     }
 #endif
     
     [PunRPC]
-    private void OnValuesChanged(string curveSettingsName)
+    private void RpcValuesChanged(string curveSettingsName)
     {
         LissajouCurveSettings newSettings = curveSettingsName != string.Empty ? Resources.Load<LissajouCurveSettings>("LissajousSettings/" + curveSettingsName) : null;
         
+        lissajousCurve.SwitchCurveSettings(newSettings);
+    }
+
+    private void ValuesChanged(LissajouCurveSettings newSettings)
+    {
         lissajousCurve.SwitchCurveSettings(newSettings);
     }
 }
