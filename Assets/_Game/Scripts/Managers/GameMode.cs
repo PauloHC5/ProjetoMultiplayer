@@ -101,9 +101,10 @@ namespace _Game.Scripts
         private int _currentLives;
         private int _playerCharactersAlive;
         private MosquitosHorde _mosquitosHordeInTheScene;
-        private int _hordesSpawnedInCurrentWave = 0;
         private int _currentWave = 1;
         private int _dengueSourcesInScene = 0;
+        private int _hordesSpawnedInCurrentWave = 0;
+        public int HordesSpawnedInCurrentWave => _hordesSpawnedInCurrentWave;
 
         private Dictionary<PlayerType, PlayerCharacter> _playerCharacters =
             new Dictionary<PlayerType, PlayerCharacter>();
