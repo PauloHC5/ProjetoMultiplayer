@@ -29,8 +29,9 @@ namespace _Game.Scripts
         [Header("Lissajous Curve Settings")]
         [SerializeField] private LissajouCurveSettings settings;
         public LissajouCurveSettings Settings => settings;
+        public bool HasMovementSettings => settings != null;
+        
         public bool interpolateToNewSettings = true;
-        public CurveTransitionMode transitionMode = CurveTransitionMode.Blend;
         public float interpolationDuration = 3.0f;
         public float timeOffset;
 
@@ -46,31 +47,23 @@ namespace _Game.Scripts
             public float A, B, C, D, delta, tMul, mult, xo, yo;
 
             // só a oscilação (sem offset)
-            public Vector2 Osc(double time)
+            public Vector2 Osc(double time, float deltaAdd, float aScale, float bScale)
             {
                 double t = time * tMul;
                 return new Vector2(
-                    A * (float)Math.Sin(C * t + delta) * mult,
-                    B * (float)Math.Sin(D * t) * mult);
+                    A  * aScale * (float)Math.Sin(C * t + delta + deltaAdd) * mult,
+                    B * bScale * (float)Math.Sin(D * t) * mult);
             }
 
             public Vector2 Offset => new Vector2(xo, yo);
         }
 
         MonoBehaviour _owner;
+        private CurveTransitionMode _transitionMode = CurveTransitionMode.Blend;
         Coroutine _transitionCoroutine;
         Params _from, _to;
         float _progress = 1f;
         bool _bAlredySwitched = false;
-
-        public void OnStart(MonoBehaviour ownerObject)
-        {
-            _owner = ownerObject;
-            CheckTrailRenderer();
-            
-            _to = _from = Resolve(settings);
-            _progress = 1f;
-        }
 
         static Params Resolve(LissajouCurveSettings s)
         {
@@ -78,13 +71,28 @@ namespace _Game.Scripts
             
             return new Params
             {
-                A = s.A_Random ? Random.Range(0f, 5f) : s.A,
-                B = s.B_Random ? Random.Range(0f, 5f) : s.B,
+                A = s.A,
+                B = s.B,
                 C = s.C_Random ? Random.Range(0f, 10f) : s.C,
                 D = s.D_Random ? Random.Range(0f, 10f) : s.D,
                 delta = s.delta_Random ? Random.Range(0f, 5f) : s.delta,
             tMul = s.t_multipler, mult = s.multiplier, xo = s.xOffset, yo = s.yOffset
             };
+        }
+        
+        static float Pulse(double t, Vector2 range, float freq, float phaseCycles)
+        {
+            float s = 0.5f + 0.5f * (float)Math.Sin(2.0 * Math.PI * (freq * t + phaseCycles));
+            return Mathf.Lerp(range.x, range.y, s);
+        }
+        
+        public void OnStart(MonoBehaviour ownerObject)
+        {
+            _owner = ownerObject;
+            CheckTrailRenderer();
+            
+            _to = _from = Resolve(settings);
+            _progress = 1f;
         }
 
         public void SwitchCurveSettings(LissajouCurveSettings newSettings)
@@ -95,7 +103,7 @@ namespace _Game.Scripts
                 _bAlredySwitched = false;
             }
 
-            if (_transitionCoroutine != null)
+            if (_transitionCoroutine != null && _owner != null)
             {
                 _owner.StopCoroutine(_transitionCoroutine);
                 _transitionCoroutine = null;
@@ -104,7 +112,10 @@ namespace _Game.Scripts
             _from = _to;
             
             _to = Resolve(newSettings);
+            
             settings = newSettings;
+            if(settings != null)
+                _transitionMode = settings.transitionMode;
             
             if(settings != null && !_bAlredySwitched)
                 settings.OnChange += () => SwitchCurveSettings(settings);
@@ -137,47 +148,53 @@ namespace _Game.Scripts
             _transitionCoroutine = null;
         }
 
+        private float DeltaAnim(double t)
+        {
+            if (settings.deltaMode == AnimMode.PingPong)
+            {
+                float s = 0.5f + 0.5f * (float)Math.Sin(2.0 * Math.PI * settings.deltaFrequency * t);
+                return Mathf.Lerp(settings.deltaMin, settings.deltaMax, s);
+            }
+            // Continuous: o seno é periódico, então o módulo não causa salto
+            return (float)((2.0 * Math.PI * settings.deltaFrequency * t) % (2.0 * Math.PI));
+        }
+
         // time = PhotonNetwork.Time (ou Time.timeAsDouble offline)
         public Vector2 Calculate(Transform transform, double time)
         {
+            var settingToUse = settings != null ? settings : ScriptableObject.CreateInstance<LissajouCurveSettings>();
+            
+            double rawTime = time; 
+            time += timeOffset;
+
+            float dAdd = settingToUse.animateDelta ? DeltaAnim(rawTime) : 0f;
+            float aS = settingToUse.animateA ? Pulse(rawTime, settingToUse.aScaleRange, settingToUse.aFrequency, 0f) : 1f;
+            float bS = settingToUse.animateB ? Pulse(rawTime, settingToUse.bScaleRange, settingToUse.bFrequency, settingToUse.bPhase) : 1f;
+
             Vector2 osc;
             Vector2 offset;
-            double t = bDebugTime ? debugTime : time;
-            t += timeOffset;
 
             if (_progress >= 1f)
             {
-                osc = _to.Osc(t);
+                osc = _to.Osc(time, dAdd, aS, bS);
                 offset = _to.Offset;
             }
             else
             {
                 offset = Vector2.Lerp(_from.Offset, _to.Offset, Mathf.SmoothStep(0f, 1f, _progress));
 
-                if (transitionMode == CurveTransitionMode.Blend)
+                if (_transitionMode == CurveTransitionMode.Blend)
                 {
                     float k = Mathf.SmoothStep(0f, 1f, _progress);
-                    osc = Vector2.Lerp(_from.Osc(t), _to.Osc(t), k);
+                    osc = Vector2.Lerp(_from.Osc(time, dAdd, aS, bS), _to.Osc(time, dAdd, aS, bS), k);
                 }
-                else // ZeroAmplitude
+                else
                 {
                     if (_progress < 0.5f)
-                    {
-                        float scale = Mathf.SmoothStep(1f, 0f, _progress * 2f);
-                        osc = _from.Osc(t) * scale;
-                    }
+                        osc = _from.Osc(time, dAdd, aS, bS) * Mathf.SmoothStep(1f, 0f, _progress * 2f);
                     else
-                    {
-                        float scale = Mathf.SmoothStep(0f, 1f, (_progress - 0.5f) * 2f);
-                        osc = _to.Osc(t) * scale;
-                    }
+                        osc = _to.Osc(time, dAdd, aS, bS) * Mathf.SmoothStep(0f, 1f, (_progress - 0.5f) * 2f);
                 }
-            }
-            
-            if (settings != null && settings.pulseMultiplier)
-            {
-                float s = 0.5f + 0.5f * (float)Math.Sin(2.0 * Math.PI * settings.pulseFrequency * time);
-                osc *= Mathf.Lerp(settings.pulseMin, settings.pulseMax, s);
             }
 
             Vector3 pos = transform.position;
