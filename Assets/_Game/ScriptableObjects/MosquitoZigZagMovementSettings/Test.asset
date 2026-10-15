@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 782f271c8f3396e478106bf11f2e765b, type: 3}
   m_Name: Test
   m_EditorClassIdentifier: Assembly-CSharp::MosquitoZigZagMovement
-  horizontalZigzagFrequency: 7
-  horizontalZigzagAmplitude: 3
-  verticalZigzagFrequency: 7
-  verticalZigzagAmplitude: 3
+  horizontalZigzagFrequency: 1.4
+  horizontalZigzagAmplitude: 20
+  verticalZigzagFrequency: 0
+  verticalZigzagAmplitude: 0

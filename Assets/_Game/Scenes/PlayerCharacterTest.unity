@@ -595,10 +595,10 @@ PrefabInstance:
     - target: {fileID: -2141858161189176034, guid: 9e2412c119f379d47bb0ec19dd06c263, type: 3}
       propertyPath: lissajousCurve.settings
       value: 
-      objectReference: {fileID: 11400000, guid: ce1a9091e94a2f243afb8e0ec7e7c63f, type: 2}
+      objectReference: {fileID: 0}
     - target: {fileID: -2141858161189176034, guid: 9e2412c119f379d47bb0ec19dd06c263, type: 3}
       propertyPath: lissajousCurve.bDebugCurve
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: -2141858161189176034, guid: 9e2412c119f379d47bb0ec19dd06c263, type: 3}
       propertyPath: positionInterpolationDuration
@@ -606,6 +606,10 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: -2141858161189176034, guid: 9e2412c119f379d47bb0ec19dd06c263, type: 3}
       propertyPath: mosquitoMovement.debugMovement
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: -2141858161189176034, guid: 9e2412c119f379d47bb0ec19dd06c263, type: 3}
+      propertyPath: zigZagMovement.bInterpolateMovement
       value: 1
       objectReference: {fileID: 0}
     - target: {fileID: -2141858161189176034, guid: 9e2412c119f379d47bb0ec19dd06c263, type: 3}
@@ -618,7 +622,7 @@ PrefabInstance:
       objectReference: {fileID: 11400000, guid: 3f0cd42cac7e6634dbfaedbdb254bb31, type: 2}
     - target: {fileID: -2141858161189176034, guid: 9e2412c119f379d47bb0ec19dd06c263, type: 3}
       propertyPath: lissajousCurve.interpolateToNewSettings
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: -2141858161189176034, guid: 9e2412c119f379d47bb0ec19dd06c263, type: 3}
       propertyPath: mosquitoZigZagMovement.debugZigZagMovement

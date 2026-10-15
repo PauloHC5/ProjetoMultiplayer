@@ -44,7 +44,8 @@ public class Mosquito : MonoBehaviour
     private bool _isMoving;
     private Collider2D _collider;
     
-    public int mosquitoId;
+    [HideInInspector]
+    public MosquitosHorde.HordePositionKey hordePositionKey;
     
     private int _projectilesLayer;
     private int _defaultLayer;
@@ -52,7 +53,7 @@ public class Mosquito : MonoBehaviour
     private Coroutine _moveRoutine;
     
     public event Action OnMosquitoHitBoundaries;
-    public event Action<int, int> OnMosquitoKilled;
+    public event Action<Mosquito, int> OnMosquitoKilled;
     
     private void Awake()
     {
@@ -101,19 +102,19 @@ public class Mosquito : MonoBehaviour
         {
             var laser = other.GetComponent<Projectile>();
             
-            OnMosquitoKilled?.Invoke(mosquitoId, laser.InstigatorId);
+            OnMosquitoKilled?.Invoke(this, laser.InstigatorId);
         }
         
         if(other.gameObject.layer == _defaultLayer)
         {
-            if(lissajousCurve.HasMovementSettings) return;
+            //if(lissajousCurve.HasMovementSettings) return;
             
             OnMosquitoHitBoundaries?.Invoke();
         }
         
         if(other.gameObject.layer == _barrierLayer)
         {
-            OnMosquitoKilled?.Invoke(mosquitoId, -1);
+            OnMosquitoKilled?.Invoke(this, -1);
             BarriersManager.Instance.DamageBarrier(other.gameObject);
         }
     }
