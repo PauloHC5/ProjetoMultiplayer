@@ -10,23 +10,30 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 60625ea6e76c82b4192e5b066cbcd501, type: 3}
-  m_Name: Circle
-  m_EditorClassIdentifier: Assembly-CSharp::LissajousSettings
-  A: 1
-  A_Random: 0
-  B: 1
-  B_Random: 0
-  C: 2
+  m_Name: Empty
+  m_EditorClassIdentifier: Assembly-CSharp::LissajouCurveSettings
+  A: 0
+  animateA: 0
+  aScaleRange: {x: 0.6, y: 1.2}
+  aFrequency: 0.5
+  B: 0
+  animateB: 0
+  bScaleRange: {x: 0.6, y: 1.2}
+  bFrequency: 0.5
+  bPhase: 0
+  C: 0
   C_Random: 0
-  D: 2
+  D: 0
   D_Random: 0
-  delta: 1.571
+  delta: 0
   delta_Random: 0
-  t_multipler: 3.07
+  animateDelta: 0
+  deltaMode: 0
+  deltaMin: 0
+  deltaMax: 6.28
+  deltaFrequency: 0.1
+  transitionMode: 0
+  t_multipler: 2
   xOffset: 0
   yOffset: 0
-  multiplier: 6.62
-  pulseMultiplier: 0
-  pulseMin: 0.5
-  pulseMax: 1.02
-  pulseFrequency: 0.58
+  multiplier: 1
