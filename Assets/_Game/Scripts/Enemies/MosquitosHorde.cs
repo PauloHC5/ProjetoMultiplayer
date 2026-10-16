@@ -700,7 +700,7 @@ public class MosquitosHorde : MonoBehaviourPunCallbacks
             
             ClearBufferedFromBehaviourFunctions();
 
-            photonView.RPC(nameof(StartBehaviour), RpcTarget.AllBuffered, mosquitosChosenKeys, settingsIndexChosen);
+            photonView.RPC(nameof(StartBehaviour), RpcTarget.AllBuffered, mosquitosChosenKeys, settingsIndexChosen, hordeBehaviour.SendMosquitosToHordeCenter);
 
             if (hordeBehaviour.IsRapidFire)
             {
@@ -724,7 +724,10 @@ public class MosquitosHorde : MonoBehaviourPunCallbacks
             
             ClearBufferedFromBehaviourFunctions();
             
-            photonView.RPC(nameof(SendMosquitosBackToTheirPositions), RpcTarget.AllBuffered);
+            if(hordeBehaviour.SendMosquitosToHordeCenter)
+            {
+                photonView.RPC(nameof(SendMosquitosBackToTheirPositions), RpcTarget.AllBuffered);
+            }
         }
     }
 
@@ -736,7 +739,7 @@ public class MosquitosHorde : MonoBehaviourPunCallbacks
     }
 
     [PunRPC]
-    private void StartBehaviour(HordePositionKey[] mosquitosKeys, int settingsIndexChosen)
+    private void StartBehaviour(HordePositionKey[] mosquitosKeys, int settingsIndexChosen, bool sendMosquitosToHordeCenter)
     {
         var hordeBehaviour = mosquitosBehaviours.GetValueOrDefault(_currentBehaviourDifficulty);
         
@@ -748,6 +751,7 @@ public class MosquitosHorde : MonoBehaviourPunCallbacks
             Debug.Log("MosquitosBehaviourBase: Behaviour started.");
             Debug.Log("MosquitosBehaviourBase: Mosquitos chosen length: " + mosquitosKeys.Length);
             Debug.Log("MosquitosBehaviourBase: Settings index chosen: " + settingsIndexChosen);
+            Debug.Log("MosquitosBehaviourBase: Send mosquitos to horde center: " + sendMosquitosToHordeCenter);
         }
 
         Mosquito[] mosquitosChosen = mosquitosKeys.Select(key => _mosquitosDict.GetValueOrDefault(key))
@@ -764,7 +768,10 @@ public class MosquitosHorde : MonoBehaviourPunCallbacks
         {
             if (mosquitosChosen[i] != null && mosquitosChosen[i].gameObject.activeInHierarchy)
             {
-                mosquitosChosen[i].GoToNewPosition(Vector2.zero, PhotonNetwork.Time + 0.1f);
+                if (sendMosquitosToHordeCenter)
+                {
+                    mosquitosChosen[i].GoToNewPosition(Vector2.zero, PhotonNetwork.Time + 0.1f);
+                }
                 mosquitosChosen[i].LissajousCurve.SwitchCurveSettings(movementSettingsChosen);
             }
         }

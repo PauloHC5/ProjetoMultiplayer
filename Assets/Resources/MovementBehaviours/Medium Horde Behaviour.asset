@@ -23,5 +23,6 @@ MonoBehaviour:
   minBehaviourDuration: 3
   maxBehaviourDuration: 5
   timeToReorder: 0.8
+  sendMosquitosToHordeCenter: 1
   bRapidFire: 1
-  rapidFireTime: 0.3
+  rapidFireTime: 0.2

@@ -1,5 +1,6 @@
 using System;
 using System.Collections;
+using _Game.Scripts;
 using Photon.Pun;
 using UnityEngine;
 
@@ -12,11 +13,8 @@ public class DengueSource : MonoBehaviour
     [SerializeField] private float minSpawnInterval = 3f;
     [SerializeField] private float maxSpawnInterval = 6f;
     
-    [Header("Prefabs")]
-    public GameObject[] moquitoPrefabs;
-    
     [Header("Debug")]
-    public bool debugMode;
+    public bool debugLog = false;
     
     private MosquitosHorde _mosquitosHorde;
 
@@ -24,7 +22,14 @@ public class DengueSource : MonoBehaviour
 
     private void Start()
     {
-        _mosquitosHorde = FindAnyObjectByType<MosquitosHorde>();
+        if (GameMode.Instance?.MosquitosHordeInTheScene != null)
+        {
+            _mosquitosHorde = GameMode.Instance.MosquitosHordeInTheScene;
+        }
+        else
+        {
+            _mosquitosHorde = FindAnyObjectByType<MosquitosHorde>();
+        }
         
         if (_mosquitosHorde == null)
         {
@@ -47,7 +52,7 @@ public class DengueSource : MonoBehaviour
     {
         if(!PhotonNetwork.IsMasterClient) return;
 
-        if (debugMode)
+        if (debugLog)
             Debug.Log($"Requesting spawn mosquito");
 
         _mosquitosHorde.RequestSpawnMosquito(transform.position);

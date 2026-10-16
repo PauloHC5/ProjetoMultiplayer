@@ -16,8 +16,11 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 75a73a20c5e82d1428a27a61dbf684ce, type: 2}
   - {fileID: 11400000, guid: 7519bd730ba15a04f972732efb4338bf, type: 2}
   behaviourType: 1
-  minBehaviourStartDelay: 5
-  maxBehaviourStartDelay: 10
-  minBehaviourDuration: 3
-  maxBehaviourDuration: 8
+  minBehaviourStartDelay: 3
+  maxBehaviourStartDelay: 5
+  minBehaviourDuration: 5
+  maxBehaviourDuration: 20
   timeToReorder: 0.5
+  sendMosquitosToHordeCenter: 0
+  bRapidFire: 0
+  rapidFireTime: 1.5

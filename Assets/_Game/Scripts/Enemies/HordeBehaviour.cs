@@ -23,6 +23,7 @@ public class HordeBehaviour : ScriptableObject
     [SerializeField] private float minBehaviourDuration = 3f;
     [SerializeField] private float maxBehaviourDuration = 3f;
     [SerializeField] private float timeToReorder = 0.5f;
+    [SerializeField] private bool sendMosquitosToHordeCenter = true;
 
     [Header("Behaviour Buffs")] 
     [SerializeField] private bool bRapidFire = false;
@@ -33,6 +34,7 @@ public class HordeBehaviour : ScriptableObject
     public float TimeToReorder => timeToReorder;
     public bool IsRapidFire => bRapidFire;
     public float RapidFireTime => rapidFireTime;
+    public bool SendMosquitosToHordeCenter => sendMosquitosToHordeCenter;
 
 
     public LissajouCurveSettings GetMovementSettings(int index)

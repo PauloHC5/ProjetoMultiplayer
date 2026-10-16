@@ -27,7 +27,7 @@ MonoBehaviour:
   D_Random: 0
   delta: 3.14
   delta_Random: 0
-  animateDelta: 0
+  animateDelta: 1
   deltaMode: 1
   deltaMin: 0
   deltaMax: 6.06
@@ -35,8 +35,5 @@ MonoBehaviour:
   transitionMode: 0
   t_multipler: 2.76
   xOffset: 0.5
-  animateXOffset: 0
-  xOffsetRange: {x: -2, y: 2}
-  xOffsetFrequency: 0.2
   yOffset: 6
   multiplier: 2.01

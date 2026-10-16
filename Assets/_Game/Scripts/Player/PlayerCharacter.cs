@@ -207,7 +207,7 @@ public class PlayerCharacter : MonoBehaviourPun
                 
         if(other.gameObject.layer == _projectilesLayer || other.gameObject.layer == _enemiesLayer)
         {
-            if (_invincible) return;
+            if (_invincible || bBotMode) return;
             
             photonView.RPC(nameof(RpcDeath), RpcTarget.All);
         }

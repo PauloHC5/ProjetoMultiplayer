@@ -12,11 +12,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 60625ea6e76c82b4192e5b066cbcd501, type: 3}
   m_Name: Easy Horde Settings 1
   m_EditorClassIdentifier: Assembly-CSharp::LissajouCurveSettings
-  A: 8.22
+  A: 1.85
   animateA: 1
   aScaleRange: {x: 0.6, y: 1.2}
   aFrequency: 0.5
-  B: 8.17
+  B: 1.8
   animateB: 1
   bScaleRange: {x: 0.6, y: 1.2}
   bFrequency: 0.5
@@ -25,18 +25,15 @@ MonoBehaviour:
   C_Random: 0
   D: 1
   D_Random: 0
-  delta: 0
+  delta: 2.01
   delta_Random: 0
-  animateDelta: 0
+  animateDelta: 1
   deltaMode: 0
   deltaMin: 0
   deltaMax: 6.28
   deltaFrequency: 0.1
   transitionMode: 1
-  t_multipler: 1.75
+  t_multipler: 6.92
   xOffset: 0
-  animateXOffset: 0
-  xOffsetRange: {x: -20, y: 23}
-  xOffsetFrequency: 0.2
   yOffset: 0
-  multiplier: 1
+  multiplier: 1.8

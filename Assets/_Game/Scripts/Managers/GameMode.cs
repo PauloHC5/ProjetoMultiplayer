@@ -28,7 +28,7 @@ namespace _Game.Scripts
             public int OneUpSpawnChance;
             public int ToolboxSpawnChance;
         }
-        
+
         [Serializable]
         private struct DengueSourceSpawnSettings
         {
@@ -44,13 +44,13 @@ namespace _Game.Scripts
             InProgress,
             GameOver
         }
-        
+
         public enum GameOverReason
         {
             AllPlayersDied,
             MosquitosReachedLimit,
         }
-        
+
         private struct DebugPlayerCheck
         {
             public Vector2 pos;
@@ -59,8 +59,7 @@ namespace _Game.Scripts
             public float timeLimit;
         }
 
-        [Header("Game Mode")] 
-        [SerializeField] private int startGameDelay = 3;
+        [Header("Game Mode")] [SerializeField] private int startGameDelay = 3;
         [SerializeField] private int startingLives = 3;
         [SerializeField] private int hordesPerWave = 3;
         [SerializeField] private float intervalBetweenHordes = 2.0f;
@@ -73,29 +72,27 @@ namespace _Game.Scripts
         [SerializeField] private Pickup[] pickupPrefabs = new Pickup[6];
         [SerializeField] private DengueSource[] dengueSourcePrefabs;
 
-        [Header("Pickups")] 
-        [SerializeField] private BoxCollider2D pickupsSpawnArea;
+        [Header("Pickups")] [SerializeField] private BoxCollider2D pickupsSpawnArea;
         [SerializeField] private PickupSpawnSettings pickupSpawnSettingsWith1CharacterAlive;
         [SerializeField] private PickupSpawnSettings pickupSpawnSettingsWith2CharactersAlive;
         [SerializeField] private PickupSpawnSettings pickupSpawnSettingsWith3CharactersAlive;
         [SerializeField] private float radiusCheckPlayerPickup = 5.0f;
-        
-        [Header("Dengue Source")]
-        [SerializeField] private BoxCollider2D dengueSourceSpawnArea;
+
+        [Header("Dengue Source")] [SerializeField]
+        private BoxCollider2D dengueSourceSpawnArea;
+
         [SerializeField] private DengueSourceSpawnSettings dengueSourceSpawnSettingsWith1CharacterAlive;
         [SerializeField] private DengueSourceSpawnSettings dengueSourceSpawnSettingsWith2CharactersAlive;
         [SerializeField] private DengueSourceSpawnSettings dengueSourceSpawnSettingsWith3CharactersAlive;
         [SerializeField] private float radiusCheckPlayerDengueSource = 5.0f;
 
-        [Header("Debug")] 
-        public bool bDebugMode = false;
+        [Header("Debug")] public bool bDebugMode = false;
         public float playerAroundCheckDebugTime = 3.0f;
         public Color colorWhenPlayerAround = Color.green;
         public Color colorWhenPlayerNotAround = Color.red;
 
-        private GameState _currentGameState;
-        public GameState CurrentGameState => _currentGameState;
 
+        private GameState _currentGameState;
         private PhotonView _photonView;
         private int _gameCountdown;
         private int _currentLives;
@@ -104,10 +101,11 @@ namespace _Game.Scripts
         private int _currentWave = 1;
         private int _dengueSourcesInScene = 0;
         private int _hordesSpawnedInCurrentWave = 0;
+        private Dictionary<PlayerType, PlayerCharacter> _playerCharacters;
+        
         public int HordesSpawnedInCurrentWave => _hordesSpawnedInCurrentWave;
-
-        private Dictionary<PlayerType, PlayerCharacter> _playerCharacters =
-            new Dictionary<PlayerType, PlayerCharacter>();
+        public GameState CurrentGameState => _currentGameState;
+        public MosquitosHorde MosquitosHordeInTheScene => _mosquitosHordeInTheScene;
 
         private List<DebugPlayerCheck> _debugCheckPlayerAround;
 
@@ -144,8 +142,8 @@ namespace _Game.Scripts
                 { PlayerType.Player2, playerCharacterPrefabs[1] },
                 { PlayerType.Player3, playerCharacterPrefabs[2] }
             };
-            
-            if(bDebugMode)
+
+            if (bDebugMode)
                 _debugCheckPlayerAround = new List<DebugPlayerCheck>();
         }
 
@@ -384,7 +382,7 @@ namespace _Game.Scripts
 
             if (bDebugMode)
                 Debug.Log("GameMode.StartGameContdown: Game Started");
-            
+
             _currentGameState = GameState.InProgress;
 
             WaveStartedEvent?.Invoke(_currentWave);
@@ -417,13 +415,17 @@ namespace _Game.Scripts
         {
             AddScoreToPlayer(playerID, points);
         }
-        
+
         private void OnDengueSourceDestroyed(DengueSource dengueSource, int playerID, int points)
         {
             dengueSource.OnDengueSourceDestroyed -= OnDengueSourceDestroyed;
             _dengueSourcesInScene--;
-            
+
             AddScoreToPlayer(playerID, points);
+
+            //restart dengue source spawn timer
+            CancelInvoke(nameof(SpawnDengueSource));
+            InvokeDengueSourceSpawn();
         }
 
         private void AddScoreToPlayer(int playerID, int points)
@@ -439,19 +441,16 @@ namespace _Game.Scripts
             var playerScore = GetPlayerScore(player) + points;
             SetPlayerScore(player, playerScore);
         }
-        
+
         public static int GetPlayerScore(Player player)
         {
             if (player.CustomProperties.TryGetValue(PlayerScoreKey, out var index))
             {
                 return (int)index;
             }
-            else
-            {
-                Debug.LogError("GameMode.GetPlayerScore: Player " + player.NickName +
-                               " does not have a PlayerScore custom property. This should not happen.");
-                return 0;
-            }
+            Debug.LogError("GameMode.GetPlayerScore: Player " + player.NickName +
+                           " does not have a PlayerScore custom property. This should not happen.");
+            return 0;
         }
 
         private void SetPlayerScore(Player player, int score)
@@ -488,12 +487,12 @@ namespace _Game.Scripts
             if (_currentLives <= 0)
             {
                 _currentLives = startingLives;
-                
+
                 PlayerType playerType = GetPlayerType(PhotonNetwork.LocalPlayer);
-                
+
                 RpcSpawnPlayerCharacter(playerType);
             }
-                
+
 
             WaveCompletedEvent?.Invoke(_currentWave);
 
@@ -526,8 +525,8 @@ namespace _Game.Scripts
 
         private void OnMosquitosReachedLimit()
         {
-            if(!PhotonNetwork.IsMasterClient) return;
-            
+            if (!PhotonNetwork.IsMasterClient) return;
+
             if (bDebugMode)
                 Debug.Log("GameMode.OnInvadersReachedLimit");
 
@@ -546,7 +545,7 @@ namespace _Game.Scripts
             _currentLives = 0;
             _currentGameState = GameState.GameOver;
 
-            if(!PhotonNetwork.IsMasterClient) return;
+            if (!PhotonNetwork.IsMasterClient) return;
 
             _photonView.RPC(nameof(RpcGameOver), RpcTarget.All, GameOverReason.MosquitosReachedLimit);
         }
@@ -584,26 +583,26 @@ namespace _Game.Scripts
         private void RpcGameOver(GameOverReason reason)
         {
             _currentGameState = GameState.GameOver;
-            
+
             if (bDebugMode)
                 Debug.Log("General GameOver. Closing room.");
 
             if (PhotonNetwork.CurrentRoom.IsOpen)
                 PhotonNetwork.CurrentRoom.IsOpen = false;
-            
+
             _currentLives = 0;
 
             StopAllCoroutines();
             CancelInvoke(nameof(SpawnPickup));
-            
+
             GameOverEvent?.Invoke(reason);
         }
 
         private IEnumerator PlayerDeathCooldown()
         {
-            if(_currentLives <= 0)
+            if (_currentLives <= 0)
                 yield break;
-            
+
             yield return new WaitForSeconds(playerDeathCooldown);
 
             if (PhotonNetwork.CurrentRoom.PlayerCount == 1 && _mosquitosHordeInTheScene)
@@ -648,21 +647,23 @@ namespace _Game.Scripts
         private void SpawnPickup()
         {
             PickupSpawnSettings spawnSettings = GetCurrentPickupSpawnSettings();
-            
+
             if (PhotonNetwork.IsMasterClient)
             {
                 var randomPickupPrefab = ChooseARandomPickup();
-                
+
                 Vector3 randomPosition;
                 do
                 {
-                    var randomX = UnityEngine.Random.Range(pickupsSpawnArea.bounds.min.x, pickupsSpawnArea.bounds.max.x);
-                    var randomY = UnityEngine.Random.Range(pickupsSpawnArea.bounds.min.y, pickupsSpawnArea.bounds.max.y);
+                    var randomX =
+                        UnityEngine.Random.Range(pickupsSpawnArea.bounds.min.x, pickupsSpawnArea.bounds.max.x);
+                    var randomY =
+                        UnityEngine.Random.Range(pickupsSpawnArea.bounds.min.y, pickupsSpawnArea.bounds.max.y);
                     randomPosition = new Vector3(randomX, randomY, 0f);
-                } while(CheckIfPlayerIsAround(randomPosition, radiusCheckPlayerPickup));
+                } while (CheckIfPlayerIsAround(randomPosition, radiusCheckPlayerPickup));
 
                 PhotonNetwork.InstantiateRoomObject(randomPickupPrefab.name, randomPosition, Quaternion.identity);
-                
+
                 _lastPickupTypeSpawned = randomPickupPrefab.Type;
             }
 
@@ -679,12 +680,12 @@ namespace _Game.Scripts
                 var randomPickupIndex = UnityEngine.Random.Range(0, pickupPrefabs.Length);
                 chosenPickupPrefab = pickupPrefabs[randomPickupIndex];
                 isOfExcludedType = excludedPickupTypes != null && excludedPickupTypes.Contains(chosenPickupPrefab.Type);
-            } 
-            while (chosenPickupPrefab.Type == _lastPickupTypeSpawned || isOfExcludedType || !CanSpawnPickup(chosenPickupPrefab.Type));
+            } while (chosenPickupPrefab.Type == _lastPickupTypeSpawned || isOfExcludedType ||
+                     !CanSpawnPickup(chosenPickupPrefab.Type));
 
             return chosenPickupPrefab;
         }
-        
+
         private bool CanSpawnPickup(Pickup.PickupType pickupType)
         {
             if (pickupType == Pickup.PickupType._1UP)
@@ -718,7 +719,7 @@ namespace _Game.Scripts
             Invoke(nameof(SpawnDengueSource),
                 UnityEngine.Random.Range(spawnSettings.MinSpawnInterval, spawnSettings.MaxSpawnInterval));
         }
-        
+
         private DengueSourceSpawnSettings GetCurrentDengueSourceSpawnSettings()
         {
             switch (_playerCharactersAlive)
@@ -736,52 +737,56 @@ namespace _Game.Scripts
 
         private void SpawnDengueSource()
         {
-            if(_dengueSourcesInScene >= GetCurrentDengueSourceSpawnSettings().MaxDengueSourcesInScene)
+            if (_dengueSourcesInScene >= GetCurrentDengueSourceSpawnSettings().MaxDengueSourcesInScene)
             {
                 InvokeDengueSourceSpawn();
                 return;
             }
-            
+
             DengueSourceSpawnSettings spawnSettings = GetCurrentDengueSourceSpawnSettings();
             if (PhotonNetwork.IsMasterClient)
             {
                 Vector3 randomPosition;
-                
-                if(bDebugMode)
+
+                if (bDebugMode)
                     Debug.Log("GameMode.SpawnDengueSource: Finding random position for dengue source spawn.");
                 do
                 {
-                    var randomX = UnityEngine.Random.Range(dengueSourceSpawnArea.bounds.min.x, dengueSourceSpawnArea.bounds.max.x);
-                    var randomY = UnityEngine.Random.Range(dengueSourceSpawnArea.bounds.min.y, dengueSourceSpawnArea.bounds.max.y);
+                    var randomX = UnityEngine.Random.Range(dengueSourceSpawnArea.bounds.min.x,
+                        dengueSourceSpawnArea.bounds.max.x);
+                    var randomY = UnityEngine.Random.Range(dengueSourceSpawnArea.bounds.min.y,
+                        dengueSourceSpawnArea.bounds.max.y);
                     randomPosition = new Vector3(randomX, randomY, 0f);
-                }
-                while(CheckIfPlayerIsAround(randomPosition, radiusCheckPlayerDengueSource));
-                
-                if(bDebugMode)
-                    Debug.Log($"GameMode.SpawnDengueSource: Found valid position for dengue source spawn: {randomPosition}");
+                } while (CheckIfPlayerIsAround(randomPosition, radiusCheckPlayerDengueSource));
+
+                if (bDebugMode)
+                    Debug.Log(
+                        $"GameMode.SpawnDengueSource: Found valid position for dengue source spawn: {randomPosition}");
 
                 int randomIndex = UnityEngine.Random.Range(0, dengueSourcePrefabs.Length);
 
-                DengueSource dengueSource = PhotonNetwork.InstantiateRoomObject(dengueSourcePrefabs[randomIndex].name, randomPosition, Quaternion.identity).GetComponent<DengueSource>();
+                DengueSource dengueSource = PhotonNetwork
+                    .InstantiateRoomObject(dengueSourcePrefabs[randomIndex].name, randomPosition, Quaternion.identity)
+                    .GetComponent<DengueSource>();
                 _dengueSourcesInScene++;
-                
+
                 dengueSource.OnDengueSourceDestroyed += OnDengueSourceDestroyed;
             }
 
             InvokeDengueSourceSpawn();
         }
-        
+
         private bool CheckIfPlayerIsAround(Vector3 position, float checkRadius)
         {
             Collider2D[] colliders = Physics2D.OverlapCircleAll(position, checkRadius, playerLayerMask);
-            
+
             bool isPlayerAround = colliders.Length > 0;
 
             if (bDebugMode)
             {
                 _debugCheckPlayerAround.Add(new DebugPlayerCheck
                 {
-                    pos = position, 
+                    pos = position,
                     checkRadius = checkRadius,
                     isPlayerAround = colliders.Length > 0,
                     timeLimit = Time.time + playerAroundCheckDebugTime
@@ -805,13 +810,15 @@ namespace _Game.Scripts
 
         private void OnDrawGizmos()
         {
-            if(!bDebugMode || _debugCheckPlayerAround == null || _debugCheckPlayerAround.Count == 0) return;
-            
+            if (!bDebugMode || _debugCheckPlayerAround == null || _debugCheckPlayerAround.Count == 0) return;
+
             _debugCheckPlayerAround.RemoveAll(check => Time.time > check.timeLimit);
 
             for (var i = 0; i < _debugCheckPlayerAround.Count; i++)
             {
-                Gizmos.color = _debugCheckPlayerAround[i].isPlayerAround ? colorWhenPlayerAround : colorWhenPlayerNotAround;
+                Gizmos.color = _debugCheckPlayerAround[i].isPlayerAround
+                    ? colorWhenPlayerAround
+                    : colorWhenPlayerNotAround;
                 Gizmos.DrawWireSphere(_debugCheckPlayerAround[i].pos, _debugCheckPlayerAround[i].checkRadius);
             }
         }
