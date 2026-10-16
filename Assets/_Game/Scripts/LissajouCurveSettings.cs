@@ -53,12 +53,6 @@ public class LissajouCurveSettings : ScriptableObject
     
     [Header("Offsets")]
     [Range(-20, 20)] public float xOffset = 0f;
-    public bool animateXOffset = false;
-    public Vector2 xOffsetRange = new Vector2(-2f, 2f);
-    public float xOffsetFrequency = 0.2f;
-
-    [Space]
-    
     [Range(-20, 20)] public float yOffset = 0f;
     
     [Header("Multiplier")]

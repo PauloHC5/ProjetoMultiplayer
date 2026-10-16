@@ -10,30 +10,30 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 60625ea6e76c82b4192e5b066cbcd501, type: 3}
-  m_Name: BH Local Row Horde 1
-  m_EditorClassIdentifier: Assembly-CSharp::LissajouCurveSettings
-  A: 15.14
+  m_Name: Hard Horde Settings 5
+  m_EditorClassIdentifier: Assembly-CSharp::LissajousSettings
+  A: 14.94
   animateA: 0
   aScaleRange: {x: 0.6, y: 1.2}
   aFrequency: 0.5
-  B: 0
+  B: 4
   animateB: 0
-  bScaleRange: {x: 0.6, y: 27.51}
+  bScaleRange: {x: 0.6, y: 1.2}
   bFrequency: 0.5
   bPhase: 0
-  C: 9.82
+  C: 0.15
   C_Random: 0
   D: 1
   D_Random: 0
-  delta: 1.6
+  delta: 0
   delta_Random: 0
   animateDelta: 0
-  deltaMode: 0
+  deltaMode: 1
   deltaMin: 0
-  deltaMax: 6.28
-  deltaFrequency: 0.1
+  deltaMax: 6.06
+  deltaFrequency: 0.35
   transitionMode: 0
-  t_multipler: 0.9
-  xOffset: 0
-  yOffset: 0
-  multiplier: 1.65
+  t_multipler: 4.51
+  xOffset: 0.5
+  yOffset: 6
+  multiplier: 2.01

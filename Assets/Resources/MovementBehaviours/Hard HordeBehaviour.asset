@@ -17,7 +17,12 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 9f6f8192cd152a44786682be59d60990, type: 2}
   - {fileID: 11400000, guid: 73386ba2379feb548a07156cba252d41, type: 2}
   - {fileID: 11400000, guid: 1958e4fa1d102884fa3102bc594cab52, type: 2}
+  - {fileID: 11400000, guid: a70fe0e6ddc7f454e8bcc962bbbd4c62, type: 2}
   behaviourType: 0
-  behaviourStartDelay: 5
-  behaviourDuration: 3
-  speedMultiplier: 2
+  minBehaviourStartDelay: 2
+  maxBehaviourStartDelay: 5
+  minBehaviourDuration: 5
+  maxBehaviourDuration: 10
+  timeToReorder: 1.2
+  bRapidFire: 0
+  rapidFireTime: 1.5

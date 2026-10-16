@@ -113,9 +113,11 @@ public class MosquitosHorde : MonoBehaviourPunCallbacks
     private Dictionary<HordePositionKey, Vector2> _hordePositions;
     private Coroutine _mosquitosBehaviourRoutine;
     private MosquitoBehaviourStateDifficulty _currentBehaviourDifficulty;
+    private List<Mosquito> _infectedMosquitoes = new List<Mosquito>();
 
     public const int MosquitosInstigatorId = 451;
     public float speedBuff = 1f;
+    public bool rapidFireActive = false;
 
     public int TotalMosquitos => this.rows * this.columns;
     public float PercentAlive => ((float)AmountAlive / (float)TotalMosquitos) * 100f;
@@ -213,7 +215,7 @@ public class MosquitosHorde : MonoBehaviourPunCallbacks
             HordePositionKey hordePositionKey = new HordePositionKey(i / this.columns, i % this.columns);
 
             _photonView.RPC(nameof(SpawnMosquitoAtHorde), RpcTarget.AllBuffered, mosquitoType,
-                hordePositionKey.row, hordePositionKey.col, 0f, 0f, false);
+                hordePositionKey, 0f, 0f, false);
         }
 
         _bAlreadySpawnedMosquitos = true;
@@ -236,11 +238,9 @@ public class MosquitosHorde : MonoBehaviourPunCallbacks
     }
 
     [PunRPC]
-    private void SpawnMosquitoAtHorde(MosquitoType mosquitoType, int row, int col, float starPosX, float starPosY,
+    private void SpawnMosquitoAtHorde(MosquitoType mosquitoType,HordePositionKey hordePositionKey, float starPosX, float starPosY,
         bool isWorldPosition)
     {
-        HordePositionKey hordePositionKey = new HordePositionKey(row, col);
-
         if (!_hordePositions.TryGetValue(hordePositionKey, out Vector2 rowPosition))
         {
             Debug.LogError($"Horde position not found for key {hordePositionKey.row}, {hordePositionKey.col}");
@@ -254,7 +254,9 @@ public class MosquitosHorde : MonoBehaviourPunCallbacks
         Vector3 startPos = isWorldPosition
             ? transform.InverseTransformPoint(new Vector3(starPosX, starPosY, 0f))
             : new Vector3(starPosX, starPosY, 0f);
-
+        
+        if(mosquitoSpawned.Type == MosquitoType.Infected)
+            _infectedMosquitoes.Add(mosquitoSpawned);
 
         // If a mosquito already exists at this index, we want to replace it with the new mosquito,
         // but we want to keep the time offset of the old mosquito
@@ -267,6 +269,7 @@ public class MosquitosHorde : MonoBehaviourPunCallbacks
                 _mosquitosDict[hordePositionKey].MosquitoZigZagMovement.phaseOffset;
             mosquitoSpawned.LissajousCurve.timeOffset = _mosquitosDict[hordePositionKey].LissajousCurve.timeOffset;
             Destroy(_mosquitosDict[hordePositionKey].gameObject);
+            _infectedMosquitoes.Remove(_mosquitosDict[hordePositionKey]);
         }
 
         _mosquitosDict[hordePositionKey] = mosquitoSpawned;
@@ -308,7 +311,7 @@ public class MosquitosHorde : MonoBehaviourPunCallbacks
         MosquitoType mosquitoType = RandomizeMosquitoType(availablePosition.row);
 
         _photonView.RPC(nameof(SpawnMosquitoAtHorde), RpcTarget.AllBuffered, mosquitoType,
-            availablePosition.row, availablePosition.col, dengueSourcePosition.x, dengueSourcePosition.y, true);
+            availablePosition, dengueSourcePosition.x, dengueSourcePosition.y, true);
     }
 
     private HordePositionKey GetAvailableHordePositionKey()
@@ -427,52 +430,22 @@ public class MosquitosHorde : MonoBehaviourPunCallbacks
 
         Mosquito mosquitoToAttack = null;
 
-        if (_lastMosquito == null || !_lastMosquito.gameObject.activeInHierarchy)
+        if (_infectedMosquitoes != null && _infectedMosquitoes.Count > 0)
         {
-            // Check if we are in the last 10 mosquitos
-            bool areWeInTheLast10Mosquitos =
-                AmountAlive <= 10 && _last10Mosquitos != null && _last10Mosquitos.Length > 0;
-
-            if (areWeInTheLast10Mosquitos)
-            {
-                var infectedMosquitos = _last10Mosquitos.Where(mosquito => mosquito != null &&
-                                                                           mosquito.Type == MosquitoType.Infected &&
-                                                                           mosquito.gameObject.activeInHierarchy)
-                    .ToArray();
-
-                if (infectedMosquitos.Length == 0) return;
-
-                mosquitoToAttack = infectedMosquitos[UnityEngine.Random.Range(0, infectedMosquitos.Length - 1)];
-            }
-            else
-            {
-                var infectedMosquitos = _mosquitosDict.Values.Where(mosquito => mosquito != null &&
-                    mosquito.Type == MosquitoType.Infected && mosquito.gameObject.activeInHierarchy).ToArray();
-
-                if (infectedMosquitos.Length == 0) return;
-
-                mosquitoToAttack = infectedMosquitos[UnityEngine.Random.Range(0, infectedMosquitos.Length - 1)];
-            }
+            mosquitoToAttack = _infectedMosquitoes[UnityEngine.Random.Range(0, _infectedMosquitoes.Count)];
         }
-        else
-        {
-            mosquitoToAttack = _lastMosquito.Type == MosquitoType.Infected ? _lastMosquito : null;
-        }
-
-        _shotCounter++;
 
         if (mosquitoToAttack == null) return;
 
-        _photonView.RPC(nameof(MissileAttack), RpcTarget.All, mosquitoToAttack.hordePositionKey.row,
-            mosquitoToAttack.hordePositionKey.col, _shotCounter);
+        _shotCounter++;
+        
+        _photonView.RPC(nameof(MissileAttack), RpcTarget.All, mosquitoToAttack.hordePositionKey, _shotCounter);
     }
 
     [PunRPC]
-    private void MissileAttack(int mosquitoRow, int mosquitoCol, int shotId)
+    private void MissileAttack(HordePositionKey hordePositionKey, int shotId)
     {
         if (stopMovement) return;
-
-        HordePositionKey hordePositionKey = new HordePositionKey(mosquitoRow, mosquitoCol);
 
         // Get the selected mosquito from the dictionary using the position key
         var selectedMosquito = _mosquitosDict.GetValueOrDefault(hordePositionKey);
@@ -481,6 +454,12 @@ public class MosquitosHorde : MonoBehaviourPunCallbacks
 
         var missile = Instantiate(missilePrefab, selectedMosquito.transform.position, Quaternion.identity);
         missile.Init(MosquitosInstigatorId, shotId);
+        
+        /*if(rapidFireActive)
+            missile.ChangeSpeed(missile.Speed * 1.5f);*/
+
+        if (debugLogs)
+            Debug.Log("Spawning missile with speed: " + missile.Speed);
     }
 
     private void MosquitoKilled(Mosquito mosquito, int instigatorPlayerId)
@@ -506,6 +485,9 @@ public class MosquitosHorde : MonoBehaviourPunCallbacks
         OnMosquitoKilled?.Invoke(instigatorPlayerId, mosquitoKilled.points);
 
         mosquitoKilled.gameObject.SetActive(false);
+        
+        if(mosquitoKilled.Type == MosquitoType.Infected)
+            _infectedMosquitoes.Remove(mosquitoKilled);
 
         mosquitoKilled.OnMosquitoKilled -= MosquitoKilled;
 
@@ -560,6 +542,7 @@ public class MosquitosHorde : MonoBehaviourPunCallbacks
                 StopCoroutine(_mosquitosBehaviourRoutine);
                 _mosquitosBehaviourRoutine = null;
                 SendMosquitosBackToTheirPositions();
+                CancelInvoke(nameof(RapidFire));
             }
         }
 
@@ -718,13 +701,25 @@ public class MosquitosHorde : MonoBehaviourPunCallbacks
             ClearBufferedFromBehaviourFunctions();
 
             photonView.RPC(nameof(StartBehaviour), RpcTarget.AllBuffered, mosquitosChosenKeys, settingsIndexChosen);
-            
+
+            if (hordeBehaviour.IsRapidFire)
+            {
+                InvokeRepeating(nameof(RapidFire), 0f, hordeBehaviour.RapidFireTime);
+                rapidFireActive = true;
+            }
+
             yield return new WaitForSeconds(hordeBehaviour.BehaviourDuration);
             
             ClearBufferedFromBehaviourFunctions();
 
             photonView.RPC(nameof(StopBehaviour), RpcTarget.AllBuffered, mosquitosChosenKeys);
-            
+
+            if (hordeBehaviour.IsRapidFire)
+            {
+                CancelInvoke(nameof(RapidFire));
+                rapidFireActive = false;
+            }
+
             yield return new WaitForSeconds(hordeBehaviour.TimeToReorder);
             
             ClearBufferedFromBehaviourFunctions();
@@ -773,6 +768,16 @@ public class MosquitosHorde : MonoBehaviourPunCallbacks
                 mosquitosChosen[i].LissajousCurve.SwitchCurveSettings(movementSettingsChosen);
             }
         }
+    }
+    
+    private void RapidFire()
+    {
+        if (!PhotonNetwork.IsMasterClient) return;
+        
+        if(debugLogs)
+            Debug.Log("Rapid fire requested.");
+
+        RequestMissileAttack();
     }
 
     [PunRPC]

@@ -34,6 +34,7 @@ namespace _Game.Scripts
         {
             public float MinSpawnInterval;
             public float MaxSpawnInterval;
+            public int MaxDengueSourcesInScene;
         }
 
         public enum GameState
@@ -81,7 +82,6 @@ namespace _Game.Scripts
         
         [Header("Dengue Source")]
         [SerializeField] private BoxCollider2D dengueSourceSpawnArea;
-        [SerializeField] private int maxDengueSourcesInScene = 3;
         [SerializeField] private DengueSourceSpawnSettings dengueSourceSpawnSettingsWith1CharacterAlive;
         [SerializeField] private DengueSourceSpawnSettings dengueSourceSpawnSettingsWith2CharactersAlive;
         [SerializeField] private DengueSourceSpawnSettings dengueSourceSpawnSettingsWith3CharactersAlive;
@@ -736,7 +736,7 @@ namespace _Game.Scripts
 
         private void SpawnDengueSource()
         {
-            if(_dengueSourcesInScene >= maxDengueSourcesInScene)
+            if(_dengueSourcesInScene >= GetCurrentDengueSourceSpawnSettings().MaxDengueSourcesInScene)
             {
                 InvokeDengueSourceSpawn();
                 return;

@@ -564,7 +564,7 @@ MonoBehaviour:
     MinSpawnInterval: 5
     MaxSpawnInterval: 12
     OneUpSpawnChance: 10
-    ToolboxSpawnChance: 25
+    ToolboxSpawnChance: 40
   pickupSpawnSettingsWith2CharactersAlive:
     MinSpawnInterval: 3
     MaxSpawnInterval: 10
@@ -577,18 +577,20 @@ MonoBehaviour:
     ToolboxSpawnChance: 25
   radiusCheckPlayerPickup: 5
   dengueSourceSpawnArea: {fileID: 1244994348}
-  maxDengueSourcesInScene: 3
   dengueSourceSpawnSettingsWith1CharacterAlive:
+    MinSpawnInterval: 10
+    MaxSpawnInterval: 20
+    MaxDengueSourcesInScene: 1
+  dengueSourceSpawnSettingsWith2CharactersAlive:
     MinSpawnInterval: 8
     MaxSpawnInterval: 20
-  dengueSourceSpawnSettingsWith2CharactersAlive:
-    MinSpawnInterval: 5
-    MaxSpawnInterval: 20
+    MaxDengueSourcesInScene: 2
   dengueSourceSpawnSettingsWith3CharactersAlive:
     MinSpawnInterval: 5
     MaxSpawnInterval: 15
+    MaxDengueSourcesInScene: 3
   radiusCheckPlayerDengueSource: 10
-  bDebugMode: 1
+  bDebugMode: 0
   playerAroundCheckDebugTime: 3
   colorWhenPlayerAround: {r: 0, g: 1, b: 0, a: 0.5019608}
   colorWhenPlayerNotAround: {r: 1, g: 0, b: 0, a: 0.5019608}
@@ -3189,7 +3191,7 @@ BoxCollider2D:
   m_UsedByEffector: 0
   m_CompositeOperation: 0
   m_CompositeOrder: 0
-  m_Offset: {x: 0, y: 0.43683815}
+  m_Offset: {x: 0, y: -0.35323715}
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0, y: 0}
@@ -3199,7 +3201,7 @@ BoxCollider2D:
     drawMode: 0
     adaptiveTiling: 0
   m_AutoTiling: 0
-  m_Size: {x: 57.48, y: 19.306324}
+  m_Size: {x: 57.48, y: 17.726173}
   m_EdgeRadius: 0
 --- !u!4 &1244994349
 Transform:
@@ -3682,7 +3684,7 @@ BoxCollider2D:
   m_UsedByEffector: 0
   m_CompositeOperation: 0
   m_CompositeOrder: 0
-  m_Offset: {x: 0, y: 0}
+  m_Offset: {x: 0, y: -5.342417}
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0, y: 0}
@@ -3692,7 +3694,7 @@ BoxCollider2D:
     drawMode: 0
     adaptiveTiling: 0
   m_AutoTiling: 0
-  m_Size: {x: 57.48, y: 20.18}
+  m_Size: {x: 57.48, y: 19.87902}
   m_EdgeRadius: 0
 --- !u!4 &1551202079
 Transform:

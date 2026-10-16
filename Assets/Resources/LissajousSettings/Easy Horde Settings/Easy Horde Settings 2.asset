@@ -10,13 +10,13 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 60625ea6e76c82b4192e5b066cbcd501, type: 3}
-  m_Name: BH Local Column Horde 1
+  m_Name: Easy Horde Settings 2
   m_EditorClassIdentifier: Assembly-CSharp::LissajouCurveSettings
-  A: 8.22
+  A: 8.62
   animateA: 1
   aScaleRange: {x: 0.6, y: 1.2}
   aFrequency: 0.5
-  B: 8.17
+  B: 8.47
   animateB: 1
   bScaleRange: {x: 0.6, y: 1.2}
   bFrequency: 0.5
@@ -25,7 +25,7 @@ MonoBehaviour:
   C_Random: 0
   D: 1
   D_Random: 0
-  delta: 0
+  delta: 3.142
   delta_Random: 0
   animateDelta: 0
   deltaMode: 0

@@ -14,7 +14,8 @@ public class Projectile : MonoBehaviour
     
     [Header("Projectile Settings")]
     [SerializeField] private ProjectileDirection direction;
-    public float speed;
+    [SerializeField] private float speed;
+    public float Speed => speed;
 
     public int InstigatorId { get; private set; }
     public int ShotId { get; private set; }
@@ -68,6 +69,12 @@ public class Projectile : MonoBehaviour
         var direction2D = new Vector2(directionToGo.x, directionToGo.y).normalized;
         
         _rigidbody2D.linearVelocity += direction2D * speed;
+    }
+    
+    public void ChangeSpeed(float newSpeed)
+    {
+        speed = newSpeed;
+        ProjectileVelocity();
     }
 
     private void OnTriggerEnter2D(Collider2D other)

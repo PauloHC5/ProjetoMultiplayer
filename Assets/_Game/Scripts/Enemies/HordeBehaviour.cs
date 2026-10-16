@@ -11,20 +11,28 @@ public class HordeBehaviour : ScriptableObject
     protected enum BehaviourType
     {
         AllHordeMosquitos,
-        RandomMosquitos,
-        RandomRowMosquitos,
-        RandomColumnMosquitos
+        RandomRowOrColumnMosquitos,
+        OnlyInfectedMosquitos,
     }
     
-    [SerializeField] protected LissajouCurveSettings[] curveMovementSettings;
-    [SerializeField] protected BehaviourType behaviourType;
-    [SerializeField] protected float behaviourStartDelay = 5f;
-    [SerializeField] protected float behaviourDuration = 3f;
-    [SerializeField] protected float timeToReorder = 0.5f;
+    [Header("Behaviour Settings")]
+    [SerializeField] private LissajouCurveSettings[] curveMovementSettings;
+    [SerializeField] private BehaviourType behaviourType;
+    [SerializeField] private float minBehaviourStartDelay = 5f;
+    [SerializeField] private float maxBehaviourStartDelay = 5f;
+    [SerializeField] private float minBehaviourDuration = 3f;
+    [SerializeField] private float maxBehaviourDuration = 3f;
+    [SerializeField] private float timeToReorder = 0.5f;
+
+    [Header("Behaviour Buffs")] 
+    [SerializeField] private bool bRapidFire = false;
+    [SerializeField] private float rapidFireTime = 1.5f;
     
-    public float BehaviourStartDelay => behaviourStartDelay;
-    public float BehaviourDuration => behaviourDuration;
+    public float BehaviourStartDelay => UnityEngine.Random.Range(minBehaviourStartDelay, maxBehaviourStartDelay);
+    public float BehaviourDuration => UnityEngine.Random.Range(minBehaviourDuration, maxBehaviourDuration);
     public float TimeToReorder => timeToReorder;
+    public bool IsRapidFire => bRapidFire;
+    public float RapidFireTime => rapidFireTime;
 
 
     public LissajouCurveSettings GetMovementSettings(int index)
@@ -66,14 +74,11 @@ public class HordeBehaviour : ScriptableObject
             case BehaviourType.AllHordeMosquitos:
                 hordeMosquitosChoosen = GetAllMosquitosFromHorde(mosquitosDictionary);
                 break;
-            case BehaviourType.RandomMosquitos:
-                hordeMosquitosChoosen = null; // Implement this case
+            case BehaviourType.OnlyInfectedMosquitos:
+                hordeMosquitosChoosen = GetOnlyInfectedMosquitos(mosquitosDictionary);
                 break;
-            case BehaviourType.RandomRowMosquitos:
-                hordeMosquitosChoosen = GetMosquitosFromRandomRow(mosquitosDictionary, hordeRows);
-                break;
-            case BehaviourType.RandomColumnMosquitos:
-                hordeMosquitosChoosen = GetMosquitosFromRandomColumn(mosquitosDictionary, hordeColumns);
+            case BehaviourType.RandomRowOrColumnMosquitos:
+                hordeMosquitosChoosen = GetMosquitosFromRandomRowOrColumn(mosquitosDictionary, hordeRows, hordeColumns);
                 break;
         }
     }
@@ -83,24 +88,34 @@ public class HordeBehaviour : ScriptableObject
         return mosquitosDictionary.Keys.ToArray();
     }
     
-    private MosquitosHorde.HordePositionKey[] GetMosquitosFromRandomRow(Dictionary<MosquitosHorde.HordePositionKey, Mosquito> mosquitosDictionary, int hordeRows)
+    private MosquitosHorde.HordePositionKey[] GetOnlyInfectedMosquitos(Dictionary<MosquitosHorde.HordePositionKey, Mosquito> mosquitosDictionary)
     {
-        var allKeys = mosquitosDictionary.Keys.ToList();
-
-        int randomRow = UnityEngine.Random.Range(0, hordeRows);
-        
-        MosquitosHorde.HordePositionKey[] selectedMosquitos = allKeys.Where(key => key.row == randomRow).ToArray();
-
-        return selectedMosquitos;
+        return mosquitosDictionary
+            .Where(kvp => kvp.Value.Type == MosquitoType.Infected)
+            .Select(kvp => kvp.Key)
+            .ToArray();
     }
     
-    private MosquitosHorde.HordePositionKey[] GetMosquitosFromRandomColumn(Dictionary<MosquitosHorde.HordePositionKey, Mosquito> mosquitosDictionary, int hordeColumns)
+    
+    private MosquitosHorde.HordePositionKey[] GetMosquitosFromRandomRowOrColumn(Dictionary<MosquitosHorde.HordePositionKey, Mosquito> mosquitosDictionary, int hordeRows, int hordeColumns)
     {
         var allKeys = mosquitosDictionary.Keys.ToList();
+        
+        var randomChoice = UnityEngine.Random.Range(0, 2); // 0 for row, 1 for column
 
+        MosquitosHorde.HordePositionKey[] selectedMosquitos = Array.Empty<MosquitosHorde.HordePositionKey>();
+        
+        if(randomChoice == 0) // Random Row
+        {
+            int randomRow = UnityEngine.Random.Range(0, hordeRows);
+            selectedMosquitos = allKeys.Where(key => key.row == randomRow).ToArray();
+            return selectedMosquitos;
+        }
+
+        // Random Column
         int randomColumn = UnityEngine.Random.Range(0, hordeColumns);
         
-        MosquitosHorde.HordePositionKey[] selectedMosquitos = allKeys.Where(key => key.col == randomColumn).ToArray();
+        selectedMosquitos = allKeys.Where(key => key.col == randomColumn).ToArray();
 
         return selectedMosquitos;
     }
