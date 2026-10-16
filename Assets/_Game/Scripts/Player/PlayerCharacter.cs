@@ -100,9 +100,11 @@ public class PlayerCharacter : MonoBehaviourPun
     private void Update()
     {
         if (!photonView.IsMine) return;
-        
+
+#if UNITY_EDITOR
         if(Keyboard.current.fKey.wasPressedThisFrame)
             photonView.RPC(nameof(RpcDeath), RpcTarget.All);
+#endif
 
         if (bBotMode)
             BotMovement();
