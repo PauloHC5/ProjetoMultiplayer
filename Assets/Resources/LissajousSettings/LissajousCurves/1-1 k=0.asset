@@ -35,5 +35,8 @@ MonoBehaviour:
   transitionMode: 0
   t_multipler: 4.54
   xOffset: 0
+  animateXOffset: 0
+  xOffsetRange: {x: 22, y: -22}
+  xOffsetFrequency: 0.2
   yOffset: 0
   multiplier: 9.57

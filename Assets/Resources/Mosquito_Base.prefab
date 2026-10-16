@@ -178,18 +178,17 @@ MonoBehaviour:
   type: 0
   positionInterpolationDuration: 1
   scaleUpDuration: 0.8
-  moveAroundAnchor: 1
   zigZagMovement:
     zigZagMovementSettings: {fileID: 11400000, guid: 3f0cd42cac7e6634dbfaedbdb254bb31, type: 2}
     bInterpolateMovement: 1
     interpolationDuration: 0.5
     debugZigZagMovement: 0
     debugTime: 0
+    phaseOffset: 0
   lissajousCurve:
     settings: {fileID: 0}
     interpolateToNewSettings: 1
-    transitionMode: 1
-    interpolationDuration: 0.5
+    interpolationDuration: 0.8
     timeOffset: 0
     tr: {fileID: 0}
     bDebugCurve: 0
@@ -198,4 +197,7 @@ MonoBehaviour:
     debugTime: 0
   debugMode: 0
   debugGoToPosition: {x: 0, y: 0}
-  mosquitoId: 0
+  moveToHordeCenter: 0
+  hordePositionKey:
+    row: 0
+    col: 0

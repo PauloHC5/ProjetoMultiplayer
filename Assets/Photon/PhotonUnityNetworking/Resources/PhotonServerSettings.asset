@@ -85,6 +85,12 @@ MonoBehaviour:
   - OnValuesChanged
   - GiveATimeOffsetToAllMosquitos
   - RpcValuesChanged
+  - TestReceivingHordePosKeysThroughRPC
+  - RpcStarMosquitosBehaviourRoutine
+  - StartBehaviour
+  - StopBehaviour
+  - SendMosquitosBackToTheirPositions
+  - SendMosquitosToHordCenter
   DisableAutoOpenWizard: 1
   ShowSettings: 1
   DevRegionSetOnce: 0

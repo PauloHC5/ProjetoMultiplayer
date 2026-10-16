@@ -119,6 +119,131 @@ NavMeshSettings:
     debug:
       m_Flags: 0
   m_NavMeshData: {fileID: 0}
+--- !u!1001 &3579263
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 0}
+    m_Modifications:
+    - target: {fileID: -2141858161189176034, guid: 9e2412c119f379d47bb0ec19dd06c263, type: 3}
+      propertyPath: debugMode
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -2141858161189176034, guid: 9e2412c119f379d47bb0ec19dd06c263, type: 3}
+      propertyPath: zigZagMovement
+      value: 
+      objectReference: {fileID: 11400000, guid: 64ffcaf4a41e5914d8b16e5eb2cf687b, type: 2}
+    - target: {fileID: -2141858161189176034, guid: 9e2412c119f379d47bb0ec19dd06c263, type: 3}
+      propertyPath: debugGoToPosition.x
+      value: -14
+      objectReference: {fileID: 0}
+    - target: {fileID: -2141858161189176034, guid: 9e2412c119f379d47bb0ec19dd06c263, type: 3}
+      propertyPath: debugGoToPosition.y
+      value: 8.11
+      objectReference: {fileID: 0}
+    - target: {fileID: -2141858161189176034, guid: 9e2412c119f379d47bb0ec19dd06c263, type: 3}
+      propertyPath: standardZigZagMovement
+      value: 
+      objectReference: {fileID: 11400000, guid: 64ffcaf4a41e5914d8b16e5eb2cf687b, type: 2}
+    - target: {fileID: -2141858161189176034, guid: 9e2412c119f379d47bb0ec19dd06c263, type: 3}
+      propertyPath: lissajousCurve.settings
+      value: 
+      objectReference: {fileID: 11400000, guid: 75a73a20c5e82d1428a27a61dbf684ce, type: 2}
+    - target: {fileID: -2141858161189176034, guid: 9e2412c119f379d47bb0ec19dd06c263, type: 3}
+      propertyPath: lissajousCurve.timeOffset
+      value: 20
+      objectReference: {fileID: 0}
+    - target: {fileID: -2141858161189176034, guid: 9e2412c119f379d47bb0ec19dd06c263, type: 3}
+      propertyPath: lissajousCurve.bDebugCurve
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -2141858161189176034, guid: 9e2412c119f379d47bb0ec19dd06c263, type: 3}
+      propertyPath: positionInterpolationDuration
+      value: 0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: -2141858161189176034, guid: 9e2412c119f379d47bb0ec19dd06c263, type: 3}
+      propertyPath: mosquitoMovement.debugMovement
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: -2141858161189176034, guid: 9e2412c119f379d47bb0ec19dd06c263, type: 3}
+      propertyPath: zigZagMovement.bInterpolateMovement
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: -2141858161189176034, guid: 9e2412c119f379d47bb0ec19dd06c263, type: 3}
+      propertyPath: mosquitoMovement.bInterpolateMovement
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: -2141858161189176034, guid: 9e2412c119f379d47bb0ec19dd06c263, type: 3}
+      propertyPath: zigZagMovement.zigZagMovementSettings
+      value: 
+      objectReference: {fileID: 11400000, guid: 64ffcaf4a41e5914d8b16e5eb2cf687b, type: 2}
+    - target: {fileID: -2141858161189176034, guid: 9e2412c119f379d47bb0ec19dd06c263, type: 3}
+      propertyPath: lissajousCurve.interpolateToNewSettings
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: -2141858161189176034, guid: 9e2412c119f379d47bb0ec19dd06c263, type: 3}
+      propertyPath: mosquitoZigZagMovement.debugZigZagMovement
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -2141858161189176034, guid: 9e2412c119f379d47bb0ec19dd06c263, type: 3}
+      propertyPath: mosquitoZigZagMovement.bInterpolateMovement
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 364302238411201926, guid: 9e2412c119f379d47bb0ec19dd06c263, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 364302238411201926, guid: 9e2412c119f379d47bb0ec19dd06c263, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 364302238411201926, guid: 9e2412c119f379d47bb0ec19dd06c263, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 364302238411201926, guid: 9e2412c119f379d47bb0ec19dd06c263, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 364302238411201926, guid: 9e2412c119f379d47bb0ec19dd06c263, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 364302238411201926, guid: 9e2412c119f379d47bb0ec19dd06c263, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 364302238411201926, guid: 9e2412c119f379d47bb0ec19dd06c263, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 364302238411201926, guid: 9e2412c119f379d47bb0ec19dd06c263, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 364302238411201926, guid: 9e2412c119f379d47bb0ec19dd06c263, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 364302238411201926, guid: 9e2412c119f379d47bb0ec19dd06c263, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2850217529171155301, guid: 9e2412c119f379d47bb0ec19dd06c263, type: 3}
+      propertyPath: m_Name
+      value: Mosquito_Base (4)
+      objectReference: {fileID: 0}
+    - target: {fileID: 4563279182175837554, guid: 9e2412c119f379d47bb0ec19dd06c263, type: 3}
+      propertyPath: sceneViewId
+      value: 3
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: 9e2412c119f379d47bb0ec19dd06c263, type: 3}
 --- !u!1001 &145433994
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -249,6 +374,256 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 7bbf2dccf0dfd99459304d84996b548b, type: 3}
+--- !u!1001 &272892375
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 0}
+    m_Modifications:
+    - target: {fileID: -2141858161189176034, guid: 9e2412c119f379d47bb0ec19dd06c263, type: 3}
+      propertyPath: debugMode
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -2141858161189176034, guid: 9e2412c119f379d47bb0ec19dd06c263, type: 3}
+      propertyPath: zigZagMovement
+      value: 
+      objectReference: {fileID: 11400000, guid: 64ffcaf4a41e5914d8b16e5eb2cf687b, type: 2}
+    - target: {fileID: -2141858161189176034, guid: 9e2412c119f379d47bb0ec19dd06c263, type: 3}
+      propertyPath: debugGoToPosition.x
+      value: -14
+      objectReference: {fileID: 0}
+    - target: {fileID: -2141858161189176034, guid: 9e2412c119f379d47bb0ec19dd06c263, type: 3}
+      propertyPath: debugGoToPosition.y
+      value: 8.11
+      objectReference: {fileID: 0}
+    - target: {fileID: -2141858161189176034, guid: 9e2412c119f379d47bb0ec19dd06c263, type: 3}
+      propertyPath: standardZigZagMovement
+      value: 
+      objectReference: {fileID: 11400000, guid: 64ffcaf4a41e5914d8b16e5eb2cf687b, type: 2}
+    - target: {fileID: -2141858161189176034, guid: 9e2412c119f379d47bb0ec19dd06c263, type: 3}
+      propertyPath: lissajousCurve.settings
+      value: 
+      objectReference: {fileID: 11400000, guid: 75a73a20c5e82d1428a27a61dbf684ce, type: 2}
+    - target: {fileID: -2141858161189176034, guid: 9e2412c119f379d47bb0ec19dd06c263, type: 3}
+      propertyPath: lissajousCurve.timeOffset
+      value: 5
+      objectReference: {fileID: 0}
+    - target: {fileID: -2141858161189176034, guid: 9e2412c119f379d47bb0ec19dd06c263, type: 3}
+      propertyPath: lissajousCurve.bDebugCurve
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -2141858161189176034, guid: 9e2412c119f379d47bb0ec19dd06c263, type: 3}
+      propertyPath: positionInterpolationDuration
+      value: 0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: -2141858161189176034, guid: 9e2412c119f379d47bb0ec19dd06c263, type: 3}
+      propertyPath: mosquitoMovement.debugMovement
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: -2141858161189176034, guid: 9e2412c119f379d47bb0ec19dd06c263, type: 3}
+      propertyPath: zigZagMovement.bInterpolateMovement
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: -2141858161189176034, guid: 9e2412c119f379d47bb0ec19dd06c263, type: 3}
+      propertyPath: mosquitoMovement.bInterpolateMovement
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: -2141858161189176034, guid: 9e2412c119f379d47bb0ec19dd06c263, type: 3}
+      propertyPath: zigZagMovement.zigZagMovementSettings
+      value: 
+      objectReference: {fileID: 11400000, guid: 64ffcaf4a41e5914d8b16e5eb2cf687b, type: 2}
+    - target: {fileID: -2141858161189176034, guid: 9e2412c119f379d47bb0ec19dd06c263, type: 3}
+      propertyPath: lissajousCurve.interpolateToNewSettings
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: -2141858161189176034, guid: 9e2412c119f379d47bb0ec19dd06c263, type: 3}
+      propertyPath: mosquitoZigZagMovement.debugZigZagMovement
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -2141858161189176034, guid: 9e2412c119f379d47bb0ec19dd06c263, type: 3}
+      propertyPath: mosquitoZigZagMovement.bInterpolateMovement
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 364302238411201926, guid: 9e2412c119f379d47bb0ec19dd06c263, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 364302238411201926, guid: 9e2412c119f379d47bb0ec19dd06c263, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 364302238411201926, guid: 9e2412c119f379d47bb0ec19dd06c263, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 364302238411201926, guid: 9e2412c119f379d47bb0ec19dd06c263, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 364302238411201926, guid: 9e2412c119f379d47bb0ec19dd06c263, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 364302238411201926, guid: 9e2412c119f379d47bb0ec19dd06c263, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 364302238411201926, guid: 9e2412c119f379d47bb0ec19dd06c263, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 364302238411201926, guid: 9e2412c119f379d47bb0ec19dd06c263, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 364302238411201926, guid: 9e2412c119f379d47bb0ec19dd06c263, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 364302238411201926, guid: 9e2412c119f379d47bb0ec19dd06c263, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2850217529171155301, guid: 9e2412c119f379d47bb0ec19dd06c263, type: 3}
+      propertyPath: m_Name
+      value: Mosquito_Base (1)
+      objectReference: {fileID: 0}
+    - target: {fileID: 4563279182175837554, guid: 9e2412c119f379d47bb0ec19dd06c263, type: 3}
+      propertyPath: sceneViewId
+      value: 3
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: 9e2412c119f379d47bb0ec19dd06c263, type: 3}
+--- !u!1001 &522012998
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 0}
+    m_Modifications:
+    - target: {fileID: -2141858161189176034, guid: 9e2412c119f379d47bb0ec19dd06c263, type: 3}
+      propertyPath: debugMode
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -2141858161189176034, guid: 9e2412c119f379d47bb0ec19dd06c263, type: 3}
+      propertyPath: zigZagMovement
+      value: 
+      objectReference: {fileID: 11400000, guid: 64ffcaf4a41e5914d8b16e5eb2cf687b, type: 2}
+    - target: {fileID: -2141858161189176034, guid: 9e2412c119f379d47bb0ec19dd06c263, type: 3}
+      propertyPath: debugGoToPosition.x
+      value: -14
+      objectReference: {fileID: 0}
+    - target: {fileID: -2141858161189176034, guid: 9e2412c119f379d47bb0ec19dd06c263, type: 3}
+      propertyPath: debugGoToPosition.y
+      value: 8.11
+      objectReference: {fileID: 0}
+    - target: {fileID: -2141858161189176034, guid: 9e2412c119f379d47bb0ec19dd06c263, type: 3}
+      propertyPath: standardZigZagMovement
+      value: 
+      objectReference: {fileID: 11400000, guid: 64ffcaf4a41e5914d8b16e5eb2cf687b, type: 2}
+    - target: {fileID: -2141858161189176034, guid: 9e2412c119f379d47bb0ec19dd06c263, type: 3}
+      propertyPath: lissajousCurve.settings
+      value: 
+      objectReference: {fileID: 11400000, guid: 75a73a20c5e82d1428a27a61dbf684ce, type: 2}
+    - target: {fileID: -2141858161189176034, guid: 9e2412c119f379d47bb0ec19dd06c263, type: 3}
+      propertyPath: lissajousCurve.timeOffset
+      value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: -2141858161189176034, guid: 9e2412c119f379d47bb0ec19dd06c263, type: 3}
+      propertyPath: lissajousCurve.bDebugCurve
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -2141858161189176034, guid: 9e2412c119f379d47bb0ec19dd06c263, type: 3}
+      propertyPath: positionInterpolationDuration
+      value: 0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: -2141858161189176034, guid: 9e2412c119f379d47bb0ec19dd06c263, type: 3}
+      propertyPath: mosquitoMovement.debugMovement
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: -2141858161189176034, guid: 9e2412c119f379d47bb0ec19dd06c263, type: 3}
+      propertyPath: zigZagMovement.bInterpolateMovement
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: -2141858161189176034, guid: 9e2412c119f379d47bb0ec19dd06c263, type: 3}
+      propertyPath: mosquitoMovement.bInterpolateMovement
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: -2141858161189176034, guid: 9e2412c119f379d47bb0ec19dd06c263, type: 3}
+      propertyPath: zigZagMovement.zigZagMovementSettings
+      value: 
+      objectReference: {fileID: 11400000, guid: 64ffcaf4a41e5914d8b16e5eb2cf687b, type: 2}
+    - target: {fileID: -2141858161189176034, guid: 9e2412c119f379d47bb0ec19dd06c263, type: 3}
+      propertyPath: lissajousCurve.interpolateToNewSettings
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: -2141858161189176034, guid: 9e2412c119f379d47bb0ec19dd06c263, type: 3}
+      propertyPath: mosquitoZigZagMovement.debugZigZagMovement
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -2141858161189176034, guid: 9e2412c119f379d47bb0ec19dd06c263, type: 3}
+      propertyPath: mosquitoZigZagMovement.bInterpolateMovement
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 364302238411201926, guid: 9e2412c119f379d47bb0ec19dd06c263, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 364302238411201926, guid: 9e2412c119f379d47bb0ec19dd06c263, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 364302238411201926, guid: 9e2412c119f379d47bb0ec19dd06c263, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 364302238411201926, guid: 9e2412c119f379d47bb0ec19dd06c263, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 364302238411201926, guid: 9e2412c119f379d47bb0ec19dd06c263, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 364302238411201926, guid: 9e2412c119f379d47bb0ec19dd06c263, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 364302238411201926, guid: 9e2412c119f379d47bb0ec19dd06c263, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 364302238411201926, guid: 9e2412c119f379d47bb0ec19dd06c263, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 364302238411201926, guid: 9e2412c119f379d47bb0ec19dd06c263, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 364302238411201926, guid: 9e2412c119f379d47bb0ec19dd06c263, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2850217529171155301, guid: 9e2412c119f379d47bb0ec19dd06c263, type: 3}
+      propertyPath: m_Name
+      value: Mosquito_Base (2)
+      objectReference: {fileID: 0}
+    - target: {fileID: 4563279182175837554, guid: 9e2412c119f379d47bb0ec19dd06c263, type: 3}
+      propertyPath: sceneViewId
+      value: 3
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: 9e2412c119f379d47bb0ec19dd06c263, type: 3}
 --- !u!114 &813563939 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 4051483603578224192, guid: 1e3f0df2fdec36d4aab6f25c54807f18, type: 3}
@@ -595,7 +970,7 @@ PrefabInstance:
     - target: {fileID: -2141858161189176034, guid: 9e2412c119f379d47bb0ec19dd06c263, type: 3}
       propertyPath: lissajousCurve.settings
       value: 
-      objectReference: {fileID: 0}
+      objectReference: {fileID: 11400000, guid: 75a73a20c5e82d1428a27a61dbf684ce, type: 2}
     - target: {fileID: -2141858161189176034, guid: 9e2412c119f379d47bb0ec19dd06c263, type: 3}
       propertyPath: lissajousCurve.bDebugCurve
       value: 0
@@ -619,7 +994,7 @@ PrefabInstance:
     - target: {fileID: -2141858161189176034, guid: 9e2412c119f379d47bb0ec19dd06c263, type: 3}
       propertyPath: zigZagMovement.zigZagMovementSettings
       value: 
-      objectReference: {fileID: 11400000, guid: 3f0cd42cac7e6634dbfaedbdb254bb31, type: 2}
+      objectReference: {fileID: 11400000, guid: 64ffcaf4a41e5914d8b16e5eb2cf687b, type: 2}
     - target: {fileID: -2141858161189176034, guid: 9e2412c119f379d47bb0ec19dd06c263, type: 3}
       propertyPath: lissajousCurve.interpolateToNewSettings
       value: 1
@@ -675,6 +1050,131 @@ PrefabInstance:
     - target: {fileID: 2850217529171155301, guid: 9e2412c119f379d47bb0ec19dd06c263, type: 3}
       propertyPath: m_Name
       value: Mosquito_Base
+      objectReference: {fileID: 0}
+    - target: {fileID: 4563279182175837554, guid: 9e2412c119f379d47bb0ec19dd06c263, type: 3}
+      propertyPath: sceneViewId
+      value: 3
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: 9e2412c119f379d47bb0ec19dd06c263, type: 3}
+--- !u!1001 &1435676900
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 0}
+    m_Modifications:
+    - target: {fileID: -2141858161189176034, guid: 9e2412c119f379d47bb0ec19dd06c263, type: 3}
+      propertyPath: debugMode
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -2141858161189176034, guid: 9e2412c119f379d47bb0ec19dd06c263, type: 3}
+      propertyPath: zigZagMovement
+      value: 
+      objectReference: {fileID: 11400000, guid: 64ffcaf4a41e5914d8b16e5eb2cf687b, type: 2}
+    - target: {fileID: -2141858161189176034, guid: 9e2412c119f379d47bb0ec19dd06c263, type: 3}
+      propertyPath: debugGoToPosition.x
+      value: -14
+      objectReference: {fileID: 0}
+    - target: {fileID: -2141858161189176034, guid: 9e2412c119f379d47bb0ec19dd06c263, type: 3}
+      propertyPath: debugGoToPosition.y
+      value: 8.11
+      objectReference: {fileID: 0}
+    - target: {fileID: -2141858161189176034, guid: 9e2412c119f379d47bb0ec19dd06c263, type: 3}
+      propertyPath: standardZigZagMovement
+      value: 
+      objectReference: {fileID: 11400000, guid: 64ffcaf4a41e5914d8b16e5eb2cf687b, type: 2}
+    - target: {fileID: -2141858161189176034, guid: 9e2412c119f379d47bb0ec19dd06c263, type: 3}
+      propertyPath: lissajousCurve.settings
+      value: 
+      objectReference: {fileID: 11400000, guid: 75a73a20c5e82d1428a27a61dbf684ce, type: 2}
+    - target: {fileID: -2141858161189176034, guid: 9e2412c119f379d47bb0ec19dd06c263, type: 3}
+      propertyPath: lissajousCurve.timeOffset
+      value: 15
+      objectReference: {fileID: 0}
+    - target: {fileID: -2141858161189176034, guid: 9e2412c119f379d47bb0ec19dd06c263, type: 3}
+      propertyPath: lissajousCurve.bDebugCurve
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -2141858161189176034, guid: 9e2412c119f379d47bb0ec19dd06c263, type: 3}
+      propertyPath: positionInterpolationDuration
+      value: 0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: -2141858161189176034, guid: 9e2412c119f379d47bb0ec19dd06c263, type: 3}
+      propertyPath: mosquitoMovement.debugMovement
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: -2141858161189176034, guid: 9e2412c119f379d47bb0ec19dd06c263, type: 3}
+      propertyPath: zigZagMovement.bInterpolateMovement
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: -2141858161189176034, guid: 9e2412c119f379d47bb0ec19dd06c263, type: 3}
+      propertyPath: mosquitoMovement.bInterpolateMovement
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: -2141858161189176034, guid: 9e2412c119f379d47bb0ec19dd06c263, type: 3}
+      propertyPath: zigZagMovement.zigZagMovementSettings
+      value: 
+      objectReference: {fileID: 11400000, guid: 64ffcaf4a41e5914d8b16e5eb2cf687b, type: 2}
+    - target: {fileID: -2141858161189176034, guid: 9e2412c119f379d47bb0ec19dd06c263, type: 3}
+      propertyPath: lissajousCurve.interpolateToNewSettings
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: -2141858161189176034, guid: 9e2412c119f379d47bb0ec19dd06c263, type: 3}
+      propertyPath: mosquitoZigZagMovement.debugZigZagMovement
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -2141858161189176034, guid: 9e2412c119f379d47bb0ec19dd06c263, type: 3}
+      propertyPath: mosquitoZigZagMovement.bInterpolateMovement
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 364302238411201926, guid: 9e2412c119f379d47bb0ec19dd06c263, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 364302238411201926, guid: 9e2412c119f379d47bb0ec19dd06c263, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 364302238411201926, guid: 9e2412c119f379d47bb0ec19dd06c263, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 364302238411201926, guid: 9e2412c119f379d47bb0ec19dd06c263, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 364302238411201926, guid: 9e2412c119f379d47bb0ec19dd06c263, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 364302238411201926, guid: 9e2412c119f379d47bb0ec19dd06c263, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 364302238411201926, guid: 9e2412c119f379d47bb0ec19dd06c263, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 364302238411201926, guid: 9e2412c119f379d47bb0ec19dd06c263, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 364302238411201926, guid: 9e2412c119f379d47bb0ec19dd06c263, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 364302238411201926, guid: 9e2412c119f379d47bb0ec19dd06c263, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2850217529171155301, guid: 9e2412c119f379d47bb0ec19dd06c263, type: 3}
+      propertyPath: m_Name
+      value: Mosquito_Base (3)
       objectReference: {fileID: 0}
     - target: {fileID: 4563279182175837554, guid: 9e2412c119f379d47bb0ec19dd06c263, type: 3}
       propertyPath: sceneViewId
@@ -968,3 +1468,7 @@ SceneRoots:
   - {fileID: 204278967}
   - {fileID: 1132252717}
   - {fileID: 1246276536}
+  - {fileID: 272892375}
+  - {fileID: 522012998}
+  - {fileID: 1435676900}
+  - {fileID: 3579263}

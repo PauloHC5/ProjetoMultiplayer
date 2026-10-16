@@ -1,3 +1,4 @@
+using ExitGames.Client.Photon;
 using UnityEngine;
 
 public static class BootStrapper
@@ -6,5 +7,34 @@ public static class BootStrapper
     private static void BeforeSceneLoad()
     {
         GameManager gameManager = GameManager.Instance;
+    }
+}
+
+public static class PhotonTypes
+{
+    [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.BeforeSceneLoad)]
+    private static void RegisterTypes()
+    {
+        PhotonPeer.RegisterType(typeof(MosquitosHorde.HordePositionKey), (byte)'H', SerializeHordePositionKey,
+            DeserializeHordePositionKey);
+    }
+
+    static byte[] SerializeHordePositionKey(object customType)
+    {
+        var d = (MosquitosHorde.HordePositionKey)customType;
+        byte[] bytes = new byte[8];
+        int i = 0;
+        Protocol.Serialize(d.col, bytes, ref i);
+        Protocol.Serialize(d.row, bytes, ref i);
+        return bytes;
+    }
+
+    static object DeserializeHordePositionKey(byte[] data)
+    {
+        var d = new MosquitosHorde.HordePositionKey();
+        int i = 0;
+        Protocol.Deserialize(out d.col, data, ref i);
+        Protocol.Deserialize(out d.row, data, ref i);
+        return d;
     }
 }

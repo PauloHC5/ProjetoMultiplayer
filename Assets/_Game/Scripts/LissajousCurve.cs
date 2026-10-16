@@ -196,6 +196,9 @@ namespace _Game.Scripts
                         osc = _to.Osc(time, dAdd, aS, bS) * Mathf.SmoothStep(0f, 1f, (_progress - 0.5f) * 2f);
                 }
             }
+            
+            if (settingToUse.animateXOffset)
+                offset.x += Pulse(rawTime, settingToUse.xOffsetRange, settingToUse.xOffsetFrequency, 0f);
 
             Vector3 pos = transform.position;
             pos.x = osc.x + offset.x;

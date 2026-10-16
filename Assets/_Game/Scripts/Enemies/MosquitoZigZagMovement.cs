@@ -67,6 +67,8 @@ namespace _Game.Scripts.Enemies
         
         public void SwitchMovementSettings(MosquitoZigZagMovementSettings newSettings)
         {
+            if(newSettings == null || newSettings == zigZagMovementSettings) return;
+            
             _targetSettings = newSettings;
             
             if(bInterpolateMovement && _mosquitoOwner != null)

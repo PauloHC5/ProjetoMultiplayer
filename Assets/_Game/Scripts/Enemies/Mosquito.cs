@@ -35,6 +35,7 @@ public class Mosquito : MonoBehaviour
     [Header("Debug")]
     public bool debugMode;
     public Vector2 debugGoToPosition;
+    public bool moveToHordeCenter = false;
     
     private Vector2 _anchorPos;
     private Vector2 _moveStartPos;
@@ -91,9 +92,14 @@ public class Mosquito : MonoBehaviour
         Vector2 zigZagOffset = zigZagMovement.Movement(now);
         Vector2 lissajousOffset = lissajousCurve.Calculate(transform, now);
 
-        
-        transform.localPosition = _anchorPos + zigZagOffset + lissajousOffset;
-        
+        if(moveToHordeCenter)
+        {
+            transform.localPosition = zigZagOffset + lissajousOffset;
+        }
+        else
+        {
+            transform.localPosition = _anchorPos + zigZagOffset + lissajousOffset;
+        }
     }
 
     private void OnTriggerEnter2D(Collider2D other)

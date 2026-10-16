@@ -189,7 +189,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::LissajousCurve
   lissajousCurve:
-    settings: {fileID: 11400000, guid: 277e2158a1cc04f4a8e012ae124ba6d5, type: 2}
+    settings: {fileID: 11400000, guid: 2f5d5f34c7125a4458d82845e31695b9, type: 2}
     interpolateToNewSettings: 1
     interpolationDuration: 3
     timeOffset: 40
@@ -349,7 +349,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::LissajousCurve
   lissajousCurve:
-    settings: {fileID: 11400000, guid: 277e2158a1cc04f4a8e012ae124ba6d5, type: 2}
+    settings: {fileID: 11400000, guid: 2f5d5f34c7125a4458d82845e31695b9, type: 2}
     interpolateToNewSettings: 1
     interpolationDuration: 3
     timeOffset: 20
@@ -783,7 +783,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::LissajousCurve
   lissajousCurve:
-    settings: {fileID: 11400000, guid: 277e2158a1cc04f4a8e012ae124ba6d5, type: 2}
+    settings: {fileID: 11400000, guid: 2f5d5f34c7125a4458d82845e31695b9, type: 2}
     interpolateToNewSettings: 1
     interpolationDuration: 3
     timeOffset: 15
@@ -1103,7 +1103,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::LissajousCurve
   lissajousCurve:
-    settings: {fileID: 11400000, guid: 277e2158a1cc04f4a8e012ae124ba6d5, type: 2}
+    settings: {fileID: 11400000, guid: 2f5d5f34c7125a4458d82845e31695b9, type: 2}
     interpolateToNewSettings: 1
     interpolationDuration: 3
     timeOffset: 5
@@ -2412,7 +2412,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::LissajousCurve
   lissajousCurve:
-    settings: {fileID: 11400000, guid: 277e2158a1cc04f4a8e012ae124ba6d5, type: 2}
+    settings: {fileID: 11400000, guid: 2f5d5f34c7125a4458d82845e31695b9, type: 2}
     interpolateToNewSettings: 1
     interpolationDuration: 3
     timeOffset: 30
@@ -2932,7 +2932,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::LissajousCurve
   lissajousCurve:
-    settings: {fileID: 11400000, guid: 277e2158a1cc04f4a8e012ae124ba6d5, type: 2}
+    settings: {fileID: 11400000, guid: 2f5d5f34c7125a4458d82845e31695b9, type: 2}
     interpolateToNewSettings: 1
     interpolationDuration: 3
     timeOffset: 25
@@ -3252,7 +3252,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::LissajousCurve
   lissajousCurve:
-    settings: {fileID: 11400000, guid: 277e2158a1cc04f4a8e012ae124ba6d5, type: 2}
+    settings: {fileID: 11400000, guid: 2f5d5f34c7125a4458d82845e31695b9, type: 2}
     interpolateToNewSettings: 1
     interpolationDuration: 3
     timeOffset: 10
@@ -3412,7 +3412,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::LissajousCurve
   lissajousCurve:
-    settings: {fileID: 11400000, guid: 277e2158a1cc04f4a8e012ae124ba6d5, type: 2}
+    settings: {fileID: 11400000, guid: 2f5d5f34c7125a4458d82845e31695b9, type: 2}
     interpolateToNewSettings: 1
     interpolationDuration: 3
     timeOffset: 45
@@ -3892,7 +3892,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::LissajousCurve
   lissajousCurve:
-    settings: {fileID: 11400000, guid: 277e2158a1cc04f4a8e012ae124ba6d5, type: 2}
+    settings: {fileID: 11400000, guid: 2f5d5f34c7125a4458d82845e31695b9, type: 2}
     interpolateToNewSettings: 1
     interpolationDuration: 3
     timeOffset: 0
@@ -4852,7 +4852,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::LissajousCurve
   lissajousCurve:
-    settings: {fileID: 11400000, guid: 277e2158a1cc04f4a8e012ae124ba6d5, type: 2}
+    settings: {fileID: 11400000, guid: 2f5d5f34c7125a4458d82845e31695b9, type: 2}
     interpolateToNewSettings: 1
     interpolationDuration: 3
     timeOffset: 35

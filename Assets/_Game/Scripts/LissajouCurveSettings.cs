@@ -16,7 +16,7 @@ public class LissajouCurveSettings : ScriptableObject
     public Vector2 aScaleRange = new Vector2(0.6f, 1.2f);
     public float aFrequency = 0.5f; 
     
-    [Space]
+    [Space(20)]
     
     [Range(0, 20)] public float B = 4f;
     public bool animateB = false;
@@ -24,10 +24,17 @@ public class LissajouCurveSettings : ScriptableObject
     public float bFrequency = 0.5f;
     [Range(0f, 1f)] public float bPhase = 0f;
     
+    [Space(20)]
+    
     [Range(0, 20)] public float C = 5f;
     public bool C_Random = false;
+    
+    [Space(20)]
+    
     [Range(0, 20)] public float D = 4f;
     public bool D_Random = false;
+    
+    [Space]
     
     [Header("Delta")]
     [Range(0, 20)] public float delta = 2.3f;
@@ -46,6 +53,9 @@ public class LissajouCurveSettings : ScriptableObject
     
     [Header("Offsets")]
     [Range(-20, 20)] public float xOffset = 0f;
+    public bool animateXOffset = false;
+    public Vector2 xOffsetRange = new Vector2(-2f, 2f);
+    public float xOffsetFrequency = 0.2f;
 
     [Space]
     

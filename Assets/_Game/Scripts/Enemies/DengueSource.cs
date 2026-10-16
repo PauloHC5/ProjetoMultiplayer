@@ -17,23 +17,20 @@ public class DengueSource : MonoBehaviour
     
     [Header("Debug")]
     public bool debugMode;
-
-    private PhotonView _photonView;
+    
     private MosquitosHorde _mosquitosHorde;
 
     public Action<DengueSource, int, int> OnDengueSourceDestroyed;
 
-    private void Awake()
-    {
-        _photonView = GetComponent<PhotonView>();
-    }
-
     private void Start()
     {
         _mosquitosHorde = FindAnyObjectByType<MosquitosHorde>();
-
-        if(_mosquitosHorde == null)
+        
+        if (_mosquitosHorde == null)
+        {
             Destroy();
+            return;
+        }
         
         _mosquitosHorde.AllMosquitosDestroyedEvent += DestroyWhenAllMosquitosDestroyed;
         
@@ -67,6 +64,8 @@ public class DengueSource : MonoBehaviour
 
     private void Destroy(int playerID = -1)
     {
+        if(!PhotonNetwork.IsMasterClient) return;
+        
         OnDengueSourceDestroyed?.Invoke(this, playerID, points);
         PhotonNetwork.Destroy(gameObject);
     }

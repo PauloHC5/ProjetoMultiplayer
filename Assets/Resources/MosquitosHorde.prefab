@@ -49,10 +49,10 @@ MonoBehaviour:
   rows: 6
   columns: 11
   missileAttackRate: 1
-  mosquitoStartPosition: {x: 0, y: 0}
   laserLayerMask:
     serializedVersion: 2
     m_Bits: 128
+  enableBehaviour: 1
   hordeSpeedCurve:
     serializedVersion: 2
     m_Curve:
@@ -86,6 +86,14 @@ MonoBehaviour:
   last5: {fileID: 11400000, guid: fe6db9c85dde15c49aede4f5f6c0ed98, type: 2}
   last3: {fileID: 11400000, guid: b7ac2ad08c11e34469576ab566c9bfcd, type: 2}
   last: {fileID: 11400000, guid: 75a71bd4fae93fb4282d4927e1178ce5, type: 2}
+  mosquitosBehaviours:
+    _serializedList:
+    - Key: 0
+      Value: {fileID: 11400000, guid: e980a580d453fa043a9337124e2ebbd5, type: 2}
+    - Key: 1
+      Value: {fileID: 11400000, guid: 31c29ee38438e464f8cc652221e92209, type: 2}
+    - Key: 2
+      Value: {fileID: 11400000, guid: baa8305b74987e3488f74cd39cae9837, type: 2}
   prefabs:
   - {fileID: 721702209136384595, guid: c27f82190daed0543816a4df5edd6210, type: 3}
   - {fileID: 2332977524222137839, guid: 19fa160092d14e54592c80f08b436869, type: 3}
@@ -95,6 +103,7 @@ MonoBehaviour:
   debugHordePositionKey:
     row: 0
     col: 0
+  speedBuff: 1
 --- !u!114 &5313734984663642673
 MonoBehaviour:
   m_ObjectHideFlags: 0
