@@ -43,14 +43,17 @@ TagManager:
   - name: Default
     uniqueID: 0
     locked: 0
+  - name: Barrier
+    uniqueID: 884387271
+    locked: 0
+  - name: Pickups
+    uniqueID: 2583546217
+    locked: 0
   - name: Characters
     uniqueID: 2146183049
     locked: 0
   - name: Enemies
     uniqueID: 583268991
-    locked: 0
-  - name: Barrier
-    uniqueID: 884387271
     locked: 0
   - name: UI_Game
     uniqueID: 510877631
