@@ -1,4 +1,5 @@
 using System.Collections;
+using System.Collections.Generic;
 using _Game.Scripts;
 using AYellowpaper.SerializedCollections;
 using Photon.Pun;
@@ -33,7 +34,6 @@ public class UI_Game : MonoBehaviour
     [Header("UI Elements")]
     public TextMeshProUGUI gameCountdownText;
     public TextMeshProUGUI outOfLivesText;
-    public TextMeshProUGUI gameOverReasonText;
     
     [Header("UI Screens")]
     public GameObject gameOverUIScreen;
@@ -48,10 +48,16 @@ public class UI_Game : MonoBehaviour
     public Transform pickupStatusUI;
     public SerializedDictionary<PlayerType, Sprite> playerIconSprites;
     
+    [Header("Game Over UI Elements")]
+    public TextMeshProUGUI gameOverReasonText;
+    public TextMeshProUGUI wavesReachedText;
+    public Transform scoreBoardContent;
+    
     [Header("UI Prefabs")]
     public GameObject playerStatusPrefab;
+    public GameObject playerScoreInfoPrefab;
 
-    [Space(10)]
+    [Space(20)]
     
     [SerializedDictionary("Pickup Type", "Sprite")]
     public SerializedDictionary<Pickup.PickupType, Sprite> pickupTypeSprites;
@@ -294,7 +300,50 @@ public class UI_Game : MonoBehaviour
                 break;
         }
         
+        wavesReachedText.text = $"Waves Reached: {GameMode.Instance.CurrentWave}";
+
+        SetupScoreBoard();
+        
         gameOverUIScreen.SetActive(true);
+    }
+
+    private void SetupScoreBoard()
+    {
+        // Get all players and their scores
+        var players = PhotonNetwork.CurrentRoom.Players.Values;
+        List<Player> sortedPlayers = new List<Player>(players);
+
+        // sort players by score in ascending order of the score
+        sortedPlayers.Sort((p1, p2) => {
+            int score1 = GameMode.GetPlayerScore(p1);
+            int score2 = GameMode.GetPlayerScore(p2);
+            return score2.CompareTo(score1); // Descending order
+        });
+
+        for (int i = 0; i < sortedPlayers.Count; i++)
+        {
+            CreateScoreInfoForPlayer(sortedPlayers[i], i + 1, GameMode.GetPlayerScore(sortedPlayers[i]));
+        }
+    }
+
+    private void CreateScoreInfoForPlayer(Player player, int rank, int score)
+    {
+        GameObject scoreInfoGO = Instantiate(playerScoreInfoPrefab, scoreBoardContent);
+        
+        var scoreRankText = scoreInfoGO.transform.GetChild(0).GetComponent<TextMeshProUGUI>();
+        var playerIcon = scoreInfoGO.transform.GetChild(1).GetComponent<Image>();
+        var playerNicknameText = scoreInfoGO.transform.GetChild(2).GetComponent<TextMeshProUGUI>();
+        var playerScoreText = scoreInfoGO.transform.GetChild(3).GetComponent<TextMeshProUGUI>();
+
+        Color playerColor = GameMode.GetPlayerColorBasedOnPlayerType(player);
+        
+        scoreRankText.text = rank.ToString();
+        scoreRankText.color = playerColor;
+        playerIcon.sprite = playerIconSprites[GameMode.GetPlayerType(player)];
+        playerNicknameText.text = player.NickName;
+        playerNicknameText.color = playerColor;
+        playerScoreText.text = "Score: " + score;
+        playerScoreText.color = playerColor;
     }
     
     public void ReturnToMainMenu()

@@ -102,7 +102,8 @@ namespace _Game.Scripts
         private int _dengueSourcesInScene = 0;
         private int _hordesSpawnedInCurrentWave = 0;
         private Dictionary<PlayerType, PlayerCharacter> _playerCharacters;
-        
+
+        public int CurrentWave => _currentWave;
         public int HordesSpawnedInCurrentWave => _hordesSpawnedInCurrentWave;
         public GameState CurrentGameState => _currentGameState;
         public MosquitosHorde MosquitosHordeInTheScene => _mosquitosHordeInTheScene;

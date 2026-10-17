@@ -10,6 +10,7 @@ using Hashtable = ExitGames.Client.Photon.Hashtable;
 public class BarriersManager : SceneSingleton<BarriersManager>
 {
     [SerializeField] private GameObject[] barriers;
+    public bool bDebugLog = false;
     
     private PhotonView _photonView;
     
@@ -50,7 +51,7 @@ public class BarriersManager : SceneSingleton<BarriersManager>
         if (propertiesThatChanged.ContainsKey(BarriersActiveKey))
         {
             UpdateBarrierStatus();
-            Debug.Log("Barrier healths updated");
+            if (bDebugLog) Debug.Log("Barrier healths updated");
         }
     }
     
