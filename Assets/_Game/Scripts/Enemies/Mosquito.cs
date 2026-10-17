@@ -74,8 +74,6 @@ public class Mosquito : MonoBehaviour
         
         if(debugMode)
             _moveStartPos = _anchorPos;
-
-        StartCoroutine(ScaleFrom0T1Interpolation());
     }
 
     private void Update()
@@ -135,6 +133,8 @@ public class Mosquito : MonoBehaviour
 
     private IEnumerator ScaleFrom0T1Interpolation()
     {
+        _collider.enabled = false;
+        
         float elapsedTime = 0f;
 
         transform.localScale = Vector3.zero;
@@ -149,7 +149,11 @@ public class Mosquito : MonoBehaviour
 
         transform.localScale = _originalScale;
         _collider.enabled = true;
+    }
 
+    private void OnEnable()
+    {
+        StartCoroutine(ScaleFrom0T1Interpolation());
     }
 
 #if UNITY_EDITOR
