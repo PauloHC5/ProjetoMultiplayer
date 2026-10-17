@@ -951,6 +951,14 @@ MonoBehaviour:
   waveProgressBarObj: {fileID: 1734537418}
   statusBarUI: {fileID: 480027233}
   pickupStatusUI: {fileID: 1789183826}
+  playerIconSprites:
+    _serializedList:
+    - Key: 0
+      Value: {fileID: 21300000, guid: ac987e9008a5c5e4e8224ae75b6ac08a, type: 3}
+    - Key: 1
+      Value: {fileID: 21300000, guid: 6367bf393999d4741b5576c3c8eeef34, type: 3}
+    - Key: 2
+      Value: {fileID: 21300000, guid: c74f82c8e1698654ea8edb36eab24fed, type: 3}
   playerStatusPrefab: {fileID: 7177965442330558712, guid: 996d9d058aeca5f4b864e2211111b3c5, type: 3}
   pickupTypeSprites:
     _serializedList:

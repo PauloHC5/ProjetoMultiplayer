@@ -1,15 +1,11 @@
-using System;
 using System.Collections;
-using System.Collections.Generic;
 using _Game.Scripts;
 using AYellowpaper.SerializedCollections;
 using Photon.Pun;
 using Photon.Realtime;
 using TMPro;
 using UnityEngine;
-using UnityEngine.Rendering;
 using UnityEngine.UI;
-
 
 public class UI_Game : MonoBehaviour
 {
@@ -50,12 +46,15 @@ public class UI_Game : MonoBehaviour
     [Header("Player Status UI Elements")]
     public GameObject statusBarUI;
     public Transform pickupStatusUI;
+    public SerializedDictionary<PlayerType, Sprite> playerIconSprites;
     
     [Header("UI Prefabs")]
     public GameObject playerStatusPrefab;
 
+    [Space(10)]
+    
     [SerializedDictionary("Pickup Type", "Sprite")]
-    public AYellowpaper.SerializedCollections.SerializedDictionary<Pickup.PickupType, Sprite> pickupTypeSprites;
+    public SerializedDictionary<Pickup.PickupType, Sprite> pickupTypeSprites;
 
     private PlayerUIStatus _localPlayerStatus;
     private bool _bGameIsRunning = false;
@@ -183,13 +182,13 @@ public class UI_Game : MonoBehaviour
         
         if(player.IsLocal)
         {
-            SpawnPlayerStatusUI(player, playerCharacter);
+            SpawnPlayerStatusUI(player);
             playerCharacter.OnPickupCollected += OnPickupCollected;
             playerCharacter.OnPlayerDeath += OnPlayerCharacterDestroyed;
         }
     }
 
-    private void SpawnPlayerStatusUI(Player player, PlayerCharacter playerCharacter)
+    private void SpawnPlayerStatusUI(Player player)
     {
         if (_localPlayerStatus.PlayerUIStatusObject != null) return;
 
@@ -219,7 +218,7 @@ public class UI_Game : MonoBehaviour
 
         Color playerColor = GameMode.GetPlayerColorBasedOnPlayerType(player);
 
-        playerIcon.color = playerColor;
+        playerIcon.sprite = playerIconSprites[GameMode.GetPlayerType(player)];
         playerStatus.PlayerNicknameText.text = player.NickName;
         playerStatus.PlayerNicknameText.color = playerColor;
         playerStatus.ScoreCounterText.text = "0";
