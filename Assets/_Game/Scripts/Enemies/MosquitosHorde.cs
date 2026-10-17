@@ -238,7 +238,7 @@ public class MosquitosHorde : MonoBehaviourPunCallbacks
     }
 
     [PunRPC]
-    private void SpawnMosquitoAtHorde(MosquitoType mosquitoType,HordePositionKey hordePositionKey, float starPosX, float starPosY,
+    private void SpawnMosquitoAtHorde(MosquitoType mosquitoType, HordePositionKey hordePositionKey, float starPosX, float starPosY,
         bool isWorldPosition)
     {
         if (!_hordePositions.TryGetValue(hordePositionKey, out Vector2 rowPosition))
@@ -247,34 +247,31 @@ public class MosquitosHorde : MonoBehaviourPunCallbacks
             return;
         }
 
-        Mosquito mosquitoPrefab = prefabs[(int)mosquitoType];
+        // Check if a mosquito already exists at this horde position
+        Mosquito mosquitoSpawned = _mosquitosDict.GetValueOrDefault(hordePositionKey);
+        
+        if (mosquitoSpawned == null) // If no mosquito exists at this horde position, spawn a new one
+        {
+            Mosquito mosquitoPrefab = prefabs[(int)mosquitoType];
 
-        Mosquito mosquitoSpawned = Instantiate(mosquitoPrefab, transform);
+            mosquitoSpawned = Instantiate(mosquitoPrefab, transform);
+            
+            _mosquitosDict[hordePositionKey] = mosquitoSpawned;
+
+            mosquitoSpawned.hordePositionKey = hordePositionKey;
+            
+            if(mosquitoSpawned.Type == MosquitoType.Infected)
+                _infectedMosquitoes.Add(mosquitoSpawned);
+        }
+        else // If a mosquito already exists at this horde position, just activate it and set its position
+        {
+            mosquitoSpawned.gameObject.SetActive(true);
+            mosquitoSpawned.transform.localPosition = new  Vector2(starPosX, starPosY);
+        }
 
         Vector3 startPos = isWorldPosition
             ? transform.InverseTransformPoint(new Vector3(starPosX, starPosY, 0f))
             : new Vector3(starPosX, starPosY, 0f);
-        
-        if(mosquitoSpawned.Type == MosquitoType.Infected)
-            _infectedMosquitoes.Add(mosquitoSpawned);
-
-        // If a mosquito already exists at this index, we want to replace it with the new mosquito,
-        // but we want to keep the time offset of the old mosquito
-        if (_mosquitosDict.TryGetValue(hordePositionKey, out Mosquito existingMosquito))
-        {
-            if (debugLogs)
-                Debug.Log($"Mosquito already exists at {hordePositionKey.row}, {hordePositionKey.col}. Replacing it.");
-
-            mosquitoSpawned.MosquitoZigZagMovement.phaseOffset =
-                _mosquitosDict[hordePositionKey].MosquitoZigZagMovement.phaseOffset;
-            mosquitoSpawned.LissajousCurve.timeOffset = _mosquitosDict[hordePositionKey].LissajousCurve.timeOffset;
-            Destroy(_mosquitosDict[hordePositionKey].gameObject);
-            _infectedMosquitoes.Remove(_mosquitosDict[hordePositionKey]);
-        }
-
-        _mosquitosDict[hordePositionKey] = mosquitoSpawned;
-
-        mosquitoSpawned.hordePositionKey = hordePositionKey;
 
         _mosquitosDict[hordePositionKey].OnMosquitoHitBoundaries += MosquitoHitBoundaries;
         _mosquitosDict[hordePositionKey].OnMosquitoKilled += MosquitoKilled;
@@ -490,6 +487,7 @@ public class MosquitosHorde : MonoBehaviourPunCallbacks
             _infectedMosquitoes.Remove(mosquitoKilled);
 
         mosquitoKilled.OnMosquitoKilled -= MosquitoKilled;
+        mosquitoKilled.OnMosquitoHitBoundaries -= MosquitoHitBoundaries;
 
         if (AmountAlive == 0)
         {
