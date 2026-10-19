@@ -27,11 +27,11 @@ namespace _Game.Scripts.Enemies
         
         public float phaseOffset;
         
-        private Mosquito _mosquitoOwner;
+        private MosquitoBase _mosquitoOwner;
         private Coroutine _interpolationCoroutine;
         private MosquitoZigZagMovementSettings _targetSettings;
         
-        public void OnStart(Mosquito mosquitoOwner)
+        public void OnStart(MosquitoBase mosquitoOwner)
         {
             if(zigZagMovementSettings == null) return;
             

@@ -768,7 +768,7 @@ public class MosquitosHorde : MonoBehaviourPunCallbacks
             {
                 if (sendMosquitosToHordeCenter)
                 {
-                    mosquitosChosen[i].GoToNewPosition(Vector2.zero, PhotonNetwork.Time + 0.1f);
+                    mosquitosChosen[i].GoToNewPosition(Vector2.zero, PhotonNetwork.Time);
                 }
                 mosquitosChosen[i].LissajousCurve.SwitchCurveSettings(movementSettingsChosen);
             }
