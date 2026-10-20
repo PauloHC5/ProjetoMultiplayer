@@ -13,6 +13,6 @@ MonoBehaviour:
   m_Name: Queen
   m_EditorClassIdentifier: Assembly-CSharp::MosquitoZigZagMovement
   horizontalZigzagFrequency: 6.1
-  horizontalZigzagAmplitude: 1.48
+  horizontalZigzagAmplitude: 2.3
   verticalZigzagFrequency: 10.8
-  verticalZigzagAmplitude: 1.41
+  verticalZigzagAmplitude: 2.16

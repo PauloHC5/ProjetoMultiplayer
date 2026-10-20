@@ -18,6 +18,7 @@ namespace _Game.Scripts.Enemies
         private PhotonView _photonView;
         private Coroutine _queenBehaviourCoroutine;
         private int _currentBehaviourIndex = 0;
+        private int _previousBehaviourIndex = 0;
 
         protected override void Awake()
         {
@@ -55,22 +56,56 @@ namespace _Game.Scripts.Enemies
 
             while (true)
             {
-                zigZagMovement.SwitchMovementSettings(queenPrepareToAttackZigZagSettings);
+                if(_queenBehaviourCoroutine != null)
+                {
+                    StopCoroutine(_queenBehaviourCoroutine);
+                }
                 
-                if(bDebugLogs)
-                    Debug.Log("[MosquitoQueen] Preparing to change behaviour to index: " + queenBehaviours[_currentBehaviourIndex].name);
+                if (_currentBehaviourIndex == 0)
+                {
+                    zigZagMovement.SwitchMovementSettings(queenPrepareToAttackZigZagSettings);
+
+                    if (bDebugLogs)
+                        Debug.Log("[MosquitoQueen] Preparing to change behaviour to index: " +
+                                  queenBehaviours[_currentBehaviourIndex].name);
+
+                    yield return new WaitForSeconds(preparationTime);
+                    
+                    zigZagMovement.SwitchMovementSettings(null);
+
+                    ChooseNextBehaviour();
+                }
+                else
+                {
+                    ReturnToBaseBehaviour();
+                    
+                    zigZagMovement.SwitchMovementSettings(queenZigZagSettings);
+                }
                 
-                yield return new WaitForSeconds(preparationTime);
-                
-                zigZagMovement.SwitchMovementSettings(queenZigZagSettings);
-            
-                _currentBehaviourIndex = (_currentBehaviourIndex + 1) % queenBehaviours.Length;
-                
+                _queenBehaviourCoroutine = StartCoroutine(QueenBehaviourRoutine());
+
                 if(bDebugLogs)
                     Debug.Log("[MosquitoQueen] Changing behaviour to index: " + queenBehaviours[_currentBehaviourIndex].name);
                 
                 yield return new WaitForSeconds(Random.Range(minTimeToChangeBehaviour, maxTimeToChangeBehaviour));
             }
+        }
+        
+        private void ReturnToBaseBehaviour()
+        {
+            _currentBehaviourIndex = 0;
+        }
+        
+        private void ChooseNextBehaviour()
+        {
+            _currentBehaviourIndex = (_previousBehaviourIndex + 1) % queenBehaviours.Length;
+            
+            if(_currentBehaviourIndex == 0)
+            {
+                _currentBehaviourIndex = 1; // Skip the base behaviour
+            }
+            
+            _previousBehaviourIndex = _currentBehaviourIndex;
         }
         
         private IEnumerator QueenBehaviourRoutine()

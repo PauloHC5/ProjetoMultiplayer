@@ -14,5 +14,5 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::MosquitoZigZagMovement
   horizontalZigzagFrequency: 6.1
   horizontalZigzagAmplitude: 1.48
-  verticalZigzagFrequency: 25.1
+  verticalZigzagFrequency: 28
   verticalZigzagAmplitude: 1.68

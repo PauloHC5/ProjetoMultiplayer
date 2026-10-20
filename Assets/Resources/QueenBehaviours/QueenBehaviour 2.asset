@@ -13,7 +13,6 @@ MonoBehaviour:
   m_Name: QueenBehaviour 2
   m_EditorClassIdentifier: Assembly-CSharp::QueenBehaviour
   curveMovementSettings:
-  - {fileID: 11400000, guid: 6ded4405a4503bd418eb9447de32cdeb, type: 2}
-  - {fileID: 11400000, guid: 53db4174e79b76e4fa321371b3d21e61, type: 2}
+  - {fileID: 11400000, guid: d93e1bd76aaf88d4f8933c38de540852, type: 2}
   minTimeToChangeMovement: 3
   maxTimeToChangeMovement: 3

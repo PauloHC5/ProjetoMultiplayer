@@ -67,7 +67,7 @@ namespace _Game.Scripts.Enemies
         
         public void SwitchMovementSettings(MosquitoZigZagMovementSettings newSettings)
         {
-            if(newSettings == null || newSettings == zigZagMovementSettings) return;
+            if(newSettings == zigZagMovementSettings) return;
             
             _targetSettings = newSettings;
             
@@ -91,8 +91,8 @@ namespace _Game.Scripts.Enemies
             float initialHorizontalAmplitude = _currentHorizontalAmplitude;
             float initialVerticalAmplitude = _currentVerticalAmplitude;
 
-            float targetHorizontalAmplitude = newSettings.HorizontalZigzagAmplitude;
-            float targetVerticalAmplitude = newSettings.VerticalZigzagAmplitude;
+            float targetHorizontalAmplitude = newSettings != null ? newSettings.HorizontalZigzagAmplitude : 0f;
+            float targetVerticalAmplitude = newSettings != null ? newSettings.VerticalZigzagAmplitude : 0f;
 
             float elapsedTime = 0f;
 
@@ -110,8 +110,8 @@ namespace _Game.Scripts.Enemies
             }
         
             // change the frequency to the new settings
-            _currentHorizontalFrequency = newSettings.HorizontalZigzagFrequency;
-            _currentVerticalFrequency = newSettings.VerticalZigzagFrequency;
+            _currentHorizontalFrequency = newSettings != null ? newSettings.HorizontalZigzagFrequency : 0f;
+            _currentVerticalFrequency = newSettings != null ? newSettings.VerticalZigzagFrequency : 0f;
         
             elapsedTime = 0f; // Reset elapsed time for the next interpolation
 
