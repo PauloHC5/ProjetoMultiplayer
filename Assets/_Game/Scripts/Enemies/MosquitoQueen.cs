@@ -45,10 +45,10 @@ namespace _Game.Scripts.Enemies
 
             _queenBehaviourCoroutine = StartCoroutine(QueenBehaviourRoutine());
             
-            StartCoroutine(ChangeBehaviour());
+            StartCoroutine(ChangeBehaviourRoutine());
         }
         
-        private IEnumerator ChangeBehaviour()
+        private IEnumerator ChangeBehaviourRoutine()
         {
             if(!bEnableBehaviour) yield break;
             

@@ -977,7 +977,7 @@ MonoBehaviour:
   lissajousCurve:
     settings: {fileID: 0}
     interpolateToNewSettings: 1
-    interpolationDuration: 1.5
+    interpolationDuration: 2
     timeOffset: 0
     tr: {fileID: 0}
     bDebugCurve: 1
@@ -994,10 +994,11 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 50dd25bca9e9d1641b1793669fb9de13, type: 2}
   - {fileID: 11400000, guid: f15d9389e933c09408b712fd93c8f1ee, type: 2}
   - {fileID: 11400000, guid: ee3aa32e52ded6b429cd4e51f6fecdf4, type: 2}
+  - {fileID: 11400000, guid: a1f44973f017a6e4cb93d3f47f8736ba, type: 2}
   minTimeToChangeBehaviour: 5
   maxTimeToChangeBehaviour: 10
   preparationTime: 3
-  bEnableBehaviour: 0
+  bEnableBehaviour: 1
 --- !u!58 &8085477826024263361
 CircleCollider2D:
   m_ObjectHideFlags: 0

@@ -1,0 +1,39 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 60625ea6e76c82b4192e5b066cbcd501, type: 3}
+  m_Name: S 2 Queen Movement
+  m_EditorClassIdentifier: Assembly-CSharp::LissajouCurveSettings
+  A: 4.8
+  animateA: 0
+  aScaleRange: {x: 0.6, y: 1.2}
+  aFrequency: 0.5
+  B: 4.6
+  animateB: 0
+  bScaleRange: {x: 0.6, y: 1.2}
+  bFrequency: 0.5
+  bPhase: 0
+  C: 3
+  C_Random: 0
+  D: 1
+  D_Random: 0
+  delta: 0.4
+  delta_Random: 0
+  animateDelta: 0
+  deltaMode: 0
+  deltaMin: 0
+  deltaMax: 6.28
+  deltaFrequency: 0.1
+  transitionMode: 0
+  t_multipler: 1.1
+  xOffset: 0
+  yOffset: 4
+  multiplier: 3.8

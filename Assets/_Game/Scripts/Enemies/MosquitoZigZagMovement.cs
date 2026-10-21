@@ -33,9 +33,9 @@ namespace _Game.Scripts.Enemies
         
         public void OnStart(MosquitoBase mosquitoOwner)
         {
-            if(zigZagMovementSettings == null) return;
-            
             _mosquitoOwner = mosquitoOwner;
+
+            if (zigZagMovementSettings == null) return;
 
             _currentHorizontalFrequency = zigZagMovementSettings.HorizontalZigzagFrequency;
             _currentHorizontalAmplitude = zigZagMovementSettings.HorizontalZigzagAmplitude;
@@ -45,8 +45,6 @@ namespace _Game.Scripts.Enemies
 
         public Vector2 Movement(double time)
         {
-            if(zigZagMovementSettings == null) return Vector2.zero;
-            
             float x = 0;
             float y = 0;
             double t = debugZigZagMovement ? debugTime : time;
@@ -96,17 +94,21 @@ namespace _Game.Scripts.Enemies
 
             float elapsedTime = 0f;
 
-            // Interpolate amplitude to 0
-            while (elapsedTime < interpolationDuration)
+            if (initialHorizontalAmplitude != 0 && initialVerticalAmplitude != 0)
             {
-                elapsedTime += Time.deltaTime;
-                float t = Mathf.Clamp01(elapsedTime / interpolationDuration);
-            
-                // Lerp per-instance current values towards 0
-                _currentHorizontalAmplitude = Mathf.Lerp(initialHorizontalAmplitude, 0f, t);
-                _currentVerticalAmplitude = Mathf.Lerp(initialVerticalAmplitude, 0f, t);
-            
-                yield return null;
+
+                // Interpolate amplitude to 0
+                while (elapsedTime < interpolationDuration)
+                {
+                    elapsedTime += Time.deltaTime;
+                    float t = Mathf.Clamp01(elapsedTime / interpolationDuration);
+
+                    // Lerp per-instance current values towards 0
+                    _currentHorizontalAmplitude = Mathf.Lerp(initialHorizontalAmplitude, 0f, t);
+                    _currentVerticalAmplitude = Mathf.Lerp(initialVerticalAmplitude, 0f, t);
+
+                    yield return null;
+                }
             }
         
             // change the frequency to the new settings
