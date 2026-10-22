@@ -103,15 +103,9 @@ namespace _Game.Scripts.Enemies
         // Helpers de rede (funcionam online, offline mode e sem Photon nenhum)
         // ---------------------------------------------------------------------------------
 
-        /// <summary>Em sala (inclui OfflineMode com sala criada) e com ViewID válido: RPC e Room Properties funcionam.</summary>
-        private bool CanUseNetwork => PhotonNetwork.InRoom && _photonView != null && _photonView.ViewID != 0;
-
-        /// <summary>Quem decide. Sem sala, o próprio client é a autoridade.</summary>
-        private static bool IsAuthority => !PhotonNetwork.InRoom || PhotonNetwork.IsMasterClient;
-
         private string RoomStateKey => $"Queen_{_photonView.ViewID}";
 
-        public Action MosquitoQueenKilledEvent;
+        public Action MosquitoQueenDeathEvent;
 
         protected override void Awake()
         {
@@ -139,7 +133,7 @@ namespace _Game.Scripts.Enemies
             
             if(Keyboard.current.kKey.wasPressedThisFrame && Keyboard.current.leftShiftKey.isPressed)
             {
-                if(CanUseNetwork && IsAuthority)
+                if(PhotonHandlers.CanUseNetwork && PhotonHandlers.IsAuthority)
                     _photonView.RPC(nameof(TakeDamage), RpcTarget.All);
                 else
                     TakeDamage();
@@ -151,7 +145,7 @@ namespace _Game.Scripts.Enemies
         private void OnDestroy()
         {
             // Limpa o estado da sala pra uma futura rainha não ler lixo.
-            if (CanUseNetwork && PhotonNetwork.IsMasterClient)
+            if (PhotonHandlers.CanUseNetwork && PhotonNetwork.IsMasterClient)
                 PhotonNetwork.CurrentRoom.SetCustomProperties(new Hashtable { { RoomStateKey, null } });
             
             PhotonNetwork.RemoveCallbackTarget(this);
@@ -203,9 +197,9 @@ namespace _Game.Scripts.Enemies
         {
             if (!bEnableBehaviour) return;
 
-            if (IsAuthority && _directorCoroutine == null)
+            if (PhotonHandlers.IsAuthority && _directorCoroutine == null)
                 _directorCoroutine = StartCoroutine(DirectorRoutine());
-            else if (!IsAuthority && _directorCoroutine != null)
+            else if (!PhotonHandlers.IsAuthority && _directorCoroutine != null)
             {
                 StopCoroutine(_directorCoroutine);
                 _directorCoroutine = null;
@@ -312,12 +306,12 @@ namespace _Game.Scripts.Enemies
 
         private void Broadcast(QueenState state)
         {
-            if (!IsAuthority) return;
+            if (!PhotonHandlers.IsAuthority) return;
 
             if (bDebugLogs)
                 Debug.Log($"[MosquitoQueen] Broadcast -> {state}");
 
-            if (CanUseNetwork)
+            if (PhotonHandlers.CanUseNetwork)
             {
                 // Propriedade primeiro: quem entrar agora lê o estado novo mesmo que perca o RPC.
                 PhotonNetwork.CurrentRoom.SetCustomProperties(new Hashtable { { RoomStateKey, state.ToArray() } });
@@ -339,7 +333,7 @@ namespace _Game.Scripts.Enemies
         {
             state = default;
 
-            return CanUseNetwork
+            return PhotonHandlers.CanUseNetwork
                    && PhotonNetwork.CurrentRoom.CustomProperties.TryGetValue(RoomStateKey, out object raw)
                    && QueenState.TryFromArray(raw, out state);
         }
@@ -387,7 +381,7 @@ namespace _Game.Scripts.Enemies
             }
             
             if(state.Phase == QueenPhase.MovingToCenter)
-                GoToNewPosition(Vector2.zero, retreatPosition);
+                GoToNewPosition(Vector2.zero);
 
             if(state.Phase == QueenPhase.Retreat)
                 StartCoroutine(RetreatRoutine());
@@ -414,7 +408,7 @@ namespace _Game.Scripts.Enemies
         [PunRPC]
         private void SpawnProjectile()
         {
-            if(CanUseNetwork && IsAuthority)
+            if(PhotonHandlers.CanUseNetwork && PhotonHandlers.IsAuthority)
                 _photonView.RPC(nameof(SpawnProjectile), RpcTarget.Others);
             
             if (projectilePrefab == null || projectileSpawnPoint == null) return;
@@ -443,7 +437,7 @@ namespace _Game.Scripts.Enemies
         {
             if(other.gameObject.layer == ProjectilesLayer)
             {
-                if(CanUseNetwork && IsAuthority)
+                if(PhotonHandlers.CanUseNetwork && PhotonHandlers.IsAuthority)
                     _photonView.RPC(nameof(TakeDamage), RpcTarget.All);
                 else
                     TakeDamage();
@@ -460,7 +454,7 @@ namespace _Game.Scripts.Enemies
 
             if (_currentHealth <= 0)
             {
-                if (CanUseNetwork && IsAuthority)
+                if (PhotonHandlers.CanUseNetwork && PhotonHandlers.IsAuthority)
                 {
                     PhotonNetwork.Destroy(gameObject);
                 }
@@ -469,7 +463,7 @@ namespace _Game.Scripts.Enemies
                     Destroy(gameObject);
                 }
 
-                MosquitoQueenKilledEvent?.Invoke();
+                MosquitoQueenDeathEvent?.Invoke();
             }
         }
 

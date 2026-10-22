@@ -99,6 +99,7 @@ MonoBehaviour:
   - SpawnProjectile
   - UpdateHealthBar
   - TakeDamage
+  - RpcSubscribeToQueenDeathEvent
   DisableAutoOpenWizard: 1
   ShowSettings: 1
   DevRegionSetOnce: 0

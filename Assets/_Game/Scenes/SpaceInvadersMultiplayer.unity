@@ -575,7 +575,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::_Game.Scripts.GameMode
   startGameDelay: 3
   startingLives: 3
-  hordesPerWave: 5
+  hordesPerWave: 1
   intervalBetweenHordes: 0.5
   playerDeathCooldown: 2
   playerLayerMask:
@@ -601,6 +601,7 @@ MonoBehaviour:
   - {fileID: 6675925251535046082, guid: 508e4a19b17909144a71b1eff5db4630, type: 3}
   - {fileID: 6675925251535046082, guid: 8ec6a5c721369b345a138adb768e196e, type: 3}
   - {fileID: 6675925251535046082, guid: 940b7e7c9b88dd4428d9e380b85a8f46, type: 3}
+  mosquitoQueenPrefab: {fileID: 501516999}
   pickupsSpawnArea: {fileID: 1551202078}
   pickupSpawnSettingsWith1CharacterAlive:
     MinSpawnInterval: 5
@@ -1904,6 +1905,17 @@ SpriteRenderer:
   m_SpriteTileMode: 0
   m_WasSpriteAssigned: 1
   m_SpriteSortPoint: 0
+--- !u!114 &501516999 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 3717588812685856975, guid: 440392b9a94955f4c90dc5591f12ef9c, type: 3}
+  m_PrefabInstance: {fileID: 328512231}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: de4f239c1a98b1a4d8d410c49e454acb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::_Game.Scripts.Enemies.MosquitoQueen
 --- !u!1 &519420028
 GameObject:
   m_ObjectHideFlags: 0

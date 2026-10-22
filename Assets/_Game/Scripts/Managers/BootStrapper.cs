@@ -58,6 +58,11 @@ public static class PhotonHandlers
 {
     public static double Now()
     {
-        return PhotonNetwork.IsConnected || PhotonNetwork.OfflineMode ? (double)PhotonNetwork.Time : (double)Time.timeAsDouble;
+        return PhotonNetwork.IsConnected || PhotonNetwork.OfflineMode ? PhotonNetwork.Time : Time.timeAsDouble;
     }
+    
+    public static bool CanUseNetwork => PhotonNetwork.InRoom && PhotonNetwork.IsConnected && !PhotonNetwork.OfflineMode;
+    
+    /// <summary>Quem decide. Sem sala, o próprio client é a autoridade.</summary>
+    public static bool IsAuthority => !PhotonNetwork.InRoom || PhotonNetwork.IsMasterClient;
 }
