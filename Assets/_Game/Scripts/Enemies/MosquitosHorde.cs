@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using _Game.Scripts;
+using _Game.Scripts.Enemies;
 using Photon.Pun;
 using Photon.Realtime;
 using UnityEngine;
@@ -114,8 +115,7 @@ public class MosquitosHorde : MonoBehaviourPunCallbacks
     private Coroutine _mosquitosBehaviourRoutine;
     private MosquitoBehaviourStateDifficulty _currentBehaviourDifficulty;
     private List<Mosquito> _infectedMosquitoes = new List<Mosquito>();
-
-    public const int MosquitosInstigatorId = 451;
+    
     public float speedBuff = 1f;
     public bool rapidFireActive = false;
 
@@ -450,7 +450,7 @@ public class MosquitosHorde : MonoBehaviourPunCallbacks
         if (selectedMosquito == null || !selectedMosquito.gameObject.activeInHierarchy) return;
 
         var missile = Instantiate(missilePrefab, selectedMosquito.transform.position, Quaternion.identity);
-        missile.Init(MosquitosInstigatorId, shotId);
+        missile.Init(MosquitoBase.MosquitosInstigatorId, shotId);
         
         /*if(rapidFireActive)
             missile.ChangeSpeed(missile.Speed * 1.5f);*/

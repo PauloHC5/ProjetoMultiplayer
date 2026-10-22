@@ -35,6 +35,8 @@ namespace _Game.Scripts.Enemies
         public MosquitoType Type => type;
         public MosquitoZigZagMovement MosquitoZigZagMovement => zigZagMovement;
         public LissajousCurve LissajousCurve => lissajousCurve;
+        
+        public static readonly int MosquitosInstigatorId = 451;
 
         protected virtual void Awake()
         {

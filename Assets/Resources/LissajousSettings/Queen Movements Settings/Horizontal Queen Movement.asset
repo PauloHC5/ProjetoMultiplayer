@@ -35,5 +35,5 @@ MonoBehaviour:
   transitionMode: 0
   t_multipler: 1.28
   xOffset: 0
-  yOffset: 8.3
-  multiplier: 1
+  yOffset: 15
+  multiplier: 1.49

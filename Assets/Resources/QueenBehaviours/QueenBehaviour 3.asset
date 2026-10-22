@@ -15,5 +15,8 @@ MonoBehaviour:
   curveMovementSettings:
   - {fileID: 11400000, guid: cbefd87a728acd446b3303154176fbb0, type: 2}
   - {fileID: 11400000, guid: ba7fdce626da9e343a5fbc4385cf9b60, type: 2}
+  minBehaviourDuration: 15
+  maxBehaviourDuration: 25
+  bChangeMovementSettings: 0
   minTimeToChangeMovement: 3
   maxTimeToChangeMovement: 3

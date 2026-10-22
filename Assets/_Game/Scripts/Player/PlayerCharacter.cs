@@ -183,7 +183,7 @@ public class PlayerCharacter : MonoBehaviourPun
             SpawnLaserProjectile(shotId, fixedPositionToSpawn, -35);
         }
 
-        GameManager.Instance.AudioManager.PlaySfx(shootSfx);
+        GameManager.Instance?.AudioManager.PlaySfx(shootSfx);
     }
 
     private void SpawnLaserProjectile(int shotId, Vector3 fixedPositionToSpawn, int zRotation)

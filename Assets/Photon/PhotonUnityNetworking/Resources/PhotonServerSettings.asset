@@ -92,6 +92,13 @@ MonoBehaviour:
   - SendMosquitosBackToTheirPositions
   - SendMosquitosToHordCenter
   - ApplyBehaviourSettings
+  - UpdateBehaviourState
+  - StartQueenBehaviourRoutine
+  - StopQueenBehaviourRoutine
+  - RpcApplyState
+  - SpawnProjectile
+  - UpdateHealthBar
+  - TakeDamage
   DisableAutoOpenWizard: 1
   ShowSettings: 1
   DevRegionSetOnce: 0

@@ -5,12 +5,19 @@ public class QueenBehaviour : ScriptableObject
 {
     [Header("Behaviour Settings")]
     [SerializeField] private LissajouCurveSettings[] curveMovementSettings;
+    [SerializeField] private float minBehaviourDuration = 5f;
+    [SerializeField] private float maxBehaviourDuration = 10f;
+    
+    [SerializeField] private bool bChangeMovementSettings = true;
     [SerializeField] private float minTimeToChangeMovement = 5f;
     [SerializeField] private float maxTimeToChangeMovement = 10f;
     
     private int _previousMovementSettingsIndex = -1;
     
     public float TimeToChangeBehaviour => Random.Range(minTimeToChangeMovement, maxTimeToChangeMovement);
+    public float BehaviourDuration => Random.Range(minBehaviourDuration, maxBehaviourDuration);
+    public bool ChangeMovementSettings => bChangeMovementSettings;
+    public bool HasMoreThanOneMovementSettings => curveMovementSettings != null && curveMovementSettings.Length > 1;
     
     public LissajouCurveSettings GetMovementSettings(int index)
     {
@@ -36,6 +43,11 @@ public class QueenBehaviour : ScriptableObject
             Debug.LogWarning("Curve movement settings array is empty.");
             return -1;
         }
+        
+        if(!HasMoreThanOneMovementSettings)
+        {
+            return 0; // Only one option available
+        }
 
         int newIndex = (currentBehaviourIndex + 1) % curveMovementSettings.Length;
 
@@ -59,7 +71,7 @@ public class QueenBehaviour : ScriptableObject
 
         int newIndex;
         
-        if(curveMovementSettings.Length == 1)
+        if(!HasMoreThanOneMovementSettings)
         {
             return 0; // Only one option available
         }

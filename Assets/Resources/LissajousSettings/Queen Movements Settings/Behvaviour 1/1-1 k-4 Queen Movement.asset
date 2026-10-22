@@ -12,11 +12,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 60625ea6e76c82b4192e5b066cbcd501, type: 3}
   m_Name: 1-1 k-4 Queen Movement
   m_EditorClassIdentifier: Assembly-CSharp::LissajousSettings
-  A: 1
+  A: 4.86
   animateA: 1
-  aScaleRange: {x: 0.6, y: 2.37}
+  aScaleRange: {x: 0.13, y: 1.11}
   aFrequency: 0.26
-  B: 1
+  B: 2.3
   animateB: 0
   bScaleRange: {x: 0.6, y: 1.2}
   bFrequency: 0.5
@@ -33,7 +33,7 @@ MonoBehaviour:
   deltaMax: 6.28
   deltaFrequency: 0.1
   transitionMode: 0
-  t_multipler: 8.31
+  t_multipler: 7.3
   xOffset: 0
-  yOffset: 0
-  multiplier: 9.57
+  yOffset: 4.3
+  multiplier: 6.49
