@@ -43,7 +43,7 @@ namespace _Game.Scripts.Enemies
         // Estado replicado
         // ---------------------------------------------------------------------------------
 
-        private enum QueenPhase
+        public enum QueenPhase : byte
         {
             Intro = 0,      // indo até o centro da cena
             Standard = 1,   // comportamento base (queenBehaviours[0])
@@ -51,7 +51,7 @@ namespace _Game.Scripts.Enemies
             Attack = 3      // comportamento de ataque (queenBehaviours[1..])
         }
 
-        private readonly struct QueenState
+        public readonly struct QueenState
         {
             public readonly QueenPhase Phase;
             public readonly int BehaviourIndex;
@@ -291,7 +291,7 @@ namespace _Game.Scripts.Enemies
             {
                 // Propriedade primeiro: quem entrar agora lê o estado novo mesmo que perca o RPC.
                 PhotonNetwork.CurrentRoom.SetCustomProperties(new Hashtable { { RoomStateKey, state.ToArray() } });
-                _photonView.RPC(nameof(RpcApplyState), RpcTarget.All, (int)state.Phase, state.BehaviourIndex, state.MovementIndex);
+                _photonView.RPC(nameof(RpcApplyState), RpcTarget.All, state);
             }
             else
             {
@@ -300,9 +300,9 @@ namespace _Game.Scripts.Enemies
         }
 
         [PunRPC]
-        private void RpcApplyState(int phase, int behaviourIndex, int movementIndex)
+        private void RpcApplyState(QueenState newQueenState)
         {
-            ApplyState(new QueenState((QueenPhase)phase, behaviourIndex, movementIndex));
+            ApplyState(newQueenState);
         }
 
         private bool TryReadRoomState(out QueenState state)

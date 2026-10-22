@@ -1,3 +1,4 @@
+using _Game.Scripts.Enemies;
 using ExitGames.Client.Photon;
 using UnityEngine;
 
@@ -17,6 +18,8 @@ public static class PhotonTypes
     {
         PhotonPeer.RegisterType(typeof(MosquitosHorde.HordePositionKey), (byte)'H', SerializeHordePositionKey,
             DeserializeHordePositionKey);
+        
+        PhotonPeer.RegisterType(typeof(MosquitoQueen.QueenState), (byte)'E', SerializeQueenState, DeserializeQueenState);
     }
 
     static byte[] SerializeHordePositionKey(object customType)
@@ -36,5 +39,16 @@ public static class PhotonTypes
         Protocol.Deserialize(out d.col, data, ref i);
         Protocol.Deserialize(out d.row, data, ref i);
         return d;
+    }
+    
+    private static byte[] SerializeQueenState(object obj)
+    {
+        var s = (MosquitoQueen.QueenState)obj;
+        return new[] { (byte)s.Phase, (byte)s.BehaviourIndex, (byte)s.MovementIndex };
+    }
+
+    private static object DeserializeQueenState(byte[] bytes)
+    {
+        return new MosquitoQueen.QueenState((MosquitoQueen.QueenPhase)bytes[0], bytes[1], bytes[2]);
     }
 }
