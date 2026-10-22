@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using Photon.Pun;
 using Photon.Realtime;
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 using Hashtable = ExitGames.Client.Photon.Hashtable;
@@ -31,6 +32,7 @@ namespace _Game.Scripts.Enemies
         [SerializeField] private int maxHealth = 100;
         [SerializeField] private int damagePerHit = 10;
         [SerializeField] private Slider healthBarSlider;
+        [SerializeField] private TextMeshProUGUI healthPercentageText;
         
         [Header("Queen Projectile Settings")]
         [SerializeField] private Projectile projectilePrefab;
@@ -90,6 +92,8 @@ namespace _Game.Scripts.Enemies
         private int _currentHealth;
 
         public float StandardBehaviourDuration => Random.Range(minStandardBehaviourDuration, maxStandardBehaviourDuration);
+        
+        public int CurrentHealthPercentage => Mathf.RoundToInt((float)_currentHealth / maxHealth * 100f);
 
         // ---------------------------------------------------------------------------------
         // Helpers de rede (funcionam online, offline mode e sem Photon nenhum)
@@ -396,6 +400,7 @@ namespace _Game.Scripts.Enemies
         {
             _currentHealth -= damagePerHit;
             healthBarSlider.value = (float)_currentHealth / maxHealth;
+            healthPercentageText.text = $"{CurrentHealthPercentage}%";
 
             if (_currentHealth <= 0)
             {
