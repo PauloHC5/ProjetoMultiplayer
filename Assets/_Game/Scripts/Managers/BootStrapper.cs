@@ -1,5 +1,6 @@
 using _Game.Scripts.Enemies;
 using ExitGames.Client.Photon;
+using Photon.Pun;
 using UnityEngine;
 
 public static class BootStrapper
@@ -50,5 +51,13 @@ public static class PhotonTypes
     private static object DeserializeQueenState(byte[] bytes)
     {
         return new MosquitoQueen.QueenState((MosquitoQueen.QueenPhase)bytes[0], bytes[1], bytes[2]);
+    }
+}
+
+public static class PhotonHandlers
+{
+    public static double Now()
+    {
+        return PhotonNetwork.IsConnected || PhotonNetwork.OfflineMode ? (double)PhotonNetwork.Time : (double)Time.timeAsDouble;
     }
 }
