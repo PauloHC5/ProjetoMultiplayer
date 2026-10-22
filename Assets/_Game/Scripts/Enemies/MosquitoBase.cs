@@ -18,7 +18,6 @@ namespace _Game.Scripts.Enemies
         [SerializeField] protected LissajousCurve lissajousCurve;
         
         [Header("Debug")]
-        public bool debugMode;
         public bool bDebugLogs;
         public Vector2 debugGoToPosition;
         public bool moveToHordeCenter = false;
@@ -46,16 +45,14 @@ namespace _Game.Scripts.Enemies
         
         protected virtual void Start()
         {
-            AnchorPos = transform.localPosition;
-            
             zigZagMovement.OnStart(this);
             lissajousCurve.OnStart(this);
             
-            if(debugMode)
-                MoveStartPos = AnchorPos;
+            AnchorPos = transform.localPosition;
+            MoveStartPos = AnchorPos;
         }
 
-        protected void Update()
+        protected virtual void Update()
         {
             double now = PhotonNetwork.IsConnected || PhotonNetwork.OfflineMode ? PhotonNetwork.Time : Time.timeAsDouble;        
             Action arrivedCallback = null;
@@ -87,12 +84,12 @@ namespace _Game.Scripts.Enemies
             arrivedCallback?.Invoke();
         }
         
-        public void GoToNewPosition(Vector2 newPos, double startTime, Vector2? startPos = null,
+        public void GoToNewPosition(Vector2 newPos, Vector2? startPos = null,
             Action onArrived = null)
         {
             MoveStartPos = startPos ?? AnchorPos;
             MoveTargetPos = newPos;
-            MoveStartTime = startTime + 0.1f; // Adding a small delay to ensure smooth transition
+            MoveStartTime = PhotonHandlers.Now() + 0.1f; // Adding a small delay to ensure smooth transition
             MoveArrivedCallback = onArrived;
             IsMoving = true;
         }
@@ -103,11 +100,9 @@ namespace _Game.Scripts.Enemies
             zigZagMovement.OnValidate();
             lissajousCurve.SwitchCurveSettings(lissajousCurve.Settings);
         
-            if(!debugMode) return;
+            //double now = PhotonNetwork.IsConnected || PhotonNetwork.OfflineMode ? PhotonNetwork.Time : Time.timeAsDouble;
         
-            double now = PhotonNetwork.IsConnected || PhotonNetwork.OfflineMode ? PhotonNetwork.Time : Time.timeAsDouble;
-        
-            GoToNewPosition(debugGoToPosition, now);
+            //GoToNewPosition(debugGoToPosition, now);
         }
 #endif
     }

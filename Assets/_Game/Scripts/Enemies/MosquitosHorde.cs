@@ -621,7 +621,7 @@ public class MosquitosHorde : MonoBehaviourPunCallbacks
 
         Vector2 startPosition = startPos == default ? mosquito.transform.localPosition : startPos;
 
-        mosquito.GoToNewPosition(hordePosition, startTime, startPosition);
+        mosquito.GoToNewPosition(hordePosition, startPosition);
     }
 
     public void MosquitoHitBoundaries()
@@ -768,7 +768,7 @@ public class MosquitosHorde : MonoBehaviourPunCallbacks
             {
                 if (sendMosquitosToHordeCenter)
                 {
-                    mosquitosChosen[i].GoToNewPosition(Vector2.zero, PhotonNetwork.Time);
+                    mosquitosChosen[i].GoToNewPosition(Vector2.zero);
                 }
                 mosquitosChosen[i].LissajousCurve.SwitchCurveSettings(movementSettingsChosen);
             }
