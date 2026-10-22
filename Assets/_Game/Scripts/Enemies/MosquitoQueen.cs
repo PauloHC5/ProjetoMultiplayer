@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using Photon.Pun;
+using Photon.Realtime;
 using UnityEngine;
 using UnityEngine.UI;
 using Hashtable = ExitGames.Client.Photon.Hashtable;
@@ -15,7 +16,7 @@ namespace _Game.Scripts.Enemies
     ///  - APLICA (todos os clients, inclusive a autoridade): ApplyState
     /// Nenhum client além da autoridade sorteia duração/índice, então ninguém diverge.
     /// </summary>
-    public class MosquitoQueen : MosquitoBase
+    public class MosquitoQueen : MosquitoBase, IInRoomCallbacks
     {
         [Header("Queen Movement Settings")]
         [SerializeField] private MosquitoZigZagMovementSettings queenStandardZigZagSettings;
@@ -111,6 +112,8 @@ namespace _Game.Scripts.Enemies
             _photonView = GetComponent<PhotonView>();
             
             _currentHealth = maxHealth;
+            
+            PhotonNetwork.AddCallbackTarget(this);
         }
 
         protected override void Start()
@@ -125,7 +128,19 @@ namespace _Game.Scripts.Enemies
             // Limpa o estado da sala pra uma futura rainha não ler lixo.
             if (CanUseNetwork && PhotonNetwork.IsMasterClient)
                 PhotonNetwork.CurrentRoom.SetCustomProperties(new Hashtable { { RoomStateKey, null } });
+            
+            PhotonNetwork.RemoveCallbackTarget(this);
         }
+        
+        public void OnMasterClientSwitched(Player newMasterClient)
+        {
+            RefreshDirector();
+        }
+        
+        public void OnPlayerEnteredRoom(Player newPlayer) { }
+        public void OnPlayerLeftRoom(Player otherPlayer) { }
+        public void OnRoomPropertiesUpdate(Hashtable propertiesThatChanged) { }
+        public void OnPlayerPropertiesUpdate(Player targetPlayer, Hashtable changedProps) { }
 
         private IEnumerator BootstrapRoutine()
         {
@@ -145,7 +160,7 @@ namespace _Game.Scripts.Enemies
             _introDone = true;
 
             if (bEnableBehaviour)
-                StartCoroutine(AuthorityWatchRoutine());
+                RefreshDirector();
         }
 
         /// <summary>
@@ -166,21 +181,16 @@ namespace _Game.Scripts.Enemies
         // (cobre o início e a migração de master sem precisar de callbacks)
         // ---------------------------------------------------------------------------------
 
-        private IEnumerator AuthorityWatchRoutine()
+        private void RefreshDirector()
         {
-            var wait = new WaitForSeconds(0.25f);
+            if (!bEnableBehaviour || !_introDone) return;
 
-            while (true)
+            if (IsAuthority && _directorCoroutine == null)
+                _directorCoroutine = StartCoroutine(DirectorRoutine());
+            else if (!IsAuthority && _directorCoroutine != null)
             {
-                if (_introDone && IsAuthority && _directorCoroutine == null)
-                    _directorCoroutine = StartCoroutine(DirectorRoutine());
-                else if (!IsAuthority && _directorCoroutine != null)
-                {
-                    StopCoroutine(_directorCoroutine);
-                    _directorCoroutine = null;
-                }
-
-                yield return wait;
+                StopCoroutine(_directorCoroutine);
+                _directorCoroutine = null;
             }
         }
 
@@ -207,7 +217,7 @@ namespace _Game.Scripts.Enemies
                 switch (phase)
                 {
                     case QueenPhase.Standard:
-                        InvokeRepeating(nameof(SpawnProjectile), 0f, projectileSpawnRate);
+                        InvokeRepeating(nameof(SpawnProjectile), projectileSpawnRate, projectileSpawnRate);
                         yield return RunBehaviour(0, QueenPhase.Standard, StandardBehaviourDuration);
                         phase = hasAttackBehaviours ? QueenPhase.Preparing : QueenPhase.Standard;
                         break;
@@ -374,8 +384,6 @@ namespace _Game.Scripts.Enemies
         {
             if(other.gameObject.layer == ProjectilesLayer)
             {
-                var laser = other.GetComponent<Projectile>();
-
                 if(CanUseNetwork && IsAuthority)
                     _photonView.RPC(nameof(TakeDamage), RpcTarget.All);
                 else
