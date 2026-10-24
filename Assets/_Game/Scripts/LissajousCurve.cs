@@ -34,9 +34,9 @@ namespace _Game.Scripts
         public bool interpolateToNewSettings = true;
         public float interpolationDuration = 3.0f;
         public float timeOffset;
+        [HideInInspector] public TrailRenderer debugTrailRenderer;
 
         [Header("Debug")]
-        public TrailRenderer tr;
         public bool bDebugCurve = false;
         public bool bDebugTime = false;
         public bool bClearTrailOnNewSettings = true;
@@ -127,12 +127,12 @@ namespace _Game.Scripts
             else
                 _progress = 1f;
             
-            if(tr == null) return;
+            if(debugTrailRenderer == null) return;
             
             CheckTrailRenderer();
             
             if(bClearTrailOnNewSettings)
-                tr.Clear();
+                debugTrailRenderer.Clear();
         }
 
         IEnumerator Transition()
@@ -205,21 +205,22 @@ namespace _Game.Scripts
 
         private void CheckTrailRenderer()
         {
-            if (tr == null)
+            if (debugTrailRenderer == null)
             {
-                tr = _owner.GetComponent<TrailRenderer>();
-                if (tr == null)
-                {
-                    tr = _owner.gameObject.AddComponent<TrailRenderer>();
-                    tr.time = 10f;
-                    tr.startWidth = 0.1f;
-                    tr.endWidth = 0.1f;
-                    tr.material = new Material(Shader.Find("Sprites/Default"));
-                    tr.startColor = Color.blue;
-                    tr.endColor = Color.deepSkyBlue;
-                }
+                var currentTrailRenderer = _owner.GetComponent<TrailRenderer>();
+                
+                if(currentTrailRenderer != null) return;
+                
+                debugTrailRenderer = _owner.gameObject.AddComponent<TrailRenderer>();
+                debugTrailRenderer.time = 10f;
+                debugTrailRenderer.startWidth = 0.1f;
+                debugTrailRenderer.endWidth = 0.1f;
+                debugTrailRenderer.material = new Material(Shader.Find("Sprites/Default"));
+                debugTrailRenderer.startColor = Color.blue;
+                debugTrailRenderer.endColor = Color.deepSkyBlue;
+                
             }
-            tr.enabled = bDebugCurve;
+            debugTrailRenderer.enabled = bDebugCurve;
         }
     }
 }
