@@ -20,8 +20,9 @@ namespace _Game.Scripts.Enemies
     /// </summary>
     public class MosquitoQueen : MosquitoBase, IInRoomCallbacks
     {
-        [Header("Queen Movement Settings")]
-        [SerializeField] private MosquitoZigZagMovementSettings queenStandardZigZagSettings;
+        [Header("Queen Movement Settings")] [SerializeField]
+        private MosquitoZigZagMovementSettings queenStandardZigZagSettings;
+
         [SerializeField] private MosquitoZigZagMovementSettings queenPrepareToAttackZigZagSettings;
         [SerializeField] private QueenBehaviour[] queenBehaviours;
         [SerializeField] private float minStandardBehaviourDuration = 5f;
@@ -30,15 +31,17 @@ namespace _Game.Scripts.Enemies
         public bool bEnableBehaviour = true;
         [SerializeField] private Vector2 retreatPosition = new Vector2(0f, 10f);
         [SerializeField] private Vector2 hordeSpawnPosition = new Vector2(0f, 0f);
-        
-        [Header("Queen Health Settings")]
-        [SerializeField] private int maxHealth = 100;
+
+        [Header("Queen Health Settings")] [SerializeField]
+        private int maxHealth = 100;
+
         [SerializeField] private int damagePerHit = 10;
         [SerializeField] private Slider healthBarSlider;
         [SerializeField] private TextMeshProUGUI healthPercentageText;
-        
-        [Header("Queen Projectile Settings")]
-        [SerializeField] private Projectile projectilePrefab;
+
+        [Header("Queen Projectile Settings")] [SerializeField]
+        private Projectile projectilePrefab;
+
         [SerializeField] private Transform projectileSpawnPoint;
         [SerializeField] private float projectileSpawnRate = 1f;
         [SerializeField] private int projectilesPerShot = 3;
@@ -50,11 +53,11 @@ namespace _Game.Scripts.Enemies
 
         public enum QueenPhase : byte
         {
-            MovingToCenter = 0,      // indo até o centro da cena
-            Standard = 1,   // comportamento base (queenBehaviours[0])
-            Preparing = 2,  // avisando que vai atacar (zigzag de preparação)
-            Attack = 3,      // comportamento de ataque (queenBehaviours[1..])
-            Retreat = 4       // indo embora
+            MovingToCenter = 0, // indo até o centro da cena
+            Standard = 1, // comportamento base (queenBehaviours[0])
+            Preparing = 2, // avisando que vai atacar (zigzag de preparação)
+            Attack = 3, // comportamento de ataque (queenBehaviours[1..])
+            Retreat = 4 // indo embora
         }
 
         public readonly struct QueenState
@@ -88,9 +91,9 @@ namespace _Game.Scripts.Enemies
         }
 
         private PhotonView _photonView;
-        private QueenState _state;                       // espelho local do último estado aplicado
+        private QueenState _state; // espelho local do último estado aplicado
         private QueenPhase _appliedPhase = QueenPhase.MovingToCenter;
-        private int _lastAttackIndex;                    // último comportamento de ataque usado (para o rodízio)
+        private int _lastAttackIndex; // último comportamento de ataque usado (para o rodízio)
         private Coroutine _directorCoroutine;
         private Coroutine _retreatCoroutine;
         private int _currentHealth;
@@ -98,8 +101,9 @@ namespace _Game.Scripts.Enemies
         private bool _bHealthBelow50Triggered = false;
         private TrailRenderer _queenTrailRenderer;
 
-        public float StandardBehaviourDuration => Random.Range(minStandardBehaviourDuration, maxStandardBehaviourDuration);
-        
+        public float StandardBehaviourDuration =>
+            Random.Range(minStandardBehaviourDuration, maxStandardBehaviourDuration);
+
         public int CurrentHealthPercentage => Mathf.RoundToInt((float)_currentHealth / maxHealth * 100f);
 
         // ---------------------------------------------------------------------------------
@@ -116,9 +120,9 @@ namespace _Game.Scripts.Enemies
 
             _photonView = GetComponent<PhotonView>();
             _queenTrailRenderer = GetComponent<TrailRenderer>();
-            
+
             _currentHealth = maxHealth;
-            
+
             PhotonNetwork.AddCallbackTarget(this);
         }
 
@@ -132,18 +136,18 @@ namespace _Game.Scripts.Enemies
         protected override void Update()
         {
             base.Update();
-            
-            #if UNITY_EDITOR
-            
-            if(Keyboard.current.kKey.wasPressedThisFrame && Keyboard.current.leftShiftKey.isPressed)
+
+#if UNITY_EDITOR
+
+            if (Keyboard.current.kKey.wasPressedThisFrame && Keyboard.current.leftShiftKey.isPressed)
             {
-                if(PhotonHandlers.CanUseNetwork && PhotonHandlers.IsAuthority)
+                if (PhotonHandlers.CanUseNetwork && PhotonNetwork.IsMasterClient)
                     _photonView.RPC(nameof(TakeDamage), RpcTarget.All);
                 else
                     TakeDamage();
             }
-            
-            #endif
+
+#endif
         }
 
         private void OnDestroy()
@@ -151,19 +155,30 @@ namespace _Game.Scripts.Enemies
             // Limpa o estado da sala pra uma futura rainha não ler lixo.
             if (PhotonHandlers.CanUseNetwork && PhotonNetwork.IsMasterClient)
                 PhotonNetwork.CurrentRoom.SetCustomProperties(new Hashtable { { RoomStateKey, null } });
-            
+
             PhotonNetwork.RemoveCallbackTarget(this);
         }
-        
+
         public void OnMasterClientSwitched(Player newMasterClient)
         {
             RefreshDirector();
         }
-        
-        public void OnPlayerEnteredRoom(Player newPlayer) { }
-        public void OnPlayerLeftRoom(Player otherPlayer) { }
-        public void OnRoomPropertiesUpdate(Hashtable propertiesThatChanged) { }
-        public void OnPlayerPropertiesUpdate(Player targetPlayer, Hashtable changedProps) { }
+
+        public void OnPlayerEnteredRoom(Player newPlayer)
+        {
+        }
+
+        public void OnPlayerLeftRoom(Player otherPlayer)
+        {
+        }
+
+        public void OnRoomPropertiesUpdate(Hashtable propertiesThatChanged)
+        {
+        }
+
+        public void OnPlayerPropertiesUpdate(Player targetPlayer, Hashtable changedProps)
+        {
+        }
 
         private IEnumerator BootstrapRoutine()
         {
@@ -175,7 +190,7 @@ namespace _Game.Scripts.Enemies
 
             if (bEnableBehaviour)
                 RefreshDirector();
-            
+
             yield return null;
         }
 
@@ -230,9 +245,9 @@ namespace _Game.Scripts.Enemies
 
             while (true)
             {
-                if(DoRetreat())
+                if (DoRetreat())
                     phase = QueenPhase.Retreat;
-                
+
                 switch (phase)
                 {
                     case QueenPhase.MovingToCenter:
@@ -256,7 +271,8 @@ namespace _Game.Scripts.Enemies
                         int attackIndex = resumingAttack ? _state.BehaviourIndex : NextAttackIndex();
                         resumingAttack = false;
 
-                        yield return RunBehaviour(attackIndex, QueenPhase.Attack, queenBehaviours[attackIndex].BehaviourDuration);
+                        yield return RunBehaviour(attackIndex, QueenPhase.Attack,
+                            queenBehaviours[attackIndex].BehaviourDuration);
                         phase = QueenPhase.Standard;
                         break;
                     case QueenPhase.Retreat:
@@ -291,8 +307,7 @@ namespace _Game.Scripts.Enemies
 
                 yield return new WaitForSeconds(wait);
                 remaining -= wait;
-            }
-            while (remaining > 0f);
+            } while (remaining > 0f);
 
             if (bDebugLogs)
                 Debug.Log($"[MosquitoQueen] Behaviour {behaviourIndex} ended after {duration}s");
@@ -366,7 +381,7 @@ namespace _Game.Scripts.Enemies
                         break;
                     case QueenPhase.Standard:
                         zigZagMovement.SwitchMovementSettings(queenStandardZigZagSettings);
-                        InvokeRepeating(nameof(SpawnProjectile), projectileSpawnRate, projectileSpawnRate);
+                        InvokeRepeating(nameof(InvokeSpawnProjectile), projectileSpawnRate, projectileSpawnRate);
                         _queenTrailRenderer.emitting = false;
                         break;
                     case QueenPhase.Preparing:
@@ -375,28 +390,30 @@ namespace _Game.Scripts.Enemies
                         break;
                     case QueenPhase.Attack:
                         zigZagMovement.SwitchMovementSettings(null);
-                        CancelInvoke(nameof(SpawnProjectile));
+                        CancelInvoke(nameof(InvokeSpawnProjectile));
                         _queenTrailRenderer.emitting = true;
                         break;
                     case QueenPhase.Retreat:
                         zigZagMovement.SwitchMovementSettings(queenPrepareToAttackZigZagSettings);
                         lissajousCurve.SwitchCurveSettings(null);
                         zigZagMovement.SwitchMovementSettings(null);
-                        CancelInvoke(nameof(SpawnProjectile));
+                        CancelInvoke(nameof(InvokeSpawnProjectile));
                         break;
                 }
             }
-            
-            if(state.Phase == QueenPhase.MovingToCenter)
+
+            if (state.Phase == QueenPhase.MovingToCenter)
                 GoToNewPosition(Vector2.zero);
 
-            if(state.Phase == QueenPhase.Retreat)
+            if (state.Phase == QueenPhase.Retreat)
                 _retreatCoroutine = StartCoroutine(RetreatRoutine());
 
             // Na preparação o movimento (Lissajous) continua o mesmo, como no script original.
-            if (state.Phase == QueenPhase.Preparing || state.Phase == QueenPhase.MovingToCenter || state.Phase == QueenPhase.Retreat) return;
+            if (state.Phase == QueenPhase.Preparing || state.Phase == QueenPhase.MovingToCenter ||
+                state.Phase == QueenPhase.Retreat) return;
 
-            LissajouCurveSettings settings = queenBehaviours[state.BehaviourIndex].GetMovementSettings(state.MovementIndex);
+            LissajouCurveSettings settings =
+                queenBehaviours[state.BehaviourIndex].GetMovementSettings(state.MovementIndex);
             if (settings != null)
                 lissajousCurve.SwitchCurveSettings(settings);
         }
@@ -404,27 +421,24 @@ namespace _Game.Scripts.Enemies
         private IEnumerator RetreatRoutine()
         {
             GoToNewPosition(hordeSpawnPosition);
-            
+
             zigZagMovement.SwitchMovementSettings(queenStandardZigZagSettings);
-            
+
             yield return new WaitForSeconds(preparationTime);
-            
+
             GoToNewPosition(retreatPosition);
-            
+
             _queenTrailRenderer.emitting = false;
 
             if (GameMode.Instance)
             {
                 MosquitosHorde mosquitosHorde = GameMode.Instance.QueenSpawnHorde(this);
-                
+
                 if (mosquitosHorde != null)
                 {
                     bool allDestroyed = false;
 
-                    Action onAllDestroyed = () =>
-                    {
-                        allDestroyed = true;
-                    };
+                    Action onAllDestroyed = () => { allDestroyed = true; };
 
                     mosquitosHorde.AllMosquitosDestroyedEvent += onAllDestroyed;
 
@@ -437,13 +451,38 @@ namespace _Game.Scripts.Enemies
             _retreatCoroutine = null;
             yield return null;
         }
-        
-        [PunRPC]
-        private void SpawnProjectile()
+
+        private void InvokeSpawnProjectile()
         {
-            if(PhotonHandlers.CanUseNetwork && PhotonHandlers.IsAuthority)
-                _photonView.RPC(nameof(SpawnProjectile), RpcTarget.Others);
+            if (PhotonHandlers.CanUseNetwork)
+            {
+                if(!PhotonHandlers.IsAuthority) return;
+                
+                _photonView.RPC(nameof(RpcSpawnProjectile), RpcTarget.Others, (Vector2)projectileSpawnPoint.position, Rigidbody2D.linearVelocity);
+                
+                SpawnProjectile(projectileSpawnPoint.position);
+
+                if (bDebugLogs)
+                    Debug.Log("[MosquitoQueen] SpawnProjectile RPC sent to all");
+            }
+            else
+            {
+                SpawnProjectile(projectileSpawnPoint.position);
+            }
+        }
+
+        [PunRPC]
+        private void RpcSpawnProjectile(Vector2 projectileSpawnPosition, Vector2 queenVelocity, PhotonMessageInfo info)
+        {
+            float lag = Mathf.Max(0f, (float)(PhotonNetwork.Time - info.SentServerTime));
             
+            Vector3 fixedPosition = projectileSpawnPosition + (Vector2)queenVelocity * lag;
+            
+            SpawnProjectile(fixedPosition);
+        }
+
+        private void SpawnProjectile(Vector3 spawnPosition)
+        {
             if (projectilePrefab == null || projectileSpawnPoint == null) return;
 
             for (int i = 0; i < projectilesPerShot; i++)
@@ -458,30 +497,34 @@ namespace _Game.Scripts.Enemies
                     ,
                     _ => 0f
                 };
-                
+
                 Quaternion rotation = Quaternion.Euler(0f, 0f, zRotation);
 
-                Projectile projectile = Instantiate(projectilePrefab, projectileSpawnPoint.position, rotation);
-                projectile.Init(MosquitosInstigatorId, Random.Range(0, int.MaxValue), pierceThroughEnemies: false, doubleSpeed: false);
+                Projectile projectile = Instantiate(projectilePrefab, spawnPosition, rotation);
+                projectile.Init(MosquitosInstigatorId, Random.Range(0, int.MaxValue), pierceThroughEnemies: false,
+                    doubleSpeed: false);
+
+                if (bDebugLogs)
+                    Debug.Log($"[MosquitoQueen] Spawned projectile {i + 1}/{projectilesPerShot}");
             }
         }
 
         private void OnTriggerEnter2D(Collider2D other)
         {
-            if(other.gameObject.layer == ProjectilesLayer)
+            if (other.gameObject.layer == ProjectilesLayer)
             {
-                if(PhotonHandlers.CanUseNetwork)
+                if (PhotonHandlers.CanUseNetwork)
                     _photonView.RPC(nameof(TakeDamage), RpcTarget.All);
                 else
                     TakeDamage();
             }
-            
-            if(other.gameObject.layer == BarrierLayer)
+
+            if (other.gameObject.layer == BarrierLayer)
             {
                 BarriersManager.Instance.DamageBarrier(other.gameObject);
             }
         }
-        
+
         [PunRPC]
         private void TakeDamage()
         {
@@ -490,20 +533,24 @@ namespace _Game.Scripts.Enemies
             int currentHealthPercentage = CurrentHealthPercentage;
             healthPercentageText.text = $"{currentHealthPercentage}%";
 
-            if (PhotonHandlers.CanUseNetwork && PhotonHandlers.IsAuthority)
-            {
-                if (_currentHealth <= 0)
-                {
-                    if(!PhotonNetwork.IsMasterClient) return;
-                    
-                    PhotonNetwork.Destroy(gameObject);
 
-                    MosquitoQueenDeathEvent?.Invoke();
-                }
+            if (_currentHealth > 0) return;
+            
+            if (PhotonHandlers.CanUseNetwork)
+            {
+                if (!PhotonHandlers.IsAuthority) return;
+
+                PhotonNetwork.Destroy(gameObject);
+
+                MosquitoQueenDeathEvent?.Invoke();
+
+                if (bDebugLogs)
+                    Debug.Log("[MosquitoQueen] Destroyed by MasterClient");
             }
             else
             {
                 Destroy(gameObject);
+                MosquitoQueenDeathEvent?.Invoke();
             }
         }
 
@@ -515,23 +562,24 @@ namespace _Game.Scripts.Enemies
             {
                 case > 50 and <= 75:
                     // Trigger some event or change behavior
-                    if(_bHealthBelow75Triggered) break;
-                    
-                    if(bDebugLogs)
+                    if (_bHealthBelow75Triggered) break;
+
+                    if (bDebugLogs)
                         Debug.Log("[Mosquito Queen] Health is between 50% and 75%");
-                    
+
                     _bHealthBelow75Triggered = true;
                     return true;
                 case > 25 and <= 50:
                     // Trigger some event or change behavior
-                    if(_bHealthBelow50Triggered) break;
-                    
-                    if(bDebugLogs)
+                    if (_bHealthBelow50Triggered) break;
+
+                    if (bDebugLogs)
                         Debug.Log("[Mosquito Queen] Health is below 50%");
-                    
+
                     _bHealthBelow50Triggered = true;
                     return true;
             }
+
             return false;
         }
     }
