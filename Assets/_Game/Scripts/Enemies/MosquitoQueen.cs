@@ -29,6 +29,7 @@ namespace _Game.Scripts.Enemies
         [SerializeField] private float preparationTime = 3f;
         public bool bEnableBehaviour = true;
         [SerializeField] private Vector2 retreatPosition = new Vector2(0f, 10f);
+        [SerializeField] private Vector2 hordeSpawnPosition = new Vector2(0f, 0f);
         
         [Header("Queen Health Settings")]
         [SerializeField] private int maxHealth = 100;
@@ -91,9 +92,11 @@ namespace _Game.Scripts.Enemies
         private QueenPhase _appliedPhase = QueenPhase.MovingToCenter;
         private int _lastAttackIndex;                    // último comportamento de ataque usado (para o rodízio)
         private Coroutine _directorCoroutine;
+        private Coroutine _retreatCoroutine;
         private int _currentHealth;
         private bool _bHealthBelow75Triggered = false;
         private bool _bHealthBelow50Triggered = false;
+        private TrailRenderer _queenTrailRenderer;
 
         public float StandardBehaviourDuration => Random.Range(minStandardBehaviourDuration, maxStandardBehaviourDuration);
         
@@ -112,6 +115,7 @@ namespace _Game.Scripts.Enemies
             base.Awake();
 
             _photonView = GetComponent<PhotonView>();
+            _queenTrailRenderer = GetComponent<TrailRenderer>();
             
             _currentHealth = maxHealth;
             
@@ -257,7 +261,7 @@ namespace _Game.Scripts.Enemies
                         break;
                     case QueenPhase.Retreat:
                         Broadcast(new QueenState(QueenPhase.Retreat, 0, _state.MovementIndex));
-                        yield return new WaitUntil(() => _state.Phase != QueenPhase.Retreat);
+                        yield return new WaitUntil(() => _retreatCoroutine == null);
                         phase = QueenPhase.MovingToCenter;
                         break;
                 }
@@ -357,25 +361,28 @@ namespace _Game.Scripts.Enemies
                 switch (state.Phase)
                 {
                     case QueenPhase.MovingToCenter:
-                        zigZagMovement.SwitchMovementSettings(null);
+                        zigZagMovement.SwitchMovementSettings(queenStandardZigZagSettings);
                         lissajousCurve.SwitchCurveSettings(null);
                         break;
                     case QueenPhase.Standard:
-                        InvokeRepeating(nameof(SpawnProjectile), projectileSpawnRate, projectileSpawnRate);
                         zigZagMovement.SwitchMovementSettings(queenStandardZigZagSettings);
+                        InvokeRepeating(nameof(SpawnProjectile), projectileSpawnRate, projectileSpawnRate);
+                        _queenTrailRenderer.emitting = false;
                         break;
                     case QueenPhase.Preparing:
                         zigZagMovement.SwitchMovementSettings(queenPrepareToAttackZigZagSettings);
+                        _queenTrailRenderer.emitting = false;
                         break;
                     case QueenPhase.Attack:
-                        CancelInvoke(nameof(SpawnProjectile));
                         zigZagMovement.SwitchMovementSettings(null);
+                        CancelInvoke(nameof(SpawnProjectile));
+                        _queenTrailRenderer.emitting = true;
                         break;
                     case QueenPhase.Retreat:
-                        CancelInvoke(nameof(SpawnProjectile));
                         zigZagMovement.SwitchMovementSettings(queenPrepareToAttackZigZagSettings);
                         lissajousCurve.SwitchCurveSettings(null);
                         zigZagMovement.SwitchMovementSettings(null);
+                        CancelInvoke(nameof(SpawnProjectile));
                         break;
                 }
             }
@@ -384,7 +391,7 @@ namespace _Game.Scripts.Enemies
                 GoToNewPosition(Vector2.zero);
 
             if(state.Phase == QueenPhase.Retreat)
-                StartCoroutine(RetreatRoutine());
+                _retreatCoroutine = StartCoroutine(RetreatRoutine());
 
             // Na preparação o movimento (Lissajous) continua o mesmo, como no script original.
             if (state.Phase == QueenPhase.Preparing || state.Phase == QueenPhase.MovingToCenter || state.Phase == QueenPhase.Retreat) return;
@@ -396,13 +403,39 @@ namespace _Game.Scripts.Enemies
 
         private IEnumerator RetreatRoutine()
         {
-            zigZagMovement.SwitchMovementSettings(queenPrepareToAttackZigZagSettings);
-            
-            yield return new WaitForSeconds(preparationTime);
+            GoToNewPosition(hordeSpawnPosition);
             
             zigZagMovement.SwitchMovementSettings(queenStandardZigZagSettings);
             
+            yield return new WaitForSeconds(preparationTime);
+            
             GoToNewPosition(retreatPosition);
+            
+            _queenTrailRenderer.emitting = false;
+
+            if (GameMode.Instance)
+            {
+                MosquitosHorde mosquitosHorde = GameMode.Instance.QueenSpawnHorde(this);
+                
+                if (mosquitosHorde != null)
+                {
+                    bool allDestroyed = false;
+
+                    Action onAllDestroyed = () =>
+                    {
+                        allDestroyed = true;
+                    };
+
+                    mosquitosHorde.AllMosquitosDestroyedEvent += onAllDestroyed;
+
+                    yield return new WaitUntil(() => allDestroyed);
+
+                    mosquitosHorde.AllMosquitosDestroyedEvent -= onAllDestroyed;
+                }
+            }
+
+            _retreatCoroutine = null;
+            yield return null;
         }
         
         [PunRPC]
@@ -437,10 +470,15 @@ namespace _Game.Scripts.Enemies
         {
             if(other.gameObject.layer == ProjectilesLayer)
             {
-                if(PhotonHandlers.CanUseNetwork && PhotonHandlers.IsAuthority)
+                if(PhotonHandlers.CanUseNetwork)
                     _photonView.RPC(nameof(TakeDamage), RpcTarget.All);
                 else
                     TakeDamage();
+            }
+            
+            if(other.gameObject.layer == BarrierLayer)
+            {
+                BarriersManager.Instance.DamageBarrier(other.gameObject);
             }
         }
         
@@ -452,18 +490,20 @@ namespace _Game.Scripts.Enemies
             int currentHealthPercentage = CurrentHealthPercentage;
             healthPercentageText.text = $"{currentHealthPercentage}%";
 
-            if (_currentHealth <= 0)
+            if (PhotonHandlers.CanUseNetwork && PhotonHandlers.IsAuthority)
             {
-                if (PhotonHandlers.CanUseNetwork && PhotonHandlers.IsAuthority)
+                if (_currentHealth <= 0)
                 {
+                    if(!PhotonNetwork.IsMasterClient) return;
+                    
                     PhotonNetwork.Destroy(gameObject);
-                }
-                else
-                {
-                    Destroy(gameObject);
-                }
 
-                MosquitoQueenDeathEvent?.Invoke();
+                    MosquitoQueenDeathEvent?.Invoke();
+                }
+            }
+            else
+            {
+                Destroy(gameObject);
             }
         }
 
