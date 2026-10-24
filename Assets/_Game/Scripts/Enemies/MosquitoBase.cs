@@ -31,6 +31,7 @@ namespace _Game.Scripts.Enemies
         protected Collider2D Collider2D;
         protected int ProjectilesLayer;
         protected int BarrierLayer;
+        protected Rigidbody2D Rigidbody2D;
         
         public MosquitoType Type => type;
         public MosquitoZigZagMovement MosquitoZigZagMovement => zigZagMovement;
@@ -43,6 +44,7 @@ namespace _Game.Scripts.Enemies
             Collider2D = GetComponent<Collider2D>();
             BarrierLayer = LayerMask.NameToLayer("Barrier");
             ProjectilesLayer = LayerMask.NameToLayer("Projectiles");
+            Rigidbody2D = GetComponent<Rigidbody2D>();
         }
         
         protected virtual void Start()
