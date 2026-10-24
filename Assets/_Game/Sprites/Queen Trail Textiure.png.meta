@@ -1,0 +1,832 @@
+fileFormatVersion: 2
+guid: 7834b0a2155398c4590c9b0d3c288575
+TextureImporter:
+  internalIDToNameTable:
+  - first:
+      213: -6830748263966081210
+    second: "Efeito Pixelado de Vento e Fuma\xE7a_0"
+  - first:
+      213: -7446374945837740083
+    second: "Efeito Pixelado de Vento e Fuma\xE7a_1"
+  - first:
+      213: 1936077862249113012
+    second: "Efeito Pixelado de Vento e Fuma\xE7a_2"
+  - first:
+      213: -1462627255098693656
+    second: "Efeito Pixelado de Vento e Fuma\xE7a_3"
+  - first:
+      213: -5075011134715193879
+    second: "Efeito Pixelado de Vento e Fuma\xE7a_4"
+  - first:
+      213: 8168505702608013577
+    second: "Efeito Pixelado de Vento e Fuma\xE7a_5"
+  - first:
+      213: -3985619875454886529
+    second: "Efeito Pixelado de Vento e Fuma\xE7a_6"
+  - first:
+      213: 6551514287576912115
+    second: "Efeito Pixelado de Vento e Fuma\xE7a_7"
+  - first:
+      213: 7968868409121170475
+    second: "Efeito Pixelado de Vento e Fuma\xE7a_8"
+  - first:
+      213: -3489387974992676333
+    second: "Efeito Pixelado de Vento e Fuma\xE7a_9"
+  - first:
+      213: 8341972083616731169
+    second: "Efeito Pixelado de Vento e Fuma\xE7a_10"
+  - first:
+      213: -7690155242654496907
+    second: "Efeito Pixelado de Vento e Fuma\xE7a_11"
+  - first:
+      213: -6787384762753863898
+    second: "Efeito Pixelado de Vento e Fuma\xE7a_12"
+  - first:
+      213: -7758947460410394660
+    second: "Efeito Pixelado de Vento e Fuma\xE7a_13"
+  - first:
+      213: -5195851900177872379
+    second: "Efeito Pixelado de Vento e Fuma\xE7a_14"
+  - first:
+      213: -9160267865608124824
+    second: "Efeito Pixelado de Vento e Fuma\xE7a_15"
+  - first:
+      213: 4323160029477690429
+    second: "Efeito Pixelado de Vento e Fuma\xE7a_16"
+  - first:
+      213: 4269732191263195529
+    second: "Efeito Pixelado de Vento e Fuma\xE7a_17"
+  - first:
+      213: 3719110743742463574
+    second: "Efeito Pixelado de Vento e Fuma\xE7a_18"
+  - first:
+      213: -6878693951872572697
+    second: "Efeito Pixelado de Vento e Fuma\xE7a_19"
+  - first:
+      213: 5581680573733125119
+    second: "Efeito Pixelado de Vento e Fuma\xE7a_20"
+  - first:
+      213: 3708449699524289315
+    second: "Efeito Pixelado de Vento e Fuma\xE7a_21"
+  - first:
+      213: -7591128352027012342
+    second: "Efeito Pixelado de Vento e Fuma\xE7a_22"
+  - first:
+      213: 5648504340233771585
+    second: "Efeito Pixelado de Vento e Fuma\xE7a_23"
+  - first:
+      213: -172226122991185723
+    second: "Efeito Pixelado de Vento e Fuma\xE7a_24"
+  - first:
+      213: 5146345291265370968
+    second: "Efeito Pixelado de Vento e Fuma\xE7a_25"
+  - first:
+      213: -4911458611688528635
+    second: "Efeito Pixelado de Vento e Fuma\xE7a_26"
+  externalObjects: {}
+  serializedVersion: 13
+  mipmaps:
+    mipMapMode: 0
+    enableMipMap: 0
+    sRGBTexture: 1
+    linearTexture: 0
+    fadeOut: 0
+    borderMipMap: 0
+    mipMapsPreserveCoverage: 0
+    alphaTestReferenceValue: 0.5
+    mipMapFadeDistanceStart: 1
+    mipMapFadeDistanceEnd: 3
+  bumpmap:
+    convertToNormalMap: 0
+    externalNormalMap: 0
+    heightScale: 0.25
+    normalMapFilter: 0
+    flipGreenChannel: 0
+  isReadable: 0
+  streamingMipmaps: 0
+  streamingMipmapsPriority: 0
+  vTOnly: 0
+  ignoreMipmapLimit: 0
+  grayScaleToAlpha: 0
+  generateCubemap: 6
+  cubemapConvolution: 0
+  seamlessCubemap: 0
+  textureFormat: 1
+  maxTextureSize: 2048
+  textureSettings:
+    serializedVersion: 2
+    filterMode: 0
+    aniso: 1
+    mipBias: 0
+    wrapU: 1
+    wrapV: 1
+    wrapW: 1
+  nPOTScale: 0
+  lightmap: 0
+  compressionQuality: 50
+  spriteMode: 1
+  spriteExtrude: 1
+  spriteMeshType: 1
+  alignment: 0
+  spritePivot: {x: 0.5, y: 0.5}
+  spritePixelsToUnits: 16
+  spriteBorder: {x: 0, y: 0, z: 0, w: 0}
+  spriteGenerateFallbackPhysicsShape: 1
+  alphaUsage: 1
+  alphaIsTransparency: 1
+  spriteTessellationDetail: -1
+  textureType: 8
+  textureShape: 1
+  singleChannelComponent: 0
+  flipbookRows: 1
+  flipbookColumns: 1
+  maxTextureSizeSet: 0
+  compressionQualitySet: 0
+  textureFormatSet: 0
+  ignorePngGamma: 0
+  applyGammaDecoding: 0
+  swizzle: 50462976
+  cookieLightType: 0
+  platformSettings:
+  - serializedVersion: 4
+    buildTarget: DefaultTexturePlatform
+    maxTextureSize: 16384
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 0
+    compressionQuality: 50
+    crunchedCompression: 1
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: Standalone
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: Android
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  spriteSheet:
+    serializedVersion: 2
+    sprites:
+    - serializedVersion: 2
+      name: "Efeito Pixelado de Vento e Fuma\xE7a_0"
+      rect:
+        serializedVersion: 2
+        x: 317
+        y: 740
+        width: 29
+        height: 28
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 64f7f2015ae4431a0800000000000000
+      internalID: -6830748263966081210
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: "Efeito Pixelado de Vento e Fuma\xE7a_1"
+      rect:
+        serializedVersion: 2
+        x: 337
+        y: 711
+        width: 41
+        height: 44
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: dcf09f8707929a890800000000000000
+      internalID: -7446374945837740083
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: "Efeito Pixelado de Vento e Fuma\xE7a_2"
+      rect:
+        serializedVersion: 2
+        x: 347
+        y: 755
+        width: 27
+        height: 16
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 4b52bd4de845eda10800000000000000
+      internalID: 1936077862249113012
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: "Efeito Pixelado de Vento e Fuma\xE7a_3"
+      rect:
+        serializedVersion: 2
+        x: 266
+        y: 741
+        width: 44
+        height: 12
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 8e7a905c244b3bbe0800000000000000
+      internalID: -1462627255098693656
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: "Efeito Pixelado de Vento e Fuma\xE7a_4"
+      rect:
+        serializedVersion: 2
+        x: 306
+        y: 741
+        width: 11
+        height: 10
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 9e51624f240f199b0800000000000000
+      internalID: -5075011134715193879
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: "Efeito Pixelado de Vento e Fuma\xE7a_5"
+      rect:
+        serializedVersion: 2
+        x: 317
+        y: 743
+        width: 7
+        height: 9
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 90904bd68ac5c5170800000000000000
+      internalID: 8168505702608013577
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: "Efeito Pixelado de Vento e Fuma\xE7a_6"
+      rect:
+        serializedVersion: 2
+        x: 456
+        y: 733
+        width: 31
+        height: 13
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: f7d56c907db30b8c0800000000000000
+      internalID: -3985619875454886529
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: "Efeito Pixelado de Vento e Fuma\xE7a_7"
+      rect:
+        serializedVersion: 2
+        x: 498
+        y: 713
+        width: 64
+        height: 29
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 3f01beb7887abea50800000000000000
+      internalID: 6551514287576912115
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: "Efeito Pixelado de Vento e Fuma\xE7a_8"
+      rect:
+        serializedVersion: 2
+        x: 322
+        y: 709
+        width: 14
+        height: 11
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: b24ef73e89b179e60800000000000000
+      internalID: 7968868409121170475
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: "Efeito Pixelado de Vento e Fuma\xE7a_9"
+      rect:
+        serializedVersion: 2
+        x: 385
+        y: 696
+        width: 20
+        height: 26
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 31aba03df14339fc0800000000000000
+      internalID: -3489387974992676333
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: "Efeito Pixelado de Vento e Fuma\xE7a_10"
+      rect:
+        serializedVersion: 2
+        x: 562
+        y: 694
+        width: 34
+        height: 35
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 12053329963a4c370800000000000000
+      internalID: 8341972083616731169
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: "Efeito Pixelado de Vento e Fuma\xE7a_11"
+      rect:
+        serializedVersion: 2
+        x: 22
+        y: 25
+        width: 1717
+        height: 660
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 57788fd0d84174590800000000000000
+      internalID: -7690155242654496907
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: "Efeito Pixelado de Vento e Fuma\xE7a_12"
+      rect:
+        serializedVersion: 2
+        x: 363
+        y: 660
+        width: 15
+        height: 27
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 62f2826f48d5ec1a0800000000000000
+      internalID: -6787384762753863898
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: "Efeito Pixelado de Vento e Fuma\xE7a_13"
+      rect:
+        serializedVersion: 2
+        x: 427
+        y: 658
+        width: 20
+        height: 29
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: cd7b157b46ea25490800000000000000
+      internalID: -7758947460410394660
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: "Efeito Pixelado de Vento e Fuma\xE7a_14"
+      rect:
+        serializedVersion: 2
+        x: 595
+        y: 684
+        width: 51
+        height: 24
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 50a0c50c930a4e7b0800000000000000
+      internalID: -5195851900177872379
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: "Efeito Pixelado de Vento e Fuma\xE7a_15"
+      rect:
+        serializedVersion: 2
+        x: 1193
+        y: 684
+        width: 26
+        height: 12
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 866800fc8e030e080800000000000000
+      internalID: -9160267865608124824
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: "Efeito Pixelado de Vento e Fuma\xE7a_16"
+      rect:
+        serializedVersion: 2
+        x: 447
+        y: 659
+        width: 10
+        height: 11
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: d3c5f284423fefb30800000000000000
+      internalID: 4323160029477690429
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: "Efeito Pixelado de Vento e Fuma\xE7a_17"
+      rect:
+        serializedVersion: 2
+        x: 429
+        y: 646
+        width: 6
+        height: 7
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 9810b425ec2214b30800000000000000
+      internalID: 4269732191263195529
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: "Efeito Pixelado de Vento e Fuma\xE7a_18"
+      rect:
+        serializedVersion: 2
+        x: 644
+        y: 630
+        width: 14
+        height: 20
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 65ebb19448fec9330800000000000000
+      internalID: 3719110743742463574
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: "Efeito Pixelado de Vento e Fuma\xE7a_19"
+      rect:
+        serializedVersion: 2
+        x: 659
+        y: 635
+        width: 7
+        height: 6
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 7e2e100bb48f980a0800000000000000
+      internalID: -6878693951872572697
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: "Efeito Pixelado de Vento e Fuma\xE7a_20"
+      rect:
+        serializedVersion: 2
+        x: 1693
+        y: 417
+        width: 20
+        height: 17
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: ffbbf07a8ec167d40800000000000000
+      internalID: 5581680573733125119
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: "Efeito Pixelado de Vento e Fuma\xE7a_21"
+      rect:
+        serializedVersion: 2
+        x: 1721
+        y: 432
+        width: 12
+        height: 14
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 323ac8f7a5f077330800000000000000
+      internalID: 3708449699524289315
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: "Efeito Pixelado de Vento e Fuma\xE7a_22"
+      rect:
+        serializedVersion: 2
+        x: 1709
+        y: 297
+        width: 12
+        height: 14
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: a03980dbbf4e6a690800000000000000
+      internalID: -7591128352027012342
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: "Efeito Pixelado de Vento e Fuma\xE7a_23"
+      rect:
+        serializedVersion: 2
+        x: 546
+        y: 241
+        width: 11
+        height: 19
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 14ad2e735c4836e40800000000000000
+      internalID: 5648504340233771585
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: "Efeito Pixelado de Vento e Fuma\xE7a_24"
+      rect:
+        serializedVersion: 2
+        x: 556
+        y: 209
+        width: 7
+        height: 13
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 5c0511ee0412c9df0800000000000000
+      internalID: -172226122991185723
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: "Efeito Pixelado de Vento e Fuma\xE7a_25"
+      rect:
+        serializedVersion: 2
+        x: 562
+        y: 211
+        width: 6
+        height: 8
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 85b6061a6cd7b6740800000000000000
+      internalID: 5146345291265370968
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: "Efeito Pixelado de Vento e Fuma\xE7a_26"
+      rect:
+        serializedVersion: 2
+        x: 1586
+        y: 209
+        width: 12
+        height: 13
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 505a5492a6ef6dbb0800000000000000
+      internalID: -4911458611688528635
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    outline: []
+    customData: 
+    physicsShape: []
+    bones: []
+    spriteID: 5e97eb03825dee720800000000000000
+    internalID: 0
+    vertices: []
+    indices: 
+    edges: []
+    weights: []
+    secondaryTextures: []
+    spriteCustomMetadata:
+      entries: []
+    nameFileIdTable:
+      "Efeito Pixelado de Vento e Fuma\xE7a_0": -6830748263966081210
+      "Efeito Pixelado de Vento e Fuma\xE7a_1": -7446374945837740083
+      "Efeito Pixelado de Vento e Fuma\xE7a_10": 8341972083616731169
+      "Efeito Pixelado de Vento e Fuma\xE7a_11": -7690155242654496907
+      "Efeito Pixelado de Vento e Fuma\xE7a_12": -6787384762753863898
+      "Efeito Pixelado de Vento e Fuma\xE7a_13": -7758947460410394660
+      "Efeito Pixelado de Vento e Fuma\xE7a_14": -5195851900177872379
+      "Efeito Pixelado de Vento e Fuma\xE7a_15": -9160267865608124824
+      "Efeito Pixelado de Vento e Fuma\xE7a_16": 4323160029477690429
+      "Efeito Pixelado de Vento e Fuma\xE7a_17": 4269732191263195529
+      "Efeito Pixelado de Vento e Fuma\xE7a_18": 3719110743742463574
+      "Efeito Pixelado de Vento e Fuma\xE7a_19": -6878693951872572697
+      "Efeito Pixelado de Vento e Fuma\xE7a_2": 1936077862249113012
+      "Efeito Pixelado de Vento e Fuma\xE7a_20": 5581680573733125119
+      "Efeito Pixelado de Vento e Fuma\xE7a_21": 3708449699524289315
+      "Efeito Pixelado de Vento e Fuma\xE7a_22": -7591128352027012342
+      "Efeito Pixelado de Vento e Fuma\xE7a_23": 5648504340233771585
+      "Efeito Pixelado de Vento e Fuma\xE7a_24": -172226122991185723
+      "Efeito Pixelado de Vento e Fuma\xE7a_25": 5146345291265370968
+      "Efeito Pixelado de Vento e Fuma\xE7a_26": -4911458611688528635
+      "Efeito Pixelado de Vento e Fuma\xE7a_3": -1462627255098693656
+      "Efeito Pixelado de Vento e Fuma\xE7a_4": -5075011134715193879
+      "Efeito Pixelado de Vento e Fuma\xE7a_5": 8168505702608013577
+      "Efeito Pixelado de Vento e Fuma\xE7a_6": -3985619875454886529
+      "Efeito Pixelado de Vento e Fuma\xE7a_7": 6551514287576912115
+      "Efeito Pixelado de Vento e Fuma\xE7a_8": 7968868409121170475
+      "Efeito Pixelado de Vento e Fuma\xE7a_9": -3489387974992676333
+  mipmapLimitGroupName: 
+  pSDRemoveMatte: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
