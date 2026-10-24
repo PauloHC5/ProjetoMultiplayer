@@ -532,26 +532,25 @@ namespace _Game.Scripts.Enemies
             healthBarSlider.value = (float)_currentHealth / maxHealth;
             int currentHealthPercentage = CurrentHealthPercentage;
             healthPercentageText.text = $"{currentHealthPercentage}%";
-
-
+            
             if (_currentHealth > 0) return;
             
             if (PhotonHandlers.CanUseNetwork)
             {
-                if (!PhotonHandlers.IsAuthority) return;
-
-                PhotonNetwork.Destroy(gameObject);
-
-                MosquitoQueenDeathEvent?.Invoke();
-
-                if (bDebugLogs)
-                    Debug.Log("[MosquitoQueen] Destroyed by MasterClient");
+                if (PhotonHandlers.IsAuthority)
+                {
+                    PhotonNetwork.Destroy(gameObject);
+                
+                    if (bDebugLogs)
+                        Debug.Log("[MosquitoQueen] Destroyed by MasterClient");
+                }
             }
             else
             {
                 Destroy(gameObject);
-                MosquitoQueenDeathEvent?.Invoke();
             }
+            
+            MosquitoQueenDeathEvent?.Invoke();
         }
 
         private bool DoRetreat()

@@ -517,6 +517,9 @@ namespace _Game.Scripts
                 _mosquitoQueenInTheScene = FindAnyObjectByType<MosquitoQueen>();
             
             _mosquitoQueenInTheScene.MosquitoQueenDeathEvent += WaveCompleted;
+            
+            if(bDebugMode)
+                Debug.Log("GameMode.RpcSubscribeToQueenDeathEvent: Subscribed to MosquitoQueenDeathEvent");
         }
 
         private void WaveCompleted()
