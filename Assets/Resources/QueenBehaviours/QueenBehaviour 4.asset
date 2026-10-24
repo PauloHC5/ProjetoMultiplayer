@@ -14,8 +14,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::QueenBehaviour
   curveMovementSettings:
   - {fileID: 11400000, guid: 3fc429d7c90da8f4e8a74a7ae6402539, type: 2}
-  minBehaviourDuration: 5
-  maxBehaviourDuration: 10
+  minBehaviourDuration: 8
+  maxBehaviourDuration: 25
   bChangeMovementSettings: 1
   minTimeToChangeMovement: 3
   maxTimeToChangeMovement: 3

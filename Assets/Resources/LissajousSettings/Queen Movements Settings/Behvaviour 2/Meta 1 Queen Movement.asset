@@ -32,8 +32,8 @@ MonoBehaviour:
   deltaMin: 2.84
   deltaMax: 5.68
   deltaFrequency: 0.1
-  transitionMode: 0
-  t_multipler: 2.43
+  transitionMode: 1
+  t_multipler: 1.48
   xOffset: 0
-  yOffset: 5.5
+  yOffset: 7.1
   multiplier: 2.57
