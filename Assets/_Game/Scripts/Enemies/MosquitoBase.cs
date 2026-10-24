@@ -30,6 +30,7 @@ namespace _Game.Scripts.Enemies
         protected Action MoveArrivedCallback;
         protected Collider2D Collider2D;
         protected int ProjectilesLayer;
+        protected int BarrierLayer;
         
         public MosquitoType Type => type;
         public MosquitoZigZagMovement MosquitoZigZagMovement => zigZagMovement;
@@ -40,6 +41,7 @@ namespace _Game.Scripts.Enemies
         protected virtual void Awake()
         {
             Collider2D = GetComponent<Collider2D>();
+            BarrierLayer = LayerMask.NameToLayer("Barrier");
             ProjectilesLayer = LayerMask.NameToLayer("Projectiles");
         }
         

@@ -16,7 +16,6 @@ public class Mosquito : MosquitoBase
     
     private Vector3 _originalScale;
     private int _defaultLayer;
-    private int _barrierLayer;
     
     [HideInInspector]
     public MosquitosHorde.HordePositionKey hordePositionKey;
@@ -29,7 +28,6 @@ public class Mosquito : MosquitoBase
         base.Awake();
         
         _defaultLayer = LayerMask.NameToLayer("Default");
-        _barrierLayer = LayerMask.NameToLayer("Barrier");
         _originalScale = transform.localScale;
     }
 
@@ -47,7 +45,7 @@ public class Mosquito : MosquitoBase
             OnMosquitoHitBoundaries?.Invoke();
         }
         
-        if(other.gameObject.layer == _barrierLayer)
+        if(other.gameObject.layer == BarrierLayer)
         {
             OnMosquitoKilled?.Invoke(this, -1);
             BarriersManager.Instance.DamageBarrier(other.gameObject);
