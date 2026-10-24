@@ -87,7 +87,7 @@ SpriteRenderer:
   m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: 583268991
   m_SortingLayer: 4
-  m_SortingOrder: 0
+  m_SortingOrder: 1
   m_MaskInteraction: 0
   m_Sprite: {fileID: 21300000, guid: b73d33b8c86c9934b8d3cbd905cfdfdc, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
@@ -233,7 +233,7 @@ MonoBehaviour:
   preparationTime: 3
   bEnableBehaviour: 1
   retreatPosition: {x: 0, y: 30}
-  hordeSpawnPosition: {x: 0, y: 15}
+  hordeSpawnPosition: {x: 0, y: 12}
   maxHealth: 100
   damagePerHit: 2
   healthBarSlider: {fileID: 2141001252292299642}
