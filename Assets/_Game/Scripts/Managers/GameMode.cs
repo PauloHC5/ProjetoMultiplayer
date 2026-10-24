@@ -405,14 +405,17 @@ namespace _Game.Scripts
             _photonView.RPC(nameof(RpcSubscribeToMosquitosHordeEvents), RpcTarget.All);
         }
 
-        public void QueenSpawnHorde(MosquitoQueen mosquitoQueen)
+        public MosquitosHorde QueenSpawnHorde(MosquitoQueen mosquitoQueen)
         {
-            if (!PhotonNetwork.IsMasterClient) return;
+            if (!PhotonNetwork.IsMasterClient) return null;
 
             _mosquitosHordeInTheScene = PhotonNetwork
                 .InstantiateRoomObject(mosquitosHordePrefab.name, mosquitoQueen.transform.position,
                     Quaternion.identity).GetComponent<MosquitosHorde>();
+
             _photonView.RPC(nameof(RpcSubscribeToMosquitosHordeEvents), RpcTarget.All);
+            
+            return _mosquitosHordeInTheScene;
         }
 
         [PunRPC]
