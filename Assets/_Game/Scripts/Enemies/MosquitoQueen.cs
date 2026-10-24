@@ -394,9 +394,7 @@ namespace _Game.Scripts.Enemies
                         _queenTrailRenderer.emitting = true;
                         break;
                     case QueenPhase.Retreat:
-                        zigZagMovement.SwitchMovementSettings(queenPrepareToAttackZigZagSettings);
                         lissajousCurve.SwitchCurveSettings(null);
-                        zigZagMovement.SwitchMovementSettings(null);
                         CancelInvoke(nameof(InvokeSpawnProjectile));
                         break;
                 }
