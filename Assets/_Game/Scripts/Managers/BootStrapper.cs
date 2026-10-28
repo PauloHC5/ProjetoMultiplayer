@@ -45,12 +45,12 @@ public static class PhotonTypes
     private static byte[] SerializeQueenState(object obj)
     {
         var s = (MosquitoQueen.QueenState)obj;
-        return new[] { (byte)s.Phase, (byte)s.BehaviourIndex, (byte)s.MovementIndex };
+        return new[] { (byte)s.Phase, (byte)s.BehaviourIndex, (byte)s.MovementIndex, (byte)s.MosquitoPatrolMovementIndex };
     }
 
     private static object DeserializeQueenState(byte[] bytes)
     {
-        return new MosquitoQueen.QueenState((MosquitoQueen.QueenPhase)bytes[0], bytes[1], bytes[2]);
+        return new MosquitoQueen.QueenState((MosquitoQueen.QueenPhase)bytes[0], bytes[1], bytes[2], bytes[3]);
     }
 }
 

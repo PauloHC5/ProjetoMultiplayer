@@ -1,5 +1,7 @@
 using System;
 using System.Collections;
+using System.Collections.Generic;
+using System.Linq;
 using Photon.Pun;
 using Photon.Realtime;
 using TMPro;
@@ -20,9 +22,8 @@ namespace _Game.Scripts.Enemies
     /// </summary>
     public class MosquitoQueen : MosquitoBase, IInRoomCallbacks
     {
-        [Header("Queen Movement Settings")] [SerializeField]
-        private MosquitoZigZagMovementSettings queenStandardZigZagSettings;
-
+        [Header("Queen Movement Settings")] 
+        [SerializeField] private MosquitoZigZagMovementSettings queenStandardZigZagSettings;
         [SerializeField] private MosquitoZigZagMovementSettings queenPrepareToAttackZigZagSettings;
         [SerializeField] private QueenBehaviour[] queenBehaviours;
         [SerializeField] private float minStandardBehaviourDuration = 5f;
@@ -31,17 +32,22 @@ namespace _Game.Scripts.Enemies
         public bool bEnableBehaviour = true;
         [SerializeField] private Vector2 retreatPosition = new Vector2(0f, 10f);
         [SerializeField] private Vector2 hordeSpawnPosition = new Vector2(0f, 0f);
+        
+        [Header("Queen Mosquitos Settings")]
+        [SerializeField] private LissajouCurveSettings[] mosquitosPatrolMovementSettings;
+        [SerializeField] private int mosquitosPatrolAmount = 5;
 
-        [Header("Queen Health Settings")] [SerializeField]
-        private int maxHealth = 100;
-
+        [Header("Queen Health Settings")] 
+        [SerializeField] private int maxHealth = 100;
         [SerializeField] private int damagePerHit = 10;
         [SerializeField] private Slider healthBarSlider;
         [SerializeField] private TextMeshProUGUI healthPercentageText;
 
-        [Header("Queen Projectile Settings")] [SerializeField]
-        private Projectile projectilePrefab;
+        [Header("Prefabs")] 
+        [SerializeField] private Projectile projectilePrefab;
+        [SerializeField] private Mosquito mosquitoPrefab;
 
+        [Header("Projectile Settings")]
         [SerializeField] private Transform projectileSpawnPoint;
         [SerializeField] private float projectileSpawnRate = 1f;
         [SerializeField] private int projectilesPerShot = 3;
@@ -65,21 +71,23 @@ namespace _Game.Scripts.Enemies
             public readonly QueenPhase Phase;
             public readonly int BehaviourIndex;
             public readonly int MovementIndex;
+            public readonly int MosquitoPatrolMovementIndex;
 
-            public QueenState(QueenPhase phase, int behaviourIndex, int movementIndex)
+            public QueenState(QueenPhase phase, int behaviourIndex, int movementIndex, int mosquitoPatrolMovementIndex = -1)
             {
                 Phase = phase;
                 BehaviourIndex = behaviourIndex;
                 MovementIndex = movementIndex;
+                MosquitoPatrolMovementIndex = mosquitoPatrolMovementIndex;
             }
 
-            public int[] ToArray() => new[] { (int)Phase, BehaviourIndex, MovementIndex };
+            public int[] ToArray() => new[] { (int)Phase, BehaviourIndex, MovementIndex, MosquitoPatrolMovementIndex };
 
             public static bool TryFromArray(object raw, out QueenState state)
             {
-                if (raw is int[] data && data.Length == 3)
+                if (raw is int[] data && data.Length == 5)
                 {
-                    state = new QueenState((QueenPhase)data[0], data[1], data[2]);
+                    state = new QueenState((QueenPhase)data[0], data[1], data[2], data[3]);
                     return true;
                 }
 
@@ -100,6 +108,8 @@ namespace _Game.Scripts.Enemies
         private bool _bHealthBelow75Triggered = false;
         private bool _bHealthBelow50Triggered = false;
         private TrailRenderer _queenTrailRenderer;
+        private Mosquito[] _mosquitos;
+        private int _lastMosquitoPatrolMovementIndex = -1;
 
         public float StandardBehaviourDuration =>
             Random.Range(minStandardBehaviourDuration, maxStandardBehaviourDuration);
@@ -147,6 +157,10 @@ namespace _Game.Scripts.Enemies
                     TakeDamage();
             }
 
+            if(Keyboard.current.lKey.wasPressedThisFrame && Keyboard.current.leftShiftKey.isPressed)
+            {
+                
+            }
 #endif
         }
 
@@ -299,7 +313,16 @@ namespace _Game.Scripts.Enemies
                     ? behaviour.GetNextMovementSettingsIndex(behaviourIndex)
                     : behaviour.GetRandomMovementSettingsIndex();
 
-                Broadcast(new QueenState(phase, behaviourIndex, movementIndex));
+                int patrolMovementIndex = -1;
+
+                if (phase == QueenPhase.Standard)
+                {
+                    patrolMovementIndex =
+                        (_lastMosquitoPatrolMovementIndex + 1) % mosquitosPatrolMovementSettings.Length;
+                    _lastMosquitoPatrolMovementIndex = patrolMovementIndex;
+                }
+
+                Broadcast(new QueenState(phase, behaviourIndex, movementIndex, patrolMovementIndex));
 
                 float wait = cycleMovements
                     ? Mathf.Min(Mathf.Max(0.1f, behaviour.TimeToChangeBehaviour), remaining)
@@ -364,6 +387,8 @@ namespace _Game.Scripts.Enemies
         private void ApplyState(QueenState state)
         {
             _state = state;
+            
+            ApplyMosquitosState();
 
             if (state.Phase == QueenPhase.Attack)
                 _lastAttackIndex = state.BehaviourIndex;
@@ -414,6 +439,59 @@ namespace _Game.Scripts.Enemies
                 queenBehaviours[state.BehaviourIndex].GetMovementSettings(state.MovementIndex);
             if (settings != null)
                 lissajousCurve.SwitchCurveSettings(settings);
+        }
+        
+        private void ApplyMosquitosState()
+        {
+            SpawnMosquitosPatrol();
+
+            for (var i = 0; i < _mosquitos.Length; i++)
+            {
+                if (_state.MosquitoPatrolMovementIndex == -1)
+                {
+                    _mosquitos[i].LissajousCurve.SwitchCurveSettings(null);
+                    continue;
+                }
+
+                _mosquitos[i].LissajousCurve.SwitchCurveSettings(mosquitosPatrolMovementSettings[_state.MosquitoPatrolMovementIndex]);
+            }
+        }
+
+        private void SpawnMosquitosPatrol()
+        {
+            bool AllMosquitosKilled = _mosquitos == null || _mosquitos.All(m => m == null || !m.gameObject.activeInHierarchy);
+            
+            if (_mosquitos == null || _mosquitos.Length == 0)
+            {
+                List<Mosquito> newMosquitos = _mosquitos != null ? new List<Mosquito>(_mosquitos) : new List<Mosquito>();
+
+                int offsetCount = 0;
+                
+                while (newMosquitos.Count < mosquitosPatrolAmount)
+                {
+                    Mosquito newMosquito = Instantiate(mosquitoPrefab, transform);
+                    
+                    newMosquito.MosquitoZigZagMovement.SwitchMovementSettings(null);
+
+                    var timeOffset = offsetCount;
+
+                    newMosquito.LissajousCurve.timeOffset = timeOffset;
+                    
+                    offsetCount += 5;
+                    
+                    newMosquitos.Add(newMosquito);
+                }
+                
+                _mosquitos = newMosquitos.ToArray();
+            }
+            else if(AllMosquitosKilled)
+            {
+                for (var i = 0; i < _mosquitos.Length; i++)
+                {
+                    _mosquitos[i].gameObject.SetActive(true);
+                }
+            }
+            
         }
 
         private IEnumerator RetreatRoutine()

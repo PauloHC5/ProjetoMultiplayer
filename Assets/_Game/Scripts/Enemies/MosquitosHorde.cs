@@ -451,9 +451,6 @@ public class MosquitosHorde : MonoBehaviourPunCallbacks
 
         var missile = Instantiate(missilePrefab, selectedMosquito.transform.position, Quaternion.identity);
         missile.Init(MosquitoBase.MosquitosInstigatorId, shotId);
-        
-        /*if(rapidFireActive)
-            missile.ChangeSpeed(missile.Speed * 1.5f);*/
 
         if (debugLogs)
             Debug.Log("Spawning missile with speed: " + missile.Speed);
