@@ -575,7 +575,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::_Game.Scripts.GameMode
   startGameDelay: 3
   startingLives: 3
-  hordesPerWave: 1
+  hordesPerWave: 5
   intervalBetweenHordes: 0.5
   playerDeathCooldown: 2
   playerLayerMask:
