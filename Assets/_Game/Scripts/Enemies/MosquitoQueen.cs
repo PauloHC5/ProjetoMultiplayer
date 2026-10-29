@@ -85,9 +85,14 @@ namespace _Game.Scripts.Enemies
 
             public static bool TryFromArray(object raw, out QueenState state)
             {
-                if (raw is int[] data && data.Length == 5)
+                if (raw is int[] data && data.Length == 4)
                 {
-                    state = new QueenState((QueenPhase)data[0], data[1], data[2], data[3]);
+                    // Se o valor chegou como 255 (byte conversion de -1), converter de volta para -1
+                    int mosquitoPatrolIndex = data[3];
+                    if (mosquitoPatrolIndex == 255)
+                        mosquitoPatrolIndex = -1;
+
+                    state = new QueenState((QueenPhase)data[0], data[1], data[2], mosquitoPatrolIndex);
                     return true;
                 }
 
@@ -445,15 +450,20 @@ namespace _Game.Scripts.Enemies
         {
             SpawnMosquitosPatrol();
 
+            int patrolmovementIndex = _state.MosquitoPatrolMovementIndex == 255 ? -1 : _state.MosquitoPatrolMovementIndex;
+
+            if (bDebugLogs)
+                Debug.Log("Switching mosquitos patrol movement to settings on index: " + patrolmovementIndex);
+
             for (var i = 0; i < _mosquitos.Length; i++)
             {
-                if (_state.MosquitoPatrolMovementIndex == -1)
+                if (patrolmovementIndex == -1)
                 {
                     _mosquitos[i].LissajousCurve.SwitchCurveSettings(null);
                     continue;
                 }
 
-                _mosquitos[i].LissajousCurve.SwitchCurveSettings(mosquitosPatrolMovementSettings[_state.MosquitoPatrolMovementIndex]);
+                _mosquitos[i].LissajousCurve.SwitchCurveSettings(mosquitosPatrolMovementSettings[patrolmovementIndex]);
             }
         }
 
