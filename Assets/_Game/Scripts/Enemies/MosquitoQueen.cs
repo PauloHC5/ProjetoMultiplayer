@@ -113,7 +113,7 @@ namespace _Game.Scripts.Enemies
         private bool _bHealthBelow75Triggered = false;
         private bool _bHealthBelow50Triggered = false;
         private TrailRenderer _queenTrailRenderer;
-        private Mosquito[] _mosquitos;
+        private Mosquito[] _mosquitos;        
         private int _lastMosquitoPatrolMovementIndex = -1;
 
         public float StandardBehaviourDuration =>
@@ -128,6 +128,7 @@ namespace _Game.Scripts.Enemies
         private string RoomStateKey => $"Queen_{_photonView.ViewID}";
 
         public Action MosquitoQueenDeathEvent;
+        public Action<int, int> OnMosquitoKilled;
 
         protected override void Awake()
         {
@@ -457,8 +458,10 @@ namespace _Game.Scripts.Enemies
 
             for (var i = 0; i < _mosquitos.Length; i++)
             {
+                if (!_mosquitos[i].gameObject.activeSelf) continue;
+
                 if (patrolmovementIndex == -1)
-                {
+                {                    
                     _mosquitos[i].LissajousCurve.SwitchCurveSettings(null);
                     continue;
                 }
@@ -469,8 +472,6 @@ namespace _Game.Scripts.Enemies
 
         private void SpawnMosquitosPatrol()
         {
-            bool AllMosquitosKilled = _mosquitos == null || _mosquitos.All(m => m == null || !m.gameObject.activeInHierarchy);
-            
             if (_mosquitos == null || _mosquitos.Length == 0)
             {
                 List<Mosquito> newMosquitos = _mosquitos != null ? new List<Mosquito>(_mosquitos) : new List<Mosquito>();
@@ -490,11 +491,16 @@ namespace _Game.Scripts.Enemies
                     offsetCount += 5;
                     
                     newMosquitos.Add(newMosquito);
+
+                    newMosquito.OnMosquitoKilled += MosquitoKilled;
                 }
                 
                 _mosquitos = newMosquitos.ToArray();
             }
-            else if(AllMosquitosKilled)
+
+            bool AllMosquitosKilled = _mosquitos.All(m => m == null || !m.gameObject.activeInHierarchy);
+
+            if(AllMosquitosKilled)
             {
                 for (var i = 0; i < _mosquitos.Length; i++)
                 {
@@ -502,6 +508,30 @@ namespace _Game.Scripts.Enemies
                 }
             }
             
+        }
+
+        private void MosquitoKilled(Mosquito mosquito, int instigatorPlayerId)
+        {
+            int mosquitoIndex = Array.IndexOf(_mosquitos, mosquito);
+
+            _photonView.RPC(nameof(RpcMosquitoKilled), RpcTarget.AllBuffered, mosquitoIndex, instigatorPlayerId);
+        }
+
+        [PunRPC]
+        private void RpcMosquitoKilled(int mosquitoIndex, int instigatorPlayerId)
+        {
+            if (mosquitoIndex < 0 || mosquitoIndex >= _mosquitos.Length)
+            {
+                Debug.LogWarning($"[MosquitoQueen] RpcMosquitoKilled: mosquitoIndex {mosquitoIndex} is out of bounds.");
+                return;
+            }
+
+            Mosquito mosquitoKilled = _mosquitos[mosquitoIndex];
+            if (mosquitoKilled == null) return;
+
+            mosquitoKilled.gameObject.SetActive(false);
+
+            OnMosquitoKilled?.Invoke(instigatorPlayerId, mosquitoKilled.points);
         }
 
         private IEnumerator RetreatRoutine()

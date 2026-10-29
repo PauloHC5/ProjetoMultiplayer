@@ -517,8 +517,10 @@ namespace _Game.Scripts
                 _mosquitoQueenInTheScene = FindAnyObjectByType<MosquitoQueen>();
             
             _mosquitoQueenInTheScene.MosquitoQueenDeathEvent += WaveCompleted;
-            
-            if(bDebugMode)
+
+            _mosquitoQueenInTheScene.OnMosquitoKilled += MosquitoKilled;
+
+            if (bDebugMode)
                 Debug.Log("GameMode.RpcSubscribeToQueenDeathEvent: Subscribed to MosquitoQueenDeathEvent");
         }
 
@@ -528,6 +530,7 @@ namespace _Game.Scripts
                 Debug.Log("GameMode.WaveCompleted");
             
             _mosquitoQueenInTheScene.MosquitoQueenDeathEvent -= WaveCompleted;
+            _mosquitoQueenInTheScene.OnMosquitoKilled -= MosquitoKilled;
             _mosquitoQueenInTheScene = null;
             
             _hordesSpawnedInCurrentWave = 0;

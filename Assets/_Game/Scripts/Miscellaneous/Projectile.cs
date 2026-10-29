@@ -32,7 +32,7 @@ public class Projectile : MonoBehaviour
     
     private static readonly Dictionary<(int instigatorId, int shotId), Projectile> ProjectileRegistry = new();
     
-    public Action<Projectile> Destroyed;
+    public Action<Projectile> Destroyed;    
 
     private void Awake()
     {
@@ -41,7 +41,7 @@ public class Projectile : MonoBehaviour
         Collider2D = GetComponent<Collider2D>();
         
         _enemiesLayer = LayerMask.NameToLayer("Enemies");
-        _enemiesProjectilesLayer = LayerMask.NameToLayer("EnemiesProjectiles");
+        _enemiesProjectilesLayer = LayerMask.NameToLayer("EnemiesProjectiles");        
     }
 
     public void Init(int instigatorPlayerId, int shotId, bool pierceThroughEnemies = false, bool doubleSpeed = false)
@@ -81,7 +81,7 @@ public class Projectile : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D other)
     {
-        if(_pierceThroughEnemies && (other.gameObject.layer == _enemiesLayer || other.gameObject.layer == _enemiesProjectilesLayer))
+        if(_pierceThroughEnemies && !other.CompareTag("Queen") && (other.gameObject.layer == _enemiesLayer || other.gameObject.layer == _enemiesProjectilesLayer))
             return;
         
         RequestDestroy();
