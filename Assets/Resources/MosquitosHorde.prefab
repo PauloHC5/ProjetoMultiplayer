@@ -98,8 +98,8 @@ MonoBehaviour:
   - {fileID: 721702209136384595, guid: c27f82190daed0543816a4df5edd6210, type: 3}
   - {fileID: 2332977524222137839, guid: 19fa160092d14e54592c80f08b436869, type: 3}
   missilePrefab: {fileID: 1057425784480642454, guid: d198b54e17c98b444b89b16a77eadcf9, type: 3}
-  debugLogs: 1
-  bDrawDebugGizmos: 1
+  debugLogs: 0
+  bDrawDebugGizmos: 0
   debugHordePositionKey:
     row: 0
     col: 0
