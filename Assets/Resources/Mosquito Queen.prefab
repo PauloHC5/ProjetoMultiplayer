@@ -74,7 +74,7 @@ CircleCollider2D:
   m_CompositeOperation: 0
   m_CompositeOrder: 0
   m_Offset: {x: 0, y: 0.006487936}
-  m_Radius: 0.38754335
+  m_Radius: 4.95
 --- !u!50 &-5148417198129923706
 Rigidbody2D:
   serializedVersion: 5
@@ -151,7 +151,7 @@ MonoBehaviour:
   preparationTime: 3
   bEnableBehaviour: 1
   retreatPosition: {x: 0, y: 30}
-  hordeSpawnPosition: {x: 0, y: 12}
+  hordeSpawnPosition: {x: 0, y: 15}
   mosquitosPatrolMovementSettings:
   - {fileID: 11400000, guid: b75a173c782f8d24e85a5a8d2614ee0f, type: 2}
   - {fileID: 11400000, guid: ce1a9091e94a2f243afb8e0ec7e7c63f, type: 2}
@@ -888,7 +888,7 @@ Transform:
   m_GameObject: {fileID: 6428387370116496314}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0.006, y: -0.25, z: 0}
+  m_LocalPosition: {x: 0.07, y: -3.72, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
