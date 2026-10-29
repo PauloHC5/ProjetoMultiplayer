@@ -134,7 +134,7 @@ MonoBehaviour:
     bDebugTime: 0
     bClearTrailOnNewSettings: 1
     debugTime: 0
-  bDebugLogs: 1
+  bDebugLogs: 0
   debugGoToPosition: {x: 0, y: 0}
   moveToHordeCenter: 0
   queenStandardZigZagSettings: {fileID: 11400000, guid: 801680464c590ac4e84747340bb595bf, type: 2}
