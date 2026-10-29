@@ -271,7 +271,7 @@ namespace _Game.Scripts.Enemies
                 switch (phase)
                 {
                     case QueenPhase.MovingToCenter:
-                        Broadcast(new QueenState(QueenPhase.MovingToCenter, 0, _state.MovementIndex));
+                        Broadcast(new QueenState(QueenPhase.MovingToCenter, 0, _state.MovementIndex, GetPatrolMovementIndex(phase)));
                         yield return new WaitUntil(() => !IsMoving);
                         phase = QueenPhase.Standard;
                         break;
@@ -282,7 +282,7 @@ namespace _Game.Scripts.Enemies
                         break;
 
                     case QueenPhase.Preparing:
-                        Broadcast(new QueenState(QueenPhase.Preparing, 0, _state.MovementIndex));
+                        Broadcast(new QueenState(QueenPhase.Preparing, 0, _state.MovementIndex, GetPatrolMovementIndex(phase)));
                         yield return new WaitForSeconds(preparationTime);
                         phase = QueenPhase.Attack;
                         break;
@@ -296,7 +296,7 @@ namespace _Game.Scripts.Enemies
                         phase = QueenPhase.Standard;
                         break;
                     case QueenPhase.Retreat:
-                        Broadcast(new QueenState(QueenPhase.Retreat, 0, _state.MovementIndex));
+                        Broadcast(new QueenState(QueenPhase.Retreat, 0, _state.MovementIndex, GetPatrolMovementIndex(phase)));
                         yield return new WaitUntil(() => _retreatCoroutine == null);
                         phase = QueenPhase.MovingToCenter;
                         break;
@@ -318,17 +318,8 @@ namespace _Game.Scripts.Enemies
                 int movementIndex = cycleMovements
                     ? behaviour.GetNextMovementSettingsIndex(behaviourIndex)
                     : behaviour.GetRandomMovementSettingsIndex();
-
-                int patrolMovementIndex = -1;
-
-                if (phase == QueenPhase.Standard)
-                {
-                    patrolMovementIndex =
-                        (_lastMosquitoPatrolMovementIndex + 1) % mosquitosPatrolMovementSettings.Length;
-                    _lastMosquitoPatrolMovementIndex = patrolMovementIndex;
-                }
-
-                Broadcast(new QueenState(phase, behaviourIndex, movementIndex, patrolMovementIndex));
+                
+                Broadcast(new QueenState(phase, behaviourIndex, movementIndex, GetPatrolMovementIndex(phase)));
 
                 float wait = cycleMovements
                     ? Mathf.Min(Mathf.Max(0.1f, behaviour.TimeToChangeBehaviour), remaining)
@@ -340,6 +331,21 @@ namespace _Game.Scripts.Enemies
 
             if (bDebugLogs)
                 Debug.Log($"[MosquitoQueen] Behaviour {behaviourIndex} ended after {duration}s");
+        }
+
+        private int GetPatrolMovementIndex(QueenPhase phase)
+        {
+            int patrolMovementIndex = -1;
+            
+            if(phase == QueenPhase.Attack || phase == QueenPhase.MovingToCenter) return patrolMovementIndex;
+
+            if (_currentHealth < maxHealth / 2)
+            {
+                patrolMovementIndex = (_lastMosquitoPatrolMovementIndex + 1) % mosquitosPatrolMovementSettings.Length;
+                _lastMosquitoPatrolMovementIndex = patrolMovementIndex;
+            }
+
+            return patrolMovementIndex;
         }
 
         private int NextAttackIndex()
@@ -497,15 +503,10 @@ namespace _Game.Scripts.Enemies
                 
                 _mosquitos = newMosquitos.ToArray();
             }
-
-            bool AllMosquitosKilled = _mosquitos.All(m => m == null || !m.gameObject.activeInHierarchy);
-
-            if(AllMosquitosKilled)
+            
+            for (var i = 0; i < _mosquitos.Length; i++)
             {
-                for (var i = 0; i < _mosquitos.Length; i++)
-                {
-                    _mosquitos[i].gameObject.SetActive(true);
-                }
+                _mosquitos[i].gameObject.SetActive(true);
             }
             
         }
@@ -529,6 +530,7 @@ namespace _Game.Scripts.Enemies
             Mosquito mosquitoKilled = _mosquitos[mosquitoIndex];
             if (mosquitoKilled == null) return;
 
+            mosquitoKilled.LissajousCurve.SwitchCurveSettings(null);
             mosquitoKilled.gameObject.SetActive(false);
 
             OnMosquitoKilled?.Invoke(instigatorPlayerId, mosquitoKilled.points);
@@ -627,6 +629,9 @@ namespace _Game.Scripts.Enemies
 
         private void OnTriggerEnter2D(Collider2D other)
         {
+            if(bDebugLogs)
+                Debug.Log($"[MosquitoQueen] OnTriggerEnter2D with {other.gameObject.name} (layer {other.gameObject.layer})");
+            
             if (other.gameObject.layer == ProjectilesLayer)
             {
                 if (PhotonHandlers.CanUseNetwork)
