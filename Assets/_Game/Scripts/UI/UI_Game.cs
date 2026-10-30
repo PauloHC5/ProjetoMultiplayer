@@ -34,6 +34,7 @@ public class UI_Game : MonoBehaviour
     [Header("UI Elements")]
     public TextMeshProUGUI gameCountdownText;
     public TextMeshProUGUI outOfLivesText;
+    public TextMeshProUGUI queenIncomingText;
     
     [Header("UI Screens")]
     public GameObject gameOverUIScreen;
@@ -139,7 +140,7 @@ public class UI_Game : MonoBehaviour
         
         if(countdown == 0)
         {
-            gameCountdownText.text = "GO!";
+            gameCountdownText.text = "Stop the Invasion!";
         }
     }
 
@@ -391,6 +392,20 @@ public class UI_Game : MonoBehaviour
 
         _waveProgressBar.WaveSlider.value = wholeProgress;
         _waveProgressBar.WaveProgressText.text = $"{wholeProgress}%";
+
+        if(progress >= 100)
+        {
+            StartCoroutine(QueenIncomingRoutine());
+        }
+    }
+
+    private IEnumerator QueenIncomingRoutine()
+    {
+        queenIncomingText.gameObject.SetActive(true);
+
+        yield return new WaitForSeconds(3f);
+
+        queenIncomingText.gameObject.SetActive(false);
     }
     
     private void OnRoomReady()
