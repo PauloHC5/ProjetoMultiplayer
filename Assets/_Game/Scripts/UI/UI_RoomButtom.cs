@@ -3,7 +3,7 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class RoomButtom : MonoBehaviour
+public class UI_RoomButtom : MonoBehaviour
 {
     public const string RoomNamePrefix = "Room: ";
     public const string RoomPlayerCountPrefix = "Players: ";

@@ -9,7 +9,7 @@ public class UI_Lobby : MonoBehaviour
 {
     [Header("UI Elements")]
     public Transform scrollViewContent;
-    public RoomButtom roomButtonPrefab;
+    public UI_RoomButtom roomButtonPrefab;
     public TMP_InputField roomNameInputField;
     public TextMeshProUGUI warningText;
     public Button createRoomButton;
@@ -64,7 +64,7 @@ public class UI_Lobby : MonoBehaviour
             
             if (existingButton != null) continue;
             
-            RoomButtom newButton = Instantiate(roomButtonPrefab, scrollViewContent);
+            UI_RoomButtom newButton = Instantiate(roomButtonPrefab, scrollViewContent);
             newButton.name = room.Key;
         }
     }
@@ -79,7 +79,7 @@ public class UI_Lobby : MonoBehaviour
             
             if (existingButton == null) continue;
             
-            RoomButtom button = existingButton.GetComponent<RoomButtom>();
+            UI_RoomButtom button = existingButton.GetComponent<UI_RoomButtom>();
             if (button != null)
             {
                 var interactable = room.Value.PlayerCount < room.Value.MaxPlayers && room.Value.IsOpen && room.Value.IsVisible;
