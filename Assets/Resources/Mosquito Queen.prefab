@@ -150,7 +150,7 @@ MonoBehaviour:
   maxStandardBehaviourDuration: 20
   preparationTime: 3
   bEnableBehaviour: 1
-  retreatPosition: {x: 0, y: 30}
+  retreatPosition: {x: 0, y: 40}
   hordeSpawnPosition: {x: 0, y: 15}
   mosquitosPatrolMovementSettings:
   - {fileID: 11400000, guid: b75a173c782f8d24e85a5a8d2614ee0f, type: 2}
