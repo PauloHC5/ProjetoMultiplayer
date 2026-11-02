@@ -769,7 +769,7 @@ Canvas:
   m_VertexColorAlwaysGammaSpace: 0
   m_AdditionalShaderChannelsFlag: 25
   m_UpdateRectTransformForStandalone: 0
-  m_SortingLayerID: 1139064329
+  m_SortingLayerID: 510877631
   m_SortingOrder: 0
   m_TargetDisplay: 0
 --- !u!224 &345395259
@@ -2123,10 +2123,6 @@ PrefabInstance:
       propertyPath: m_Camera
       value: 
       objectReference: {fileID: 519420031}
-    - target: {fileID: 4113257420416600772, guid: 0fa3ad4ac70aebc4eabd30367dd13837, type: 3}
-      propertyPath: m_SortingLayerID
-      value: 510877631
-      objectReference: {fileID: 0}
     - target: {fileID: 5205210894851692406, guid: 0fa3ad4ac70aebc4eabd30367dd13837, type: 3}
       propertyPath: m_AnchorMax.x
       value: 1
@@ -2776,7 +2772,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 61.30005, y: 0}
+  m_AnchoredPosition: {x: 59.639954, y: 0}
   m_SizeDelta: {x: 119.28003, y: 119.28}
   m_Pivot: {x: 1, y: 0}
 --- !u!114 &777810350
