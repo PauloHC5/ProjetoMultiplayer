@@ -464,6 +464,14 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 7380585379183910588, guid: 2cdd92942844e9544828eece9b9cef8b, type: 3}
+      propertyPath: rows
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 7380585379183910588, guid: 2cdd92942844e9544828eece9b9cef8b, type: 3}
+      propertyPath: debugLogs
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7380585379183910588, guid: 2cdd92942844e9544828eece9b9cef8b, type: 3}
       propertyPath: stopMovement
       value: 1
       objectReference: {fileID: 0}
@@ -477,7 +485,7 @@ PrefabInstance:
       objectReference: {fileID: 11400000, guid: 31c29ee38438e464f8cc652221e92209, type: 2}
     - target: {fileID: 7380585379183910588, guid: 2cdd92942844e9544828eece9b9cef8b, type: 3}
       propertyPath: enableBehaviour
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 7380585379183910588, guid: 2cdd92942844e9544828eece9b9cef8b, type: 3}
       propertyPath: testZigZagSettings
@@ -542,7 +550,7 @@ PrefabInstance:
     - target: {fileID: 7380585379183910588, guid: 2cdd92942844e9544828eece9b9cef8b, type: 3}
       propertyPath: mosquitosBehaviours._serializedList.Array.data[2].Value
       value: 
-      objectReference: {fileID: 11400000, guid: e980a580d453fa043a9337124e2ebbd5, type: 2}
+      objectReference: {fileID: 11400000, guid: baa8305b74987e3488f74cd39cae9837, type: 2}
     - target: {fileID: 7751632355803559981, guid: 2cdd92942844e9544828eece9b9cef8b, type: 3}
       propertyPath: m_Name
       value: MosquitosHorde
@@ -873,7 +881,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4726976605300119692, guid: 940b7e7c9b88dd4428d9e380b85a8f46, type: 3}
       propertyPath: m_IsActive
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 4852986267106582334, guid: 940b7e7c9b88dd4428d9e380b85a8f46, type: 3}
       propertyPath: sceneViewId

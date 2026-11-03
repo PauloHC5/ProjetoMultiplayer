@@ -54,9 +54,8 @@ public class MosquitosHorde : MonoBehaviourPunCallbacks
         }
     }
 
-    [Header("Horde Settings")] [SerializeField]
-    public int rows = 5;
-
+    [Header("Horde Settings")] 
+    [SerializeField] public int rows = 5;
     [SerializeField] int columns = 11;
     [SerializeField] private float missileAttackRate = 1.0f;
     [SerializeField] private LayerMask laserLayerMask;
@@ -70,29 +69,16 @@ public class MosquitosHorde : MonoBehaviourPunCallbacks
 
     [Header("Audio")] public AudioCue killedSfx;
 
-    [Header("ZigZag Movement Settings")] [Space] [Header("Movement Settings for the standard mosquitos")]
-    public MosquitoZigZagMovementSettings StandardZigZag;
-
-    [Header("Movement Settings for the last 10 mosquitos")]
-    public MosquitoZigZagMovementSettings last10;
-
-    [Header("Movement Settings for the last 7 mosquitos")]
-    public MosquitoZigZagMovementSettings last7;
-
-    [Header("Movement Settings for the last 5 mosquitos")]
-    public MosquitoZigZagMovementSettings last5;
-
-    [Header("Movement Settings for the last 3 mosquitos")]
-    public MosquitoZigZagMovementSettings last3;
-
-    [Header("Movement Settings for the last mosquito")]
-    public MosquitoZigZagMovementSettings last;
+    [Header("ZigZag Movement Settings")]
+    public MosquitoZigZagMovementSettings standardZigZag;
+    
+    [Space]
+    
+    public SerializedDictionary<int, MosquitoZigZagMovementSettings> zigZagMovementSettings;
 
     [Space] 
     
-    [Header("Mosquitos Behaviours")] 
     [SerializeField] private SerializedDictionary<MosquitoBehaviourStateDifficulty, HordeBehaviour> mosquitosBehaviours;
-    
 
     [Header("Prefabs")] public Mosquito[] prefabs = new Mosquito[3];
     public Projectile missilePrefab;
@@ -103,8 +89,6 @@ public class MosquitosHorde : MonoBehaviourPunCallbacks
 
     private Vector3 _direction = Vector3.right;
     private Dictionary<HordePositionKey, Mosquito> _mosquitosDict;
-    private Mosquito[] _last10Mosquitos;
-    private Mosquito _lastMosquito;
     private PhotonView _photonView;
     private bool _bRequestedRowAdvance = false;
     private bool _bAlreadySetHordePositions = false;
@@ -114,7 +98,7 @@ public class MosquitosHorde : MonoBehaviourPunCallbacks
     private Dictionary<HordePositionKey, Vector2> _hordePositions;
     private Coroutine _mosquitosBehaviourRoutine;
     private MosquitoBehaviourStateDifficulty _currentBehaviourDifficulty;
-    private List<Mosquito> _infectedMosquitoes = new List<Mosquito>();
+    private List<Mosquito> _infectedMosquitos = new List<Mosquito>();
     
     public float speedBuff = 1f;
     public bool rapidFireActive = false;
@@ -139,6 +123,8 @@ public class MosquitosHorde : MonoBehaviourPunCallbacks
     {
         _mosquitosDict = new Dictionary<HordePositionKey, Mosquito>(this.rows * this.columns);
         _photonView = GetComponent<PhotonView>();
+        
+        ValidateZigZagMovementSettings();
 
         if (PhotonNetwork.InRoom)
         {
@@ -147,6 +133,24 @@ public class MosquitosHorde : MonoBehaviourPunCallbacks
         else
         {
             StartCoroutine(WaitForRoomBeReady());
+        }
+    }
+    
+    private void ValidateZigZagMovementSettings()
+    {
+        int[] requiredKeys = { 1, 3, 5, 7, 10 };
+
+        foreach (int key in requiredKeys)
+        {
+            if (!zigZagMovementSettings.ContainsKey(key) ||
+                zigZagMovementSettings[key] == null)
+            {
+                Debug.LogError(
+                    $"Missing zig-zag movement settings for {key} mosquito(s). " +
+                    $"\nIt is required to have settings for 1, 3, 5, 7, and 10 mosquitos alive. " +
+                    $"\nPlease assign the appropriate settings in the inspector.",
+                    this);
+            }
         }
     }
 
@@ -261,7 +265,7 @@ public class MosquitosHorde : MonoBehaviourPunCallbacks
             mosquitoSpawned.hordePositionKey = hordePositionKey;
             
             if(mosquitoSpawned.Type == MosquitoType.Infected)
-                _infectedMosquitoes.Add(mosquitoSpawned);
+                _infectedMosquitos.Add(mosquitoSpawned);
         }
         else // If a mosquito already exists at this horde position, just activate it and set its position
         {
@@ -277,21 +281,8 @@ public class MosquitosHorde : MonoBehaviourPunCallbacks
         _mosquitosDict[hordePositionKey].OnMosquitoKilled += MosquitoKilled;
 
         MoveMosquitoToNewHordePosition(mosquitoSpawned, hordePositionKey, PhotonNetwork.Time + 0.1f, startPos);
-
-        // If we are in the last 10 mosquitos, we want to add this mosquito to the last 10 mosquitos array
-        if (_last10Mosquitos != null && _last10Mosquitos.Length > 0)
-        {
-            // Find the index of the mosquito that was destroyed when replacing it with the new mosquito in the mosquitos array
-            int indexOfDeadMosquito = _last10Mosquitos.Where(m => m != null).Select((m, i) => i).FirstOrDefault();
-
-            // If we found a dead mosquito, replace it with the new mosquito
-            if (indexOfDeadMosquito >= 0 && indexOfDeadMosquito < _last10Mosquitos.Length)
-            {
-                _last10Mosquitos[indexOfDeadMosquito] = mosquitoSpawned;
-            }
-
-            UpdateMosquitosMovement();
-        }
+        
+        UpdateMosquitosMovement();
     }
 
     public void RequestSpawnMosquito(Vector2 dengueSourcePosition)
@@ -427,9 +418,9 @@ public class MosquitosHorde : MonoBehaviourPunCallbacks
 
         Mosquito mosquitoToAttack = null;
 
-        if (_infectedMosquitoes != null && _infectedMosquitoes.Count > 0)
+        if (_infectedMosquitos != null && _infectedMosquitos.Count > 0)
         {
-            mosquitoToAttack = _infectedMosquitoes[UnityEngine.Random.Range(0, _infectedMosquitoes.Count)];
+            mosquitoToAttack = _infectedMosquitos[UnityEngine.Random.Range(0, _infectedMosquitos.Count)];
         }
 
         if (mosquitoToAttack == null) return;
@@ -481,7 +472,7 @@ public class MosquitosHorde : MonoBehaviourPunCallbacks
         mosquitoKilled.gameObject.SetActive(false);
         
         if(mosquitoKilled.Type == MosquitoType.Infected)
-            _infectedMosquitoes.Remove(mosquitoKilled);
+            _infectedMosquitos.Remove(mosquitoKilled);
 
         mosquitoKilled.OnMosquitoKilled -= MosquitoKilled;
         mosquitoKilled.OnMosquitoHitBoundaries -= MosquitoHitBoundaries;
@@ -494,96 +485,63 @@ public class MosquitosHorde : MonoBehaviourPunCallbacks
                 PhotonNetwork.Destroy(gameObject);
         }
 
-        if (AmountAlive == 1)
-        {
-            _lastMosquito =
-                _mosquitosDict.Values.FirstOrDefault(mosquito =>
-                    mosquito != null && mosquito.gameObject.activeInHierarchy);
-        }
-
         GameManager.Instance.AudioManager.PlaySfx(killedSfx);
         UpdateMosquitosMovement();
     }
 
     private void UpdateMosquitosMovement()
     {
-        if (AmountAlive == 1)
+        int amountAlive = AmountAlive;
+        
+        if (amountAlive == 1)
         {
             CancelInvoke(nameof(RequestMissileAttack));
             InvokeRepeating(nameof(RequestMissileAttack), missileAttackRate / 2, missileAttackRate / 2);
         }
 
-        // If we have more than 10 mosquitos alive, we want to reset the last 10 mosquitos movement settings to the standard settings
-        if (_last10Mosquitos != null && _last10Mosquitos.Length > 0 && AmountAlive > 10)
+        if (amountAlive <= 10 && _mosquitosBehaviourRoutine != null)
         {
-            _last10Mosquitos = null;
-            for (var i = 0; i < _mosquitosDict.Values.Count; i++)
-            {
-                if (_mosquitosDict.Values.ElementAt(i) != null &&
-                    _mosquitosDict.Values.ElementAt(i).gameObject.activeInHierarchy)
-                {
-                    _mosquitosDict.Values.ElementAt(i).MosquitoZigZagMovement.SwitchMovementSettings(StandardZigZag);
-                }
-            }
+            StopCoroutine(_mosquitosBehaviourRoutine);
+            _mosquitosBehaviourRoutine = null;
+            SendMosquitosBackToTheirPositions();
+            CancelInvoke(nameof(RapidFire));
         }
 
-        // If we have 10 or less mosquitos alive, we want to store the last 10 mosquitos in the _last10Mosquitos array
-        if (_last10Mosquitos == null && AmountAlive <= 10)
+        var zigZagSettings = GetZigZagMovementSettingsForMosquito(amountAlive);
+        
+        foreach (Mosquito mosquito in _mosquitosDict.Values)
         {
-            _last10Mosquitos = _mosquitosDict.Values
-                .Where(mosquito => mosquito != null && mosquito.gameObject.activeInHierarchy).ToArray();
-            if (_mosquitosBehaviourRoutine != null)
-            {
-                StopCoroutine(_mosquitosBehaviourRoutine);
-                _mosquitosBehaviourRoutine = null;
-                SendMosquitosBackToTheirPositions();
-                CancelInvoke(nameof(RapidFire));
-            }
-        }
+            if (mosquito == null || !mosquito.gameObject.activeInHierarchy)
+                continue;
 
-        if (_last10Mosquitos == null || _last10Mosquitos.Length == 0) return;
+            if (mosquito.LissajousCurve.HasMovementSettings && amountAlive <= 10)
+                mosquito.LissajousCurve.SwitchCurveSettings(null);
 
-        for (int i = _last10Mosquitos.Length - 1; i >= 0; i--)
-        {
-            if (_last10Mosquitos[i] != null && _last10Mosquitos[i].gameObject.activeInHierarchy)
-            {
-                if (_last10Mosquitos[i].LissajousCurve.HasMovementSettings)
-                {
-                    _last10Mosquitos[i].LissajousCurve.SwitchCurveSettings(null);
-                }
-
-                var zigZagSettings = GetZigZagMovementSettingsForMosquito();
-                _last10Mosquitos[i].MosquitoZigZagMovement.SwitchMovementSettings(zigZagSettings);
-            }
+            mosquito.MosquitoZigZagMovement.SwitchMovementSettings(zigZagSettings);
         }
     }
 
-    private MosquitoZigZagMovementSettings GetZigZagMovementSettingsForMosquito()
+    private MosquitoZigZagMovementSettings GetZigZagMovementSettingsForMosquito(int amountAlive)
     {
-        if (AmountAlive > 10)
+        if (amountAlive > 10)
         {
-            return StandardZigZag;
+            return standardZigZag;
         }
 
-        if (_last10Mosquitos == null || _last10Mosquitos.Length == 0)
-        {
-            return StandardZigZag;
-        }
-
-        switch (AmountAlive)
+        switch (amountAlive)
         {
             case > 7 and <= 10:
-                return last10;
+                return zigZagMovementSettings[10];
             case > 5 and <= 7:
-                return last7;
+                return zigZagMovementSettings[7];
             case > 3 and <= 5:
-                return last5;
+                return zigZagMovementSettings[5];
             case > 1 and <= 3:
-                return last3;
+                return zigZagMovementSettings[3];
             case 1:
-                return last;
+                return zigZagMovementSettings[1];
             default:
-                return StandardZigZag;
+                return standardZigZag;
         }
     }
     
