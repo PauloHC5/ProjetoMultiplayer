@@ -11,7 +11,7 @@ public class MainMenuManager : MonoBehaviourPunCallbacks
     public UI_Lobby lobby;
 
     public const int MaxNickNameLength = 18;
-    public const string SpaceInvadersMultiplayerSceneName = "SpaceInvadersMultiplayer";
+    public const string GameSceneName = "GameScene";
 
     private Dictionary<string, RoomInfo> _availableRooms = new Dictionary<string, RoomInfo>();
 
@@ -125,7 +125,7 @@ public class MainMenuManager : MonoBehaviourPunCallbacks
             IsOpen = true,
             CustomRoomProperties = new ExitGames.Client.Photon.Hashtable
             {
-                { "sceneName",  SpaceInvadersMultiplayerSceneName }
+                { "sceneName",  GameSceneName }
             }
         };
 
