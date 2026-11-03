@@ -342,8 +342,6 @@ RectTransform:
   m_Children:
   - {fileID: 6622505577506573462}
   - {fileID: 572117894450331505}
-  - {fileID: 2836077987466252587}
-  - {fileID: 3808405719098529912}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
@@ -428,15 +426,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::UI_Chat
   roomChat:
     chatObj: {fileID: 2067000262701964659}
-    chatTypeText: {fileID: 2887200526666525552}
     chatContent: {fileID: 7450890425638711721}
     chatInputField: {fileID: 909505066490583712}
     roomNameText: {fileID: 3291890613573800641}
     playersCountText: {fileID: 7328399388849083212}
-  chatButtonsGroup: {fileID: 2836077987466252587}
-  playerChatOverlay: {fileID: 3808405719098529912}
-  playerChatPrefab: {fileID: 206718856313031749, guid: fa59e71ebf750b742be2293e7337926e, type: 3}
-  playerChatButtonPrefab: {fileID: 4664529832971624592, guid: 2f1179ffb001ffe429b1de27b62e7b33, type: 3}
 --- !u!114 &3390536081178763988
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1632,68 +1625,6 @@ MonoBehaviour:
   m_FlexibleWidth: -1
   m_FlexibleHeight: -1
   m_LayoutPriority: 1
---- !u!1 &5759789099129139582
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 2836077987466252587}
-  - component: {fileID: 9106353207687812301}
-  m_Layer: 5
-  m_Name: Chat Buttons Group
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!224 &2836077987466252587
-RectTransform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5759789099129139582}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 3723946080316260100}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0.5, y: 0.5}
-  m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -611.0265, y: -13.22953}
-  m_SizeDelta: {x: 424.23, y: 856.55}
-  m_Pivot: {x: 0.5, y: 0.5}
---- !u!114 &9106353207687812301
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5759789099129139582}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 59f8146938fff824cb5fd77236b75775, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.VerticalLayoutGroup
-  m_Padding:
-    m_Left: 0
-    m_Right: 0
-    m_Top: 51
-    m_Bottom: 0
-  m_ChildAlignment: 1
-  m_Spacing: 96.99
-  m_ChildForceExpandWidth: 0
-  m_ChildForceExpandHeight: 0
-  m_ChildControlWidth: 0
-  m_ChildControlHeight: 0
-  m_ChildScaleWidth: 0
-  m_ChildScaleHeight: 0
-  m_ReverseArrangement: 0
 --- !u!1 &5851142121430709240
 GameObject:
   m_ObjectHideFlags: 0
@@ -2066,41 +1997,6 @@ MonoBehaviour:
   m_hasFontAssetChanged: 0
   m_baseMaterial: {fileID: 0}
   m_maskOffset: {x: 0, y: 0, z: 0, w: 0}
---- !u!1 &6229894697361992084
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 3808405719098529912}
-  m_Layer: 5
-  m_Name: Player Chat Overlay
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!224 &3808405719098529912
-RectTransform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6229894697361992084}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 3723946080316260100}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 1, y: 0.5}
-  m_AnchorMax: {x: 1, y: 0.5}
-  m_AnchoredPosition: {x: -282.5, y: -0.0024414}
-  m_SizeDelta: {x: 565, y: 808.99}
-  m_Pivot: {x: 0.5, y: 0.5}
 --- !u!1 &6861333008357517555
 GameObject:
   m_ObjectHideFlags: 0
