@@ -503,7 +503,12 @@ public class MosquitosHorde : MonoBehaviourPunCallbacks
         {
             StopCoroutine(_mosquitosBehaviourRoutine);
             _mosquitosBehaviourRoutine = null;
-            SendMosquitosBackToTheirPositions();
+
+            if(PhotonHandlers.CanUseNetwork && PhotonHandlers.IsAuthority)
+                photonView.RPC(nameof(SendMosquitosBackToTheirPositions), RpcTarget.All);
+            else
+                SendMosquitosBackToTheirPositions();
+
             CancelInvoke(nameof(RapidFire));
         }
 
