@@ -27,15 +27,15 @@ namespace _Game.Scripts.Enemies
         
         public float phaseOffset;
         
-        private Mosquito _mosquitoOwner;
+        private MosquitoBase _mosquitoOwner;
         private Coroutine _interpolationCoroutine;
         private MosquitoZigZagMovementSettings _targetSettings;
         
-        public void OnStart(Mosquito mosquitoOwner)
+        public void OnStart(MosquitoBase mosquitoOwner)
         {
-            if(zigZagMovementSettings == null) return;
-            
             _mosquitoOwner = mosquitoOwner;
+
+            if (zigZagMovementSettings == null) return;
 
             _currentHorizontalFrequency = zigZagMovementSettings.HorizontalZigzagFrequency;
             _currentHorizontalAmplitude = zigZagMovementSettings.HorizontalZigzagAmplitude;
@@ -45,8 +45,6 @@ namespace _Game.Scripts.Enemies
 
         public Vector2 Movement(double time)
         {
-            if(zigZagMovementSettings == null) return Vector2.zero;
-            
             float x = 0;
             float y = 0;
             double t = debugZigZagMovement ? debugTime : time;
@@ -67,7 +65,7 @@ namespace _Game.Scripts.Enemies
         
         public void SwitchMovementSettings(MosquitoZigZagMovementSettings newSettings)
         {
-            if(newSettings == null || newSettings == zigZagMovementSettings) return;
+            if(newSettings == zigZagMovementSettings) return;
             
             _targetSettings = newSettings;
             
@@ -91,27 +89,31 @@ namespace _Game.Scripts.Enemies
             float initialHorizontalAmplitude = _currentHorizontalAmplitude;
             float initialVerticalAmplitude = _currentVerticalAmplitude;
 
-            float targetHorizontalAmplitude = newSettings.HorizontalZigzagAmplitude;
-            float targetVerticalAmplitude = newSettings.VerticalZigzagAmplitude;
+            float targetHorizontalAmplitude = newSettings != null ? newSettings.HorizontalZigzagAmplitude : 0f;
+            float targetVerticalAmplitude = newSettings != null ? newSettings.VerticalZigzagAmplitude : 0f;
 
             float elapsedTime = 0f;
 
-            // Interpolate amplitude to 0
-            while (elapsedTime < interpolationDuration)
+            if (initialHorizontalAmplitude != 0 && initialVerticalAmplitude != 0)
             {
-                elapsedTime += Time.deltaTime;
-                float t = Mathf.Clamp01(elapsedTime / interpolationDuration);
-            
-                // Lerp per-instance current values towards 0
-                _currentHorizontalAmplitude = Mathf.Lerp(initialHorizontalAmplitude, 0f, t);
-                _currentVerticalAmplitude = Mathf.Lerp(initialVerticalAmplitude, 0f, t);
-            
-                yield return null;
+
+                // Interpolate amplitude to 0
+                while (elapsedTime < interpolationDuration)
+                {
+                    elapsedTime += Time.deltaTime;
+                    float t = Mathf.Clamp01(elapsedTime / interpolationDuration);
+
+                    // Lerp per-instance current values towards 0
+                    _currentHorizontalAmplitude = Mathf.Lerp(initialHorizontalAmplitude, 0f, t);
+                    _currentVerticalAmplitude = Mathf.Lerp(initialVerticalAmplitude, 0f, t);
+
+                    yield return null;
+                }
             }
         
             // change the frequency to the new settings
-            _currentHorizontalFrequency = newSettings.HorizontalZigzagFrequency;
-            _currentVerticalFrequency = newSettings.VerticalZigzagFrequency;
+            _currentHorizontalFrequency = newSettings != null ? newSettings.HorizontalZigzagFrequency : 0f;
+            _currentVerticalFrequency = newSettings != null ? newSettings.VerticalZigzagFrequency : 0f;
         
             elapsedTime = 0f; // Reset elapsed time for the next interpolation
 

@@ -22,8 +22,9 @@ public class Projectile : MonoBehaviour
 
     private bool _destroyed;
     private Rigidbody2D _rigidbody2D;
-    private int _enemiesLayer;
     private bool _pierceThroughEnemies = false;
+    private int _enemiesLayer;
+    private int _enemiesProjectilesLayer;
     
     public SpriteRenderer SpriteRenderer { get; private set; }
     public Collider2D Collider2D { get; private set; }
@@ -31,7 +32,7 @@ public class Projectile : MonoBehaviour
     
     private static readonly Dictionary<(int instigatorId, int shotId), Projectile> ProjectileRegistry = new();
     
-    public Action<Projectile> Destroyed;
+    public Action<Projectile> Destroyed;    
 
     private void Awake()
     {
@@ -40,6 +41,7 @@ public class Projectile : MonoBehaviour
         Collider2D = GetComponent<Collider2D>();
         
         _enemiesLayer = LayerMask.NameToLayer("Enemies");
+        _enemiesProjectilesLayer = LayerMask.NameToLayer("EnemiesProjectiles");        
     }
 
     public void Init(int instigatorPlayerId, int shotId, bool pierceThroughEnemies = false, bool doubleSpeed = false)
@@ -79,7 +81,7 @@ public class Projectile : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D other)
     {
-        if(_pierceThroughEnemies && other.gameObject.layer == _enemiesLayer)
+        if(_pierceThroughEnemies && !other.CompareTag("Queen") && (other.gameObject.layer == _enemiesLayer || other.gameObject.layer == _enemiesProjectilesLayer))
             return;
         
         RequestDestroy();

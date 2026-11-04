@@ -1,0 +1,39 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 60625ea6e76c82b4192e5b066cbcd501, type: 3}
+  m_Name: Meta 1 Queen Movement
+  m_EditorClassIdentifier: Assembly-CSharp::LissajouCurveSettings
+  A: 14.26
+  animateA: 0
+  aScaleRange: {x: 0.6, y: 1.2}
+  aFrequency: 0.5
+  B: 6.49
+  animateB: 0
+  bScaleRange: {x: 0.6, y: 1.2}
+  bFrequency: 0.5
+  bPhase: 0
+  C: 1
+  C_Random: 0
+  D: 2
+  D_Random: 0
+  delta: 6.82
+  delta_Random: 0
+  animateDelta: 0
+  deltaMode: 0
+  deltaMin: 2.84
+  deltaMax: 5.68
+  deltaFrequency: 0.1
+  transitionMode: 1
+  t_multipler: 1.48
+  xOffset: 0
+  yOffset: 7.1
+  multiplier: 2.57

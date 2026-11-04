@@ -13,11 +13,11 @@ MonoBehaviour:
   m_Name: Circle
   m_EditorClassIdentifier: Assembly-CSharp::LissajousSettings
   A: 1
-  animateA: 0
+  animateA: 1
   aScaleRange: {x: 0.6, y: 1.2}
   aFrequency: 0.5
   B: 1
-  animateB: 0
+  animateB: 1
   bScaleRange: {x: 0.6, y: 1.2}
   bFrequency: 0.5
   bPhase: 0

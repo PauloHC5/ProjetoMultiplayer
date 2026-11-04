@@ -63,6 +63,5 @@ public class LissajouCurveSettings : ScriptableObject
     private void OnValidate()
     {
         OnChange?.Invoke();
-        Debug.LogWarning("LissajouCurveSettings - OnValidate");
     }
 }

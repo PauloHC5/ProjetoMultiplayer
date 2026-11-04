@@ -13,20 +13,27 @@ MonoBehaviour:
   m_Name: 1-1 k=3
   m_EditorClassIdentifier: Assembly-CSharp::LissajousSettings
   A: 1
-  A_Random: 0
+  animateA: 0
+  aScaleRange: {x: 0.6, y: 1.2}
+  aFrequency: 0.5
   B: 1
-  B_Random: 0
+  animateB: 0
+  bScaleRange: {x: 0.6, y: 1.2}
+  bFrequency: 0.5
+  bPhase: 0
   C: 1
   C_Random: 0
   D: 1
   D_Random: 0
-  delta: 2.356
+  delta: 0.785
   delta_Random: 0
+  animateDelta: 1
+  deltaMode: 1
+  deltaMin: 0
+  deltaMax: 6.28
+  deltaFrequency: 0.1
+  transitionMode: 0
   t_multipler: 3.9
   xOffset: 0
   yOffset: 0
   multiplier: 9.57
-  pulseMultiplier: 0
-  pulseMin: 0.5
-  pulseMax: 1.5
-  pulseFrequency: 0.5

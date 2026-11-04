@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 8085477824393298412}
   - component: {fileID: 7791026170484750557}
   - component: {fileID: 7866726089032111292}
+  - component: {fileID: -7202800261452219367}
   - component: {fileID: -2141858161189176034}
   m_Layer: 6
   m_Name: Mosquito_Base
@@ -81,7 +82,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: 583268991
-  m_SortingLayer: 3
+  m_SortingLayer: 4
   m_SortingOrder: 0
   m_MaskInteraction: 0
   m_Sprite: {fileID: 21300000, guid: e5472953031c6d140ac05d4b9a87653b, type: 3}
@@ -162,6 +163,33 @@ BoxCollider2D:
   m_AutoTiling: 0
   m_Size: {x: 1.18, y: 1.1183153}
   m_EdgeRadius: 0
+--- !u!50 &-7202800261452219367
+Rigidbody2D:
+  serializedVersion: 5
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2850217529171155301}
+  m_BodyType: 1
+  m_Simulated: 1
+  m_UseFullKinematicContacts: 0
+  m_UseAutoMass: 0
+  m_Mass: 1
+  m_LinearDamping: 0
+  m_AngularDamping: 0
+  m_GravityScale: 0
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_Interpolate: 0
+  m_SleepingMode: 1
+  m_CollisionDetection: 0
+  m_Constraints: 0
 --- !u!114 &-2141858161189176034
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -177,7 +205,6 @@ MonoBehaviour:
   points: 10
   type: 0
   positionInterpolationDuration: 1
-  scaleUpDuration: 0.8
   zigZagMovement:
     zigZagMovementSettings: {fileID: 11400000, guid: 3f0cd42cac7e6634dbfaedbdb254bb31, type: 2}
     bInterpolateMovement: 1
@@ -190,14 +217,15 @@ MonoBehaviour:
     interpolateToNewSettings: 1
     interpolationDuration: 0.8
     timeOffset: 0
-    tr: {fileID: 0}
+    debugTrailRenderer: {fileID: 0}
     bDebugCurve: 0
     bDebugTime: 0
     bClearTrailOnNewSettings: 1
     debugTime: 0
-  debugMode: 0
+  bDebugLogs: 0
   debugGoToPosition: {x: 0, y: 0}
   moveToHordeCenter: 0
+  scaleUpDuration: 0.8
   hordePositionKey:
     row: 0
     col: 0

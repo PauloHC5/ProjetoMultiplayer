@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using _Game.Scripts.Enemies;
 using _Game.Scripts.SpaceInvaders;
 using Photon.Pun;
 using Photon.Realtime;
@@ -71,6 +72,7 @@ namespace _Game.Scripts
         [SerializeField] private PlayerCharacter[] playerCharacterPrefabs = new PlayerCharacter[3];
         [SerializeField] private Pickup[] pickupPrefabs = new Pickup[6];
         [SerializeField] private DengueSource[] dengueSourcePrefabs;
+        [SerializeField] private MosquitoQueen mosquitoQueenPrefab;
 
         [Header("Pickups")] [SerializeField] private BoxCollider2D pickupsSpawnArea;
         [SerializeField] private PickupSpawnSettings pickupSpawnSettingsWith1CharacterAlive;
@@ -98,6 +100,7 @@ namespace _Game.Scripts
         private int _currentLives;
         private int _playerCharactersAlive;
         private MosquitosHorde _mosquitosHordeInTheScene;
+        private MosquitoQueen _mosquitoQueenInTheScene;
         private int _currentWave = 1;
         private int _dengueSourcesInScene = 0;
         private int _hordesSpawnedInCurrentWave = 0;
@@ -402,6 +405,19 @@ namespace _Game.Scripts
             _photonView.RPC(nameof(RpcSubscribeToMosquitosHordeEvents), RpcTarget.All);
         }
 
+        public MosquitosHorde QueenSpawnHorde(MosquitoQueen mosquitoQueen)
+        {
+            if (!PhotonNetwork.IsMasterClient) return null;
+
+            _mosquitosHordeInTheScene = PhotonNetwork
+                .InstantiateRoomObject(mosquitosHordePrefab.name, mosquitoQueen.transform.position,
+                    Quaternion.identity).GetComponent<MosquitosHorde>();
+
+            _photonView.RPC(nameof(RpcSubscribeToMosquitosHordeEvents), RpcTarget.All);
+            
+            return _mosquitosHordeInTheScene;
+        }
+
         [PunRPC]
         private void RpcSubscribeToMosquitosHordeEvents()
         {
@@ -465,25 +481,20 @@ namespace _Game.Scripts
         {
             if (bDebugMode)
                 Debug.Log("GameMode.HordeKilled");
+            
+            if(_hordesSpawnedInCurrentWave == hordesPerWave) return;
 
             _hordesSpawnedInCurrentWave++;
             OnHordeProgressChanged?.Invoke(HordeProgressPercentage);
 
-            if (_hordesSpawnedInCurrentWave >= hordesPerWave)
+             if (_hordesSpawnedInCurrentWave >= hordesPerWave)
             {
-                _hordesSpawnedInCurrentWave = 0;
-                WaveCompleted();
+                Invoke(nameof(SpawnMosquitoQueen), 3f);
             }
             else
             {
                 Invoke(nameof(SpawnHorde), intervalBetweenHordes);
             }
-        }
-
-        private void WaveCompleted()
-        {
-            if (bDebugMode)
-                Debug.Log("GameMode.WaveCompleted");
 
             if (_currentLives <= 0)
             {
@@ -493,7 +504,45 @@ namespace _Game.Scripts
 
                 RpcSpawnPlayerCharacter(playerType);
             }
+        }
+        
+        private void SpawnMosquitoQueen()
+        {
+            if (!PhotonNetwork.IsMasterClient) return;
+            
+            var mosquitoQueen = PhotonNetwork
+                .InstantiateRoomObject(mosquitoQueenPrefab.name, mosquitoQueenPrefab.transform.position,
+                    Quaternion.identity).GetComponent<MosquitoQueen>();
+            
+            _mosquitoQueenInTheScene = mosquitoQueen;
+            
+            _photonView.RPC(nameof(RpcSubscribeToQueenDeathEvent), RpcTarget.All);
+        }
+        
+        [PunRPC]
+        private void RpcSubscribeToQueenDeathEvent()
+        {
+            if(_mosquitoQueenInTheScene == null)
+                _mosquitoQueenInTheScene = FindAnyObjectByType<MosquitoQueen>();
+            
+            _mosquitoQueenInTheScene.MosquitoQueenDeathEvent += WaveCompleted;
 
+            _mosquitoQueenInTheScene.OnMosquitoKilled += MosquitoKilled;
+
+            if (bDebugMode)
+                Debug.Log("GameMode.RpcSubscribeToQueenDeathEvent: Subscribed to MosquitoQueenDeathEvent");
+        }
+
+        private void WaveCompleted()
+        {
+            if (bDebugMode)
+                Debug.Log("GameMode.WaveCompleted");
+            
+            _mosquitoQueenInTheScene.MosquitoQueenDeathEvent -= WaveCompleted;
+            _mosquitoQueenInTheScene.OnMosquitoKilled -= MosquitoKilled;
+            _mosquitoQueenInTheScene = null;
+            
+            _hordesSpawnedInCurrentWave = 0;
 
             WaveCompletedEvent?.Invoke(_currentWave);
 

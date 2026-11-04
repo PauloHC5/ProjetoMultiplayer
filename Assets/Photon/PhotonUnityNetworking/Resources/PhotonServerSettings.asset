@@ -65,7 +65,6 @@ MonoBehaviour:
   - RpcExplodeSfx
   - RpcEndInvincible
   - RpcStartInvincible
-  - ReceivePrivateChatMessage
   - RpcSyncMosquitosState
   - RpcReplicatePickupState
   - RpcReplicateMosquitosTypesQueueToNewMaster
@@ -91,6 +90,17 @@ MonoBehaviour:
   - StopBehaviour
   - SendMosquitosBackToTheirPositions
   - SendMosquitosToHordCenter
+  - ApplyBehaviourSettings
+  - UpdateBehaviourState
+  - StartQueenBehaviourRoutine
+  - StopQueenBehaviourRoutine
+  - RpcApplyState
+  - SpawnProjectile
+  - UpdateHealthBar
+  - TakeDamage
+  - RpcSubscribeToQueenDeathEvent
+  - RpcSpawnProjectile
+  - RpcMosquitoKilled
   DisableAutoOpenWizard: 1
   ShowSettings: 1
   DevRegionSetOnce: 0
