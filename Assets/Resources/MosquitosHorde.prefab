@@ -48,7 +48,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::Invaders
   rows: 6
   columns: 11
-  missileAttackRate: 1
+  missileAttackRate: 5
   laserLayerMask:
     serializedVersion: 2
     m_Bits: 128
