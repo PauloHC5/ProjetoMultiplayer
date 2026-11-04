@@ -495,6 +495,15 @@ namespace _Game.Scripts
             {
                 Invoke(nameof(SpawnHorde), intervalBetweenHordes);
             }
+
+            if (_currentLives <= 0)
+            {
+                _currentLives = startingLives;
+
+                PlayerType playerType = GetPlayerType(PhotonNetwork.LocalPlayer);
+
+                RpcSpawnPlayerCharacter(playerType);
+            }
         }
         
         private void SpawnMosquitoQueen()
@@ -534,16 +543,6 @@ namespace _Game.Scripts
             _mosquitoQueenInTheScene = null;
             
             _hordesSpawnedInCurrentWave = 0;
-
-            if (_currentLives <= 0)
-            {
-                _currentLives = startingLives;
-
-                PlayerType playerType = GetPlayerType(PhotonNetwork.LocalPlayer);
-
-                RpcSpawnPlayerCharacter(playerType);
-            }
-
 
             WaveCompletedEvent?.Invoke(_currentWave);
 
