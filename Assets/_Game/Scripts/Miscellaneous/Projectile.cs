@@ -15,6 +15,9 @@ public class Projectile : MonoBehaviour
     [Header("Projectile Settings")]
     [SerializeField] private ProjectileDirection direction;
     [SerializeField] private float speed;
+    [SerializeField] private float explodeDuration = 0.5f;
+    [SerializeField] private Collider2D normalCollider;
+    [SerializeField] private Collider2D piercingCollider;
     public float Speed => speed;
 
     public int InstigatorId { get; private set; }
@@ -25,10 +28,13 @@ public class Projectile : MonoBehaviour
     private bool _pierceThroughEnemies = false;
     private int _enemiesLayer;
     private int _enemiesProjectilesLayer;
+    private Animator _animator;
     
     public SpriteRenderer SpriteRenderer { get; private set; }
-    public Collider2D Collider2D { get; private set; }
+    public Collider2D Collider2D => _pierceThroughEnemies ? piercingCollider : normalCollider;
     
+    private int PiercingHash = Animator.StringToHash("Piercing");
+    private int ExplodeHasg = Animator.StringToHash("Explode");
     
     private static readonly Dictionary<(int instigatorId, int shotId), Projectile> ProjectileRegistry = new();
     
@@ -38,7 +44,7 @@ public class Projectile : MonoBehaviour
     {
         SpriteRenderer = GetComponent<SpriteRenderer>();
         _rigidbody2D = GetComponent<Rigidbody2D>();
-        Collider2D = GetComponent<Collider2D>();
+        _animator = GetComponentInChildren<Animator>();
         
         _enemiesLayer = LayerMask.NameToLayer("Enemies");
         _enemiesProjectilesLayer = LayerMask.NameToLayer("EnemiesProjectiles");        
@@ -49,6 +55,14 @@ public class Projectile : MonoBehaviour
         InstigatorId = instigatorPlayerId;
         ShotId = shotId;
         _pierceThroughEnemies = pierceThroughEnemies;
+        
+        if(_pierceThroughEnemies)
+        {
+            piercingCollider.enabled = true;
+            normalCollider.enabled = false;
+        }
+
+        _animator.SetBool(PiercingHash, pierceThroughEnemies);
 
         ProjectileRegistry[(instigatorPlayerId, shotId)] = this;
 
@@ -84,12 +98,22 @@ public class Projectile : MonoBehaviour
         if(_pierceThroughEnemies && !other.CompareTag("Queen") && (other.gameObject.layer == _enemiesLayer || other.gameObject.layer == _enemiesProjectilesLayer))
             return;
         
-        RequestDestroy();
+        _animator.SetTrigger(ExplodeHasg);
+        _rigidbody2D.linearVelocity = Vector2.zero;
+        Collider2D.enabled = false;
+        
+        Invoke(nameof(RequestDestroy), explodeDuration);
+        Destroyed?.Invoke(this);
     }
 
     private void OnCollisionEnter2D(Collision2D other)
     {
-        RequestDestroy();
+        _animator.SetTrigger(ExplodeHasg);
+        _rigidbody2D.linearVelocity = Vector2.zero;
+        Collider2D.enabled = false;
+        
+        Invoke(nameof(RequestDestroy), explodeDuration);
+        Destroyed?.Invoke(this);
     }
 
     private void RequestDestroy()
@@ -121,8 +145,7 @@ public class Projectile : MonoBehaviour
  
         var shotId = ProjectileRegistry.FirstOrDefault(x => x.Value == this).Key.shotId;
         ProjectileRegistry.Remove((InstigatorId, ShotId));
- 
-        Destroyed?.Invoke(this);
+        
         Destroy(gameObject);
     }
 }

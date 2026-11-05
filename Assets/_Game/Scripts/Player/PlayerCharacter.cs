@@ -203,7 +203,7 @@ public class PlayerCharacter : MonoBehaviourPun
 
     private void OnTriggerEnter2D(Collider2D other)
     {
-        if(!PhotonNetwork.IsMasterClient) return;
+        if(!PhotonHandlers.IsAuthority) return;
                 
         if(other.gameObject.layer == _projectilesLayer || other.gameObject.layer == _enemiesLayer)
         {
@@ -218,9 +218,17 @@ public class PlayerCharacter : MonoBehaviourPun
             if (pickup == null) return;
             
             if(CheckIfThisPickupIsActive(pickup.Type)) return;
-            
-            photonView.RPC(nameof(RpcReplicatePickupState), RpcTarget.AllBuffered, pickup.Type, pickup.Duration);
-            PhotonNetwork.Destroy(other.gameObject);
+
+            if (PhotonHandlers.CanUseNetwork)
+            {
+                photonView.RPC(nameof(RpcReplicatePickupState), RpcTarget.AllBuffered, pickup.Type, pickup.Duration);
+                PhotonNetwork.Destroy(other.gameObject);
+            }
+            else
+            {
+                SetPickupState(pickup.Type, true, pickup.Duration);
+                Destroy(other.gameObject);
+            }
         }
     }
 
