@@ -43,6 +43,10 @@ namespace _Game.Scripts.Enemies
         [SerializeField] private Slider healthBarSlider;
         [SerializeField] private TextMeshProUGUI healthPercentageText;
 
+        [Header("Queen VFX Settings")]
+        [SerializeField] private Material onDamageMaterial;
+        [SerializeField] private float onDamageVfxDuration = 0.2f;  
+
         [Header("Prefabs")] 
         [SerializeField] private Projectile projectilePrefab;
         [SerializeField] private Mosquito mosquitoPrefab;
@@ -115,6 +119,9 @@ namespace _Game.Scripts.Enemies
         private TrailRenderer _queenTrailRenderer;
         private Mosquito[] _mosquitos;        
         private int _lastMosquitoPatrolMovementIndex = -1;
+        private SpriteRenderer _spriteRenderer;
+        private Material _originalMaterial;
+        private Coroutine _onDamageVfxCoroutine;
 
         public float StandardBehaviourDuration =>
             Random.Range(minStandardBehaviourDuration, maxStandardBehaviourDuration);
@@ -136,6 +143,8 @@ namespace _Game.Scripts.Enemies
 
             _photonView = GetComponent<PhotonView>();
             _queenTrailRenderer = GetComponent<TrailRenderer>();
+            _spriteRenderer = GetComponentInChildren<SpriteRenderer>();
+            _originalMaterial = _spriteRenderer.material;
 
             _currentHealth = maxHealth;
 
@@ -653,7 +662,12 @@ namespace _Game.Scripts.Enemies
             healthBarSlider.value = (float)_currentHealth / maxHealth;
             int currentHealthPercentage = CurrentHealthPercentage;
             healthPercentageText.text = $"{currentHealthPercentage}%";
-            
+
+            if(_onDamageVfxCoroutine != null)
+                StopCoroutine(_onDamageVfxCoroutine);
+
+            _onDamageVfxCoroutine = StartCoroutine(OnDamageVFXRoutine());
+
             if (_currentHealth > 0) return;
             
             if (PhotonHandlers.CanUseNetwork)
@@ -672,6 +686,13 @@ namespace _Game.Scripts.Enemies
             }
             
             MosquitoQueenDeathEvent?.Invoke();
+        }
+
+        private IEnumerator OnDamageVFXRoutine()
+        {
+            _spriteRenderer.material = onDamageMaterial;
+            yield return new WaitForSeconds(onDamageVfxDuration);
+            _spriteRenderer.material = _originalMaterial;
         }
 
         private bool DoRetreat()
