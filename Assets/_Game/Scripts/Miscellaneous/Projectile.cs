@@ -5,6 +5,7 @@ using System.Linq;
 using _Game.Scripts;
 using Photon.Realtime;
 using UnityEngine;
+using System.Collections;
 
 public class Projectile : MonoBehaviour
 {
@@ -103,44 +104,14 @@ public class Projectile : MonoBehaviour
     {
         if(_pierceThroughEnemies && !other.CompareTag("Queen") && (other.gameObject.layer == _enemiesLayer || other.gameObject.layer == _enemiesProjectilesLayer))
             return;
-        
-        _animator.SetTrigger(ExplodeHasg);
-        _rigidbody2D.linearVelocity = Vector2.zero;
-        Collider2D.enabled = false;
 
-        if (instigatorPlayerType != PlayerType.None)
-        {
-            _spriteRenderer.color = instigatorPlayerType switch
-            {
-                PlayerType.Player1 => Color.green,
-                PlayerType.Player2 => Color.blue,
-                PlayerType.Player3 => Color.orangeRed,
-                _ => Color.white
-            };
-        }
-        
-        Invoke(nameof(RequestDestroy), explodeDuration);
+        RequestDestroy();
         Destroyed?.Invoke(this);
     }
 
     private void OnCollisionEnter2D(Collision2D other)
     {
-        _animator.SetTrigger(ExplodeHasg);
-        _rigidbody2D.linearVelocity = Vector2.zero;
-        Collider2D.enabled = false;
-
-        if (instigatorPlayerType != PlayerType.None)
-        {
-            _spriteRenderer.color = instigatorPlayerType switch
-            {
-                PlayerType.Player1 => Color.green,
-                PlayerType.Player2 => Color.blue,
-                PlayerType.Player3 => Color.orangeRed,
-                _ => Color.white
-            };
-        }
-        
-        Invoke(nameof(RequestDestroy), explodeDuration);
+        RequestDestroy();
         Destroyed?.Invoke(this);
     }
 
@@ -174,6 +145,28 @@ public class Projectile : MonoBehaviour
         var shotId = ProjectileRegistry.FirstOrDefault(x => x.Value == this).Key.shotId;
         ProjectileRegistry.Remove((InstigatorId, ShotId));
         
+        StartCoroutine(DestroyRoutine());
+    }
+
+    private IEnumerator DestroyRoutine()
+    {
+        _animator.SetTrigger(ExplodeHasg);
+        _rigidbody2D.linearVelocity = Vector2.zero;
+        Collider2D.enabled = false;
+
+        if (instigatorPlayerType != PlayerType.None)
+        {
+            _spriteRenderer.color = instigatorPlayerType switch
+            {
+                PlayerType.Player1 => Color.green,
+                PlayerType.Player2 => Color.blue,
+                PlayerType.Player3 => Color.orangeRed,
+                _ => Color.white
+            };
+        }
+
+        yield return new WaitForSeconds(explodeDuration);
+
         Destroy(gameObject);
     }
 }
