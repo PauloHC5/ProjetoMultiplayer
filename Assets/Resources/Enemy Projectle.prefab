@@ -20,6 +20,10 @@ PrefabInstance:
       propertyPath: normalCollider
       value: 
       objectReference: {fileID: 7946883236904392962}
+    - target: {fileID: -8598748547545543793, guid: 1a2dc1bf48ef33445bd320b213005467, type: 3}
+      propertyPath: projectileTimeToLive
+      value: 5
+      objectReference: {fileID: 0}
     - target: {fileID: 3218001635609132967, guid: 1a2dc1bf48ef33445bd320b213005467, type: 3}
       propertyPath: m_Name
       value: Enemy Projectle

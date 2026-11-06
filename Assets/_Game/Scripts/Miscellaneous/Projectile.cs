@@ -2,6 +2,8 @@ using Photon.Pun;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using _Game.Scripts;
+using Photon.Realtime;
 using UnityEngine;
 
 public class Projectile : MonoBehaviour
@@ -15,9 +17,11 @@ public class Projectile : MonoBehaviour
     [Header("Projectile Settings")]
     [SerializeField] private ProjectileDirection direction;
     [SerializeField] private float speed;
+    [SerializeField] private float projectileTimeToLive = 3f;
     [SerializeField] private float explodeDuration = 0.5f;
     [SerializeField] private Collider2D normalCollider;
     [SerializeField] private Collider2D piercingCollider;
+    [SerializeField] private PlayerType instigatorPlayerType = PlayerType.None;
     public float Speed => speed;
 
     public int InstigatorId { get; private set; }
@@ -29,6 +33,7 @@ public class Projectile : MonoBehaviour
     private int _enemiesLayer;
     private int _enemiesProjectilesLayer;
     private Animator _animator;
+    private SpriteRenderer _spriteRenderer;
     
     public SpriteRenderer SpriteRenderer { get; private set; }
     public Collider2D Collider2D => _pierceThroughEnemies ? piercingCollider : normalCollider;
@@ -45,6 +50,7 @@ public class Projectile : MonoBehaviour
         SpriteRenderer = GetComponent<SpriteRenderer>();
         _rigidbody2D = GetComponent<Rigidbody2D>();
         _animator = GetComponentInChildren<Animator>();
+        _spriteRenderer = GetComponentInChildren<SpriteRenderer>();
         
         _enemiesLayer = LayerMask.NameToLayer("Enemies");
         _enemiesProjectilesLayer = LayerMask.NameToLayer("EnemiesProjectiles");        
@@ -76,7 +82,7 @@ public class Projectile : MonoBehaviour
 
     private void Start()
     {
-        Invoke(nameof(DestroyProjectile), 3f);
+        Invoke(nameof(DestroyProjectile), projectileTimeToLive);
     }
 
     private void ProjectileVelocity()
@@ -101,6 +107,17 @@ public class Projectile : MonoBehaviour
         _animator.SetTrigger(ExplodeHasg);
         _rigidbody2D.linearVelocity = Vector2.zero;
         Collider2D.enabled = false;
+
+        if (instigatorPlayerType != PlayerType.None)
+        {
+            _spriteRenderer.color = instigatorPlayerType switch
+            {
+                PlayerType.Player1 => Color.green,
+                PlayerType.Player2 => Color.blue,
+                PlayerType.Player3 => Color.orangeRed,
+                _ => Color.white
+            };
+        }
         
         Invoke(nameof(RequestDestroy), explodeDuration);
         Destroyed?.Invoke(this);
@@ -111,6 +128,17 @@ public class Projectile : MonoBehaviour
         _animator.SetTrigger(ExplodeHasg);
         _rigidbody2D.linearVelocity = Vector2.zero;
         Collider2D.enabled = false;
+
+        if (instigatorPlayerType != PlayerType.None)
+        {
+            _spriteRenderer.color = instigatorPlayerType switch
+            {
+                PlayerType.Player1 => Color.green,
+                PlayerType.Player2 => Color.blue,
+                PlayerType.Player3 => Color.orangeRed,
+                _ => Color.white
+            };
+        }
         
         Invoke(nameof(RequestDestroy), explodeDuration);
         Destroyed?.Invoke(this);
