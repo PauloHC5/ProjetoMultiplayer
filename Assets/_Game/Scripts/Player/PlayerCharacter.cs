@@ -45,6 +45,7 @@ public class PlayerCharacter : MonoBehaviourPun
     private int _enemiesLayer;
     private int _pickupsLayer;
     private Coroutine _invincibleCoroutine;
+    private TrailRenderer _trailRenderer;
     
     public Action<PlayerCharacter> OnPlayerDeath;
     public Action<Pickup.PickupType, float> OnPickupCollected;
@@ -69,6 +70,8 @@ public class PlayerCharacter : MonoBehaviourPun
         _rigidbody2D = GetComponent<Rigidbody2D>();
         _playerNicknameText = GetComponentInChildren<TextMeshProUGUI>();
         _characterAnimator = GetComponentInChildren<Animator>();
+        _trailRenderer = GetComponentInChildren<TrailRenderer>();
+        
         _projectilesLayer = LayerMask.NameToLayer("EnemiesProjectiles");
         _enemiesLayer = LayerMask.NameToLayer("Enemies");
         _pickupsLayer = LayerMask.NameToLayer("Pickups");
@@ -387,6 +390,7 @@ public class PlayerCharacter : MonoBehaviourPun
                 break;
             case Pickup.PickupType.SpeedBuff:
                 _speedBuffActive = state;
+                _trailRenderer.emitting = state;
                 speed = state ? speed * 2f : speed / 2f; // Double speed when active, revert when inactive
                 break;
             case Pickup.PickupType.TripleFire:

@@ -8,7 +8,7 @@ Material:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_Name: GreenSpeedTrail
-  m_Shader: {fileID: -6465566751694194690, guid: f674501d11699ec47ae1a4e376d08457, type: 3}
+  m_Shader: {fileID: -6465566751694194690, guid: 18561d56541e4564983dcb57cba1501c, type: 3}
   m_Parent: {fileID: 0}
   m_ModifiedSerializedProperties: 0
   m_ValidKeywords: []
@@ -88,10 +88,11 @@ Material:
     - _DstBlend: 10
     - _DstBlendAlpha: 10
     - _EnableExternalAlpha: 0
-    - _FPS: 12
+    - _FPS: 0
     - _FlipbookBlending: 0
     - _FlipbookMode: 0
     - _FrameCount: 5
+    - _MaxFrames: 1
     - _Mode: 0
     - _QueueControl: 0
     - _QueueOffset: 0
@@ -99,6 +100,8 @@ Material:
     - _SoftParticlesEnabled: 0
     - _SoftParticlesFarFadeDistance: 1
     - _SoftParticlesNearFadeDistance: 0
+    - _SpriteSheetColuns: 1
+    - _SpriteSheetRows: 1
     - _SrcBlend: 5
     - _SrcBlendAlpha: 1
     - _Surface: 1
