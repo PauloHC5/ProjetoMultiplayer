@@ -32,6 +32,42 @@ PrefabInstance:
       propertyPath: m_Name
       value: Player 1 Projectile
       objectReference: {fileID: 0}
+    - target: {fileID: 5694605384879612310, guid: 1a2dc1bf48ef33445bd320b213005467, type: 3}
+      propertyPath: 'm_Materials.Array.data[0]'
+      value: 
+      objectReference: {fileID: 2100000, guid: 15411b5402d97244da3d547a2862af33, type: 2}
+    - target: {fileID: 5694605384879612310, guid: 1a2dc1bf48ef33445bd320b213005467, type: 3}
+      propertyPath: m_Parameters.colorGradient.atime2
+      value: 65535
+      objectReference: {fileID: 0}
+    - target: {fileID: 5694605384879612310, guid: 1a2dc1bf48ef33445bd320b213005467, type: 3}
+      propertyPath: m_Parameters.colorGradient.ctime2
+      value: 65535
+      objectReference: {fileID: 0}
+    - target: {fileID: 5694605384879612310, guid: 1a2dc1bf48ef33445bd320b213005467, type: 3}
+      propertyPath: m_Parameters.colorGradient.key0.a
+      value: 0.7058824
+      objectReference: {fileID: 0}
+    - target: {fileID: 5694605384879612310, guid: 1a2dc1bf48ef33445bd320b213005467, type: 3}
+      propertyPath: m_Parameters.colorGradient.key0.b
+      value: 0.010946936
+      objectReference: {fileID: 0}
+    - target: {fileID: 5694605384879612310, guid: 1a2dc1bf48ef33445bd320b213005467, type: 3}
+      propertyPath: m_Parameters.colorGradient.key0.g
+      value: 0.7735849
+      objectReference: {fileID: 0}
+    - target: {fileID: 5694605384879612310, guid: 1a2dc1bf48ef33445bd320b213005467, type: 3}
+      propertyPath: m_Parameters.colorGradient.key0.r
+      value: 0.085715495
+      objectReference: {fileID: 0}
+    - target: {fileID: 5694605384879612310, guid: 1a2dc1bf48ef33445bd320b213005467, type: 3}
+      propertyPath: m_Parameters.colorGradient.key2.g
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5694605384879612310, guid: 1a2dc1bf48ef33445bd320b213005467, type: 3}
+      propertyPath: m_Parameters.colorGradient.key2.r
+      value: 0.20015311
+      objectReference: {fileID: 0}
     - target: {fileID: 6912046828208996544, guid: 1a2dc1bf48ef33445bd320b213005467, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0

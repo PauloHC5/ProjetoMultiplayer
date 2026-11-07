@@ -35,6 +35,7 @@ public class Projectile : MonoBehaviour
     private int _enemiesProjectilesLayer;
     private Animator _animator;
     private SpriteRenderer _spriteRenderer;
+    private TrailRenderer _trailRenderer;
     
     public SpriteRenderer SpriteRenderer { get; private set; }
     public Collider2D Collider2D => _pierceThroughEnemies ? piercingCollider : normalCollider;
@@ -52,7 +53,8 @@ public class Projectile : MonoBehaviour
         _rigidbody2D = GetComponent<Rigidbody2D>();
         _animator = GetComponentInChildren<Animator>();
         _spriteRenderer = GetComponentInChildren<SpriteRenderer>();
-        
+        _trailRenderer = GetComponent<TrailRenderer>();
+
         _enemiesLayer = LayerMask.NameToLayer("Enemies");
         _enemiesProjectilesLayer = LayerMask.NameToLayer("EnemiesProjectiles");        
     }
@@ -73,9 +75,11 @@ public class Projectile : MonoBehaviour
 
         ProjectileRegistry[(instigatorPlayerId, shotId)] = this;
 
+        _trailRenderer.enabled = doubleSpeed;
+
         if (doubleSpeed)
         {
-            speed *= 2f;
+            speed *= 2f;            
         }
         
         ProjectileVelocity();
