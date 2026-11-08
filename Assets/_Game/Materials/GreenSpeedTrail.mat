@@ -41,7 +41,7 @@ Material:
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _MainTex:
-        m_Texture: {fileID: 2800000, guid: e45041cd0e566ab47a4273faed90663a, type: 3}
+        m_Texture: {fileID: 2800000, guid: 185861cd85f32e94aa2d66b3d6c7c4ef, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _MaskTex:
@@ -88,11 +88,11 @@ Material:
     - _DstBlend: 10
     - _DstBlendAlpha: 10
     - _EnableExternalAlpha: 0
-    - _FPS: 0
+    - _FPS: 30
     - _FlipbookBlending: 0
     - _FlipbookMode: 0
     - _FrameCount: 5
-    - _MaxFrames: 1
+    - _MaxFrames: 5
     - _Mode: 0
     - _QueueControl: 0
     - _QueueOffset: 0
@@ -100,7 +100,7 @@ Material:
     - _SoftParticlesEnabled: 0
     - _SoftParticlesFarFadeDistance: 1
     - _SoftParticlesNearFadeDistance: 0
-    - _SpriteSheetColuns: 1
+    - _SpriteSheetColuns: 5
     - _SpriteSheetRows: 1
     - _SrcBlend: 5
     - _SrcBlendAlpha: 1
