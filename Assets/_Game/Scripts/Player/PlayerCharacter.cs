@@ -55,6 +55,7 @@ public class PlayerCharacter : MonoBehaviourPun
     private readonly int MoveYHash = Animator.StringToHash("MoveY");
     private readonly int IsMovingHash = Animator.StringToHash("IsMoving");
     private readonly int IsDeadHash = Animator.StringToHash("IsDead");
+    private readonly int AnimMultiplierHash = Animator.StringToHash("AnimMultiplier");
     
     // Buffs & Status
     private bool _invincible;
@@ -405,6 +406,7 @@ public class PlayerCharacter : MonoBehaviourPun
                 _speedBuffActive = state;
                 _trailRenderer.emitting = state;
                 speed = state ? speed * 2f : speed / 2f; // Double speed when active, revert when inactive
+                _characterAnimator.SetFloat(AnimMultiplierHash, state ? 2f : 1f);
                 break;
             case Pickup.PickupType.TripleFire:
                 _tripleShootActive = state;
