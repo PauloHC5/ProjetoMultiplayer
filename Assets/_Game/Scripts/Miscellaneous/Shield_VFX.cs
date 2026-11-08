@@ -19,6 +19,7 @@ public class Shield_VFX : MonoBehaviour
     private readonly int HitLeftHash = Animator.StringToHash("HitLeft");
     private readonly int HitRightHash = Animator.StringToHash("HitRight");
     private readonly int BreakHash = Animator.StringToHash("Break");
+    private readonly int AnimMultiplierHash = Animator.StringToHash("AnimMultiplier");
 
     private void Awake()
     {
@@ -27,7 +28,7 @@ public class Shield_VFX : MonoBehaviour
         _collider2D = GetComponent<Collider2D>();
     }
     
-    public void RiseShield()
+    public void RiseShield(float duration)
     {
         _spriteRenderer.enabled = true;
         _animator.enabled = true;
@@ -35,6 +36,17 @@ public class Shield_VFX : MonoBehaviour
         
         _animator.Rebind();
         _animator.Update(0f);
+        
+        float oneThirdDuration = duration / 3f;
+        
+        float durationAboutToBreak = duration - oneThirdDuration;
+        
+        Invoke(nameof(ShieldBreaking), durationAboutToBreak);
+    }
+    
+    private void ShieldBreaking()
+    {
+        _animator.SetFloat(AnimMultiplierHash, 3f);
     }
     
     private void OnTriggerEnter2D(Collider2D other)

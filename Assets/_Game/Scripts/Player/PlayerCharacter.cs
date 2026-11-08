@@ -339,7 +339,7 @@ public class PlayerCharacter : MonoBehaviourPun
         }
         else
         {
-            _shieldVFX.RiseShield();
+            _shieldVFX.RiseShield(duration);
             yield return new WaitForSeconds(duration);
         }
 
