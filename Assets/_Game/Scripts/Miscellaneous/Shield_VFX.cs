@@ -29,7 +29,6 @@ public class Shield_VFX : MonoBehaviour
     
     public void RiseShield()
     {
-        enabled = true;
         _spriteRenderer.enabled = true;
         _animator.enabled = true;
         _collider2D.enabled = true;
@@ -84,6 +83,5 @@ public class Shield_VFX : MonoBehaviour
     {
         _spriteRenderer.enabled = false;
         _animator.enabled = false;
-        enabled = false;
     }
 }
