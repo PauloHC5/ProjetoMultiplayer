@@ -46,7 +46,7 @@ public class Shield_VFX : MonoBehaviour
     
     private void ShieldBreaking()
     {
-        _animator.SetFloat(AnimMultiplierHash, 3f);
+        _animator.SetFloat(AnimMultiplierHash, 4f);
     }
     
     private void OnTriggerEnter2D(Collider2D other)
