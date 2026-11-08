@@ -1,0 +1,338 @@
+fileFormatVersion: 2
+guid: 06e434279789e064aa6907e192a93d1e
+TextureImporter:
+  internalIDToNameTable:
+  - first:
+      213: 718785539931904443
+    second: projectile-arsenal_spinner_toxic_w_32_0
+  - first:
+      213: 29496537852572130
+    second: projectile-arsenal_spinner_toxic_w_32_1
+  - first:
+      213: -2305085572237954875
+    second: projectile-arsenal_spinner_toxic_w_32_2
+  - first:
+      213: -7450075428422438188
+    second: projectile-arsenal_spinner_toxic_w_32_3
+  - first:
+      213: 5435913687713735922
+    second: projectile-arsenal_spinner_toxic_w_32_4
+  - first:
+      213: 8663008289119824706
+    second: projectile-arsenal_spinner_toxic_w_32_5
+  - first:
+      213: 8157902274999859574
+    second: projectile-arsenal_spinner_toxic_w_32_6
+  - first:
+      213: -6339388985831462824
+    second: projectile-arsenal_spinner_toxic_w_32_7
+  externalObjects: {}
+  serializedVersion: 13
+  mipmaps:
+    mipMapMode: 0
+    enableMipMap: 0
+    sRGBTexture: 1
+    linearTexture: 0
+    fadeOut: 0
+    borderMipMap: 0
+    mipMapsPreserveCoverage: 0
+    alphaTestReferenceValue: 0.5
+    mipMapFadeDistanceStart: 1
+    mipMapFadeDistanceEnd: 3
+  bumpmap:
+    convertToNormalMap: 0
+    externalNormalMap: 0
+    heightScale: 0.25
+    normalMapFilter: 0
+    flipGreenChannel: 0
+  isReadable: 0
+  streamingMipmaps: 0
+  streamingMipmapsPriority: 0
+  vTOnly: 0
+  ignoreMipmapLimit: 0
+  grayScaleToAlpha: 0
+  generateCubemap: 6
+  cubemapConvolution: 0
+  seamlessCubemap: 0
+  textureFormat: 1
+  maxTextureSize: 2048
+  textureSettings:
+    serializedVersion: 2
+    filterMode: 1
+    aniso: 1
+    mipBias: 0
+    wrapU: 1
+    wrapV: 1
+    wrapW: 1
+  nPOTScale: 0
+  lightmap: 0
+  compressionQuality: 50
+  spriteMode: 2
+  spriteExtrude: 1
+  spriteMeshType: 1
+  alignment: 0
+  spritePivot: {x: 0.5, y: 0.5}
+  spritePixelsToUnits: 100
+  spriteBorder: {x: 0, y: 0, z: 0, w: 0}
+  spriteGenerateFallbackPhysicsShape: 1
+  alphaUsage: 1
+  alphaIsTransparency: 1
+  spriteTessellationDetail: -1
+  textureType: 8
+  textureShape: 1
+  singleChannelComponent: 0
+  flipbookRows: 1
+  flipbookColumns: 1
+  maxTextureSizeSet: 0
+  compressionQualitySet: 0
+  textureFormatSet: 0
+  ignorePngGamma: 0
+  applyGammaDecoding: 0
+  swizzle: 50462976
+  cookieLightType: 0
+  platformSettings:
+  - serializedVersion: 4
+    buildTarget: DefaultTexturePlatform
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: Standalone
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: Android
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  spriteSheet:
+    serializedVersion: 2
+    sprites:
+    - serializedVersion: 2
+      name: projectile-arsenal_spinner_toxic_w_32_0
+      rect:
+        serializedVersion: 2
+        x: 5
+        y: 12
+        width: 23
+        height: 8
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: bb91459e3a3a9f900800000000000000
+      internalID: 718785539931904443
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: projectile-arsenal_spinner_toxic_w_32_1
+      rect:
+        serializedVersion: 2
+        x: 37
+        y: 12
+        width: 23
+        height: 8
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 2e17ec4e1fac86000800000000000000
+      internalID: 29496537852572130
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: projectile-arsenal_spinner_toxic_w_32_2
+      rect:
+        serializedVersion: 2
+        x: 69
+        y: 12
+        width: 23
+        height: 8
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 5c0f0e982e0b200e0800000000000000
+      internalID: -2305085572237954875
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: projectile-arsenal_spinner_toxic_w_32_3
+      rect:
+        serializedVersion: 2
+        x: 101
+        y: 12
+        width: 23
+        height: 8
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 4d2b30bbed30c9890800000000000000
+      internalID: -7450075428422438188
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: projectile-arsenal_spinner_toxic_w_32_4
+      rect:
+        serializedVersion: 2
+        x: 133
+        y: 12
+        width: 23
+        height: 8
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 2f46cd1c2be307b40800000000000000
+      internalID: 5435913687713735922
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: projectile-arsenal_spinner_toxic_w_32_5
+      rect:
+        serializedVersion: 2
+        x: 165
+        y: 12
+        width: 23
+        height: 8
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 24b604fe320393870800000000000000
+      internalID: 8663008289119824706
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: projectile-arsenal_spinner_toxic_w_32_6
+      rect:
+        serializedVersion: 2
+        x: 197
+        y: 12
+        width: 23
+        height: 8
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 679b7bd85e0b63170800000000000000
+      internalID: 8157902274999859574
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: projectile-arsenal_spinner_toxic_w_32_7
+      rect:
+        serializedVersion: 2
+        x: 229
+        y: 12
+        width: 23
+        height: 8
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 858ed7e0e47f508a0800000000000000
+      internalID: -6339388985831462824
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    outline: []
+    customData: 
+    physicsShape: []
+    bones: []
+    spriteID: 
+    internalID: 0
+    vertices: []
+    indices: 
+    edges: []
+    weights: []
+    secondaryTextures: []
+    spriteCustomMetadata:
+      entries: []
+    nameFileIdTable:
+      projectile-arsenal_spinner_toxic_w_32_0: 718785539931904443
+      projectile-arsenal_spinner_toxic_w_32_1: 29496537852572130
+      projectile-arsenal_spinner_toxic_w_32_2: -2305085572237954875
+      projectile-arsenal_spinner_toxic_w_32_3: -7450075428422438188
+      projectile-arsenal_spinner_toxic_w_32_4: 5435913687713735922
+      projectile-arsenal_spinner_toxic_w_32_5: 8663008289119824706
+      projectile-arsenal_spinner_toxic_w_32_6: 8157902274999859574
+      projectile-arsenal_spinner_toxic_w_32_7: -6339388985831462824
+  mipmapLimitGroupName: 
+  pSDRemoveMatte: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

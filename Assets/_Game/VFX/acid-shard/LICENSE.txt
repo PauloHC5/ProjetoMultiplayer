@@ -1,0 +1,16 @@
+Pixel Projectile FX
+by a small, smart potato
+https://a-small-smart-potato.itch.io
+
+LICENSE
+-------
+
+You CAN:
+  - use these assets in personal and commercial game projects
+  - modify and edit them freely
+
+You CANNOT:
+  - resell, repackage or redistribute them as assets
+  - claim them as your own work
+
+Credit is not required, but always welcome.

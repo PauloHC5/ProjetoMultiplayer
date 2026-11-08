@@ -10,7 +10,9 @@ public enum PlayerType
 {
     Player1,
     Player2,
-    Player3
+    Player3,
+    
+    None
 }
 
 [RequireComponent(typeof(PhotonView))]
@@ -43,6 +45,8 @@ public class PlayerCharacter : MonoBehaviourPun
     private int _enemiesLayer;
     private int _pickupsLayer;
     private Coroutine _invincibleCoroutine;
+    private TrailRenderer _trailRenderer;
+    private Shield_VFX _shieldVFX;
     
     public Action<PlayerCharacter> OnPlayerDeath;
     public Action<Pickup.PickupType, float> OnPickupCollected;
@@ -51,6 +55,7 @@ public class PlayerCharacter : MonoBehaviourPun
     private readonly int MoveYHash = Animator.StringToHash("MoveY");
     private readonly int IsMovingHash = Animator.StringToHash("IsMoving");
     private readonly int IsDeadHash = Animator.StringToHash("IsDead");
+    private readonly int AnimMultiplierHash = Animator.StringToHash("AnimMultiplier");
     
     // Buffs & Status
     private bool _invincible;
@@ -67,6 +72,9 @@ public class PlayerCharacter : MonoBehaviourPun
         _rigidbody2D = GetComponent<Rigidbody2D>();
         _playerNicknameText = GetComponentInChildren<TextMeshProUGUI>();
         _characterAnimator = GetComponentInChildren<Animator>();
+        _trailRenderer = GetComponentInChildren<TrailRenderer>();
+        _shieldVFX = GetComponentInChildren<Shield_VFX>();
+        
         _projectilesLayer = LayerMask.NameToLayer("EnemiesProjectiles");
         _enemiesLayer = LayerMask.NameToLayer("Enemies");
         _pickupsLayer = LayerMask.NameToLayer("Pickups");
@@ -203,7 +211,7 @@ public class PlayerCharacter : MonoBehaviourPun
 
     private void OnTriggerEnter2D(Collider2D other)
     {
-        if(!PhotonNetwork.IsMasterClient) return;
+        if(!PhotonHandlers.IsAuthority) return;
                 
         if(other.gameObject.layer == _projectilesLayer || other.gameObject.layer == _enemiesLayer)
         {
@@ -218,9 +226,17 @@ public class PlayerCharacter : MonoBehaviourPun
             if (pickup == null) return;
             
             if(CheckIfThisPickupIsActive(pickup.Type)) return;
-            
-            photonView.RPC(nameof(RpcReplicatePickupState), RpcTarget.AllBuffered, pickup.Type, pickup.Duration);
-            PhotonNetwork.Destroy(other.gameObject);
+
+            if (PhotonHandlers.CanUseNetwork)
+            {
+                photonView.RPC(nameof(RpcReplicatePickupState), RpcTarget.AllBuffered, pickup.Type, pickup.Duration);
+                PhotonNetwork.Destroy(other.gameObject);
+            }
+            else
+            {
+                SetPickupState(pickup.Type, true, pickup.Duration);
+                Destroy(other.gameObject);
+            }
         }
     }
 
@@ -239,6 +255,8 @@ public class PlayerCharacter : MonoBehaviourPun
         _rigidbody2D.linearVelocity = Vector2.zero;
         
         _characterAnimator.SetBool(IsDeadHash, true);
+        
+        _shieldVFX.BreakShield();
         
         GameManager.Instance.AudioManager.PlaySfx(explosionSfx);
         
@@ -288,7 +306,7 @@ public class PlayerCharacter : MonoBehaviourPun
         
         if(_invincibleCoroutine != null)
             StopCoroutine(_invincibleCoroutine);
-        _invincibleCoroutine = StartCoroutine(Invincible());
+        _invincibleCoroutine = StartCoroutine(Invincible(true));
     }
     
     [PunRPC]
@@ -304,23 +322,32 @@ public class PlayerCharacter : MonoBehaviourPun
         SpriteRenderer.enabled = true;
     }
     
-    private IEnumerator Invincible(float duration = 3.0f)
+    private IEnumerator Invincible(bool isSpawnInvencible, float duration = 3.0f)
     {
         _invincible = true;
         SpriteRenderer.enabled = true;
 
-        float elapsedTime = 0.0f;
-
-        while (elapsedTime < duration)
+        if (isSpawnInvencible)
         {
-            SpriteRenderer.enabled = !SpriteRenderer.enabled;
+            float elapsedTime = 0.0f;
+            while (elapsedTime < duration)
+            {
+                SpriteRenderer.enabled = !SpriteRenderer.enabled;
 
-            yield return new WaitForSeconds(0.2f);
-            elapsedTime += 0.2f;
+                yield return new WaitForSeconds(0.2f);
+                elapsedTime += 0.2f;
+            }
+        }
+        else
+        {
+            _shieldVFX.RiseShield(duration);
+            yield return new WaitForSeconds(duration);
         }
 
         SpriteRenderer.enabled = true;
         _invincible = false;
+        
+        _shieldVFX.BreakShield();
         
         photonView.RPC(nameof(RpcEndInvincible), RpcTarget.OthersBuffered);
     }
@@ -372,12 +399,14 @@ public class PlayerCharacter : MonoBehaviourPun
             case Pickup.PickupType.Repellent:
                 if(state)
                 {
-                    StartCoroutine(Invincible(duration));
+                    StartCoroutine(Invincible(false, duration));
                 }
                 break;
             case Pickup.PickupType.SpeedBuff:
                 _speedBuffActive = state;
+                _trailRenderer.emitting = state;
                 speed = state ? speed * 2f : speed / 2f; // Double speed when active, revert when inactive
+                _characterAnimator.SetFloat(AnimMultiplierHash, state ? 2f : 1f);
                 break;
             case Pickup.PickupType.TripleFire:
                 _tripleShootActive = state;

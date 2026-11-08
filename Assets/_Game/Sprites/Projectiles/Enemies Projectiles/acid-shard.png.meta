@@ -1,0 +1,520 @@
+fileFormatVersion: 2
+guid: e6dc8e500773089499d0020877c11737
+TextureImporter:
+  internalIDToNameTable:
+  - first:
+      213: 2883889616620226936
+    second: acid-shard_0
+  - first:
+      213: -3144326115610988907
+    second: acid-shard_1
+  - first:
+      213: -656448617727506920
+    second: acid-shard_2
+  - first:
+      213: 4813454099085363263
+    second: acid-shard_3
+  - first:
+      213: -573297874207920719
+    second: acid-shard_4
+  - first:
+      213: 420091519448926560
+    second: acid-shard_5
+  - first:
+      213: -2417098956315849430
+    second: acid-shard_6
+  - first:
+      213: -1224871454337382607
+    second: acid-shard_7
+  - first:
+      213: 4870269564675415819
+    second: acid-shard_8
+  - first:
+      213: 4647514628030420113
+    second: acid-shard_9
+  - first:
+      213: -3957098469127237710
+    second: acid-shard_10
+  - first:
+      213: 5965285504052028416
+    second: acid-shard_11
+  - first:
+      213: 4384303859550727192
+    second: acid-shard_12
+  - first:
+      213: 2817633499049478230
+    second: acid-shard_13
+  - first:
+      213: -8248137703741177363
+    second: acid-shard_14
+  externalObjects: {}
+  serializedVersion: 13
+  mipmaps:
+    mipMapMode: 0
+    enableMipMap: 0
+    sRGBTexture: 1
+    linearTexture: 0
+    fadeOut: 0
+    borderMipMap: 0
+    mipMapsPreserveCoverage: 0
+    alphaTestReferenceValue: 0.5
+    mipMapFadeDistanceStart: 1
+    mipMapFadeDistanceEnd: 3
+  bumpmap:
+    convertToNormalMap: 0
+    externalNormalMap: 0
+    heightScale: 0.25
+    normalMapFilter: 0
+    flipGreenChannel: 0
+  isReadable: 0
+  streamingMipmaps: 0
+  streamingMipmapsPriority: 0
+  vTOnly: 0
+  ignoreMipmapLimit: 0
+  grayScaleToAlpha: 0
+  generateCubemap: 6
+  cubemapConvolution: 0
+  seamlessCubemap: 0
+  textureFormat: 1
+  maxTextureSize: 2048
+  textureSettings:
+    serializedVersion: 2
+    filterMode: 0
+    aniso: 1
+    mipBias: 0
+    wrapU: 1
+    wrapV: 1
+    wrapW: 1
+  nPOTScale: 0
+  lightmap: 0
+  compressionQuality: 50
+  spriteMode: 2
+  spriteExtrude: 1
+  spriteMeshType: 1
+  alignment: 0
+  spritePivot: {x: 0.5, y: 0.5}
+  spritePixelsToUnits: 64
+  spriteBorder: {x: 0, y: 0, z: 0, w: 0}
+  spriteGenerateFallbackPhysicsShape: 1
+  alphaUsage: 1
+  alphaIsTransparency: 1
+  spriteTessellationDetail: -1
+  textureType: 8
+  textureShape: 1
+  singleChannelComponent: 0
+  flipbookRows: 1
+  flipbookColumns: 1
+  maxTextureSizeSet: 0
+  compressionQualitySet: 0
+  textureFormatSet: 0
+  ignorePngGamma: 0
+  applyGammaDecoding: 0
+  swizzle: 50462976
+  cookieLightType: 0
+  platformSettings:
+  - serializedVersion: 4
+    buildTarget: DefaultTexturePlatform
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 0
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: Standalone
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: Android
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  spriteSheet:
+    serializedVersion: 2
+    sprites:
+    - serializedVersion: 2
+      name: acid-shard_0
+      rect:
+        serializedVersion: 2
+        x: 11
+        y: 20
+        width: 40
+        height: 30
+      alignment: 9
+      pivot: {x: 0.84, y: 0.45}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 879061aa352a50820800000000000000
+      internalID: 2883889616620226936
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: acid-shard_1
+      rect:
+        serializedVersion: 2
+        x: 78
+        y: 41
+        width: 7
+        height: 7
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 59ee505ae0c1d54d0800000000000000
+      internalID: -3144326115610988907
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: acid-shard_2
+      rect:
+        serializedVersion: 2
+        x: 86
+        y: 46
+        width: 9
+        height: 7
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 8164e0fc573d3e6f0800000000000000
+      internalID: -656448617727506920
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: acid-shard_3
+      rect:
+        serializedVersion: 2
+        x: 140
+        y: 43
+        width: 9
+        height: 7
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: f3881a61003dcc240800000000000000
+      internalID: 4813454099085363263
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: acid-shard_4
+      rect:
+        serializedVersion: 2
+        x: 149
+        y: 48
+        width: 9
+        height: 7
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 1bda951fe9c3b08f0800000000000000
+      internalID: -573297874207920719
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: acid-shard_5
+      rect:
+        serializedVersion: 2
+        x: 201
+        y: 20
+        width: 42
+        height: 36
+      alignment: 9
+      pivot: {x: 0.85, y: 0.35}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 06948edd20774d500800000000000000
+      internalID: 420091519448926560
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: acid-shard_6
+      rect:
+        serializedVersion: 2
+        x: 258
+        y: 38
+        width: 19
+        height: 13
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: a2d83d93e4db47ed0800000000000000
+      internalID: -2417098956315849430
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: acid-shard_7
+      rect:
+        serializedVersion: 2
+        x: 275
+        y: 20
+        width: 32
+        height: 36
+      alignment: 9
+      pivot: {x: 0.8, y: 0.38}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 13744b4e6e1600fe0800000000000000
+      internalID: -1224871454337382607
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: acid-shard_8
+      rect:
+        serializedVersion: 2
+        x: 8
+        y: 29
+        width: 10
+        height: 10
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: b0fdfd28d5ca69340800000000000000
+      internalID: 4870269564675415819
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: acid-shard_9
+      rect:
+        serializedVersion: 2
+        x: 69
+        y: 32
+        width: 8
+        height: 8
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 1945f2c3ee94f7040800000000000000
+      internalID: 4647514628030420113
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: acid-shard_10
+      rect:
+        serializedVersion: 2
+        x: 75
+        y: 20
+        width: 40
+        height: 24
+      alignment: 9
+      pivot: {x: 0.84, y: 0.52}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 2bfcd6e68ef8519c0800000000000000
+      internalID: -3957098469127237710
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: acid-shard_11
+      rect:
+        serializedVersion: 2
+        x: 131
+        y: 27
+        width: 8
+        height: 15
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 004eecc7f83f8c250800000000000000
+      internalID: 5965285504052028416
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: acid-shard_12
+      rect:
+        serializedVersion: 2
+        x: 141
+        y: 20
+        width: 38
+        height: 25
+      alignment: 9
+      pivot: {x: 0.83, y: 0.46}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 81c25e7912d28dc30800000000000000
+      internalID: 4384303859550727192
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: acid-shard_13
+      rect:
+        serializedVersion: 2
+        x: 195
+        y: 38
+        width: 6
+        height: 6
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 658c51a2dbe3a1720800000000000000
+      internalID: 2817633499049478230
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: acid-shard_14
+      rect:
+        serializedVersion: 2
+        x: 264
+        y: 25
+        width: 13
+        height: 12
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: de1400e757ab88d80800000000000000
+      internalID: -8248137703741177363
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    outline: []
+    customData: 
+    physicsShape: []
+    bones: []
+    spriteID: 4114542f04778f741ae44e71a8ba75e4
+    internalID: 0
+    vertices: []
+    indices: 
+    edges: []
+    weights: []
+    secondaryTextures: []
+    spriteCustomMetadata:
+      entries: []
+    nameFileIdTable:
+      acid-shard_0: 2883889616620226936
+      acid-shard_1: -3144326115610988907
+      acid-shard_10: -3957098469127237710
+      acid-shard_11: 5965285504052028416
+      acid-shard_12: 4384303859550727192
+      acid-shard_13: 2817633499049478230
+      acid-shard_14: -8248137703741177363
+      acid-shard_2: -656448617727506920
+      acid-shard_3: 4813454099085363263
+      acid-shard_4: -573297874207920719
+      acid-shard_5: 420091519448926560
+      acid-shard_6: -2417098956315849430
+      acid-shard_7: -1224871454337382607
+      acid-shard_8: 4870269564675415819
+      acid-shard_9: 4647514628030420113
+  mipmapLimitGroupName: 
+  pSDRemoveMatte: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

@@ -161,7 +161,9 @@ MonoBehaviour:
   damagePerHit: 2
   healthBarSlider: {fileID: 2141001252292299642}
   healthPercentageText: {fileID: 4339944225062284646}
-  projectilePrefab: {fileID: 1057425784480642454, guid: d198b54e17c98b444b89b16a77eadcf9, type: 3}
+  onDamageMaterial: {fileID: 2100000, guid: 0e30a797c12d61e47a005fbfd8f60aff, type: 2}
+  onDamageVfxDuration: 0.1
+  projectilePrefab: {fileID: 8615181883404891688, guid: 525f2b816ca79f54f8992594a20a0b28, type: 3}
   mosquitoPrefab: {fileID: 721702209136384595, guid: c27f82190daed0543816a4df5edd6210, type: 3}
   projectileSpawnPoint: {fileID: 5663861538857627995}
   projectileSpawnRate: 1

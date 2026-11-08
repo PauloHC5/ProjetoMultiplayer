@@ -1,0 +1,496 @@
+fileFormatVersion: 2
+guid: 5f32954a482c1724685fc18524a27736
+TextureImporter:
+  internalIDToNameTable:
+  - first:
+      213: -4260776122369477001
+    second: Shield Round Smooth Collapse with splinters 512x512 BW_0
+  - first:
+      213: 5806593230073833755
+    second: Shield Round Smooth Collapse with splinters 512x512 BW_1
+  - first:
+      213: -3129477199743266023
+    second: Shield Round Smooth Collapse with splinters 512x512 BW_2
+  - first:
+      213: 4341068133088115437
+    second: Shield Round Smooth Collapse with splinters 512x512 BW_3
+  - first:
+      213: -1340563423508137557
+    second: Shield Round Smooth Collapse with splinters 512x512 BW_4
+  - first:
+      213: -295835240860316314
+    second: Shield Round Smooth Collapse with splinters 512x512 BW_5
+  - first:
+      213: -586378585140993372
+    second: Shield Round Smooth Collapse with splinters 512x512 BW_6
+  - first:
+      213: -4547945258350675478
+    second: Shield Round Smooth Collapse with splinters 512x512 BW_7
+  - first:
+      213: 6795588442428303673
+    second: Shield Round Smooth Collapse with splinters 512x512 BW_8
+  - first:
+      213: 7486065150927460620
+    second: Shield Round Smooth Collapse with splinters 512x512 BW_9
+  - first:
+      213: -1577557475932069063
+    second: Shield Round Smooth Collapse with splinters 512x512 BW_10
+  - first:
+      213: -4243289627798262946
+    second: Shield Round Smooth Collapse with splinters 512x512 BW_11
+  - first:
+      213: -1389449666972010638
+    second: Shield Round Smooth Collapse with splinters 512x512 BW_12
+  - first:
+      213: 4092682988337325048
+    second: Shield Round Smooth Collapse with splinters 512x512 BW_13
+  - first:
+      213: -6202607984795778523
+    second: Shield Round Smooth Collapse with splinters 512x512 BW_14
+  - first:
+      213: -808711426692285857
+    second: Shield Round Smooth Collapse with splinters 512x512 BW_15
+  - first:
+      213: 5077783226283373837
+    second: Shield Round Smooth Collapse with splinters 512x512 BW_16
+  - first:
+      213: -3011312260467864516
+    second: Shield Round Smooth Collapse with splinters 512x512 BW_17
+  - first:
+      213: -3192558326160400356
+    second: Shield Round Smooth Collapse with splinters 512x512 BW_18
+  - first:
+      213: 2004207109724379464
+    second: Shield Round Smooth Collapse with splinters 512x512 BW_19
+  - first:
+      213: -4388917718335144653
+    second: Shield Round Smooth Collapse with splinters 512x512 BW_20
+  - first:
+      213: 1127047287907517783
+    second: Shield Round Smooth Collapse with splinters 512x512 BW_21
+  - first:
+      213: 2503007617035761430
+    second: Shield Round Smooth Collapse with splinters 512x512 BW_22
+  - first:
+      213: 6046842715452425238
+    second: Shield Round Smooth Collapse with splinters 512x512 BW_23
+  - first:
+      213: 772517513380258531
+    second: Shield Round Smooth Collapse with splinters 512x512 BW_24
+  - first:
+      213: -5588042295570621389
+    second: Shield Round Smooth Collapse with splinters 512x512 BW_25
+  - first:
+      213: 5112525357795039512
+    second: Shield Round Smooth Collapse with splinters 512x512 BW_26
+  - first:
+      213: -2242949608757419743
+    second: Shield Round Smooth Collapse with splinters 512x512 BW_27
+  - first:
+      213: -811429689519678947
+    second: Shield Round Smooth Collapse with splinters 512x512 BW_28
+  - first:
+      213: 6733401644975643708
+    second: Shield Round Smooth Collapse with splinters 512x512 BW_29
+  - first:
+      213: -8963553139786593560
+    second: Shield Round Smooth Collapse with splinters 512x512 BW_30
+  - first:
+      213: 2155396001522974557
+    second: Shield Round Smooth Collapse with splinters 512x512 BW_31
+  - first:
+      213: -3778712758132839752
+    second: Shield Round Smooth Collapse with splinters 512x512 BW_32
+  - first:
+      213: -816069351970642650
+    second: Shield Round Smooth Collapse with splinters 512x512 BW_33
+  - first:
+      213: 513194747212088804
+    second: Shield Round Smooth Collapse with splinters 512x512 BW_34
+  - first:
+      213: -6123672437015028565
+    second: Shield Round Smooth Collapse with splinters 512x512 BW_35
+  - first:
+      213: -154702296161434940
+    second: Shield Round Smooth Collapse with splinters 512x512 BW_36
+  - first:
+      213: -7420810062157402589
+    second: Shield Round Smooth Collapse with splinters 512x512 BW_37
+  - first:
+      213: -3015165466984089085
+    second: Shield Round Smooth Collapse with splinters 512x512 BW_38
+  - first:
+      213: -6421176171449598217
+    second: Shield Round Smooth Collapse with splinters 512x512 BW_39
+  - first:
+      213: -8700089520687247077
+    second: Shield Round Smooth Collapse with splinters 512x512 BW_40
+  - first:
+      213: -7129099461910685133
+    second: Shield Round Smooth Collapse with splinters 512x512 BW_41
+  - first:
+      213: -3324917227290195950
+    second: Shield Round Smooth Collapse with splinters 512x512 BW_42
+  - first:
+      213: -7817124391441663296
+    second: Shield Round Smooth Collapse with splinters 512x512 BW_43
+  - first:
+      213: 4163025993171366195
+    second: Shield Round Smooth Collapse with splinters 512x512 BW_44
+  - first:
+      213: -8876759021879532389
+    second: Shield Round Smooth Collapse with splinters 512x512 BW_45
+  - first:
+      213: 5952779756736993571
+    second: Shield Round Smooth Collapse with splinters 512x512 BW_46
+  - first:
+      213: -1247694293235229908
+    second: Shield Round Smooth Collapse with splinters 512x512 BW_47
+  - first:
+      213: 9189036294137909662
+    second: Shield Round Smooth Collapse with splinters 512x512 BW_48
+  - first:
+      213: -5411062086605185748
+    second: Shield Round Smooth Collapse with splinters 512x512 BW_49
+  - first:
+      213: -231691962228723940
+    second: Shield Round Smooth Collapse with splinters 512x512 BW_50
+  - first:
+      213: -46608248573933095
+    second: Shield Round Smooth Collapse with splinters 512x512 BW_51
+  - first:
+      213: -6349955091861594125
+    second: Shield Round Smooth Collapse with splinters 512x512 BW_52
+  - first:
+      213: 8740108993651399713
+    second: Shield Round Smooth Collapse with splinters 512x512 BW_53
+  - first:
+      213: -7379941562985965982
+    second: Shield Round Smooth Collapse with splinters 512x512 BW_54
+  - first:
+      213: -1274386516765866253
+    second: Shield Round Smooth Collapse with splinters 512x512 BW_55
+  - first:
+      213: 953294298524703409
+    second: Shield Round Smooth Collapse with splinters 512x512 BW_56
+  - first:
+      213: 3460104563491680195
+    second: Shield Round Smooth Collapse with splinters 512x512 BW_57
+  - first:
+      213: 7212200681777687444
+    second: Shield Round Smooth Collapse with splinters 512x512 BW_58
+  - first:
+      213: 5346380256520973311
+    second: Shield Round Smooth Collapse with splinters 512x512 BW_59
+  externalObjects: {}
+  serializedVersion: 13
+  mipmaps:
+    mipMapMode: 0
+    enableMipMap: 0
+    sRGBTexture: 1
+    linearTexture: 0
+    fadeOut: 0
+    borderMipMap: 0
+    mipMapsPreserveCoverage: 0
+    alphaTestReferenceValue: 0.5
+    mipMapFadeDistanceStart: 1
+    mipMapFadeDistanceEnd: 3
+  bumpmap:
+    convertToNormalMap: 0
+    externalNormalMap: 0
+    heightScale: 0.25
+    normalMapFilter: 0
+    flipGreenChannel: 0
+  isReadable: 0
+  streamingMipmaps: 0
+  streamingMipmapsPriority: 0
+  vTOnly: 0
+  ignoreMipmapLimit: 0
+  grayScaleToAlpha: 0
+  generateCubemap: 6
+  cubemapConvolution: 0
+  seamlessCubemap: 0
+  textureFormat: 1
+  maxTextureSize: 2048
+  textureSettings:
+    serializedVersion: 2
+    filterMode: 0
+    aniso: 1
+    mipBias: 0
+    wrapU: 1
+    wrapV: 1
+    wrapW: 1
+  nPOTScale: 0
+  lightmap: 0
+  compressionQuality: 50
+  spriteMode: 2
+  spriteExtrude: 1
+  spriteMeshType: 1
+  alignment: 0
+  spritePivot: {x: 0.5, y: 0.5}
+  spritePixelsToUnits: 100
+  spriteBorder: {x: 0, y: 0, z: 0, w: 0}
+  spriteGenerateFallbackPhysicsShape: 1
+  alphaUsage: 1
+  alphaIsTransparency: 1
+  spriteTessellationDetail: -1
+  textureType: 8
+  textureShape: 1
+  singleChannelComponent: 0
+  flipbookRows: 1
+  flipbookColumns: 1
+  maxTextureSizeSet: 0
+  compressionQualitySet: 0
+  textureFormatSet: 0
+  ignorePngGamma: 0
+  applyGammaDecoding: 0
+  swizzle: 50462976
+  cookieLightType: 0
+  platformSettings:
+  - serializedVersion: 4
+    buildTarget: DefaultTexturePlatform
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 0
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: Standalone
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: Android
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  spriteSheet:
+    serializedVersion: 2
+    sprites:
+    - serializedVersion: 2
+      name: Shield Round Smooth Collapse with splinters 512x512 BW_0
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 1536
+        width: 512
+        height: 512
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 77673b6f0beaed4c0800000000000000
+      internalID: -4260776122369477001
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Shield Round Smooth Collapse with splinters 512x512 BW_1
+      rect:
+        serializedVersion: 2
+        x: 512
+        y: 1536
+        width: 512
+        height: 512
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: b192db137c9259050800000000000000
+      internalID: 5806593230073833755
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Shield Round Smooth Collapse with splinters 512x512 BW_2
+      rect:
+        serializedVersion: 2
+        x: 1024
+        y: 1536
+        width: 512
+        height: 512
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 9135e98411dd194d0800000000000000
+      internalID: -3129477199743266023
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Shield Round Smooth Collapse with splinters 512x512 BW_3
+      rect:
+        serializedVersion: 2
+        x: 1536
+        y: 1536
+        width: 512
+        height: 512
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: dea3c7297729e3c30800000000000000
+      internalID: 4341068133088115437
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Shield Round Smooth Collapse with splinters 512x512 BW_4
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 1024
+        width: 512
+        height: 512
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 7a0331d3fa2a8b746a0efa2af744e0e0
+      internalID: -1340563423508137557
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Shield Round Smooth Collapse with splinters 512x512 BW_5
+      rect:
+        serializedVersion: 2
+        x: 512
+        y: 1024
+        width: 512
+        height: 512
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: b555110ca3693484bb3007662d660129
+      internalID: -295835240860316314
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Shield Round Smooth Collapse with splinters 512x512 BW_6
+      rect:
+        serializedVersion: 2
+        x: 1024
+        y: 1024
+        width: 512
+        height: 512
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 2ec672e12c1b77b47a92704a2d2aa398
+      internalID: -586378585140993372
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Shield Round Smooth Collapse with splinters 512x512 BW_7
+      rect:
+        serializedVersion: 2
+        x: 1536
+        y: 1024
+        width: 512
+        height: 512
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 247dbb320f6859f46b650f6e36a78982
+      internalID: -4547945258350675478
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    outline: []
+    customData: 
+    physicsShape: []
+    bones: []
+    spriteID: 4a254a49158245b4abb88e5443080a3f
+    internalID: 0
+    vertices: []
+    indices: 
+    edges: []
+    weights: []
+    secondaryTextures: []
+    spriteCustomMetadata:
+      entries:
+      - key: SpriteEditor.SliceSettings
+        value: '{"sliceOnImport":false,"gridCellCount":{"x":4.0,"y":4.0},"gridSpriteSize":{"x":512.0,"y":512.0},"gridSpriteOffset":{"x":0.0,"y":0.0},"gridSpritePadding":{"x":0.0,"y":0.0},"pivot":{"x":0.5,"y":0.5},"pivotPixels":{"x":0.0,"y":0.0},"autoSlicingMethod":0,"spriteAlignment":0,"pivotUnitMode":0,"slicingType":2,"keepEmptyRects":false,"isAlternate":false}'
+    nameFileIdTable:
+      Shield Round Smooth Collapse with splinters 512x512 BW_0: -4260776122369477001
+      Shield Round Smooth Collapse with splinters 512x512 BW_1: 5806593230073833755
+      Shield Round Smooth Collapse with splinters 512x512 BW_2: -3129477199743266023
+      Shield Round Smooth Collapse with splinters 512x512 BW_3: 4341068133088115437
+      Shield Round Smooth Collapse with splinters 512x512 BW_4: -1340563423508137557
+      Shield Round Smooth Collapse with splinters 512x512 BW_5: -295835240860316314
+      Shield Round Smooth Collapse with splinters 512x512 BW_6: -586378585140993372
+      Shield Round Smooth Collapse with splinters 512x512 BW_7: -4547945258350675478
+  mipmapLimitGroupName: 
+  pSDRemoveMatte: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

@@ -47,7 +47,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::GameManager
   _currentScene: 
-  mainMenuSceneName: SpaveInvadersMenu
+  mainMenuSceneName: MenuScene
   _audioManager:
     _audioMixer: {fileID: 24100000, guid: e1510e5bb3ebbd0469cea7bfbded578b, type: 2}
     _musicSource: {fileID: 872042203241412623}

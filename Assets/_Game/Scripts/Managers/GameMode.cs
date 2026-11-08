@@ -65,7 +65,7 @@ namespace _Game.Scripts
         [SerializeField] private int hordesPerWave = 3;
         [SerializeField] private float intervalBetweenHordes = 2.0f;
         public float playerDeathCooldown = 3.0f;
-        [SerializeField] private LayerMask playerLayerMask;
+        [SerializeField] private LayerMask playerAndDengueSourceLayerMask;
 
         [Header("Prefabs")] [SerializeField] private PlayerController playerControllerPrefab;
         [SerializeField] private MosquitosHorde mosquitosHordePrefab;
@@ -495,6 +495,15 @@ namespace _Game.Scripts
             {
                 Invoke(nameof(SpawnHorde), intervalBetweenHordes);
             }
+
+            if (_currentLives <= 0)
+            {
+                _currentLives = startingLives;
+
+                PlayerType playerType = GetPlayerType(PhotonNetwork.LocalPlayer);
+
+                RpcSpawnPlayerCharacter(playerType);
+            }
         }
         
         private void SpawnMosquitoQueen()
@@ -534,16 +543,6 @@ namespace _Game.Scripts
             _mosquitoQueenInTheScene = null;
             
             _hordesSpawnedInCurrentWave = 0;
-
-            if (_currentLives <= 0)
-            {
-                _currentLives = startingLives;
-
-                PlayerType playerType = GetPlayerType(PhotonNetwork.LocalPlayer);
-
-                RpcSpawnPlayerCharacter(playerType);
-            }
-
 
             WaveCompletedEvent?.Invoke(_currentWave);
 
@@ -711,7 +710,7 @@ namespace _Game.Scripts
                     var randomY =
                         UnityEngine.Random.Range(pickupsSpawnArea.bounds.min.y, pickupsSpawnArea.bounds.max.y);
                     randomPosition = new Vector3(randomX, randomY, 0f);
-                } while (CheckIfPlayerIsAround(randomPosition, radiusCheckPlayerPickup));
+                } while (CheckIfPlayerOrDengueSourceIsAround(randomPosition, radiusCheckPlayerPickup));
 
                 PhotonNetwork.InstantiateRoomObject(randomPickupPrefab.name, randomPosition, Quaternion.identity);
 
@@ -808,7 +807,7 @@ namespace _Game.Scripts
                     var randomY = UnityEngine.Random.Range(dengueSourceSpawnArea.bounds.min.y,
                         dengueSourceSpawnArea.bounds.max.y);
                     randomPosition = new Vector3(randomX, randomY, 0f);
-                } while (CheckIfPlayerIsAround(randomPosition, radiusCheckPlayerDengueSource));
+                } while (CheckIfPlayerOrDengueSourceIsAround(randomPosition, radiusCheckPlayerDengueSource));
 
                 if (bDebugMode)
                     Debug.Log(
@@ -827,11 +826,11 @@ namespace _Game.Scripts
             InvokeDengueSourceSpawn();
         }
 
-        private bool CheckIfPlayerIsAround(Vector3 position, float checkRadius)
+        private bool CheckIfPlayerOrDengueSourceIsAround(Vector3 position, float checkRadius)
         {
-            Collider2D[] colliders = Physics2D.OverlapCircleAll(position, checkRadius, playerLayerMask);
+            Collider2D[] colliders = Physics2D.OverlapCircleAll(position, checkRadius, playerAndDengueSourceLayerMask);
 
-            bool isPlayerAround = colliders.Length > 0;
+            bool isPlayerOrDengueSourceAround = colliders.Length > 0;
 
             if (bDebugMode)
             {
@@ -844,7 +843,7 @@ namespace _Game.Scripts
                 });
             }
 
-            return isPlayerAround;
+            return isPlayerOrDengueSourceAround;
         }
 
         protected override void OnDestroy()
