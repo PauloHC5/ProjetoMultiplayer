@@ -1,10 +1,10 @@
 fileFormatVersion: 2
-guid: ac987e9008a5c5e4e8224ae75b6ac08a
+guid: 4a0f307f6eb78f34684b1954368575f5
 TextureImporter:
   internalIDToNameTable:
   - first:
-      213: 6685289425767418007
-    second: PlayerVerdelIcon_0
+      213: -8110599354414587555
+    second: IconNovoVerdel_0
   externalObjects: {}
   serializedVersion: 13
   mipmaps:
@@ -113,13 +113,13 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: PlayerVerdelIcon_0
+      name: IconNovoVerdel_0
       rect:
         serializedVersion: 2
         x: 0
         y: 0
-        width: 16
-        height: 16
+        width: 21
+        height: 21
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -128,8 +128,8 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 798ca83005be6cc50800000000000000
-      internalID: 6685289425767418007
+      spriteID: d512b94ebdc517f80800000000000000
+      internalID: -8110599354414587555
       vertices: []
       indices: 
       edges: []
@@ -148,7 +148,7 @@ TextureImporter:
     spriteCustomMetadata:
       entries: []
     nameFileIdTable:
-      PlayerVerdelIcon_0: 6685289425767418007
+      IconNovoVerdel_0: -8110599354414587555
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

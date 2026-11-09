@@ -1,10 +1,10 @@
 fileFormatVersion: 2
-guid: c74f82c8e1698654ea8edb36eab24fed
+guid: a70e6c9bcdc327e4294b3e9b50a5740f
 TextureImporter:
   internalIDToNameTable:
   - first:
-      213: 9195131212705683561
-    second: PlayerLaranjaIcon_0
+      213: -1989909397358492055
+    second: IconNovoAzul_0
   externalObjects: {}
   serializedVersion: 13
   mipmaps:
@@ -113,13 +113,13 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: PlayerLaranjaIcon_0
+      name: IconNovoAzul_0
       rect:
         serializedVersion: 2
         x: 0
         y: 0
-        width: 16
-        height: 16
+        width: 21
+        height: 21
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -128,8 +128,8 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 968dd6cbe1bab9f70800000000000000
-      internalID: 9195131212705683561
+      spriteID: 9664c3332fb6264e0800000000000000
+      internalID: -1989909397358492055
       vertices: []
       indices: 
       edges: []
@@ -148,7 +148,7 @@ TextureImporter:
     spriteCustomMetadata:
       entries: []
     nameFileIdTable:
-      PlayerLaranjaIcon_0: 9195131212705683561
+      IconNovoAzul_0: -1989909397358492055
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 
