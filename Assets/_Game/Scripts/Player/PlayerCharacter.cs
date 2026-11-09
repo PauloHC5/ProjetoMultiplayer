@@ -413,6 +413,7 @@ public class PlayerCharacter : MonoBehaviourPun
                 if(state)
                 {
                     StartCoroutine(Invincible(false, duration));
+                    StartCoroutine(PickupIconRoutine(pickupType, duration));
                 }
                 break;
             case Pickup.PickupType.SpeedBuff:
