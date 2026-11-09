@@ -52,6 +52,7 @@ public class UI_Game : MonoBehaviour, IInRoomCallbacks, IMatchmakingCallbacks
     public GameObject statusBarUI;
     public Transform pickupStatusUI;
     public SerializedDictionary<PlayerType, Sprite> playerIconSprites;
+    public SerializedDictionary<int, Sprite> playerRankIconSprites;
     
     [Header("Game Over UI Elements")]
     public TextMeshProUGUI gameOverReasonText;
@@ -353,22 +354,29 @@ public class UI_Game : MonoBehaviour, IInRoomCallbacks, IMatchmakingCallbacks
 
     private void CreateScoreInfoForPlayer(Player player, int rank, int score)
     {
+        if(playerRankIconSprites == null || !playerRankIconSprites.ContainsKey(rank))
+        {
+            Debug.LogError("No sprite found for player rank: " + rank);
+            return;
+        }
+
         GameObject scoreInfoGO = Instantiate(playerScoreInfoPrefab, scoreBoardContent);
         
-        var scoreRankText = scoreInfoGO.transform.GetChild(0).GetComponent<TextMeshProUGUI>();
-        var playerIcon = scoreInfoGO.transform.GetChild(1).GetComponent<Image>();
-        var playerNicknameText = scoreInfoGO.transform.GetChild(2).GetComponent<TextMeshProUGUI>();
-        var playerScoreText = scoreInfoGO.transform.GetChild(3).GetComponent<TextMeshProUGUI>();
+        var scoreRankIcon = scoreInfoGO.transform.GetChild(0).GetComponent<Image>();
+        var playerIcon = scoreInfoGO.transform.GetChild(2).GetComponent<Image>();
+        var playerNicknameText = scoreInfoGO.transform.GetChild(3).GetComponent<TextMeshProUGUI>();
+        var playerScoreCounterText = scoreInfoGO.transform.GetChild(5).GetComponent<TextMeshProUGUI>();
 
         Color playerColor = GameMode.GetPlayerColorBasedOnPlayerType(player);
         
-        scoreRankText.text = rank.ToString();
-        scoreRankText.color = playerColor;
+        scoreInfoGO.GetComponent<Image>().color = playerColor;
+        
+        scoreRankIcon.sprite = playerRankIconSprites[rank];
+        scoreRankIcon.color = playerColor;
         playerIcon.sprite = playerIconSprites[GameMode.GetPlayerType(player)];
         playerNicknameText.text = player.NickName;
         playerNicknameText.color = playerColor;
-        playerScoreText.text = "Score: " + score;
-        playerScoreText.color = playerColor;
+        playerScoreCounterText.text = score.ToString();
     }
     
     public void ReturnToMainMenu()
