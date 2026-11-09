@@ -7,13 +7,16 @@ using Photon.Realtime;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
+using Hashtable = ExitGames.Client.Photon.Hashtable;
 
-public class UI_Game : MonoBehaviour
+public class UI_Game : MonoBehaviour, IInRoomCallbacks, IMatchmakingCallbacks
 {
     private struct PlayerUIStatus
     {
         public GameObject PlayerUIStatusObject;
         public Image PlayerIcon;
+        public Image ScoreAndLivesOverlay;
+        public Image NickNameOverlay;
         public TextMeshProUGUI PlayerNicknameText;
         public TextMeshProUGUI ScoreCounterText;
         public TextMeshProUGUI LivesCounterText;
@@ -39,8 +42,9 @@ public class UI_Game : MonoBehaviour
     [Header("UI Screens")]
     public GameObject gameOverUIScreen;
     public GameObject matchPreparationUIScreen;
-    
-    [Header("Wave UI Elements")]
+
+    [Header("Wave UI Elements")] 
+    public GameObject waveOverlay;
     public TextMeshProUGUI waveCounterText;
     public GameObject waveProgressBarObj;
     
@@ -62,20 +66,21 @@ public class UI_Game : MonoBehaviour
     
     [SerializedDictionary("Pickup Type", "Sprite")]
     public SerializedDictionary<Pickup.PickupType, Sprite> pickupTypeSprites;
+    
+    
+    [Space(20)]
+    
+    public SerializedDictionary<PlayerType, Color> playerTypeColors;
 
     private PlayerUIStatus _localPlayerStatus;
     private bool _bGameIsRunning = false;
     private WaveProgressBar _waveProgressBar;
     private MatchPreparationUI _matchPreparationUI;
 
-    // Constants for finding child components in the player status prefab
-    private const string PlayerNicknameTextComponentName = "Player Nickname Text (TMP)";
-    private const string ScoreCounterTextComponentName = "Score Counter Text (TMP)";
-    private const string LivesCounterTextComponentName = "Lives Counter Text (TMP)";
-
     private void Awake()
     {
         gameCountdownText.enabled = false;
+        waveOverlay.SetActive(false);
         waveCounterText.gameObject.SetActive(false);
         waveProgressBarObj.SetActive(false);
         outOfLivesText.gameObject.SetActive(false);
@@ -109,25 +114,38 @@ public class UI_Game : MonoBehaviour
         _bGameIsRunning = true;                
     }
 
-    private void OnMasterClientChanged(bool isMasterClient)
+    public void OnJoinedRoom()
     {
-        if (isMasterClient)
+        if (PhotonNetwork.IsMasterClient)
         {
             _matchPreparationUI.StartGameButton.gameObject.SetActive(true);
             _matchPreparationUI.AwaitingHostText.gameObject.SetActive(false);
-            Debug.Log("You are the host. You can start the game.");
         }
         else
         {
             _matchPreparationUI.StartGameButton.gameObject.SetActive(false);
             _matchPreparationUI.AwaitingHostText.gameObject.SetActive(true);
-            Debug.Log("You are not the host. Waiting for the host to start the game.");
+        }
+    }
+    
+    public void OnMasterClientSwitched(Player newMasterClient)
+    {
+        Debug.Log($"Master client switched to: {newMasterClient.NickName} (ActorNumber: {newMasterClient.ActorNumber})");
+        
+        if(PhotonNetwork.LocalPlayer.ActorNumber == newMasterClient.ActorNumber)
+        {
+            _matchPreparationUI.StartGameButton.gameObject.SetActive(true);
+            _matchPreparationUI.AwaitingHostText.gameObject.SetActive(false);
+        }
+        else
+        {
+            _matchPreparationUI.StartGameButton.gameObject.SetActive(false);
+            _matchPreparationUI.AwaitingHostText.gameObject.SetActive(true);
         }
     }
 
     private void StartWave()
     {
-        //GameMode.Start
         GameMode.Instance.StartWave();
     }
 
@@ -209,29 +227,35 @@ public class UI_Game : MonoBehaviour
 
         playerStatusGO.transform.SetParent(statusBarUI.transform, false);
         
-        var playerIcon = playerStatusGO.GetComponentInChildren<Image>();
-        var nicknameText = playerStatusGO.transform.Find(PlayerNicknameTextComponentName).GetComponent<TextMeshProUGUI>();
-        var scoreCounterText = playerStatusGO.transform.Find(ScoreCounterTextComponentName).GetComponent<TextMeshProUGUI>();
-        var livesCounterText = playerStatusGO.transform.Find(LivesCounterTextComponentName).GetComponent<TextMeshProUGUI>();
+        var ScoreAndLivesOverlay = playerStatusGO.transform.GetChild(0).GetComponent<Image>();
+        var playerIcon = playerStatusGO.transform.GetChild(1).GetComponent<Image>();
+        var scoreCounterText = playerStatusGO.transform.GetChild(4).GetComponent<TextMeshProUGUI>();
+        var livesCounterText = playerStatusGO.transform.GetChild(2).GetComponent<TextMeshProUGUI>();
+        var NickNameOverlay = playerStatusGO.transform.GetChild(6).GetComponent<Image>();
+        var nicknameText = playerStatusGO.transform.GetChild(7).GetComponent<TextMeshProUGUI>();
         
         PlayerUIStatus playerStatus = new PlayerUIStatus
         {
             PlayerUIStatusObject = playerStatusGO,
             PlayerIcon = playerIcon,
+            ScoreAndLivesOverlay = ScoreAndLivesOverlay,
+            NickNameOverlay = NickNameOverlay,
             PlayerNicknameText = nicknameText,
             ScoreCounterText = scoreCounterText,
             LivesCounterText = livesCounterText
         };
 
-        Color playerColor = GameMode.GetPlayerColorBasedOnPlayerType(player);
+        Color playerColor = playerTypeColors[GameMode.GetPlayerType(player)];
 
         playerIcon.sprite = playerIconSprites[GameMode.GetPlayerType(player)];
         playerStatus.PlayerNicknameText.text = player.NickName;
-        playerStatus.PlayerNicknameText.color = playerColor;
+        playerStatus.PlayerNicknameText.color = GameMode.GetPlayerColorBasedOnPlayerType(player);
         playerStatus.ScoreCounterText.text = "0";
         playerStatus.ScoreCounterText.color = playerColor;
         playerStatus.LivesCounterText.text = GameMode.Instance.StartingLives.ToString();
         playerStatus.LivesCounterText.color = playerColor;
+        playerStatus.NickNameOverlay.color = playerColor;
+        playerStatus.ScoreAndLivesOverlay.color = playerColor;
 
         _localPlayerStatus = playerStatus;
     }
@@ -278,6 +302,7 @@ public class UI_Game : MonoBehaviour
         gameCountdownText.enabled = false;
         outOfLivesText.gameObject.SetActive(false);
         matchPreparationUIScreen.SetActive(false);
+        waveOverlay.SetActive(false);
         waveCounterText.gameObject.SetActive(false);
         waveProgressBarObj.SetActive(false);
         
@@ -289,7 +314,6 @@ public class UI_Game : MonoBehaviour
         GameMode.WaveStartedEvent -= OnWaveStarted;
         GameMode.GameOverEvent -= OnGameOver;
         GameMode.OnHordeProgressChanged -= UpdateProgressBar;
-        GameMode.OnMasterClientChanged -= OnMasterClientChanged;
 
         switch (reason)
         {
@@ -356,6 +380,7 @@ public class UI_Game : MonoBehaviour
     {        
         gameCountdownText.enabled = false;
         
+        waveOverlay.SetActive(true);
         waveCounterText.gameObject.SetActive(true);
         waveProgressBarObj.SetActive(true);
         
@@ -431,10 +456,10 @@ public class UI_Game : MonoBehaviour
         GameMode.WaveStartedEvent += OnWaveStarted;
         GameMode.GameOverEvent += OnGameOver;
         GameMode.OnHordeProgressChanged += UpdateProgressBar;
-        GameMode.OnMasterClientChanged += OnMasterClientChanged;
         GameMode.WaveCompletedEvent += OnWaveCompleted;
-        
         GameMode.RoomReady += OnRoomReady;
+        
+        PhotonNetwork.AddCallbackTarget(this);
     }
 
     private void OnDisable()
@@ -446,9 +471,10 @@ public class UI_Game : MonoBehaviour
         GameMode.WaveStartedEvent -= OnWaveStarted;
         GameMode.GameOverEvent -= OnGameOver;
         GameMode.OnHordeProgressChanged -= UpdateProgressBar;
-        GameMode.OnMasterClientChanged -= OnMasterClientChanged;
         GameMode.WaveCompletedEvent -= OnWaveCompleted;
         GameMode.RoomReady -= OnRoomReady;
+        
+        PhotonNetwork.RemoveCallbackTarget(this);
     }
 
     private void OnApplicationQuit()
@@ -463,4 +489,24 @@ public class UI_Game : MonoBehaviour
             _matchPreparationUI.StartGameButton.onClick.RemoveListener(StartWave);
         }
     }
+
+    public void OnPlayerEnteredRoom(Player newPlayer) { }
+
+    public void OnPlayerLeftRoom(Player otherPlayer) { }
+
+    public void OnRoomPropertiesUpdate(Hashtable propertiesThatChanged) { }
+
+    public void OnPlayerPropertiesUpdate(Player targetPlayer, Hashtable changedProps) { }
+
+    public void OnFriendListUpdate(List<FriendInfo> friendList) { }
+
+    public void OnCreatedRoom() { }
+
+    public void OnCreateRoomFailed(short returnCode, string message) { }
+
+    public void OnJoinRoomFailed(short returnCode, string message) { }
+
+    public void OnJoinRandomFailed(short returnCode, string message) { }
+
+    public void OnLeftRoom() { }
 }
