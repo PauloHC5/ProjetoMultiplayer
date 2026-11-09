@@ -40,6 +40,7 @@ public class UI_Game : MonoBehaviour, IInRoomCallbacks, IMatchmakingCallbacks
     public GameObject outOfLives;
     public GameObject stopInvasionWarning;
     public GameObject queenIncoming;
+    public GameObject waveCompleted;
     
     [Header("UI Screens")]
     public GameObject gameOverUIScreen;
@@ -171,18 +172,14 @@ public class UI_Game : MonoBehaviour, IInRoomCallbacks, IMatchmakingCallbacks
 
     private void OnWaveCompleted(int waveNumber)
     {
-        gameCountDownOverlay.SetActive(false);
-        gameCountdownText.enabled = true;
-        gameCountdownText.text = $"Wave {waveNumber} Completed!";
+        waveCompleted.SetActive(true);
 
-        StartCoroutine(HideWaveCompletedMessageAfterDelay(3f));
+        Invoke(nameof(HideWaveCompleted), 3f);
     }
 
-    private IEnumerator HideWaveCompletedMessageAfterDelay(float delay)
+    private void HideWaveCompleted()
     {
-        yield return new WaitForSeconds(delay);
-        gameCountDownOverlay.SetActive(false);
-        gameCountdownText.enabled = false;
+        waveCompleted.SetActive(false);
         matchPreparationUIScreen.SetActive(true);
     }
 
