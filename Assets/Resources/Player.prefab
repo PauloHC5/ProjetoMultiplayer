@@ -1,5 +1,91 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
+--- !u!1 &549803067400428652
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 7610627058565193096}
+  - component: {fileID: 3078884417575300567}
+  - component: {fileID: 3750550068941215550}
+  - component: {fileID: 7126299599804287780}
+  m_Layer: 5
+  m_Name: Pickups Status
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!224 &7610627058565193096
+RectTransform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 549803067400428652}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 0.5, y: 0.5, z: 0.5}
+  m_ConstrainProportionsScale: 1
+  m_Children: []
+  m_Father: {fileID: 8002074995823689418}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 1, y: 1}
+  m_AnchoredPosition: {x: 0, y: -265}
+  m_SizeDelta: {x: 0, y: 0}
+  m_Pivot: {x: 0.5, y: 0.5}
+--- !u!222 &3078884417575300567
+CanvasRenderer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 549803067400428652}
+  m_CullTransparentMesh: 1
+--- !u!114 &3750550068941215550
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 549803067400428652}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 30649d3a9faa99c48a7b1166b86bf2a0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.HorizontalLayoutGroup
+  m_Padding:
+    m_Left: 0
+    m_Right: 0
+    m_Top: 0
+    m_Bottom: 0
+  m_ChildAlignment: 0
+  m_Spacing: 38.59
+  m_ChildForceExpandWidth: 1
+  m_ChildForceExpandHeight: 1
+  m_ChildControlWidth: 1
+  m_ChildControlHeight: 1
+  m_ChildScaleWidth: 0
+  m_ChildScaleHeight: 0
+  m_ReverseArrangement: 0
+--- !u!114 &7126299599804287780
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 549803067400428652}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3245ec927659c4140ac4f8d17403cc18, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.ContentSizeFitter
+  m_HorizontalFit: 2
+  m_VerticalFit: 2
 --- !u!1 &1978324224296010093
 GameObject:
   m_ObjectHideFlags: 0
@@ -762,8 +848,25 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::Player
   speed: 10
   projectileSpawnPoint: {fileID: 4017231318131708658}
-  projectilePrefab: {fileID: -8598748547545543793, guid: 1a2dc1bf48ef33445bd320b213005467, type: 3}
   shootSfx: {fileID: 11400000, guid: eed8b4b32103b734ba348e06663863fb, type: 2}
+  pickupsStatusPanel: {fileID: 7610627058565193096}
+  pickupTypeSprites:
+    _serializedList:
+    - Key: 0
+      Value: {fileID: 21300000, guid: 13bf6825c6d09fd4dabd01b96a889baf, type: 3}
+    - Key: 1
+      Value: {fileID: 21300000, guid: 1329b242281113944a2bbdb14452ee94, type: 3}
+    - Key: 2
+      Value: {fileID: 21300000, guid: 5c0682fa82adbbc4a973cfe02af4ffa5, type: 3}
+    - Key: 3
+      Value: {fileID: 21300000, guid: e0a8333937369744a8e467eb10be2a72, type: 3}
+    - Key: 4
+      Value: {fileID: 21300000, guid: 1b57edafb7df37c4f9593dce2cf11d5d, type: 3}
+    - Key: 5
+      Value: {fileID: 21300000, guid: d254337ca02d75b4cb702d23f23492fe, type: 3}
+    - Key: 6
+      Value: {fileID: 21300000, guid: c5790a46f495e4946bc0dd7a63105993, type: 3}
+  projectilePrefab: {fileID: -8598748547545543793, guid: 1a2dc1bf48ef33445bd320b213005467, type: 3}
   bBotMode: 0
   explosionSfx: {fileID: 11400000, guid: b801a95c9ae27e34c836a1f912fbe15b, type: 2}
 --- !u!114 &4465742883512400945
@@ -819,7 +922,7 @@ GameObject:
   - component: {fileID: 2228015243098259574}
   - component: {fileID: 3119387262069688377}
   m_Layer: 5
-  m_Name: Nickname Canvas
+  m_Name: Player Canvas
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -838,6 +941,7 @@ RectTransform:
   m_ConstrainProportionsScale: 1
   m_Children:
   - {fileID: 1504970867631153826}
+  - {fileID: 7610627058565193096}
   m_Father: {fileID: 3237252627021774936}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}

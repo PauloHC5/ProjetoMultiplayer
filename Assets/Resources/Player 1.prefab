@@ -60,6 +60,14 @@ PrefabInstance:
       propertyPath: m_Color.r
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 7610627058565193096, guid: d309fc0006846c549aeb75c69f86a298, type: 3}
+      propertyPath: m_SizeDelta.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7610627058565193096, guid: d309fc0006846c549aeb75c69f86a298, type: 3}
+      propertyPath: m_SizeDelta.y
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 7795914129631279361, guid: d309fc0006846c549aeb75c69f86a298, type: 3}
       propertyPath: m_Sprite
       value: 

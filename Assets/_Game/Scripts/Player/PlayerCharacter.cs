@@ -1,10 +1,12 @@
 using System;
 using System.Collections;
 using _Game.Scripts;
+using AYellowpaper.SerializedCollections;
 using Photon.Pun;
 using TMPro;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEngine.UI;
 
 public enum PlayerType
 {
@@ -23,10 +25,16 @@ public class PlayerCharacter : MonoBehaviourPun
     [Header("Player Settings")]
     [SerializeField] private float speed = 10.0f;
     [SerializeField] private Transform projectileSpawnPoint;
-    public Projectile projectilePrefab;
 
     [Header("Audio")]
     public AudioCue shootSfx;
+    
+    [Header("UI")]
+    [SerializeField] private RectTransform pickupsStatusPanel;
+    public SerializedDictionary<Pickup.PickupType, Sprite> pickupTypeSprites;
+    
+    [Header("Prefabs")]
+    public Projectile projectilePrefab;
 
     [Header("Bot Settings")]
     public bool bBotMode = false;
@@ -229,12 +237,12 @@ public class PlayerCharacter : MonoBehaviourPun
 
             if (PhotonHandlers.CanUseNetwork)
             {
-                photonView.RPC(nameof(RpcReplicatePickupState), RpcTarget.AllBuffered, pickup.Type, pickup.Duration);
+                photonView.RPC(nameof(RpcSetPickupState), RpcTarget.AllBuffered, pickup.Type, pickup.Duration);
                 PhotonNetwork.Destroy(other.gameObject);
             }
             else
             {
-                SetPickupState(pickup.Type, true, pickup.Duration);
+                RpcSetPickupState(pickup.Type, pickup.Duration);
                 Destroy(other.gameObject);
             }
         }
@@ -349,11 +357,14 @@ public class PlayerCharacter : MonoBehaviourPun
         
         _shieldVFX.BreakShield();
         
-        photonView.RPC(nameof(RpcEndInvincible), RpcTarget.OthersBuffered);
+        if(PhotonHandlers.CanUseNetwork)
+            photonView.RPC(nameof(RpcEndInvincible), RpcTarget.OthersBuffered);
+        else
+            RpcEndInvincible();
     }
     
     [PunRPC]
-    private void RpcReplicatePickupState(Pickup.PickupType pickupType, float duration)
+    private void RpcSetPickupState(Pickup.PickupType pickupType, float duration)
     {
         StartCoroutine(PickupDuration(pickupType, duration));
         
@@ -392,9 +403,11 @@ public class PlayerCharacter : MonoBehaviourPun
                 break;
             case Pickup.PickupType.FasterFire:
                 _fasterFireActive = state;
+                StartCoroutine(PickupIconRoutine(pickupType, duration));
                 break;
             case Pickup.PickupType.PiercingProjectiles:
                 _piercingProjectilesActive = state;
+                StartCoroutine(PickupIconRoutine(pickupType, duration));
                 break;
             case Pickup.PickupType.Repellent:
                 if(state)
@@ -407,9 +420,11 @@ public class PlayerCharacter : MonoBehaviourPun
                 _trailRenderer.emitting = state;
                 speed = state ? speed * 2f : speed / 2f; // Double speed when active, revert when inactive
                 _characterAnimator.SetFloat(AnimMultiplierHash, state ? 2f : 1f);
+                StartCoroutine(PickupIconRoutine(pickupType, duration));
                 break;
             case Pickup.PickupType.TripleFire:
                 _tripleShootActive = state;
+                StartCoroutine(PickupIconRoutine(pickupType, duration));
                 break;
             case Pickup.PickupType.Toolbox:
                 if(!photonView.IsMine) return;
@@ -419,6 +434,36 @@ public class PlayerCharacter : MonoBehaviourPun
                 Debug.LogWarning("Unknown pickup type: " + pickupType);
                 break;
         }
+    }
+    
+    private IEnumerator PickupIconRoutine(Pickup.PickupType pickupType, float duration)
+    {
+        if(!photonView.IsMine) yield break;
+        
+        // Create an empty GameObject to hold the pickup icon
+        GameObject pickupIconGO = new GameObject("PickupIcon");
+        pickupIconGO.transform.SetParent(pickupsStatusPanel, false);
+        pickupIconGO.AddComponent<Image>();
+        
+        var pickIconImage = pickupIconGO.GetComponent<Image>();
+        pickIconImage.sprite = pickupTypeSprites[pickupType];
+
+        float countdown = duration;
+        Color originalColor = pickIconImage.color;
+        float aThirdDuration = duration / 3f;
+
+        while (countdown > 0)
+        {
+            if (countdown <= aThirdDuration)
+            {
+                float alpha = Mathf.PingPong(Time.time * 5, 1);
+                pickIconImage.color = new Color(originalColor.r, originalColor.g, originalColor.b, alpha);
+            }
+            countdown -= Time.deltaTime;
+            yield return null;
+        }
+
+        Destroy(pickIconImage.gameObject);
     }
     
     private void OnGameOver(GameMode.GameOverReason reason)
