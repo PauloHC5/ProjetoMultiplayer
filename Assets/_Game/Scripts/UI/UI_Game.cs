@@ -31,13 +31,15 @@ public class UI_Game : MonoBehaviour, IInRoomCallbacks, IMatchmakingCallbacks
     private struct MatchPreparationUI
     {
         public Button StartGameButton;
-        public TextMeshProUGUI AwaitingHostText;
+        public Image AwaitingHostText;
     }
     
     [Header("UI Elements")]
+    public GameObject gameCountDownOverlay;
     public TextMeshProUGUI gameCountdownText;
-    public TextMeshProUGUI outOfLivesText;
-    public TextMeshProUGUI queenIncomingText;
+    public GameObject outOfLives;
+    public GameObject stopInvasionWarning;
+    public GameObject queenIncoming;
     
     [Header("UI Screens")]
     public GameObject gameOverUIScreen;
@@ -80,11 +82,13 @@ public class UI_Game : MonoBehaviour, IInRoomCallbacks, IMatchmakingCallbacks
 
     private void Awake()
     {
+        gameCountDownOverlay.SetActive(false);
         gameCountdownText.enabled = false;
+        stopInvasionWarning.SetActive(false);
         waveOverlay.SetActive(false);
         waveCounterText.gameObject.SetActive(false);
         waveProgressBarObj.SetActive(false);
-        outOfLivesText.gameObject.SetActive(false);
+        outOfLives.SetActive(false);
         
         _localPlayerStatus = new PlayerUIStatus
         {
@@ -104,7 +108,7 @@ public class UI_Game : MonoBehaviour, IInRoomCallbacks, IMatchmakingCallbacks
         _matchPreparationUI = new MatchPreparationUI
         {
             StartGameButton = matchPreparationUIScreen.transform.GetChild(0).GetComponent<Button>(),
-            AwaitingHostText = matchPreparationUIScreen.transform.GetChild(1).GetComponent<TextMeshProUGUI>()
+            AwaitingHostText = matchPreparationUIScreen.transform.GetChild(1).GetComponent<Image>()
         };
 
         _matchPreparationUI.StartGameButton.onClick.AddListener(StartWave);
@@ -155,16 +159,19 @@ public class UI_Game : MonoBehaviour, IInRoomCallbacks, IMatchmakingCallbacks
         matchPreparationUIScreen.SetActive(false);
 
         gameCountdownText.enabled = countdown >= 0;
+        gameCountDownOverlay.SetActive(countdown >= 0);
         gameCountdownText.text = countdown.ToString();
         
         if(countdown == 0)
         {
-            gameCountdownText.text = "Stop the Invasion!";
+            gameCountdownText.enabled = false;
+            stopInvasionWarning.SetActive(true);
         }
     }
 
     private void OnWaveCompleted(int waveNumber)
     {
+        gameCountDownOverlay.SetActive(false);
         gameCountdownText.enabled = true;
         gameCountdownText.text = $"Wave {waveNumber} Completed!";
 
@@ -174,6 +181,7 @@ public class UI_Game : MonoBehaviour, IInRoomCallbacks, IMatchmakingCallbacks
     private IEnumerator HideWaveCompletedMessageAfterDelay(float delay)
     {
         yield return new WaitForSeconds(delay);
+        gameCountDownOverlay.SetActive(false);
         gameCountdownText.enabled = false;
         matchPreparationUIScreen.SetActive(true);
     }
@@ -194,11 +202,11 @@ public class UI_Game : MonoBehaviour, IInRoomCallbacks, IMatchmakingCallbacks
         if(lives <= 0)
         {            
             _localPlayerStatus.LivesCounterText.text = "0";
-            outOfLivesText.gameObject.SetActive(true);
+            outOfLives.SetActive(true);
             return;
         }
         
-        outOfLivesText.gameObject.SetActive(false);
+        outOfLives.SetActive(false);
         _localPlayerStatus.LivesCounterText.text = lives.ToString();
     }
     
@@ -300,8 +308,9 @@ public class UI_Game : MonoBehaviour, IInRoomCallbacks, IMatchmakingCallbacks
     private void OnGameOver(GameMode.GameOverReason reason)
     {
         // Hide all other UI elements
+        gameCountDownOverlay.SetActive(false);
         gameCountdownText.enabled = false;
-        outOfLivesText.gameObject.SetActive(false);
+        outOfLives.SetActive(false);
         matchPreparationUIScreen.SetActive(false);
         waveOverlay.SetActive(false);
         waveCounterText.gameObject.SetActive(false);
@@ -385,8 +394,10 @@ public class UI_Game : MonoBehaviour, IInRoomCallbacks, IMatchmakingCallbacks
     }
     
     private void OnWaveStarted(int waveNumber)
-    {        
+    {
+        gameCountDownOverlay.SetActive(false);
         gameCountdownText.enabled = false;
+        stopInvasionWarning.SetActive(false);
         
         waveOverlay.SetActive(true);
         waveCounterText.gameObject.SetActive(true);
@@ -434,11 +445,11 @@ public class UI_Game : MonoBehaviour, IInRoomCallbacks, IMatchmakingCallbacks
 
     private IEnumerator QueenIncomingRoutine()
     {
-        queenIncomingText.gameObject.SetActive(true);
+        queenIncoming.SetActive(true);
 
         yield return new WaitForSeconds(3f);
 
-        queenIncomingText.gameObject.SetActive(false);
+        queenIncoming.SetActive(false);
     }
     
     private void OnRoomReady()

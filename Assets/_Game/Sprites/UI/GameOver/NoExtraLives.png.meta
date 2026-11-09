@@ -1,0 +1,572 @@
+fileFormatVersion: 2
+guid: de1e989b041ea9e4bb9d6d05784a1011
+TextureImporter:
+  internalIDToNameTable:
+  - first:
+      213: 301094373268581508
+    second: NoExtraLives_0
+  - first:
+      213: 6744956573146786129
+    second: NoExtraLives_1
+  - first:
+      213: -6021979103088612541
+    second: NoExtraLives_2
+  - first:
+      213: -3458392425803723855
+    second: NoExtraLives_3
+  - first:
+      213: 8176333545341713805
+    second: NoExtraLives_4
+  - first:
+      213: -1088640147105369671
+    second: NoExtraLives_5
+  - first:
+      213: 7991167581053781791
+    second: NoExtraLives_6
+  - first:
+      213: 4990951219565048788
+    second: NoExtraLives_7
+  - first:
+      213: -1730895711733016702
+    second: NoExtraLives_8
+  - first:
+      213: 3834787577633848176
+    second: NoExtraLives_9
+  - first:
+      213: 8983557537161583156
+    second: NoExtraLives_10
+  - first:
+      213: 66292016075331316
+    second: NoExtraLives_11
+  - first:
+      213: -4535913854018116278
+    second: NoExtraLives_12
+  - first:
+      213: 6435049412259327783
+    second: NoExtraLives_13
+  - first:
+      213: -9127172017846274935
+    second: NoExtraLives_14
+  - first:
+      213: 5234129123030042107
+    second: NoExtraLives_15
+  - first:
+      213: -4640520525874744297
+    second: NoExtraLives_16
+  externalObjects: {}
+  serializedVersion: 13
+  mipmaps:
+    mipMapMode: 0
+    enableMipMap: 0
+    sRGBTexture: 1
+    linearTexture: 0
+    fadeOut: 0
+    borderMipMap: 0
+    mipMapsPreserveCoverage: 0
+    alphaTestReferenceValue: 0.5
+    mipMapFadeDistanceStart: 1
+    mipMapFadeDistanceEnd: 3
+  bumpmap:
+    convertToNormalMap: 0
+    externalNormalMap: 0
+    heightScale: 0.25
+    normalMapFilter: 0
+    flipGreenChannel: 0
+  isReadable: 0
+  streamingMipmaps: 0
+  streamingMipmapsPriority: 0
+  vTOnly: 0
+  ignoreMipmapLimit: 0
+  grayScaleToAlpha: 0
+  generateCubemap: 6
+  cubemapConvolution: 0
+  seamlessCubemap: 0
+  textureFormat: 1
+  maxTextureSize: 2048
+  textureSettings:
+    serializedVersion: 2
+    filterMode: 0
+    aniso: 1
+    mipBias: 0
+    wrapU: 1
+    wrapV: 1
+    wrapW: 1
+  nPOTScale: 0
+  lightmap: 0
+  compressionQuality: 50
+  spriteMode: 1
+  spriteExtrude: 1
+  spriteMeshType: 1
+  alignment: 0
+  spritePivot: {x: 0.5, y: 0.5}
+  spritePixelsToUnits: 64
+  spriteBorder: {x: 0, y: 0, z: 0, w: 0}
+  spriteGenerateFallbackPhysicsShape: 1
+  alphaUsage: 1
+  alphaIsTransparency: 1
+  spriteTessellationDetail: -1
+  textureType: 8
+  textureShape: 1
+  singleChannelComponent: 0
+  flipbookRows: 1
+  flipbookColumns: 1
+  maxTextureSizeSet: 0
+  compressionQualitySet: 0
+  textureFormatSet: 0
+  ignorePngGamma: 0
+  applyGammaDecoding: 0
+  swizzle: 50462976
+  cookieLightType: 0
+  platformSettings:
+  - serializedVersion: 4
+    buildTarget: DefaultTexturePlatform
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 0
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: Standalone
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: Android
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  spriteSheet:
+    serializedVersion: 2
+    sprites:
+    - serializedVersion: 2
+      name: NoExtraLives_0
+      rect:
+        serializedVersion: 2
+        x: 30
+        y: 39
+        width: 2107
+        height: 667
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 48cea8abcb3bd2400800000000000000
+      internalID: 301094373268581508
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: NoExtraLives_1
+      rect:
+        serializedVersion: 2
+        x: 788
+        y: 683
+        width: 9
+        height: 10
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 159a9d75446ea9d50800000000000000
+      internalID: 6744956573146786129
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: NoExtraLives_2
+      rect:
+        serializedVersion: 2
+        x: 875
+        y: 596
+        width: 186
+        height: 114
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 34be39b59e1ad6ca0800000000000000
+      internalID: -6021979103088612541
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: NoExtraLives_3
+      rect:
+        serializedVersion: 2
+        x: 869
+        y: 604
+        width: 8
+        height: 7
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 1bb411e79625100d0800000000000000
+      internalID: -3458392425803723855
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: NoExtraLives_4
+      rect:
+        serializedVersion: 2
+        x: 1301
+        y: 602
+        width: 7
+        height: 7
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: d8df3371a0c287170800000000000000
+      internalID: 8176333545341713805
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: NoExtraLives_5
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 472
+        width: 5
+        height: 16
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 9b13e87dd8f54e0f0800000000000000
+      internalID: -1088640147105369671
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: NoExtraLives_6
+      rect:
+        serializedVersion: 2
+        x: 800
+        y: 99
+        width: 6
+        height: 6
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: f170451739456ee60800000000000000
+      internalID: 7991167581053781791
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: NoExtraLives_7
+      rect:
+        serializedVersion: 2
+        x: 979
+        y: 95
+        width: 6
+        height: 6
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 4d33a75e0bb634540800000000000000
+      internalID: 4990951219565048788
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: NoExtraLives_8
+      rect:
+        serializedVersion: 2
+        x: 974
+        y: 85
+        width: 6
+        height: 11
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 28718e6558f9af7e0800000000000000
+      internalID: -1730895711733016702
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: NoExtraLives_9
+      rect:
+        serializedVersion: 2
+        x: 1522
+        y: 79
+        width: 8
+        height: 8
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 07b32f9fbf6e73530800000000000000
+      internalID: 3834787577633848176
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: NoExtraLives_10
+      rect:
+        serializedVersion: 2
+        x: 635
+        y: 63
+        width: 6
+        height: 9
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 43a9ccdabf10cac70800000000000000
+      internalID: 8983557537161583156
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: NoExtraLives_11
+      rect:
+        serializedVersion: 2
+        x: 796
+        y: 64
+        width: 10
+        height: 8
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 4f65d95cc348be000800000000000000
+      internalID: 66292016075331316
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: NoExtraLives_12
+      rect:
+        serializedVersion: 2
+        x: 1470
+        y: 65
+        width: 9
+        height: 10
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: a452a7fc1623d01c0800000000000000
+      internalID: -4535913854018116278
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: NoExtraLives_13
+      rect:
+        serializedVersion: 2
+        x: 1701
+        y: 67
+        width: 8
+        height: 8
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 72fadc99853ed4950800000000000000
+      internalID: 6435049412259327783
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: NoExtraLives_14
+      rect:
+        serializedVersion: 2
+        x: 1738
+        y: 65
+        width: 12
+        height: 8
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 98433685865c55180800000000000000
+      internalID: -9127172017846274935
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: NoExtraLives_15
+      rect:
+        serializedVersion: 2
+        x: 483
+        y: 49
+        width: 7
+        height: 7
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: bf58bbea4bc53a840800000000000000
+      internalID: 5234129123030042107
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: NoExtraLives_16
+      rect:
+        serializedVersion: 2
+        x: 1496
+        y: 41
+        width: 7
+        height: 9
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 714b3521b2f899fb0800000000000000
+      internalID: -4640520525874744297
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    outline: []
+    customData: 
+    physicsShape: []
+    bones: []
+    spriteID: 5e97eb03825dee720800000000000000
+    internalID: 0
+    vertices: []
+    indices: 
+    edges: []
+    weights: []
+    secondaryTextures: []
+    spriteCustomMetadata:
+      entries: []
+    nameFileIdTable:
+      NoExtraLives_0: 301094373268581508
+      NoExtraLives_1: 6744956573146786129
+      NoExtraLives_10: 8983557537161583156
+      NoExtraLives_11: 66292016075331316
+      NoExtraLives_12: -4535913854018116278
+      NoExtraLives_13: 6435049412259327783
+      NoExtraLives_14: -9127172017846274935
+      NoExtraLives_15: 5234129123030042107
+      NoExtraLives_16: -4640520525874744297
+      NoExtraLives_2: -6021979103088612541
+      NoExtraLives_3: -3458392425803723855
+      NoExtraLives_4: 8176333545341713805
+      NoExtraLives_5: -1088640147105369671
+      NoExtraLives_6: 7991167581053781791
+      NoExtraLives_7: 4990951219565048788
+      NoExtraLives_8: -1730895711733016702
+      NoExtraLives_9: 3834787577633848176
+  mipmapLimitGroupName: 
+  pSDRemoveMatte: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
