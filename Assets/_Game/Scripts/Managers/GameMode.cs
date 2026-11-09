@@ -132,7 +132,6 @@ namespace _Game.Scripts
         public static Action<Player, PlayerCharacter> OnPlayerCharacterSpawned;
         public static Action RoomReady;
         public static Action<float> OnHordeProgressChanged;
-        public static Action<bool> OnMasterClientChanged;
 
         protected override void Awake()
         {
@@ -190,13 +189,6 @@ namespace _Game.Scripts
             }
 
             GameManager.LoadMainMenu();
-        }
-
-        public override void OnMasterClientSwitched(Player newMasterClient)
-        {
-            bool isLocalPlayerMasterClient = PhotonNetwork.LocalPlayer.ActorNumber == newMasterClient.ActorNumber;
-
-            OnMasterClientChanged?.Invoke(isLocalPlayerMasterClient);
         }
 
         private void SpawnPlayerController()
