@@ -246,7 +246,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.045351457, y: 0.22800002}
   m_AnchorMax: {x: 0.16687863, y: 0.82400006}
-  m_AnchoredPosition: {x: 19.302, y: -3.6248}
+  m_AnchoredPosition: {x: 10.2, y: -3.6248}
   m_SizeDelta: {x: 15.404, y: 16.671}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &6649490569686611806
@@ -325,7 +325,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -114, y: -22.2}
+  m_AnchoredPosition: {x: -133.9, y: -18}
   m_SizeDelta: {x: 184.318, y: 57.816}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &2030435276979471842
@@ -400,8 +400,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -47.405, y: 29.1}
-  m_SizeDelta: {x: 350.929, y: 42.468}
+  m_AnchoredPosition: {x: -47.38562, y: 36.3}
+  m_SizeDelta: {x: 349.4587, y: 42.468}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &8339782042072951274
 CanvasRenderer:
@@ -458,12 +458,12 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 29.65
+  m_fontSize: 27
   m_fontSizeBase: 36
   m_fontWeight: 400
   m_enableAutoSizing: 1
-  m_fontSizeMin: 13.3
-  m_fontSizeMax: 34.9
+  m_fontSizeMin: 12.15
+  m_fontSizeMax: 27
   m_fontStyle: 0
   m_HorizontalAlignment: 1
   m_VerticalAlignment: 1024
@@ -652,7 +652,7 @@ GameObject:
   - component: {fileID: 5792751501586609423}
   - component: {fileID: 1909479195272454757}
   m_Layer: 5
-  m_Name: Max Players Room Counter Text (TMP) (1)
+  m_Name: Max Players Room Counter Text (TMP)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -961,7 +961,7 @@ MonoBehaviour:
     m_HighlightedColor: {r: 0.9607843, g: 0.9607843, b: 0.9607843, a: 1}
     m_PressedColor: {r: 0.78431374, g: 0.78431374, b: 0.78431374, a: 1}
     m_SelectedColor: {r: 0.9607843, g: 0.9607843, b: 0.9607843, a: 1}
-    m_DisabledColor: {r: 0.78431374, g: 0.78431374, b: 0.78431374, a: 0.26666668}
+    m_DisabledColor: {r: 0.78431374, g: 0.78431374, b: 0.78431374, a: 1}
     m_ColorMultiplier: 1
     m_FadeDuration: 0.1
   m_SpriteState:
@@ -999,11 +999,22 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 7919170027328275111}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 34630e4083e378240bd78d941b03fcd6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::RoomButtom
+  roomNameText: {fileID: 7334379198617402991}
+  playerCountText: {fileID: 8212651114250586531}
+  maxPlayersText: {fileID: 1909479195272454757}
+  joinImage: {fileID: 8358467077047192469}
+  lockedSprite: {fileID: 21300000, guid: 9f573793c7c18be4f8bc429978c6958f, type: 3}
+  roomCounterOverlayImage: {fileID: 4877595063950932929}
+  playersIconImage: {fileID: 4950657881015134679}
+  playersIconCounterImage: {fileID: 7010134750151950705}
+  roomCounterOverlayColorWhenFull: {r: 1, g: 0, b: 0, a: 1}
+  playersIconColorWhenFull: {r: 0.6039216, g: 0.6039216, b: 0.6039216, a: 1}
+  playersIconCounterColorWhenFull: {r: 1, g: 1, b: 1, a: 1}
 --- !u!1 &8912272422918569155
 GameObject:
   m_ObjectHideFlags: 0
@@ -1038,8 +1049,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 152.9, y: 0.000029713}
-  m_SizeDelta: {x: 133.852, y: 135.245}
+  m_AnchoredPosition: {x: 139.4, y: 1.9032}
+  m_SizeDelta: {x: 143.3998, y: 138.4182}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &9028759663227491933
 CanvasRenderer:

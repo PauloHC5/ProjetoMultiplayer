@@ -5,27 +5,75 @@ using UnityEngine.UI;
 
 public class UI_RoomButtom : MonoBehaviour
 {
-    public const string RoomNamePrefix = "Room: ";
-    public const string RoomPlayerCountPrefix = "Players: ";
-    
-    public Button Button { get; private set; }
+    [Header("UI Texts")]
+    [SerializeField] private TextMeshProUGUI roomNameText;
+    [SerializeField] private TextMeshProUGUI playerCountText;
+    [SerializeField] private TextMeshProUGUI maxPlayersText;
 
-    private TextMeshProUGUI _buttomText;
+    [Header("UI Images")]
+    [SerializeField] private Image joinImage;
+    [SerializeField] private Sprite lockedSprite;
+    [SerializeField] private Image roomCounterOverlayImage;
+    [SerializeField] private Image playersIconImage;
+    [SerializeField] private Image playersIconCounterImage;
+
+    [Header("Colors")]
+    public Color roomCounterOverlayColorWhenFull;
+    public Color playersIconColorWhenFull;
+    public Color playersIconCounterColorWhenFull;
+
+    private Sprite _joinImageSprite;
+    
+    private Color _roomCounterOverlayColorWhenNotFull;
+    private Color _playersIconColorWhenNotFull;
+    private Color _playersIconCounterColorWhenNotFull;
+
+    private Button _button;
 
     private void Awake()
     {
-        Button = GetComponent<Button>();
-        _buttomText = GetComponentInChildren<TextMeshProUGUI>();
-    }
+        _button = GetComponent<Button>();
+        
+        _joinImageSprite = joinImage.sprite;
 
-    private void Update()
+        _roomCounterOverlayColorWhenNotFull = roomCounterOverlayImage.color;
+        _playersIconColorWhenNotFull = playersIconImage.color;
+        _playersIconCounterColorWhenNotFull = playersIconCounterImage.color;
+    }
+    
+    public void SetButtonInteractable(bool isInteractable)
     {
-        _buttomText.color = Button.interactable ? Color.green : Color.gray;
+        _button.interactable = isInteractable;
+        
+        if (isInteractable)
+        {
+            joinImage.sprite = _joinImageSprite;
+            
+            roomCounterOverlayImage.color = _roomCounterOverlayColorWhenNotFull;
+            playersIconImage.color = _playersIconColorWhenNotFull;
+            playersIconCounterImage.color = _playersIconCounterColorWhenNotFull;
+            
+            playerCountText.color = Color.black;
+            maxPlayersText.color = Color.black;
+        }
+        else
+        {
+            joinImage.sprite = lockedSprite;
+
+            roomCounterOverlayImage.color = roomCounterOverlayColorWhenFull;
+            playersIconImage.color = playersIconColorWhenFull;
+            playersIconCounterImage.color = playersIconCounterColorWhenFull;
+            
+            playerCountText.color = Color.white;
+            maxPlayersText.color = Color.white;
+        }
     }
 
     public void UpdateRoomState(string roomName, int playerCount, int maxPlayers)
     {
-        _buttomText.text = RoomNamePrefix + roomName + " \n" + RoomPlayerCountPrefix + playerCount + "/" + maxPlayers;
+        roomNameText.text = roomName;
+        playerCountText.text = playerCount.ToString();
+        maxPlayersText.text = maxPlayers.ToString();
     }
 
     public void JoinRoom()
@@ -33,6 +81,6 @@ public class UI_RoomButtom : MonoBehaviour
         string roomName = gameObject.name;
         MainMenuManager.JoinRoom(roomName);
         
-        Button.interactable = false;
+        SetButtonInteractable(false);
     }
 }

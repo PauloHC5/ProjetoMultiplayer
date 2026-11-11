@@ -11,12 +11,13 @@ public class UI_Lobby : MonoBehaviour
     public Transform scrollViewContent;
     public UI_RoomButtom roomButtonPrefab;
     public TMP_InputField roomNameInputField;
+    public GameObject warningPanel;
     public TextMeshProUGUI warningText;
     public Button createRoomButton;
     
     private string _customRoomName;
     
-    public const int MaxRoomNameLength = 38;
+    public const int MaxRoomNameLength = 11;
 
     private void OnEnable()
     {
@@ -84,7 +85,7 @@ public class UI_Lobby : MonoBehaviour
             {
                 var interactable = room.Value.PlayerCount < room.Value.MaxPlayers && room.Value.IsOpen && room.Value.IsVisible;
                 
-                button.Button.interactable = interactable;
+                button.SetButtonInteractable(interactable);
                 button.UpdateRoomState(room.Key, room.Value.PlayerCount, room.Value.MaxPlayers);
             }
         }
@@ -94,23 +95,23 @@ public class UI_Lobby : MonoBehaviour
     {
         if(string.IsNullOrWhiteSpace(roomName))
         {
+            warningPanel.SetActive(true);
             warningText.text = "Room name cannot be empty.";
-            warningText.gameObject.SetActive(true);
             createRoomButton.gameObject.SetActive(false);
             return;
         }
         
         if (roomName.Length > MaxRoomNameLength)
         {
+            warningPanel.SetActive(true);
             warningText.text = $"Room name cannot exceed {MaxRoomNameLength} characters.";
-            warningText.gameObject.SetActive(true);
             createRoomButton.gameObject.SetActive(false);
             roomNameInputField.text = string.Empty;
             return;
         }
         
         _customRoomName = roomName;
-        warningText.gameObject.SetActive(false);
+        warningPanel.SetActive(false);
         createRoomButton.gameObject.SetActive(true);
     }
 
