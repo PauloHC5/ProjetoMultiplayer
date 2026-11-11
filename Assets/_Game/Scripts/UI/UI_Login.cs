@@ -9,7 +9,8 @@ public class UI_Login : MonoBehaviour
     public TMP_InputField nickNameInputField;
     public Button loginButton;
     public TextMeshProUGUI warningText;
-    
+    public GameObject warningPanel;
+
     [Header("Debug")]
     public bool generateRandomNickName = true;
     public string randomNickNamePrefix = "Player_";
@@ -24,6 +25,7 @@ public class UI_Login : MonoBehaviour
             nickNameInputField.text = randomNickName;
             _nickName = randomNickName;
             loginButton.gameObject.SetActive(true);
+            warningPanel.SetActive(false);
             warningText.gameObject.SetActive(false);
         }
     }
@@ -44,6 +46,7 @@ public class UI_Login : MonoBehaviour
         
         if (string.IsNullOrEmpty(_nickName))
         {
+            warningPanel.SetActive(true);
             warningText.gameObject.SetActive(true);
             warningText.text = "Nickname cannot be empty.";
             loginButton.gameObject.SetActive(false);
@@ -52,6 +55,7 @@ public class UI_Login : MonoBehaviour
         
         if(_nickName.Length > MainMenuManager.MaxNickNameLength)
         {
+            warningPanel.SetActive(true);
             warningText.gameObject.SetActive(true);
             warningText.text = $"Nickname cannot exceed {MainMenuManager.MaxNickNameLength} characters.";
             loginButton.gameObject.SetActive(false);
@@ -60,6 +64,7 @@ public class UI_Login : MonoBehaviour
         }
 
         loginButton.gameObject.SetActive(true);
+        warningPanel.SetActive(false);
         warningText.gameObject.SetActive(false);
     }
 

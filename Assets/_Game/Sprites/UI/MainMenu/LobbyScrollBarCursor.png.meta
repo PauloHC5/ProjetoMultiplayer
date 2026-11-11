@@ -1,0 +1,767 @@
+fileFormatVersion: 2
+guid: fd4d05c85e80a3440b08ecbd742f908e
+TextureImporter:
+  internalIDToNameTable:
+  - first:
+      213: -2515834362364975756
+    second: LobbyScrollBarCursor_0
+  - first:
+      213: 1222075942255344277
+    second: LobbyScrollBarCursor_1
+  - first:
+      213: 6437608371726328781
+    second: LobbyScrollBarCursor_2
+  - first:
+      213: -5853726734265722448
+    second: LobbyScrollBarCursor_3
+  - first:
+      213: -1506392520719895924
+    second: LobbyScrollBarCursor_4
+  - first:
+      213: -7959231385681826987
+    second: LobbyScrollBarCursor_5
+  - first:
+      213: -6834364659436493871
+    second: LobbyScrollBarCursor_6
+  - first:
+      213: -2803151194439181095
+    second: LobbyScrollBarCursor_7
+  - first:
+      213: -8075149352913049363
+    second: LobbyScrollBarCursor_8
+  - first:
+      213: -4249057307343243476
+    second: LobbyScrollBarCursor_9
+  - first:
+      213: 3105983446452839541
+    second: LobbyScrollBarCursor_10
+  - first:
+      213: 8544246630416075927
+    second: LobbyScrollBarCursor_11
+  - first:
+      213: 6060601688092452898
+    second: LobbyScrollBarCursor_12
+  - first:
+      213: 8470897698383588008
+    second: LobbyScrollBarCursor_13
+  - first:
+      213: -2589811871997815245
+    second: LobbyScrollBarCursor_14
+  - first:
+      213: -5922888269303840559
+    second: LobbyScrollBarCursor_15
+  - first:
+      213: -6967699421739779217
+    second: LobbyScrollBarCursor_16
+  - first:
+      213: -1240691053501090464
+    second: LobbyScrollBarCursor_17
+  - first:
+      213: 249532555163293557
+    second: LobbyScrollBarCursor_18
+  - first:
+      213: -8961082329194520172
+    second: LobbyScrollBarCursor_19
+  - first:
+      213: 3320012243294455258
+    second: LobbyScrollBarCursor_20
+  - first:
+      213: 3200414629718990068
+    second: LobbyScrollBarCursor_21
+  externalObjects: {}
+  serializedVersion: 13
+  mipmaps:
+    mipMapMode: 0
+    enableMipMap: 0
+    sRGBTexture: 1
+    linearTexture: 0
+    fadeOut: 0
+    borderMipMap: 0
+    mipMapsPreserveCoverage: 0
+    alphaTestReferenceValue: 0.5
+    mipMapFadeDistanceStart: 1
+    mipMapFadeDistanceEnd: 3
+  bumpmap:
+    convertToNormalMap: 0
+    externalNormalMap: 0
+    heightScale: 0.25
+    normalMapFilter: 0
+    flipGreenChannel: 0
+  isReadable: 0
+  streamingMipmaps: 0
+  streamingMipmapsPriority: 0
+  vTOnly: 0
+  ignoreMipmapLimit: 0
+  grayScaleToAlpha: 0
+  generateCubemap: 6
+  cubemapConvolution: 0
+  seamlessCubemap: 0
+  textureFormat: 1
+  maxTextureSize: 2048
+  textureSettings:
+    serializedVersion: 2
+    filterMode: 0
+    aniso: 1
+    mipBias: 0
+    wrapU: 1
+    wrapV: 1
+    wrapW: 1
+  nPOTScale: 0
+  lightmap: 0
+  compressionQuality: 50
+  spriteMode: 1
+  spriteExtrude: 1
+  spriteMeshType: 1
+  alignment: 0
+  spritePivot: {x: 0.5, y: 0.5}
+  spritePixelsToUnits: 100
+  spriteBorder: {x: 0, y: 0, z: 0, w: 0}
+  spriteGenerateFallbackPhysicsShape: 1
+  alphaUsage: 1
+  alphaIsTransparency: 1
+  spriteTessellationDetail: -1
+  textureType: 8
+  textureShape: 1
+  singleChannelComponent: 0
+  flipbookRows: 1
+  flipbookColumns: 1
+  maxTextureSizeSet: 0
+  compressionQualitySet: 0
+  textureFormatSet: 0
+  ignorePngGamma: 0
+  applyGammaDecoding: 0
+  swizzle: 50462976
+  cookieLightType: 0
+  platformSettings:
+  - serializedVersion: 4
+    buildTarget: DefaultTexturePlatform
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 0
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: WebGL
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: iOS
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: Standalone
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: Android
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: VisionOS
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: tvOS
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: WindowsStoreApps
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  spriteSheet:
+    serializedVersion: 2
+    sprites:
+    - serializedVersion: 2
+      name: LobbyScrollBarCursor_0
+      rect:
+        serializedVersion: 2
+        x: 32
+        y: 29
+        width: 675
+        height: 1575
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 475a3851af5f51dd0800000000000000
+      internalID: -2515834362364975756
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: LobbyScrollBarCursor_1
+      rect:
+        serializedVersion: 2
+        x: 104
+        y: 1495
+        width: 553
+        height: 621
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 59a3eaa389fa5f010800000000000000
+      internalID: 1222075942255344277
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: LobbyScrollBarCursor_2
+      rect:
+        serializedVersion: 2
+        x: 249
+        y: 1612
+        width: 17
+        height: 22
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: dc324d7c4baf65950800000000000000
+      internalID: 6437608371726328781
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: LobbyScrollBarCursor_3
+      rect:
+        serializedVersion: 2
+        x: 263
+        y: 1607
+        width: 10
+        height: 12
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 0b952efac8263cea0800000000000000
+      internalID: -5853726734265722448
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: LobbyScrollBarCursor_4
+      rect:
+        serializedVersion: 2
+        x: 265
+        y: 1640
+        width: 10
+        height: 9
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: c827f2ecbf7381be0800000000000000
+      internalID: -1506392520719895924
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: LobbyScrollBarCursor_5
+      rect:
+        serializedVersion: 2
+        x: 265
+        y: 1624
+        width: 13
+        height: 13
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 55b6b4b79312b8190800000000000000
+      internalID: -7959231385681826987
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: LobbyScrollBarCursor_6
+      rect:
+        serializedVersion: 2
+        x: 416
+        y: 1606
+        width: 54
+        height: 40
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 1d3edc06d857721a0800000000000000
+      internalID: -6834364659436493871
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: LobbyScrollBarCursor_7
+      rect:
+        serializedVersion: 2
+        x: 466
+        y: 1606
+        width: 22
+        height: 27
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 9dc9db327d43919d0800000000000000
+      internalID: -2803151194439181095
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: LobbyScrollBarCursor_8
+      rect:
+        serializedVersion: 2
+        x: 489
+        y: 1626
+        width: 17
+        height: 17
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: de8646f827e4fef80800000000000000
+      internalID: -8075149352913049363
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: LobbyScrollBarCursor_9
+      rect:
+        serializedVersion: 2
+        x: 505
+        y: 1606
+        width: 9
+        height: 17
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: c27378534e05805c0800000000000000
+      internalID: -4249057307343243476
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: LobbyScrollBarCursor_10
+      rect:
+        serializedVersion: 2
+        x: 507
+        y: 1624
+        width: 7
+        height: 16
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 574a0140d7baa1b20800000000000000
+      internalID: 3105983446452839541
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: LobbyScrollBarCursor_11
+      rect:
+        serializedVersion: 2
+        x: 119
+        y: 1406
+        width: 7
+        height: 12
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 79c474f7a03439670800000000000000
+      internalID: 8544246630416075927
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: LobbyScrollBarCursor_12
+      rect:
+        serializedVersion: 2
+        x: 577
+        y: 1372
+        width: 17
+        height: 18
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 22822e7ff159b1450800000000000000
+      internalID: 6060601688092452898
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: LobbyScrollBarCursor_13
+      rect:
+        serializedVersion: 2
+        x: 617
+        y: 599
+        width: 6
+        height: 6
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 8aae3d0739cae8570800000000000000
+      internalID: 8470897698383588008
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: LobbyScrollBarCursor_14
+      rect:
+        serializedVersion: 2
+        x: 361
+        y: 532
+        width: 9
+        height: 8
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 3361b76e2d32f0cd0800000000000000
+      internalID: -2589811871997815245
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: LobbyScrollBarCursor_15
+      rect:
+        serializedVersion: 2
+        x: 406
+        y: 520
+        width: 25
+        height: 20
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 1d001d7ff7cadcda0800000000000000
+      internalID: -5922888269303840559
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: LobbyScrollBarCursor_16
+      rect:
+        serializedVersion: 2
+        x: 346
+        y: 514
+        width: 9
+        height: 9
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: f6b7189da42cd4f90800000000000000
+      internalID: -6967699421739779217
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: LobbyScrollBarCursor_17
+      rect:
+        serializedVersion: 2
+        x: 290
+        y: 120
+        width: 10
+        height: 11
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 065ff007f0e28cee0800000000000000
+      internalID: -1240691053501090464
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: LobbyScrollBarCursor_18
+      rect:
+        serializedVersion: 2
+        x: 257
+        y: 96
+        width: 14
+        height: 14
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 577576e6984867300800000000000000
+      internalID: 249532555163293557
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: LobbyScrollBarCursor_19
+      rect:
+        serializedVersion: 2
+        x: 271
+        y: 106
+        width: 8
+        height: 10
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 491a4557917d3a380800000000000000
+      internalID: -8961082329194520172
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: LobbyScrollBarCursor_20
+      rect:
+        serializedVersion: 2
+        x: 283
+        y: 91
+        width: 6
+        height: 6
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: ad5838b8b8d031e20800000000000000
+      internalID: 3320012243294455258
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: LobbyScrollBarCursor_21
+      rect:
+        serializedVersion: 2
+        x: 418
+        y: 37
+        width: 17
+        height: 22
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 4fc1d5236282a6c20800000000000000
+      internalID: 3200414629718990068
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    outline: []
+    customData: 
+    physicsShape: []
+    bones: []
+    spriteID: 5e97eb03825dee720800000000000000
+    internalID: 0
+    vertices: []
+    indices: 
+    edges: []
+    weights: []
+    secondaryTextures: []
+    spriteCustomMetadata:
+      entries: []
+    nameFileIdTable:
+      LobbyScrollBarCursor_0: -2515834362364975756
+      LobbyScrollBarCursor_1: 1222075942255344277
+      LobbyScrollBarCursor_10: 3105983446452839541
+      LobbyScrollBarCursor_11: 8544246630416075927
+      LobbyScrollBarCursor_12: 6060601688092452898
+      LobbyScrollBarCursor_13: 8470897698383588008
+      LobbyScrollBarCursor_14: -2589811871997815245
+      LobbyScrollBarCursor_15: -5922888269303840559
+      LobbyScrollBarCursor_16: -6967699421739779217
+      LobbyScrollBarCursor_17: -1240691053501090464
+      LobbyScrollBarCursor_18: 249532555163293557
+      LobbyScrollBarCursor_19: -8961082329194520172
+      LobbyScrollBarCursor_2: 6437608371726328781
+      LobbyScrollBarCursor_20: 3320012243294455258
+      LobbyScrollBarCursor_21: 3200414629718990068
+      LobbyScrollBarCursor_3: -5853726734265722448
+      LobbyScrollBarCursor_4: -1506392520719895924
+      LobbyScrollBarCursor_5: -7959231385681826987
+      LobbyScrollBarCursor_6: -6834364659436493871
+      LobbyScrollBarCursor_7: -2803151194439181095
+      LobbyScrollBarCursor_8: -8075149352913049363
+      LobbyScrollBarCursor_9: -4249057307343243476
+  mipmapLimitGroupName: 
+  pSDRemoveMatte: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
