@@ -23,6 +23,10 @@ public class Projectile : MonoBehaviour
     [SerializeField] private Collider2D normalCollider;
     [SerializeField] private Collider2D piercingCollider;
     [SerializeField] private PlayerType instigatorPlayerType = PlayerType.None;
+    
+    [Header("SFX")]
+    public AudioCue explosionSfx;
+    
     public float Speed => speed;
 
     public int InstigatorId { get; private set; }
@@ -168,6 +172,8 @@ public class Projectile : MonoBehaviour
                 _ => Color.white
             };
         }
+        
+        GameManager.Instance.AudioManager.PlaySfx(explosionSfx);
 
         yield return new WaitForSeconds(explodeDuration);
 

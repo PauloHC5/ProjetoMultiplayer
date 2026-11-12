@@ -25,9 +25,6 @@ public class PlayerCharacter : MonoBehaviourPun
     [Header("Player Settings")]
     [SerializeField] private float speed = 10.0f;
     [SerializeField] private Transform projectileSpawnPoint;
-
-    [Header("Audio")]
-    public AudioCue shootSfx;
     
     [Header("UI")]
     [SerializeField] private RectTransform pickupsStatusPanel;
@@ -38,8 +35,10 @@ public class PlayerCharacter : MonoBehaviourPun
 
     [Header("Bot Settings")]
     public bool bBotMode = false;
-
-    public AudioCue explosionSfx;
+    
+    [Header("SFX")]
+    public AudioCue shootSfx;
+    public AudioCue deathSfx;
     
     public SpriteRenderer SpriteRenderer { get; private set; }
     private Rigidbody2D _rigidbody2D;
@@ -118,8 +117,13 @@ public class PlayerCharacter : MonoBehaviourPun
         if (!photonView.IsMine) return;
 
 #if UNITY_EDITOR
-        if(Keyboard.current.fKey.wasPressedThisFrame)
-            photonView.RPC(nameof(RpcDeath), RpcTarget.All);
+        if (Keyboard.current.fKey.wasPressedThisFrame)
+        {
+            if(PhotonHandlers.CanUseNetwork)
+                photonView.RPC(nameof(RpcDeath), RpcTarget.All);
+            else
+                RpcDeath();
+        }
 #endif
 
         if (bBotMode)
@@ -245,6 +249,9 @@ public class PlayerCharacter : MonoBehaviourPun
                 RpcSetPickupState(pickup.Type, pickup.Duration);
                 Destroy(other.gameObject);
             }
+            
+            if(photonView.IsMine)
+                GameManager.Instance.AudioManager.PlaySfx(pickup.pickupSfx);
         }
     }
 
@@ -266,7 +273,7 @@ public class PlayerCharacter : MonoBehaviourPun
         
         _shieldVFX.BreakShield();
         
-        GameManager.Instance.AudioManager.PlaySfx(explosionSfx);
+        GameManager.Instance.AudioManager.PlaySfx(deathSfx);
         
         OnPlayerDeath?.Invoke(this);
         
@@ -278,7 +285,7 @@ public class PlayerCharacter : MonoBehaviourPun
         SpriteRenderer.enabled = true;
         float elapsedTime = 0f;
 
-        float deathDuration = GameMode.Instance.playerDeathCooldown;
+        float deathDuration = GameMode.Instance ? GameMode.Instance.playerDeathCooldown : 1.5f;
 
         while (elapsedTime < deathDuration)
         {
@@ -399,6 +406,8 @@ public class PlayerCharacter : MonoBehaviourPun
         {
             case Pickup.PickupType._1UP:
                 if(!photonView.IsMine) return;
+                
+                if(GameMode.Instance == null) return;
                 GameMode.Instance.AddExtraLife();
                 break;
             case Pickup.PickupType.FasterFire:
@@ -428,7 +437,7 @@ public class PlayerCharacter : MonoBehaviourPun
                 StartCoroutine(PickupIconRoutine(pickupType, duration));
                 break;
             case Pickup.PickupType.Toolbox:
-                if(!photonView.IsMine) return;
+                if(!photonView.IsMine || !BarriersManager.Instance) return;
                 BarriersManager.Instance.RestoreBarrier();
                 break;
             default:

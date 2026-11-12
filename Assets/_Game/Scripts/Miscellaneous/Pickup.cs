@@ -25,6 +25,9 @@ public class Pickup : MonoBehaviour
     public float frequency = 5.0f;
     public float amplitude = 1.0f;
     
+    [Header("SFX")]
+    public AudioCue pickupSfx;
+    
     private float _initialY;
     
     private PhotonView _photonView;

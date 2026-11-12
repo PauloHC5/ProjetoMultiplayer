@@ -129,6 +129,7 @@ MonoBehaviour:
   normalCollider: {fileID: 7801158924126011581}
   piercingCollider: {fileID: 9077290221062466830}
   instigatorPlayerType: 3
+  explosionSfx: {fileID: 11400000, guid: 430c39e7a0e14b8439ab23c44ab22aa0, type: 2}
 --- !u!61 &9077290221062466830
 BoxCollider2D:
   m_ObjectHideFlags: 0

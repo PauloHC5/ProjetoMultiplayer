@@ -848,7 +848,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::Player
   speed: 10
   projectileSpawnPoint: {fileID: 4017231318131708658}
-  shootSfx: {fileID: 11400000, guid: eed8b4b32103b734ba348e06663863fb, type: 2}
   pickupsStatusPanel: {fileID: 7610627058565193096}
   pickupTypeSprites:
     _serializedList:
@@ -868,7 +867,8 @@ MonoBehaviour:
       Value: {fileID: 21300000, guid: c5790a46f495e4946bc0dd7a63105993, type: 3}
   projectilePrefab: {fileID: -8598748547545543793, guid: 1a2dc1bf48ef33445bd320b213005467, type: 3}
   bBotMode: 0
-  explosionSfx: {fileID: 11400000, guid: b801a95c9ae27e34c836a1f912fbe15b, type: 2}
+  shootSfx: {fileID: 11400000, guid: 3ecbd0275169aa7419067dc9b1efe996, type: 2}
+  deathSfx: {fileID: 11400000, guid: 657d358f9fc080842ac682306633c9b8, type: 2}
 --- !u!114 &4465742883512400945
 MonoBehaviour:
   m_ObjectHideFlags: 0

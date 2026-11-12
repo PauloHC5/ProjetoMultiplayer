@@ -13,6 +13,10 @@ PrefabInstance:
       value: 1UP
       objectReference: {fileID: 0}
     - target: {fileID: 5636441428214929782, guid: 350251513ff2cc74991d08cf4f071c65, type: 3}
+      propertyPath: pickupSfx
+      value: 
+      objectReference: {fileID: 11400000, guid: 1cecc24f31c892444b7bd64a9d01b1a5, type: 2}
+    - target: {fileID: 5636441428214929782, guid: 350251513ff2cc74991d08cf4f071c65, type: 3}
       propertyPath: pickupType
       value: 0
       objectReference: {fileID: 0}
