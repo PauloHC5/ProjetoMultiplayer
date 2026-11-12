@@ -1,0 +1,1128 @@
+fileFormatVersion: 2
+guid: 3b302b5516dac9d4eb0b303c6d7d5d89
+TextureImporter:
+  internalIDToNameTable:
+  - first:
+      213: -8057802676574153002
+    second: neblina_8bits_expande_contrai_spritesheet_32_0
+  - first:
+      213: 4998890537640005917
+    second: neblina_8bits_expande_contrai_spritesheet_32_1
+  - first:
+      213: -6629317869819051147
+    second: neblina_8bits_expande_contrai_spritesheet_32_2
+  - first:
+      213: 8793317506040564375
+    second: neblina_8bits_expande_contrai_spritesheet_32_3
+  - first:
+      213: 6377752455814374190
+    second: neblina_8bits_expande_contrai_spritesheet_32_4
+  - first:
+      213: -7414741759702190214
+    second: neblina_8bits_expande_contrai_spritesheet_32_5
+  - first:
+      213: 8523410680799565906
+    second: neblina_8bits_expande_contrai_spritesheet_32_6
+  - first:
+      213: 7384268269781585885
+    second: neblina_8bits_expande_contrai_spritesheet_32_7
+  - first:
+      213: -7411737083368825768
+    second: neblina_8bits_expande_contrai_spritesheet_32_8
+  - first:
+      213: 103601378792207449
+    second: neblina_8bits_expande_contrai_spritesheet_32_9
+  - first:
+      213: -4791757129820940977
+    second: neblina_8bits_expande_contrai_spritesheet_32_10
+  - first:
+      213: -6792878371087785619
+    second: neblina_8bits_expande_contrai_spritesheet_32_11
+  - first:
+      213: -7481243104048228476
+    second: neblina_8bits_expande_contrai_spritesheet_32_12
+  - first:
+      213: 4253899074937329553
+    second: neblina_8bits_expande_contrai_spritesheet_32_13
+  - first:
+      213: 4886825559950692708
+    second: neblina_8bits_expande_contrai_spritesheet_32_14
+  - first:
+      213: 7284107860066820148
+    second: neblina_8bits_expande_contrai_spritesheet_32_15
+  - first:
+      213: 6113356890847283385
+    second: neblina_8bits_expande_contrai_spritesheet_32_16
+  - first:
+      213: -3169701561855397402
+    second: neblina_8bits_expande_contrai_spritesheet_32_17
+  - first:
+      213: -6711750496993629026
+    second: neblina_8bits_expande_contrai_spritesheet_32_18
+  - first:
+      213: -8003657417192805850
+    second: neblina_8bits_expande_contrai_spritesheet_32_19
+  - first:
+      213: 6028338683670831341
+    second: neblina_8bits_expande_contrai_spritesheet_32_20
+  - first:
+      213: 4260623030919609546
+    second: neblina_8bits_expande_contrai_spritesheet_32_21
+  - first:
+      213: -3801813732871508751
+    second: neblina_8bits_expande_contrai_spritesheet_32_22
+  - first:
+      213: -948947456437612865
+    second: neblina_8bits_expande_contrai_spritesheet_32_23
+  - first:
+      213: 4154261309444600810
+    second: neblina_8bits_expande_contrai_spritesheet_32_24
+  - first:
+      213: -4188546066713421525
+    second: neblina_8bits_expande_contrai_spritesheet_32_25
+  - first:
+      213: 5781801667700751318
+    second: neblina_8bits_expande_contrai_spritesheet_32_26
+  - first:
+      213: 6205416026421431867
+    second: neblina_8bits_expande_contrai_spritesheet_32_27
+  - first:
+      213: -4515356836809269763
+    second: neblina_8bits_expande_contrai_spritesheet_32_28
+  - first:
+      213: -2619118995846354454
+    second: neblina_8bits_expande_contrai_spritesheet_32_29
+  - first:
+      213: -3469449345773120174
+    second: neblina_8bits_expande_contrai_spritesheet_32_30
+  - first:
+      213: -4069966517875306093
+    second: neblina_8bits_expande_contrai_spritesheet_32_31
+  - first:
+      213: 2185671559728624051
+    second: neblina_8bits_expande_contrai_spritesheet_32_32
+  - first:
+      213: -7181744830370575133
+    second: neblina_8bits_expande_contrai_spritesheet_32_33
+  - first:
+      213: 51446795005581354
+    second: neblina_8bits_expande_contrai_spritesheet_32_34
+  - first:
+      213: -4700117249976710192
+    second: neblina_8bits_expande_contrai_spritesheet_32_35
+  - first:
+      213: -4779518714677916221
+    second: neblina_8bits_expande_contrai_spritesheet_32_36
+  - first:
+      213: 5916527730362566868
+    second: neblina_8bits_expande_contrai_spritesheet_32_37
+  - first:
+      213: -5137405501972317850
+    second: neblina_8bits_expande_contrai_spritesheet_32_38
+  - first:
+      213: -1870120573506277156
+    second: neblina_8bits_expande_contrai_spritesheet_32_39
+  - first:
+      213: -5865834707577674757
+    second: neblina_8bits_expande_contrai_spritesheet_32_40
+  - first:
+      213: -9014622959369402948
+    second: neblina_8bits_expande_contrai_spritesheet_32_41
+  - first:
+      213: 9056491410727639858
+    second: neblina_8bits_expande_contrai_spritesheet_32_42
+  - first:
+      213: -9178500241915581907
+    second: neblina_8bits_expande_contrai_spritesheet_32_43
+  - first:
+      213: -5610623195846533807
+    second: neblina_8bits_expande_contrai_spritesheet_32_44
+  - first:
+      213: -9178494188752042093
+    second: neblina_8bits_expande_contrai_spritesheet_32_45
+  - first:
+      213: -2754182673148026757
+    second: neblina_8bits_expande_contrai_spritesheet_32_46
+  - first:
+      213: 8500106418034386641
+    second: neblina_8bits_expande_contrai_spritesheet_32_47
+  - first:
+      213: 4710424967123491728
+    second: neblina_8bits_expande_contrai_spritesheet_32_48
+  - first:
+      213: -7568363920966821408
+    second: neblina_8bits_expande_contrai_spritesheet_32_49
+  - first:
+      213: 5750794025403462155
+    second: neblina_8bits_expande_contrai_spritesheet_32_50
+  - first:
+      213: 3784584357349298054
+    second: neblina_8bits_expande_contrai_spritesheet_32_51
+  - first:
+      213: -8496366659907525100
+    second: neblina_8bits_expande_contrai_spritesheet_32_52
+  - first:
+      213: -4372962871405727279
+    second: neblina_8bits_expande_contrai_spritesheet_32_53
+  - first:
+      213: -6416710251510940145
+    second: neblina_8bits_expande_contrai_spritesheet_32_54
+  - first:
+      213: 1829839732968041857
+    second: neblina_8bits_expande_contrai_spritesheet_32_55
+  - first:
+      213: -6224825834561172991
+    second: neblina_8bits_expande_contrai_spritesheet_32_56
+  - first:
+      213: -2628490036301074195
+    second: neblina_8bits_expande_contrai_spritesheet_32_57
+  - first:
+      213: 2595899148985199842
+    second: neblina_8bits_expande_contrai_spritesheet_32_58
+  - first:
+      213: 4959196298084582322
+    second: neblina_8bits_expande_contrai_spritesheet_32_59
+  - first:
+      213: -447927501252265441
+    second: neblina_8bits_expande_contrai_spritesheet_32_60
+  - first:
+      213: -600340034767839649
+    second: neblina_8bits_expande_contrai_spritesheet_32_61
+  - first:
+      213: -667762146702298095
+    second: neblina_8bits_expande_contrai_spritesheet_32_62
+  - first:
+      213: -2108028891573555639
+    second: neblina_8bits_expande_contrai_spritesheet_32_63
+  - first:
+      213: 1074480280212851371
+    second: neblina_8bits_expande_contrai_spritesheet_32_64
+  externalObjects: {}
+  serializedVersion: 13
+  mipmaps:
+    mipMapMode: 0
+    enableMipMap: 0
+    sRGBTexture: 1
+    linearTexture: 0
+    fadeOut: 0
+    borderMipMap: 0
+    mipMapsPreserveCoverage: 0
+    alphaTestReferenceValue: 0.5
+    mipMapFadeDistanceStart: 1
+    mipMapFadeDistanceEnd: 3
+  bumpmap:
+    convertToNormalMap: 0
+    externalNormalMap: 0
+    heightScale: 0.25
+    normalMapFilter: 0
+    flipGreenChannel: 0
+  isReadable: 0
+  streamingMipmaps: 0
+  streamingMipmapsPriority: 0
+  vTOnly: 0
+  ignoreMipmapLimit: 0
+  grayScaleToAlpha: 0
+  generateCubemap: 6
+  cubemapConvolution: 0
+  seamlessCubemap: 0
+  textureFormat: 1
+  maxTextureSize: 2048
+  textureSettings:
+    serializedVersion: 2
+    filterMode: 0
+    aniso: 1
+    mipBias: 0
+    wrapU: 1
+    wrapV: 1
+    wrapW: 1
+  nPOTScale: 0
+  lightmap: 0
+  compressionQuality: 50
+  spriteMode: 2
+  spriteExtrude: 1
+  spriteMeshType: 1
+  alignment: 0
+  spritePivot: {x: 0.5, y: 0.5}
+  spritePixelsToUnits: 100
+  spriteBorder: {x: 0, y: 0, z: 0, w: 0}
+  spriteGenerateFallbackPhysicsShape: 1
+  alphaUsage: 1
+  alphaIsTransparency: 1
+  spriteTessellationDetail: -1
+  textureType: 8
+  textureShape: 1
+  singleChannelComponent: 0
+  flipbookRows: 1
+  flipbookColumns: 1
+  maxTextureSizeSet: 0
+  compressionQualitySet: 0
+  textureFormatSet: 0
+  ignorePngGamma: 0
+  applyGammaDecoding: 0
+  swizzle: 50462976
+  cookieLightType: 0
+  platformSettings:
+  - serializedVersion: 4
+    buildTarget: DefaultTexturePlatform
+    maxTextureSize: 2048
+    resizeAlgorithm: 1
+    textureFormat: -1
+    textureCompression: 0
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: WebGL
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: iOS
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: Standalone
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: Android
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: VisionOS
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: tvOS
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: WindowsStoreApps
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  spriteSheet:
+    serializedVersion: 2
+    sprites:
+    - serializedVersion: 2
+      name: neblina_8bits_expande_contrai_spritesheet_32_0
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 768
+        width: 768
+        height: 256
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 6d61b90682fec2090800000000000000
+      internalID: -8057802676574153002
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: neblina_8bits_expande_contrai_spritesheet_32_1
+      rect:
+        serializedVersion: 2
+        x: 768
+        y: 768
+        width: 768
+        height: 256
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: d11181f6570af5540800000000000000
+      internalID: 4998890537640005917
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: neblina_8bits_expande_contrai_spritesheet_32_2
+      rect:
+        serializedVersion: 2
+        x: 1536
+        y: 768
+        width: 768
+        height: 256
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 5734942658eeff3a0800000000000000
+      internalID: -6629317869819051147
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: neblina_8bits_expande_contrai_spritesheet_32_3
+      rect:
+        serializedVersion: 2
+        x: 2304
+        y: 768
+        width: 768
+        height: 256
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 79a85c8cea3280a70800000000000000
+      internalID: 8793317506040564375
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: neblina_8bits_expande_contrai_spritesheet_32_4
+      rect:
+        serializedVersion: 2
+        x: 3072
+        y: 768
+        width: 768
+        height: 256
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: e23e03a5114528850800000000000000
+      internalID: 6377752455814374190
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: neblina_8bits_expande_contrai_spritesheet_32_5
+      rect:
+        serializedVersion: 2
+        x: 3840
+        y: 768
+        width: 768
+        height: 256
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: a7732bf87ab891990800000000000000
+      internalID: -7414741759702190214
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: neblina_8bits_expande_contrai_spritesheet_32_6
+      rect:
+        serializedVersion: 2
+        x: 4608
+        y: 768
+        width: 768
+        height: 256
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 25814dfeadc394670800000000000000
+      internalID: 8523410680799565906
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: neblina_8bits_expande_contrai_spritesheet_32_7
+      rect:
+        serializedVersion: 2
+        x: 5376
+        y: 768
+        width: 768
+        height: 256
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: ddf058a2ed03a7660800000000000000
+      internalID: 7384268269781585885
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: neblina_8bits_expande_contrai_spritesheet_32_8
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 512
+        width: 768
+        height: 256
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 85c16394468342990800000000000000
+      internalID: -7411737083368825768
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: neblina_8bits_expande_contrai_spritesheet_32_9
+      rect:
+        serializedVersion: 2
+        x: 768
+        y: 512
+        width: 768
+        height: 256
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 9547625b7e0107100800000000000000
+      internalID: 103601378792207449
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: neblina_8bits_expande_contrai_spritesheet_32_10
+      rect:
+        serializedVersion: 2
+        x: 1536
+        y: 512
+        width: 768
+        height: 256
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: f45d31b3742408db0800000000000000
+      internalID: -4791757129820940977
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: neblina_8bits_expande_contrai_spritesheet_32_11
+      rect:
+        serializedVersion: 2
+        x: 2304
+        y: 512
+        width: 768
+        height: 256
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: d61e0e89c19dab1a0800000000000000
+      internalID: -6792878371087785619
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: neblina_8bits_expande_contrai_spritesheet_32_12
+      rect:
+        serializedVersion: 2
+        x: 3072
+        y: 512
+        width: 768
+        height: 256
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 4875dd0c8094d2890800000000000000
+      internalID: -7481243104048228476
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: neblina_8bits_expande_contrai_spritesheet_32_13
+      rect:
+        serializedVersion: 2
+        x: 3840
+        y: 512
+        width: 768
+        height: 256
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 1979008aba2e80b30800000000000000
+      internalID: 4253899074937329553
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: neblina_8bits_expande_contrai_spritesheet_32_14
+      rect:
+        serializedVersion: 2
+        x: 4608
+        y: 512
+        width: 768
+        height: 256
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 461192c84fd71d340800000000000000
+      internalID: 4886825559950692708
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: neblina_8bits_expande_contrai_spritesheet_32_15
+      rect:
+        serializedVersion: 2
+        x: 5376
+        y: 512
+        width: 768
+        height: 256
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 430e9e08189561560800000000000000
+      internalID: 7284107860066820148
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: neblina_8bits_expande_contrai_spritesheet_32_16
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 256
+        width: 768
+        height: 256
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 9b88328c3b107d450800000000000000
+      internalID: 6113356890847283385
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: neblina_8bits_expande_contrai_spritesheet_32_17
+      rect:
+        serializedVersion: 2
+        x: 768
+        y: 256
+        width: 768
+        height: 256
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 6e1bb992935f204d0800000000000000
+      internalID: -3169701561855397402
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: neblina_8bits_expande_contrai_spritesheet_32_18
+      rect:
+        serializedVersion: 2
+        x: 1536
+        y: 256
+        width: 768
+        height: 256
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: e9ca4adbb721bd2a0800000000000000
+      internalID: -6711750496993629026
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: neblina_8bits_expande_contrai_spritesheet_32_19
+      rect:
+        serializedVersion: 2
+        x: 2304
+        y: 256
+        width: 768
+        height: 256
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 62a6d48fbfb4de090800000000000000
+      internalID: -8003657417192805850
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: neblina_8bits_expande_contrai_spritesheet_32_20
+      rect:
+        serializedVersion: 2
+        x: 3072
+        y: 256
+        width: 768
+        height: 256
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: de022f1e716f8a350800000000000000
+      internalID: 6028338683670831341
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: neblina_8bits_expande_contrai_spritesheet_32_21
+      rect:
+        serializedVersion: 2
+        x: 3840
+        y: 256
+        width: 768
+        height: 256
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: accbfc7a216c02b30800000000000000
+      internalID: 4260623030919609546
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: neblina_8bits_expande_contrai_spritesheet_32_22
+      rect:
+        serializedVersion: 2
+        x: 4608
+        y: 256
+        width: 768
+        height: 256
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 1fcedf58d8e3d3bc0800000000000000
+      internalID: -3801813732871508751
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: neblina_8bits_expande_contrai_spritesheet_32_23
+      rect:
+        serializedVersion: 2
+        x: 5376
+        y: 256
+        width: 768
+        height: 256
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: fbe868ce059a4d2f0800000000000000
+      internalID: -948947456437612865
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: neblina_8bits_expande_contrai_spritesheet_32_24
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 0
+        width: 768
+        height: 256
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: ae3389596a6e6a930800000000000000
+      internalID: 4154261309444600810
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: neblina_8bits_expande_contrai_spritesheet_32_25
+      rect:
+        serializedVersion: 2
+        x: 768
+        y: 0
+        width: 768
+        height: 256
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: b29df205b8b4fd5c0800000000000000
+      internalID: -4188546066713421525
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: neblina_8bits_expande_contrai_spritesheet_32_26
+      rect:
+        serializedVersion: 2
+        x: 1536
+        y: 0
+        width: 768
+        height: 256
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 6db7015cbf51d3050800000000000000
+      internalID: 5781801667700751318
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: neblina_8bits_expande_contrai_spritesheet_32_27
+      rect:
+        serializedVersion: 2
+        x: 2304
+        y: 0
+        width: 768
+        height: 256
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: b3e8d529ff01e1650800000000000000
+      internalID: 6205416026421431867
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: neblina_8bits_expande_contrai_spritesheet_32_28
+      rect:
+        serializedVersion: 2
+        x: 3072
+        y: 0
+        width: 768
+        height: 256
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: dfd1adb51ea3651c0800000000000000
+      internalID: -4515356836809269763
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: neblina_8bits_expande_contrai_spritesheet_32_29
+      rect:
+        serializedVersion: 2
+        x: 3840
+        y: 0
+        width: 768
+        height: 256
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: ae9a914662507abd0800000000000000
+      internalID: -2619118995846354454
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: neblina_8bits_expande_contrai_spritesheet_32_30
+      rect:
+        serializedVersion: 2
+        x: 4608
+        y: 0
+        width: 768
+        height: 256
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 2555bf2b33a0adfc0800000000000000
+      internalID: -3469449345773120174
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: neblina_8bits_expande_contrai_spritesheet_32_31
+      rect:
+        serializedVersion: 2
+        x: 5376
+        y: 0
+        width: 768
+        height: 256
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 3911f4ef3039487c0800000000000000
+      internalID: -4069966517875306093
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    outline: []
+    customData: 
+    physicsShape: []
+    bones: []
+    spriteID: 88c7b49e2b2f91c4fb7a5893db2df5b0
+    internalID: 0
+    vertices: []
+    indices: 
+    edges: []
+    weights: []
+    secondaryTextures: []
+    spriteCustomMetadata:
+      entries:
+      - key: SpriteEditor.SliceSettings
+        value: '{"sliceOnImport":false,"gridCellCount":{"x":1.0,"y":1.0},"gridSpriteSize":{"x":768.0,"y":256.0},"gridSpriteOffset":{"x":0.0,"y":0.0},"gridSpritePadding":{"x":0.0,"y":0.0},"pivot":{"x":0.5,"y":0.5},"pivotPixels":{"x":0.0,"y":0.0},"autoSlicingMethod":0,"spriteAlignment":0,"pivotUnitMode":0,"slicingType":1,"keepEmptyRects":false,"isAlternate":false}'
+    nameFileIdTable:
+      neblina_8bits_expande_contrai_spritesheet_32_0: -8057802676574153002
+      neblina_8bits_expande_contrai_spritesheet_32_1: 4998890537640005917
+      neblina_8bits_expande_contrai_spritesheet_32_10: -4791757129820940977
+      neblina_8bits_expande_contrai_spritesheet_32_11: -6792878371087785619
+      neblina_8bits_expande_contrai_spritesheet_32_12: -7481243104048228476
+      neblina_8bits_expande_contrai_spritesheet_32_13: 4253899074937329553
+      neblina_8bits_expande_contrai_spritesheet_32_14: 4886825559950692708
+      neblina_8bits_expande_contrai_spritesheet_32_15: 7284107860066820148
+      neblina_8bits_expande_contrai_spritesheet_32_16: 6113356890847283385
+      neblina_8bits_expande_contrai_spritesheet_32_17: -3169701561855397402
+      neblina_8bits_expande_contrai_spritesheet_32_18: -6711750496993629026
+      neblina_8bits_expande_contrai_spritesheet_32_19: -8003657417192805850
+      neblina_8bits_expande_contrai_spritesheet_32_2: -6629317869819051147
+      neblina_8bits_expande_contrai_spritesheet_32_20: 6028338683670831341
+      neblina_8bits_expande_contrai_spritesheet_32_21: 4260623030919609546
+      neblina_8bits_expande_contrai_spritesheet_32_22: -3801813732871508751
+      neblina_8bits_expande_contrai_spritesheet_32_23: -948947456437612865
+      neblina_8bits_expande_contrai_spritesheet_32_24: 4154261309444600810
+      neblina_8bits_expande_contrai_spritesheet_32_25: -4188546066713421525
+      neblina_8bits_expande_contrai_spritesheet_32_26: 5781801667700751318
+      neblina_8bits_expande_contrai_spritesheet_32_27: 6205416026421431867
+      neblina_8bits_expande_contrai_spritesheet_32_28: -4515356836809269763
+      neblina_8bits_expande_contrai_spritesheet_32_29: -2619118995846354454
+      neblina_8bits_expande_contrai_spritesheet_32_3: 8793317506040564375
+      neblina_8bits_expande_contrai_spritesheet_32_30: -3469449345773120174
+      neblina_8bits_expande_contrai_spritesheet_32_31: -4069966517875306093
+      neblina_8bits_expande_contrai_spritesheet_32_4: 6377752455814374190
+      neblina_8bits_expande_contrai_spritesheet_32_5: -7414741759702190214
+      neblina_8bits_expande_contrai_spritesheet_32_6: 8523410680799565906
+      neblina_8bits_expande_contrai_spritesheet_32_7: 7384268269781585885
+      neblina_8bits_expande_contrai_spritesheet_32_8: -7411737083368825768
+      neblina_8bits_expande_contrai_spritesheet_32_9: 103601378792207449
+  mipmapLimitGroupName: 
+  pSDRemoveMatte: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
