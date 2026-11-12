@@ -13,7 +13,6 @@ MonoBehaviour:
   m_Name: PlayerFire
   m_EditorClassIdentifier: Assembly-CSharp::AudioCue
   _samples:
-  - {fileID: 8300000, guid: 8e2edede28dcda342b847b069ab99d73, type: 3}
   - {fileID: 8300000, guid: 479a0bf2559c7ca4ab11929fadd0a545, type: 3}
   - {fileID: 8300000, guid: df31452fc5c51534891f009b9197e05b, type: 3}
   _minPitch: 0.805
