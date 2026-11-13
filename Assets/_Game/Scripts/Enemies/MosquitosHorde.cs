@@ -67,7 +67,13 @@ public class MosquitosHorde : MonoBehaviourPunCallbacks
     public bool stopMovement = false;
     public float hordeVerticalInterpolationDuration = 0.5f;
 
-    [Header("Audio")] public AudioCue killedSfx;
+    [Header("SFX")] 
+    public AudioCue hordeSpawnSfx;
+    public AudioCue hordeMovingSfx;
+    public AudioCue hordeKilledSfx;
+    public AudioCue mosquitoKilledSfx;
+    public AudioCue mosquitoSpawnSfx;
+    public AudioCue mosquitoFireSfx;
 
     [Header("ZigZag Movement Settings")]
     public MosquitoZigZagMovementSettings standardZigZag;
@@ -81,7 +87,7 @@ public class MosquitosHorde : MonoBehaviourPunCallbacks
     [SerializeField] private SerializedDictionary<MosquitoBehaviourStateDifficulty, HordeBehaviour> mosquitosBehaviours;
 
     [Header("Prefabs")] public Mosquito[] prefabs = new Mosquito[3];
-    public Projectile missilePrefab;
+    public Projectile mosquitoProjectilePrefab;
 
     [Header("Debug")] public bool debugLogs = false;
     public bool bDrawDebugGizmos = false;
@@ -282,6 +288,9 @@ public class MosquitosHorde : MonoBehaviourPunCallbacks
 
         MoveMosquitoToNewHordePosition(mosquitoSpawned, hordePositionKey, PhotonNetwork.Time + 0.1f, startPos);
         
+        if(_bAlreadySpawnedMosquitos)
+            GameManager.Instance.AudioManager.PlaySfx(mosquitoSpawnSfx);
+        
         UpdateMosquitosMovement();
     }
 
@@ -336,6 +345,9 @@ public class MosquitosHorde : MonoBehaviourPunCallbacks
     [PunRPC]
     private void RpcStarMosquitosBehaviourRoutine()
     {
+        GameManager.Instance.AudioManager.PlaySfx(hordeSpawnSfx);
+        GameManager.Instance.AudioManager.PlaySfxInLoop(hordeMovingSfx);
+        
         if(GameMode.Instance?.HordeProgressPercentage == 0)
             return;
         
@@ -351,7 +363,7 @@ public class MosquitosHorde : MonoBehaviourPunCallbacks
 
     private void Start()
     {
-        InvokeRepeating(nameof(RequestMissileAttack), missileAttackRate, missileAttackRate);
+        InvokeRepeating(nameof(RequestMosquitoFire), missileAttackRate, missileAttackRate);
     }
 
 #if UNITY_EDITOR
@@ -412,7 +424,7 @@ public class MosquitosHorde : MonoBehaviourPunCallbacks
         _lastBoundariesSideHit = (BoundariesSideHit)lastBoundariesSideHit;
     }
 
-    private void RequestMissileAttack()
+    private void RequestMosquitoFire()
     {
         if (!PhotonNetwork.IsMasterClient) return;
 
@@ -427,11 +439,11 @@ public class MosquitosHorde : MonoBehaviourPunCallbacks
 
         _shotCounter++;
         
-        _photonView.RPC(nameof(MissileAttack), RpcTarget.All, mosquitoToAttack.hordePositionKey, _shotCounter);
+        _photonView.RPC(nameof(MosquitoFire), RpcTarget.All, mosquitoToAttack.hordePositionKey, _shotCounter);
     }
 
     [PunRPC]
-    private void MissileAttack(HordePositionKey hordePositionKey, int shotId)
+    private void MosquitoFire(HordePositionKey hordePositionKey, int shotId)
     {
         if (stopMovement) return;
 
@@ -440,8 +452,10 @@ public class MosquitosHorde : MonoBehaviourPunCallbacks
 
         if (selectedMosquito == null || !selectedMosquito.gameObject.activeInHierarchy) return;
 
-        var missile = Instantiate(missilePrefab, selectedMosquito.transform.position, Quaternion.identity);
+        var missile = Instantiate(mosquitoProjectilePrefab, selectedMosquito.transform.position, Quaternion.identity);
         missile.Init(MosquitoBase.MosquitosInstigatorId, shotId);
+        
+        GameManager.Instance.AudioManager.PlaySfx(mosquitoFireSfx);
 
         if (debugLogs)
             Debug.Log("Spawning missile with speed: " + missile.Speed);
@@ -476,16 +490,21 @@ public class MosquitosHorde : MonoBehaviourPunCallbacks
 
         mosquitoKilled.OnMosquitoKilled -= MosquitoKilled;
         mosquitoKilled.OnMosquitoHitBoundaries -= MosquitoHitBoundaries;
+        
+        bool allMosquitosDestroyed = AmountAlive == 0;
 
-        if (AmountAlive == 0)
+        if (allMosquitosDestroyed)
         {
             AllMosquitosDestroyedEvent?.Invoke();
 
             if (PhotonNetwork.IsMasterClient)
                 PhotonNetwork.Destroy(gameObject);
         }
-
-        GameManager.Instance.AudioManager.PlaySfx(killedSfx);
+        
+        GameManager.Instance.AudioManager.PlaySfx(
+            allMosquitosDestroyed ? hordeKilledSfx : mosquitoKilledSfx
+            );
+        
         UpdateMosquitosMovement();
     }
 
@@ -495,8 +514,8 @@ public class MosquitosHorde : MonoBehaviourPunCallbacks
         
         if (amountAlive == 1)
         {
-            CancelInvoke(nameof(RequestMissileAttack));
-            InvokeRepeating(nameof(RequestMissileAttack), missileAttackRate / 2, missileAttackRate / 2);
+            CancelInvoke(nameof(RequestMosquitoFire));
+            InvokeRepeating(nameof(RequestMosquitoFire), missileAttackRate / 2, missileAttackRate / 2);
         }
 
         if (amountAlive <= 10 && _mosquitosBehaviourRoutine != null)
@@ -530,22 +549,31 @@ public class MosquitosHorde : MonoBehaviourPunCallbacks
     {
         if (amountAlive > 10)
         {
+            GameManager.Instance.AudioManager.ChangeSfxPitch(hordeMovingSfx, 1.0f);
             return standardZigZag;
         }
+        
+        float currentPitch = GameManager.Instance.AudioManager.GetSfxPitch(hordeMovingSfx);
 
         switch (amountAlive)
         {
             case > 7 and <= 10:
+                GameManager.Instance.AudioManager.ChangeSfxPitch(hordeMovingSfx, currentPitch + ((10 - amountAlive) * 0.05f), true);
                 return zigZagMovementSettings[10];
             case > 5 and <= 7:
+                GameManager.Instance.AudioManager.ChangeSfxPitch(hordeMovingSfx, currentPitch + ((7 - amountAlive) * 0.05f), true);
                 return zigZagMovementSettings[7];
             case > 3 and <= 5:
+                GameManager.Instance.AudioManager.ChangeSfxPitch(hordeMovingSfx, currentPitch + ((5 - amountAlive) * 0.05f), true);
                 return zigZagMovementSettings[5];
             case > 1 and <= 3:
+                GameManager.Instance.AudioManager.ChangeSfxPitch(hordeMovingSfx, currentPitch + ((3 - amountAlive) * 0.05f), true);
                 return zigZagMovementSettings[3];
             case 1:
+                GameManager.Instance.AudioManager.ChangeSfxPitch(hordeMovingSfx, currentPitch + ((1 - amountAlive) * 0.05f), true);
                 return zigZagMovementSettings[1];
             default:
+                GameManager.Instance.AudioManager.ChangeSfxPitch(hordeMovingSfx, 1.0f);
                 return standardZigZag;
         }
     }
@@ -742,7 +770,7 @@ public class MosquitosHorde : MonoBehaviourPunCallbacks
         if(debugLogs)
             Debug.Log("Rapid fire requested.");
 
-        RequestMissileAttack();
+        RequestMosquitoFire();
     }
 
     [PunRPC]
@@ -778,7 +806,7 @@ public class MosquitosHorde : MonoBehaviourPunCallbacks
     [PunRPC]
     private void RpcReplicateGameOver()
     {
-        CancelInvoke(nameof(RequestMissileAttack));
+        CancelInvoke(nameof(RequestMosquitoFire));
         stopMovement = true;
     }
 
@@ -793,6 +821,14 @@ public class MosquitosHorde : MonoBehaviourPunCallbacks
     {
         base.OnDisable();
         GameMode.GameOverEvent -= OnGameOver;
+    }
+
+    private void OnDestroy()
+    {
+        if(GameManager.Instance == null || GameManager.Instance.AudioManager == null) return;
+        
+        GameManager.Instance.AudioManager.StopSfxInLoop(hordeMovingSfx);
+        GameManager.Instance.AudioManager.PlaySfx(hordeKilledSfx);
     }
 
     private void OnDrawGizmos()

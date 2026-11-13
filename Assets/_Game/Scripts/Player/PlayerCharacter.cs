@@ -251,7 +251,7 @@ public class PlayerCharacter : MonoBehaviourPun
             }
             
             if(photonView.IsMine)
-                GameManager.Instance.AudioManager.PlaySfx(pickup.pickupSfx);
+                GameManager.Instance.AudioManager.PlaySfx(pickup.pickupCollectedSfx);
         }
     }
 

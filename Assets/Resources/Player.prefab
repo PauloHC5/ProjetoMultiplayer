@@ -258,6 +258,7 @@ GameObject:
   - component: {fileID: 2764516007797317965}
   - component: {fileID: 7635905824344413223}
   - component: {fileID: 2906210824025858760}
+  - component: {fileID: 4607222006212483054}
   m_Layer: 3
   m_Name: CharacterSprite
   m_TagString: Untagged
@@ -388,6 +389,19 @@ MonoBehaviour:
   m_SynchronizeLayers:
   - SynchronizeType: 0
     LayerIndex: 0
+--- !u!114 &4607222006212483054
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2952632034308913638}
+  m_Enabled: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6c9153df76af354448debda3876c261b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::AnimationTriggerSfx
+  sfxToPlay: {fileID: 11400000, guid: 14b3bd0b948a07f4ab543de3785fcc1c, type: 2}
 --- !u!1 &3356647578792708323
 GameObject:
   m_ObjectHideFlags: 0
@@ -583,6 +597,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f6b8b9480703f0949be10e09ba910d18, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Shield_VFX
+  hitSfx: {fileID: 11400000, guid: 61099fdac3aeb4b4480ed42b41ee7ccf, type: 2}
+  breakSfx: {fileID: 11400000, guid: e60542b8d2ec86646b421ece6acb9bd4, type: 2}
 --- !u!1 &5342354236132845405
 GameObject:
   m_ObjectHideFlags: 0

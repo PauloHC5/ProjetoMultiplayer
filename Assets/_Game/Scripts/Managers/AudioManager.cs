@@ -152,6 +152,18 @@ public class AudioManager
         if (_sfxSource.isPlaying)
             _sfxSource.Stop();
     }
+    
+    public void StopSfxInLoop(AudioCue sfx)
+    {
+        for (var index = 0; index < _sfxSourcePool.Count; index++)
+        {
+            if (_sfxSourcePool[index].isPlaying && _sfxSourcePool[index].clip == sfx.GetSample())
+            {
+                _sfxSourcePool[index].Stop();
+                break;
+            }
+        }
+    }
 
     public void PauseSfx(bool bIsPause = true)
     {
@@ -159,6 +171,80 @@ public class AudioManager
             _sfxSource.Pause();
         else
             _sfxSource.UnPause();
+    }
+    
+    public float GetSfxVolume(AudioCue sfx)
+    {
+        for (var index = 0; index < _sfxSourcePool.Count; index++)
+        {
+            if (_sfxSourcePool[index].isPlaying && _sfxSourcePool[index].clip == sfx.GetSample())
+            {
+                return _sfxSourcePool[index].volume;
+            }
+        }
+
+        return 0f;
+    }
+    
+    public void ChangeSfxVolume(AudioCue sfx, float targetDbVolume, bool bInterpolate = false, float duration = 1.0f)
+    {
+        AudioSource sfxSource = null;
+        for (var index = 0; index < _sfxSourcePool.Count; index++)
+        {
+            if (_sfxSourcePool[index].isPlaying && _sfxSourcePool[index].clip == sfx.GetSample())
+            {
+                sfxSource = _sfxSourcePool[index];
+                break;
+            }
+        }
+        
+        if(sfxSource == null) return;
+        
+        if (bInterpolate)
+        {
+            GameManager.Instance.StartCoroutine(InternalChangeSfxVolume(sfxSource, targetDbVolume, duration));
+        }
+        else
+        {
+            sfxSource.volume = Mathf.Pow(10f, targetDbVolume / 20f);
+        }
+    }
+    
+    public float GetSfxPitch(AudioCue sfx)
+    {
+        for (var index = 0; index < _sfxSourcePool.Count; index++)
+        {
+            if (_sfxSourcePool[index].isPlaying && _sfxSourcePool[index].clip == sfx.GetSample())
+            {
+                return _sfxSourcePool[index].pitch;
+            }
+        }
+        
+        return 1.0f;
+    }
+    
+    public void ChangeSfxPitch(AudioCue sfx, float newPitch, bool bInterpolate = false, float duration = 1.0f)
+    {
+        AudioSource sfxSource = null;
+        for (var index = 0; index < _sfxSourcePool.Count; index++)
+        {
+            if (_sfxSourcePool[index].isPlaying && _sfxSourcePool[index].clip == sfx.GetSample())
+            {
+                sfxSource = _sfxSourcePool[index];
+                break;
+            }
+        }
+        
+        if(sfxSource == null) return;
+        
+        if (bInterpolate)
+        {
+            GameManager.Instance.StartCoroutine(InternalChangeSfxPitch(sfxSource, newPitch, duration));
+        }
+        else
+        {
+            sfxSource.pitch = newPitch;
+        }
     }
 
     public AudioStop InternalPlaySfx(AudioClip clip, float pitch, float volume, bool bLoop = false)
@@ -206,6 +292,37 @@ public class AudioManager
 
         return result;
     }    
+    
+    private IEnumerator InternalChangeSfxVolume(AudioSource sfxSource, float targetDbVolume, float duration)
+    {
+        float currentVolume = sfxSource.volume;
+        float targetVolume = Mathf.Pow(10f, targetDbVolume / 20f);
+        float deltaTime = 0.0f;
+
+        while (deltaTime < duration)
+        {
+            deltaTime += Time.deltaTime;
+            sfxSource.volume = Mathf.Lerp(currentVolume, targetVolume, deltaTime / duration);
+            yield return null;
+        }
+
+        sfxSource.volume = targetVolume;
+    }
+    
+    private IEnumerator InternalChangeSfxPitch(AudioSource sfxSource, float targetPitch, float duration)
+    {
+        float currentPitch = sfxSource.pitch;
+        float deltaTime = 0.0f;
+
+        while (deltaTime < duration)
+        {
+            deltaTime += Time.deltaTime;
+            sfxSource.pitch = Mathf.Lerp(currentPitch, targetPitch, deltaTime / duration);
+            yield return null;
+        }
+
+        sfxSource.pitch = targetPitch;
+    }
 
     private int CreateAudioSource()
     {

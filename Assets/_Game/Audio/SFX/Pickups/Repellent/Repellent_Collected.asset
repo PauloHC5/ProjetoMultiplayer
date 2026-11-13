@@ -13,8 +13,8 @@ MonoBehaviour:
   m_Name: Repellent_Collected
   m_EditorClassIdentifier: Assembly-CSharp::AudioCue
   _samples:
-  - {fileID: 8300000, guid: e6aefcae30ac29a44b2583cf62acf6aa, type: 3}
+  - {fileID: 8300000, guid: 76678001dbe0bec4599da3adb43e8aaf, type: 3}
   _minPitch: 0.924
   _Maxpitch: 1.182
-  _minVolume: 1
-  _maxVolume: 1
+  _minVolume: 0.331
+  _maxVolume: 0.454

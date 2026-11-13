@@ -26,7 +26,7 @@ public class Pickup : MonoBehaviour
     public float amplitude = 1.0f;
     
     [Header("SFX")]
-    public AudioCue pickupSfx;
+    public AudioCue pickupCollectedSfx;
     
     private float _initialY;
     private float _movementOffsetTime;

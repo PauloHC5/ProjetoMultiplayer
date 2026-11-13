@@ -1,0 +1,20 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b91623fd58d62de46bd6be7e22cac7d4, type: 3}
+  m_Name: Mosquito_Spawn
+  m_EditorClassIdentifier: Assembly-CSharp::AudioCue
+  _samples:
+  - {fileID: 8300000, guid: 44ed1a87acfbb614286ef2d78ffb5657, type: 3}
+  _minPitch: 0.834
+  _Maxpitch: 0.983
+  _minVolume: 0.404
+  _maxVolume: 0.606

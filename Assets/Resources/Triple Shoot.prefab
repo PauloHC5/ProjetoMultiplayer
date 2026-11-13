@@ -24,6 +24,10 @@ PrefabInstance:
       propertyPath: pickupType
       value: 5
       objectReference: {fileID: 0}
+    - target: {fileID: 5636441428214929782, guid: 350251513ff2cc74991d08cf4f071c65, type: 3}
+      propertyPath: pickupCollectedSfx
+      value: 
+      objectReference: {fileID: 11400000, guid: 756ddfe1a760a9145b72f8176458989c, type: 2}
     - target: {fileID: 7391475007303937962, guid: 350251513ff2cc74991d08cf4f071c65, type: 3}
       propertyPath: m_SpriteTilingProperty.oldSize.x
       value: 2.8125

@@ -10,6 +10,10 @@ public class Shield_VFX : MonoBehaviour
         Down
     }
     
+    [Header("SFX")]
+    public AudioCue hitSfx;
+    public AudioCue breakSfx;
+    
     private Animator _animator;
     private SpriteRenderer _spriteRenderer;
     private Collider2D _collider2D;
@@ -70,6 +74,8 @@ public class Shield_VFX : MonoBehaviour
                 _animator.SetTrigger(HitRightHash);
                 break;
         }
+        
+        GameManager.Instance.AudioManager.PlaySfx(hitSfx);
     }
 
     
@@ -89,6 +95,7 @@ public class Shield_VFX : MonoBehaviour
     {
         _collider2D.enabled = false;
         _animator.SetTrigger(BreakHash);
+        GameManager.Instance.AudioManager.PlaySfx(breakSfx);
     }
 
     public void OnBreak()

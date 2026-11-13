@@ -79,7 +79,12 @@ MonoBehaviour:
     m_RotationOrder: 4
   stopMovement: 0
   hordeVerticalInterpolationDuration: 0.5
-  killedSfx: {fileID: 11400000, guid: f7b9e99808bb87147b11252c15101374, type: 2}
+  hordeSpawnSfx: {fileID: 11400000, guid: d82518173ca12aa44b5f8e103ab55849, type: 2}
+  hordeMovingSfx: {fileID: 11400000, guid: 5c379d4c79c7fa44b82b3d3f96994114, type: 2}
+  hordeKilledSfx: {fileID: 11400000, guid: 71521030fd3e4534fab1c041955e1565, type: 2}
+  mosquitoKilledSfx: {fileID: 11400000, guid: a67fe29eee3556946a68ab985d264963, type: 2}
+  mosquitoSpawnSfx: {fileID: 11400000, guid: 79d369b37806d1941aee9b83a1692e70, type: 2}
+  mosquitoFireSfx: {fileID: 11400000, guid: 09c9ef8191c86ea499eed734ef44a89b, type: 2}
   standardZigZag: {fileID: 11400000, guid: 3f0cd42cac7e6634dbfaedbdb254bb31, type: 2}
   zigZagMovementSettings:
     _serializedList:
@@ -104,7 +109,7 @@ MonoBehaviour:
   prefabs:
   - {fileID: 721702209136384595, guid: c27f82190daed0543816a4df5edd6210, type: 3}
   - {fileID: 2332977524222137839, guid: 19fa160092d14e54592c80f08b436869, type: 3}
-  missilePrefab: {fileID: 8615181883404891688, guid: 525f2b816ca79f54f8992594a20a0b28, type: 3}
+  mosquitoProjectilePrefab: {fileID: 8615181883404891688, guid: 525f2b816ca79f54f8992594a20a0b28, type: 3}
   debugLogs: 0
   bDrawDebugGizmos: 0
   debugHordePositionKey:
