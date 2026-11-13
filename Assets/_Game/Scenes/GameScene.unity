@@ -721,7 +721,7 @@ MonoBehaviour:
   startGameDelay: 3
   startingLives: 3
   hordesPerWave: 5
-  intervalBetweenHordes: 0.5
+  intervalBetweenHordes: 1.5
   playerDeathCooldown: 2
   playerAndDengueSourceLayerMask:
     serializedVersion: 2

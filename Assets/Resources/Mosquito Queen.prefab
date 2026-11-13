@@ -163,6 +163,7 @@ MonoBehaviour:
   healthPercentageText: {fileID: 4339944225062284646}
   onDamageMaterial: {fileID: 2100000, guid: 0e30a797c12d61e47a005fbfd8f60aff, type: 2}
   onDamageVfxDuration: 0.1
+  queenHitSfx: {fileID: 11400000, guid: 8512794af0652f943a652be481a50571, type: 2}
   projectilePrefab: {fileID: 8615181883404891688, guid: 525f2b816ca79f54f8992594a20a0b28, type: 3}
   mosquitoPrefab: {fileID: 721702209136384595, guid: c27f82190daed0543816a4df5edd6210, type: 3}
   projectileSpawnPoint: {fileID: 5663861538857627995}

@@ -26,3 +26,4 @@ MonoBehaviour:
   sendMosquitosToHordeCenter: 1
   bRapidFire: 1
   rapidFireTime: 0.2
+  pitchToApplyOnHordeMovingSfx: 1.2

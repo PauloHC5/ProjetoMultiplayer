@@ -74,6 +74,7 @@ public class MosquitosHorde : MonoBehaviourPunCallbacks
     public AudioCue mosquitoKilledSfx;
     public AudioCue mosquitoSpawnSfx;
     public AudioCue mosquitoFireSfx;
+    public float pitchIncreasePerMosquitoKilled = 0.05f;
 
     [Header("ZigZag Movement Settings")]
     public MosquitoZigZagMovementSettings standardZigZag;
@@ -529,6 +530,8 @@ public class MosquitosHorde : MonoBehaviourPunCallbacks
                 SendMosquitosBackToTheirPositions();
 
             CancelInvoke(nameof(RapidFire));
+            
+            GameManager.Instance.AudioManager.ChangeSfxPitch(hordeMovingSfx, 1.0f);
         }
 
         var zigZagSettings = GetZigZagMovementSettingsForMosquito(amountAlive);
@@ -558,19 +561,19 @@ public class MosquitosHorde : MonoBehaviourPunCallbacks
         switch (amountAlive)
         {
             case > 7 and <= 10:
-                GameManager.Instance.AudioManager.ChangeSfxPitch(hordeMovingSfx, currentPitch + ((10 - amountAlive) * 0.05f), true);
+                GameManager.Instance.AudioManager.ChangeSfxPitch(hordeMovingSfx, currentPitch + ((10 - amountAlive) * pitchIncreasePerMosquitoKilled), true);
                 return zigZagMovementSettings[10];
             case > 5 and <= 7:
-                GameManager.Instance.AudioManager.ChangeSfxPitch(hordeMovingSfx, currentPitch + ((7 - amountAlive) * 0.05f), true);
+                GameManager.Instance.AudioManager.ChangeSfxPitch(hordeMovingSfx, currentPitch + ((7 - amountAlive) * pitchIncreasePerMosquitoKilled), true);
                 return zigZagMovementSettings[7];
             case > 3 and <= 5:
-                GameManager.Instance.AudioManager.ChangeSfxPitch(hordeMovingSfx, currentPitch + ((5 - amountAlive) * 0.05f), true);
+                GameManager.Instance.AudioManager.ChangeSfxPitch(hordeMovingSfx, currentPitch + ((5 - amountAlive) * pitchIncreasePerMosquitoKilled), true);
                 return zigZagMovementSettings[5];
             case > 1 and <= 3:
-                GameManager.Instance.AudioManager.ChangeSfxPitch(hordeMovingSfx, currentPitch + ((3 - amountAlive) * 0.05f), true);
+                GameManager.Instance.AudioManager.ChangeSfxPitch(hordeMovingSfx, currentPitch + ((3 - amountAlive) * pitchIncreasePerMosquitoKilled), true);
                 return zigZagMovementSettings[3];
             case 1:
-                GameManager.Instance.AudioManager.ChangeSfxPitch(hordeMovingSfx, currentPitch + ((1 - amountAlive) * 0.05f), true);
+                GameManager.Instance.AudioManager.ChangeSfxPitch(hordeMovingSfx, currentPitch + 1 * pitchIncreasePerMosquitoKilled, true);
                 return zigZagMovementSettings[1];
             default:
                 GameManager.Instance.AudioManager.ChangeSfxPitch(hordeMovingSfx, 1.0f);
@@ -761,6 +764,8 @@ public class MosquitosHorde : MonoBehaviourPunCallbacks
                 mosquitosChosen[i].LissajousCurve.SwitchCurveSettings(movementSettingsChosen);
             }
         }
+        
+        GameManager.Instance.AudioManager.ChangeSfxPitch(hordeMovingSfx, hordeBehaviour.PitchToApplyOnHordeMovingSfx, true);
     }
     
     private void RapidFire()
@@ -796,6 +801,8 @@ public class MosquitosHorde : MonoBehaviourPunCallbacks
                 mosquitosChosen[i].LissajousCurve.SwitchCurveSettings(null);
             }
         }
+        
+        GameManager.Instance.AudioManager.ChangeSfxPitch(hordeMovingSfx, 1.0f, true);
     }
 
     private void OnGameOver(GameMode.GameOverReason reason)

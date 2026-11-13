@@ -46,6 +46,9 @@ namespace _Game.Scripts.Enemies
         [Header("Queen VFX Settings")]
         [SerializeField] private Material onDamageMaterial;
         [SerializeField] private float onDamageVfxDuration = 0.2f;  
+        
+        [Header("SFX")]
+        public AudioCue queenHitSfx;
 
         [Header("Prefabs")] 
         [SerializeField] private Projectile projectilePrefab;
@@ -667,6 +670,8 @@ namespace _Game.Scripts.Enemies
                 StopCoroutine(_onDamageVfxCoroutine);
 
             _onDamageVfxCoroutine = StartCoroutine(OnDamageVFXRoutine());
+            
+            GameManager.Instance.AudioManager.PlaySfx(queenHitSfx);
 
             if (_currentHealth > 0) return;
             

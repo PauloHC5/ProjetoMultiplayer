@@ -168,7 +168,5 @@ MonoBehaviour:
   chanceToSoawnMosquitoOnSpawn: 50
   minSpawnInterval: 3
   maxSpawnInterval: 6
-  moquitoPrefabs:
-  - {fileID: 5750136513495760424, guid: c27f82190daed0543816a4df5edd6210, type: 3}
-  - {fileID: 7325369050134065556, guid: 19fa160092d14e54592c80f08b436869, type: 3}
-  debugMode: 0
+  dengueSourceDestroyedSfx: {fileID: 11400000, guid: 72bd534efc3aa254aa510f8da92788b2, type: 2}
+  debugLog: 0

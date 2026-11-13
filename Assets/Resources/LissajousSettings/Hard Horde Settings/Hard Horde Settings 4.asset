@@ -33,10 +33,7 @@ MonoBehaviour:
   deltaMax: 6.28
   deltaFrequency: 0.1
   transitionMode: 0
-  t_multipler: 0.8
+  t_multipler: 1.66
   xOffset: 0
-  animateXOffset: 0
-  xOffsetRange: {x: -2, y: 2}
-  xOffsetFrequency: 0.2
   yOffset: 12.9
   multiplier: 8.92

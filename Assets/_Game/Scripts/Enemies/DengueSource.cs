@@ -13,6 +13,9 @@ public class DengueSource : MonoBehaviour
     [SerializeField] private float minSpawnInterval = 3f;
     [SerializeField] private float maxSpawnInterval = 6f;
     
+    [Header("SFX")]
+    public AudioCue dengueSourceDestroyedSfx;
+    
     [Header("Debug")]
     public bool debugLog = false;
     
@@ -63,6 +66,8 @@ public class DengueSource : MonoBehaviour
     private void OnTriggerEnter2D(Collider2D other)
     {
         int playerID = other.GetComponent<PlayerCharacter>().GetPlayerId();
+        
+        GameManager.Instance.AudioManager.PlaySfx(dengueSourceDestroyedSfx);
         
         Destroy(playerID);
     }

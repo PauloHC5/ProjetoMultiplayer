@@ -29,12 +29,16 @@ public class HordeBehaviour : ScriptableObject
     [SerializeField] private bool bRapidFire = false;
     [SerializeField] private float rapidFireTime = 1.5f;
     
+    [Header("SFX Settings")]
+    [SerializeField] private float pitchToApplyOnHordeMovingSfx = 1.0f;
+    
     public float BehaviourStartDelay => UnityEngine.Random.Range(minBehaviourStartDelay, maxBehaviourStartDelay);
     public float BehaviourDuration => UnityEngine.Random.Range(minBehaviourDuration, maxBehaviourDuration);
     public float TimeToReorder => timeToReorder;
     public bool IsRapidFire => bRapidFire;
     public float RapidFireTime => rapidFireTime;
     public bool SendMosquitosToHordeCenter => sendMosquitosToHordeCenter;
+    public float PitchToApplyOnHordeMovingSfx => pitchToApplyOnHordeMovingSfx;
 
 
     public LissajouCurveSettings GetMovementSettings(int index)
