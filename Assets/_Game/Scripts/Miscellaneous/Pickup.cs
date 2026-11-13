@@ -29,6 +29,7 @@ public class Pickup : MonoBehaviour
     public AudioCue pickupSfx;
     
     private float _initialY;
+    private float _movementOffsetTime;
     
     private PhotonView _photonView;
     
@@ -38,6 +39,7 @@ public class Pickup : MonoBehaviour
     private void Awake()
     {
         _initialY = transform.localPosition.y;
+        _movementOffsetTime = UnityEngine.Random.Range(0f, Mathf.PI * 2);
         _photonView = GetComponent<PhotonView>();
     }
 
@@ -48,7 +50,7 @@ public class Pickup : MonoBehaviour
     
     private void PickupMovement()
     {
-        float y = _initialY + Mathf.Sin(Time.time * frequency) * amplitude;
+        float y = _initialY + Mathf.Sin(Time.time * frequency + _movementOffsetTime) * amplitude;
         transform.localPosition = new Vector3(
             transform.localPosition.x,
             y,

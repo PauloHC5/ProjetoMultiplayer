@@ -15,8 +15,6 @@ public class UI_Game : MonoBehaviour, IInRoomCallbacks, IMatchmakingCallbacks
     {
         public GameObject PlayerUIStatusObject;
         public Image PlayerIcon;
-        public Image ScoreAndLivesOverlay;
-        public Image NickNameOverlay;
         public TextMeshProUGUI PlayerNicknameText;
         public TextMeshProUGUI ScoreCounterText;
         public TextMeshProUGUI LivesCounterText;
@@ -157,7 +155,8 @@ public class UI_Game : MonoBehaviour, IInRoomCallbacks, IMatchmakingCallbacks
 
     private void OnGameCountdownChanged(int countdown)
     {
-        matchPreparationUIScreen.SetActive(false);
+        if(PhotonHandlers.CanUseNetwork && !PhotonNetwork.IsMasterClient)
+            _matchPreparationUI.AwaitingHostText.GetComponent<UIPanelScaleAnimator>().Hide();
 
         gameCountdownText.enabled = countdown >= 0;
         gameCountDownOverlay.SetActive(countdown >= 0);
@@ -165,9 +164,15 @@ public class UI_Game : MonoBehaviour, IInRoomCallbacks, IMatchmakingCallbacks
         
         if(countdown == 0)
         {
-            gameCountdownText.enabled = false;
+            gameCountDownOverlay.SetActive(false);
             stopInvasionWarning.SetActive(true);
+            Invoke(nameof(TurnOffStopInvasionWarning), 3f);
         }
+    }
+    
+    private void TurnOffStopInvasionWarning()
+    {
+        stopInvasionWarning.GetComponent<UIPanelScaleAnimator>().Hide();
     }
 
     private void OnWaveCompleted(int waveNumber)
@@ -179,7 +184,7 @@ public class UI_Game : MonoBehaviour, IInRoomCallbacks, IMatchmakingCallbacks
 
     private void HideWaveCompleted()
     {
-        waveCompleted.SetActive(false);
+        waveCompleted.GetComponent<UIPanelScaleAnimator>().Hide();
         matchPreparationUIScreen.SetActive(true);
     }
 
@@ -232,20 +237,18 @@ public class UI_Game : MonoBehaviour, IInRoomCallbacks, IMatchmakingCallbacks
         }
 
         playerStatusGO.transform.SetParent(statusBarUI.transform, false);
+
+        var playerStatusPanel = playerStatusGO.transform.GetChild(0);
         
-        var ScoreAndLivesOverlay = playerStatusGO.transform.GetChild(0).GetComponent<Image>();
-        var playerIcon = playerStatusGO.transform.GetChild(1).GetComponent<Image>();
-        var scoreCounterText = playerStatusGO.transform.GetChild(4).GetComponent<TextMeshProUGUI>();
-        var livesCounterText = playerStatusGO.transform.GetChild(2).GetComponent<TextMeshProUGUI>();
-        var NickNameOverlay = playerStatusGO.transform.GetChild(6).GetComponent<Image>();
-        var nicknameText = playerStatusGO.transform.GetChild(7).GetComponent<TextMeshProUGUI>();
+        var playerIcon = playerStatusPanel.transform.GetChild(0).GetComponent<Image>();
+        var livesCounterText = playerStatusPanel.transform.GetChild(1).GetComponent<TextMeshProUGUI>();
+        var scoreCounterText = playerStatusPanel.transform.GetChild(3).GetComponent<TextMeshProUGUI>();
+        var nicknameText = playerStatusPanel.transform.GetChild(5).GetComponent<TextMeshProUGUI>();
         
         PlayerUIStatus playerStatus = new PlayerUIStatus
         {
             PlayerUIStatusObject = playerStatusGO,
             PlayerIcon = playerIcon,
-            ScoreAndLivesOverlay = ScoreAndLivesOverlay,
-            NickNameOverlay = NickNameOverlay,
             PlayerNicknameText = nicknameText,
             ScoreCounterText = scoreCounterText,
             LivesCounterText = livesCounterText
@@ -260,8 +263,6 @@ public class UI_Game : MonoBehaviour, IInRoomCallbacks, IMatchmakingCallbacks
         playerStatus.ScoreCounterText.color = playerColor;
         playerStatus.LivesCounterText.text = GameMode.Instance.StartingLives.ToString();
         playerStatus.LivesCounterText.color = playerColor;
-        playerStatus.NickNameOverlay.color = playerColor;
-        playerStatus.ScoreAndLivesOverlay.color = playerColor;
 
         _localPlayerStatus = playerStatus;
     }
@@ -394,7 +395,6 @@ public class UI_Game : MonoBehaviour, IInRoomCallbacks, IMatchmakingCallbacks
     {
         gameCountDownOverlay.SetActive(false);
         gameCountdownText.enabled = false;
-        stopInvasionWarning.SetActive(false);
         
         waveOverlay.SetActive(true);
         waveCounterText.gameObject.SetActive(true);
@@ -446,7 +446,7 @@ public class UI_Game : MonoBehaviour, IInRoomCallbacks, IMatchmakingCallbacks
 
         yield return new WaitForSeconds(3f);
 
-        queenIncoming.SetActive(false);
+        queenIncoming.GetComponent<UIPanelScaleAnimator>().Hide();
     }
     
     private void OnRoomReady()

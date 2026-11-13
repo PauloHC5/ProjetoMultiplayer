@@ -2,17 +2,30 @@ using System;
 using System.Collections.Generic;
 using Photon.Pun;
 using Photon.Realtime;
+using TMPro;
 using UnityEngine;
+using UnityEngine.InputSystem;
 using UnityEngine.SceneManagement;
 
 public class MainMenuManager : MonoBehaviourPunCallbacks
 {
+    private enum MenuState
+    {
+        PressAnyKey,
+        Login,
+        Lobby
+    }
+    
     public UI_Login login;
     public UI_Lobby lobby;
+    public GameObject logo;
+    public TextMeshProUGUI pressAnyKeyText;
 
     public const int MaxNickNameLength = 18;
     public const string GameSceneName = "GameScene";
 
+    private MenuState _currentMenuState = MenuState.PressAnyKey;
+    
     private Dictionary<string, RoomInfo> _availableRooms = new Dictionary<string, RoomInfo>();
 
     private void Awake()
@@ -21,6 +34,53 @@ public class MainMenuManager : MonoBehaviourPunCallbacks
         lobby.gameObject.SetActive(false);
         
         PhotonNetwork.AutomaticallySyncScene = true;
+    }
+
+    private void Start()
+    {
+        if(PhotonNetwork.IsConnected && PhotonNetwork.NickName != null)
+        {
+            ChangeMenuState(MenuState.Lobby);
+        }
+        else
+        {
+            ChangeMenuState(MenuState.PressAnyKey);
+        }
+    }
+
+    private void Update()
+    {
+        if(_currentMenuState == MenuState.PressAnyKey && Keyboard.current.anyKey.wasPressedThisFrame)
+        {
+            ChangeMenuState(MenuState.Login);
+        }
+    }
+
+    private void ChangeMenuState(MenuState newState)
+    {
+        switch (newState)
+        {
+            case MenuState.PressAnyKey:
+                login.gameObject.SetActive(false);
+                lobby.gameObject.SetActive(false);
+                logo.gameObject.SetActive(true);
+                pressAnyKeyText.gameObject.SetActive(true);
+                break;
+            case MenuState.Login:
+                login.gameObject.SetActive(true);
+                lobby.gameObject.SetActive(false);
+                logo.gameObject.SetActive(true);
+                pressAnyKeyText.gameObject.SetActive(false);
+                break;
+            case MenuState.Lobby:
+                login.gameObject.SetActive(false);
+                lobby.gameObject.SetActive(true);
+                logo.gameObject.SetActive(false);
+                pressAnyKeyText.gameObject.SetActive(false);
+                break;
+        }
+        
+        _currentMenuState = newState;
     }
 
     public static void Login(string nickName)
