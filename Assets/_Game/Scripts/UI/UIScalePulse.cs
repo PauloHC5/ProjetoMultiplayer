@@ -1,4 +1,6 @@
+using System;
 using UnityEngine;
+using UnityEngine.Events;
 
 [RequireComponent(typeof(RectTransform))]
 public class UIScalePulse : MonoBehaviour
@@ -12,6 +14,11 @@ public class UIScalePulse : MonoBehaviour
     [SerializeField] private AnimationCurve curve = AnimationCurve.EaseInOut(0, 0, 1, 1);
     [SerializeField] private bool ignoreTimeScale = true;  // useful for menus while the game is paused
 
+    [Header("Events")]
+    public UnityEvent onShown;
+    public UnityEvent onHidden;
+    
+    
     private RectTransform rectTransform;
 
     private void Awake()
@@ -22,6 +29,12 @@ public class UIScalePulse : MonoBehaviour
     private void OnEnable()
     {
         rectTransform.localScale = minScale;
+        onShown?.Invoke();
+    }
+
+    private void OnDisable()
+    {
+        onHidden?.Invoke();
     }
 
     private void Update()

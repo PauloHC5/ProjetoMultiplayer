@@ -71,7 +71,6 @@ public class MosquitosHorde : MonoBehaviourPunCallbacks
     public AudioCue hordeSpawnSfx;
     public AudioCue hordeBuzzSfx;
     public AudioCue hordeKilledSfx;
-    public AudioCue mosquitoKilledSfx;
     public AudioCue mosquitoSpawnSfx;
     public AudioCue mosquitoFireSfx;
     public float pitchIncreasePerMosquitoKilled = 0.05f;
@@ -229,8 +228,6 @@ public class MosquitosHorde : MonoBehaviourPunCallbacks
             _photonView.RPC(nameof(SpawnMosquitoAtHorde), RpcTarget.AllBuffered, mosquitoType,
                 hordePositionKey, 0f, 0f, false);
         }
-
-        _bAlreadySpawnedMosquitos = true;
     }
 
     private MosquitoType RandomizeMosquitoType(int row)
@@ -342,6 +339,8 @@ public class MosquitosHorde : MonoBehaviourPunCallbacks
                 _mosquitosDict.Values.ElementAt(i).LissajousCurve.timeOffset = offset;
             }
         }
+        
+        _bAlreadySpawnedMosquitos = true;
     }
 
     [PunRPC]
@@ -502,10 +501,6 @@ public class MosquitosHorde : MonoBehaviourPunCallbacks
             if (PhotonNetwork.IsMasterClient)
                 PhotonNetwork.Destroy(gameObject);
         }
-        
-        GameManager.Instance.AudioManager.PlaySfx(
-            allMosquitosDestroyed ? hordeKilledSfx : mosquitoKilledSfx
-            );
         
         UpdateMosquitosMovement();
     }

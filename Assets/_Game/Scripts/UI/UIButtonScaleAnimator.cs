@@ -16,8 +16,13 @@ public class UIButtonScaleAnimator : MonoBehaviour,
     [SerializeField] private float clickDuration = 0.2f;
     [SerializeField] private AnimationCurve curve = AnimationCurve.EaseInOut(0, 0, 1, 1);
     [SerializeField] private bool ignoreTimeScale = true;
+    [SerializeField] private bool scaleUpOnEnable = true;
 
     [Header("Events")]
+    
+    [Tooltip("Invoked when the pointer enters the button.")]
+    public UnityEvent onPointerEnter;
+    
     [Tooltip("Invoked when the scale down to zero finishes.")]
     public UnityEvent onClickAnimationFinished;
 
@@ -33,7 +38,9 @@ public class UIButtonScaleAnimator : MonoBehaviour,
     private void OnEnable()
     {
         clicked = false;
-        rectTransform.localScale = normalScale;
+        rectTransform.localScale = scaleUpOnEnable ? Vector3.zero : normalScale;
+        
+        if(scaleUpOnEnable) ScaleTo(normalScale, hoverDuration);
     }
 
     private void OnDisable()
@@ -45,19 +52,20 @@ public class UIButtonScaleAnimator : MonoBehaviour,
     {
         if (clicked) return;
         ScaleTo(hoverScale, hoverDuration);
+        onPointerEnter?.Invoke();
     }
 
     public void OnPointerExit(PointerEventData eventData)
     {
         if (clicked) return;
         ScaleTo(normalScale, hoverDuration);
+        
     }
 
     public void OnPointerClick(PointerEventData eventData)
     {
         if (clicked) return;
-        clicked = true;
-        ScaleTo(Vector3.zero, clickDuration, onClickAnimationFinished.Invoke);
+        ShrinkButton();
     }
 
     /// <summary>Resets the button to its normal scale (e.g. when reopening a menu).</summary>
@@ -66,9 +74,17 @@ public class UIButtonScaleAnimator : MonoBehaviour,
         clicked = false;
         ScaleTo(normalScale, hoverDuration);
     }
+    
+    public void ShrinkButton()
+    {
+        clicked = true;
+        ScaleTo(Vector3.zero, clickDuration, onClickAnimationFinished.Invoke);
+    }
 
     private void ScaleTo(Vector3 target, float duration, System.Action onComplete = null)
     {
+        if(!gameObject.activeInHierarchy) return;
+        
         if (currentRoutine != null) StopCoroutine(currentRoutine);
         currentRoutine = StartCoroutine(ScaleRoutine(target, duration, onComplete));
     }

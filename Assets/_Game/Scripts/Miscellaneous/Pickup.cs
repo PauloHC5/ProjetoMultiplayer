@@ -56,4 +56,25 @@ public class Pickup : MonoBehaviour
             y,
             transform.localPosition.z);
     }
+
+    public void RequestDestroyPickup()
+    {
+        if (PhotonHandlers.CanUseNetwork)
+        {
+            if (PhotonNetwork.IsMasterClient)
+                RpcDestroyPickup();
+            else
+                _photonView.RPC(nameof(RpcDestroyPickup), RpcTarget.MasterClient);
+        }
+        else
+        {
+            Destroy(gameObject);
+        }
+    }
+
+    [PunRPC]
+    private void RpcDestroyPickup()
+    {
+        PhotonNetwork.Destroy(gameObject);
+    }
 }

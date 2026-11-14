@@ -98,9 +98,13 @@ public class PlayerCharacter : MonoBehaviourPun
 
     private void Start()
     {
-        if (!photonView.IsMine || !PhotonNetwork.IsConnected) return;
-        
-        StartCoroutine(WaitForRoomBeReady());
+        if (PhotonHandlers.CanUseNetwork)
+            StartCoroutine(WaitForRoomBeReady());
+        else
+        {
+            RpcStartInvincible();
+            RpcSetNickname("LocalPlayer");
+        }
     }
 
     private IEnumerator WaitForRoomBeReady()
@@ -110,6 +114,10 @@ public class PlayerCharacter : MonoBehaviourPun
         photonView.RPC(nameof(RpcStartInvincible), RpcTarget.AllBuffered);
         
         photonView.RPC(nameof(RpcSetNickname), RpcTarget.AllBuffered, PhotonNetwork.NickName);
+        
+        if(!photonView.IsMine)
+            GetComponent<Collider2D>().enabled = false;
+            
     }
 
     private void Update()
@@ -223,8 +231,6 @@ public class PlayerCharacter : MonoBehaviourPun
 
     private void OnTriggerEnter2D(Collider2D other)
     {
-        if(!PhotonHandlers.IsAuthority) return;
-                
         if(other.gameObject.layer == _projectilesLayer || other.gameObject.layer == _enemiesLayer)
         {
             if (_invincible || bBotMode) return;
@@ -242,7 +248,7 @@ public class PlayerCharacter : MonoBehaviourPun
             if (PhotonHandlers.CanUseNetwork)
             {
                 photonView.RPC(nameof(RpcSetPickupState), RpcTarget.AllBuffered, pickup.Type, pickup.Duration);
-                PhotonNetwork.Destroy(other.gameObject);
+                pickup.RequestDestroyPickup();
             }
             else
             {

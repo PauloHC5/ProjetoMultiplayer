@@ -144,8 +144,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::Pickup
   pickupType: 6
   pickupDuration: 10
+  playerLayerMask:
+    serializedVersion: 2
+    m_Bits: 8
   frequency: 5
   amplitude: 1
+  pickupCollectedSfx: {fileID: 0}
 --- !u!114 &1617607155178439810
 MonoBehaviour:
   m_ObjectHideFlags: 0

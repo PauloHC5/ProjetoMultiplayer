@@ -103,6 +103,7 @@ MonoBehaviour:
   - RpcMosquitoKilled
   - RpcSetPickupState
   - MosquitoFire
+  - RpcDestroyPickup
   DisableAutoOpenWizard: 1
   ShowSettings: 1
   DevRegionSetOnce: 0

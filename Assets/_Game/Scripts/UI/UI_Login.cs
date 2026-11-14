@@ -1,75 +1,58 @@
 using System;
 using TMPro;
 using UnityEngine;
+using UnityEngine.Events;
+using UnityEngine.InputSystem;
 using UnityEngine.UI;
 
 public class UI_Login : MonoBehaviour
 {
-    [Header("UI Elements")]
-    public TMP_InputField nickNameInputField;
-    public Button loginButton;
-    public TextMeshProUGUI warningText;
-    public GameObject warningPanel;
-
-    [Header("Debug")]
-    public bool generateRandomNickName = true;
-    public string randomNickNamePrefix = "Player_";
+    [Header("Events")]
+    public UnityEvent onRoomNameEmpty;
+    public UnityEvent onRoomNameTooLong;
+    public UnityEvent onRoomNameValid;
+    public UnityEvent onLoginSuccess;
     
     private string _nickName;
 
-    private void Start()
+    private void LateUpdate()
     {
-        if (generateRandomNickName)
+        if(Keyboard.current.enterKey.wasPressedThisFrame || Keyboard.current.numpadEnterKey.wasPressedThisFrame)
         {
-            string randomNickName = randomNickNamePrefix + UnityEngine.Random.Range(1000, 9999);
-            nickNameInputField.text = randomNickName;
-            _nickName = randomNickName;
-            loginButton.gameObject.SetActive(true);
-            warningPanel.SetActive(false);
-            warningText.gameObject.SetActive(false);
+            Login();
         }
     }
 
-    private void OnEnable()
-    {
-        nickNameInputField.onEndEdit.AddListener(OnInsertedNickName);
-    }
-
-    private void OnDisable()
-    {
-        nickNameInputField.onEndEdit.RemoveListener(OnInsertedNickName);
-    }
-
-    private void OnInsertedNickName(string nickName)
+    public void OnInsertedNickName(string nickName)
     {
         _nickName = nickName;
-        
-        if (string.IsNullOrEmpty(_nickName))
-        {
-            warningPanel.SetActive(true);
-            warningText.gameObject.SetActive(true);
-            warningText.text = "Nickname cannot be empty.";
-            loginButton.gameObject.SetActive(false);
-            return;
-        }
-        
-        if(_nickName.Length > MainMenuManager.MaxNickNameLength)
-        {
-            warningPanel.SetActive(true);
-            warningText.gameObject.SetActive(true);
-            warningText.text = $"Nickname cannot exceed {MainMenuManager.MaxNickNameLength} characters.";
-            loginButton.gameObject.SetActive(false);
-            nickNameInputField.text = string.Empty;
-            return;
-        }
 
-        loginButton.gameObject.SetActive(true);
-        warningPanel.SetActive(false);
-        warningText.gameObject.SetActive(false);
+        CheckNickname();
     }
 
     public void Login()
     {
+        if(!CheckNickname()) return;
+        
+        onLoginSuccess?.Invoke();
         MainMenuManager.Login(_nickName);
+    }
+    
+    private bool CheckNickname()
+    {
+        if (string.IsNullOrEmpty(_nickName))
+        {
+            onRoomNameEmpty?.Invoke();
+            return false;
+        }
+        
+        if(_nickName.Length > GameManager.MaxNickNameLength)
+        {
+            onRoomNameTooLong?.Invoke();
+            return false;
+        }
+
+        onRoomNameValid?.Invoke();
+        return true;
     }
 }

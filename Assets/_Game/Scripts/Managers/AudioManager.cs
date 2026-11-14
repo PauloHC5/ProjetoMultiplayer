@@ -141,6 +141,11 @@ public class AudioManager
     {
         InternalPlaySfx(sfx.GetSample(), sfx.GetPitch(), sfx.GetVolume());
     }
+    
+    public void PlaySfx(AudioClip clip, float pitch, float volume, bool bLoop)
+    {
+        InternalPlaySfx(clip, pitch, volume, bLoop);
+    }
 
     public void PlaySfxWithDelay(AudioCue sfx, float delay)
     {
@@ -286,7 +291,7 @@ public class AudioManager
 
         AudioStop result = () =>
         {
-            if (index > _sfxSourcePool.Count || !GameManager.IsGameRunning) return;
+            if (index >= _sfxSourcePool.Count || !GameManager.IsGameRunning) return;
             _sfxSourcePool[index].Stop();
         };
 

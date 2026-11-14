@@ -6,6 +6,7 @@ using Photon.Pun;
 using Photon.Realtime;
 using TMPro;
 using UnityEngine;
+using UnityEngine.Events;
 using UnityEngine.UI;
 using Hashtable = ExitGames.Client.Photon.Hashtable;
 
@@ -69,10 +70,12 @@ public class UI_Game : MonoBehaviour, IInRoomCallbacks, IMatchmakingCallbacks
     [SerializedDictionary("Pickup Type", "Sprite")]
     public SerializedDictionary<Pickup.PickupType, Sprite> pickupTypeSprites;
     
-    
     [Space(20)]
     
     public SerializedDictionary<PlayerType, Color> playerTypeColors;
+    
+    [Header("Events")]
+    public UnityEvent onCountdownChanged;
 
     private PlayerUIStatus _localPlayerStatus;
     private bool _bGameIsRunning = false;
@@ -136,6 +139,8 @@ public class UI_Game : MonoBehaviour, IInRoomCallbacks, IMatchmakingCallbacks
     {
         Debug.Log($"Master client switched to: {newMasterClient.NickName} (ActorNumber: {newMasterClient.ActorNumber})");
         
+        if(GameMode.Instance.CurrentGameState != GameMode.GameState.WaitingForPlayers) return;
+        
         if(PhotonNetwork.LocalPlayer.ActorNumber == newMasterClient.ActorNumber)
         {
             _matchPreparationUI.StartGameButton.gameObject.SetActive(true);
@@ -167,6 +172,11 @@ public class UI_Game : MonoBehaviour, IInRoomCallbacks, IMatchmakingCallbacks
             gameCountDownOverlay.SetActive(false);
             stopInvasionWarning.SetActive(true);
             Invoke(nameof(TurnOffStopInvasionWarning), 3f);
+        }
+        
+        if(countdown != 3 && countdown > 0)
+        {
+            onCountdownChanged?.Invoke();
         }
     }
     

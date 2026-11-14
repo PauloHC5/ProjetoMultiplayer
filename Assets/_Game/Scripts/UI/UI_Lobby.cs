@@ -1,39 +1,48 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
+using Photon.Pun;
 using Photon.Realtime;
 using TMPro;
 using UnityEngine;
+using UnityEngine.Events;
+using UnityEngine.InputSystem;
 using UnityEngine.UI;
 
-public class UI_Lobby : MonoBehaviour
+public class UI_Lobby : MonoBehaviour, ILobbyCallbacks
 {
     [Header("UI Elements")]
     public Transform scrollViewContent;
     public UI_RoomButtom roomButtonPrefab;
-    public TMP_InputField roomNameInputField;
-    public GameObject warningPanel;
-    public TextMeshProUGUI warningText;
-    public Button createRoomButton;
+    
+    [Header("Events")]
+    public UnityEvent onRoomNameEmpty;
+    public UnityEvent onRoomNameTooLong;
+    public UnityEvent onRoomNameValid;
+    public UnityEvent<bool> onRoomListUpdate;
     
     private string _customRoomName;
-    
-    public const int MaxRoomNameLength = 11;
 
-    private void OnEnable()
+    private void LateUpdate()
     {
-        roomNameInputField.onEndEdit.AddListener(OnInsertedRoomName);
+        if(Keyboard.current.enterKey.wasPressedThisFrame || Keyboard.current.numpadEnterKey.wasPressedThisFrame)
+        {
+            CreateRoom();
+        }
     }
 
-    private void OnDisable()
+    public void OnRoomListUpdate(List<RoomInfo> roomList)
     {
-        roomNameInputField.onEndEdit.RemoveAllListeners();
+        Dictionary<string, RoomInfo> availableRooms = roomList.ToDictionary(room => room.Name, room => room);
+        
+        UpdateRoomList(availableRooms);
     }
 
-    public void UpdateRoomList(Dictionary<string, RoomInfo> _availableRooms)
+    private void UpdateRoomList(Dictionary<string, RoomInfo> availableRooms)
     {
-        RemoveUnexistingRoomButtons(_availableRooms);
-        AddNewRoomButtons(_availableRooms);
-        UpdateRoomsStates(_availableRooms);
+        RemoveUnexistingRoomButtons(availableRooms);
+        AddNewRoomButtons(availableRooms);
+        UpdateRoomsStates(availableRooms);
     }
     
     private void RemoveUnexistingRoomButtons(Dictionary<string, RoomInfo> availableRooms)
@@ -89,36 +98,55 @@ public class UI_Lobby : MonoBehaviour
                 button.UpdateRoomState(room.Key, room.Value.PlayerCount, room.Value.MaxPlayers);
             }
         }
+        
+        onRoomListUpdate.Invoke(availableRooms.Values.All(room => room.RemovedFromList || !room.IsVisible));
     }
     
-    private void OnInsertedRoomName(string roomName)
+    public void OnInsertedRoomName(string roomName)
+    {
+        _customRoomName = roomName;
+
+        CheckRoomName(roomName);
+    }
+
+    private bool CheckRoomName(string roomName)
     {
         if(string.IsNullOrWhiteSpace(roomName))
         {
-            warningPanel.SetActive(true);
-            warningText.text = "Room name cannot be empty.";
-            createRoomButton.gameObject.SetActive(false);
-            return;
+            onRoomNameEmpty?.Invoke();
+            return false;
         }
         
-        if (roomName.Length > MaxRoomNameLength)
+        if (roomName.Length > GameManager.MaxRoomNameLength)
         {
-            warningPanel.SetActive(true);
-            warningText.text = $"Room name cannot exceed {MaxRoomNameLength} characters.";
-            createRoomButton.gameObject.SetActive(false);
-            roomNameInputField.text = string.Empty;
-            return;
+            onRoomNameTooLong?.Invoke();
+            return false;
         }
         
-        _customRoomName = roomName;
-        warningPanel.SetActive(false);
-        createRoomButton.gameObject.SetActive(true);
+        onRoomNameValid?.Invoke();
+        return true;
     }
 
     public void CreateRoom()
     {
-        if(string.IsNullOrWhiteSpace(_customRoomName)) return;
+        if(!CheckRoomName(_customRoomName)) return;
 
        MainMenuManager.CreateRoom(_customRoomName);
     }
+    
+    private void OnEnable()
+    {
+        PhotonNetwork.AddCallbackTarget(this);
+    }
+
+    private void OnDisable()
+    {
+        PhotonNetwork.RemoveCallbackTarget(this);
+    }
+
+    public void OnJoinedLobby() {}
+
+    public void OnLeftLobby() {}
+
+    public void OnLobbyStatisticsUpdate(List<TypedLobbyInfo> lobbyStatistics) {}
 }

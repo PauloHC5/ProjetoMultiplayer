@@ -11,9 +11,13 @@ public class UIPanelScaleAnimator : MonoBehaviour
     [SerializeField] private AnimationCurve showCurve = AnimationCurve.EaseInOut(0, 0, 1, 1);
     [SerializeField] private AnimationCurve hideCurve = AnimationCurve.EaseInOut(0, 0, 1, 1);
     [SerializeField] private bool ignoreTimeScale = true;
+    [SerializeField] private bool showOnEnable = false;
 
     [Header("Events")]
+    public UnityEvent beginShow;
     public UnityEvent onShown;
+    
+    public UnityEvent beginHide;
     public UnityEvent onHidden;
 
     private RectTransform rectTransform;
@@ -31,9 +35,7 @@ public class UIPanelScaleAnimator : MonoBehaviour
     {
         isHiding = false;
         rectTransform.localScale = Vector3.zero;
-
-        if (currentRoutine != null) StopCoroutine(currentRoutine);
-        currentRoutine = StartCoroutine(ScaleRoutine(Vector3.zero, normalScale, showDuration, showCurve, onShown.Invoke));
+        if (showOnEnable) Show();
     }
 
     /// <summary>Scales down to zero and then deactivates the panel. Use this instead of SetActive(false).</summary>
@@ -41,6 +43,8 @@ public class UIPanelScaleAnimator : MonoBehaviour
     {
         if (!gameObject.activeInHierarchy || isHiding) return;
         isHiding = true;
+        
+        beginHide.Invoke();
 
         if (currentRoutine != null) StopCoroutine(currentRoutine);
         currentRoutine = StartCoroutine(ScaleRoutine(rectTransform.localScale, Vector3.zero, hideDuration, hideCurve, () =>
@@ -54,6 +58,10 @@ public class UIPanelScaleAnimator : MonoBehaviour
     public void Show()
     {
         gameObject.SetActive(true);
+        beginShow.Invoke();
+        
+        if (currentRoutine != null) StopCoroutine(currentRoutine);
+        currentRoutine = StartCoroutine(ScaleRoutine(Vector3.zero, normalScale, showDuration, showCurve, onShown.Invoke));
     }
 
     private IEnumerator ScaleRoutine(Vector3 from, Vector3 to, float duration, AnimationCurve curve, System.Action onComplete)

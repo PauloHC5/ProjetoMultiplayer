@@ -7,12 +7,16 @@ public class GameManager : IPersistentSinglenton<GameManager>
 {
     public string _currentScene;
     public string mainMenuSceneName;
+    public string gameSceneName;
     public Action<string> OnSceneLoaded;
 
     [SerializeField]
     private AudioManager _audioManager;
 
     public AudioManager AudioManager => _audioManager;
+
+    public const int MaxNickNameLength = 18;
+    public const int MaxRoomNameLength = 11;
 
     protected override void Awake()
     {

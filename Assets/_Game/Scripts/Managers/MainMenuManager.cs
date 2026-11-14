@@ -1,28 +1,33 @@
 using System;
 using System.Collections.Generic;
+using _Game.Scripts;
 using Photon.Pun;
 using Photon.Realtime;
 using TMPro;
 using UnityEngine;
+using UnityEngine.Events;
 using UnityEngine.InputSystem;
 using UnityEngine.SceneManagement;
 
-public class MainMenuManager : MonoBehaviourPunCallbacks
+public class MainMenuManager : SceneSingleton<MainMenuManager>
 {
     private enum MenuState
     {
         PressAnyKey,
         Login,
-        Lobby
+        Lobby,
+        JoiningRoom
     }
-    
-    public UI_Login login;
-    public UI_Lobby lobby;
-    public GameObject logo;
-    public TextMeshProUGUI pressAnyKeyText;
 
-    public const int MaxNickNameLength = 18;
-    public const string GameSceneName = "GameScene";
+    [Header("Menu States Events")] 
+    public UnityEvent onPressAnyKeyState;
+    public UnityEvent onLoginState;
+    public UnityEvent onLobbyState;
+    public UnityEvent onJoiningRoomState;
+    
+    [Header("Music")]
+    public AudioClip mainMenuMusic;
+    
 
     private MenuState _currentMenuState = MenuState.PressAnyKey;
     
@@ -30,14 +35,13 @@ public class MainMenuManager : MonoBehaviourPunCallbacks
 
     private void Awake()
     {
-        login.gameObject.SetActive(true);
-        lobby.gameObject.SetActive(false);
-        
         PhotonNetwork.AutomaticallySyncScene = true;
     }
 
     private void Start()
     {
+        GameManager.Instance.AudioManager.PlayMusic(mainMenuMusic);
+        
         if(PhotonNetwork.IsConnected && PhotonNetwork.NickName != null)
         {
             ChangeMenuState(MenuState.Lobby);
@@ -61,22 +65,16 @@ public class MainMenuManager : MonoBehaviourPunCallbacks
         switch (newState)
         {
             case MenuState.PressAnyKey:
-                login.gameObject.SetActive(false);
-                lobby.gameObject.SetActive(false);
-                logo.gameObject.SetActive(true);
-                pressAnyKeyText.gameObject.SetActive(true);
+                onPressAnyKeyState?.Invoke();
                 break;
             case MenuState.Login:
-                login.gameObject.SetActive(true);
-                lobby.gameObject.SetActive(false);
-                logo.gameObject.SetActive(true);
-                pressAnyKeyText.gameObject.SetActive(false);
+                onLoginState?.Invoke();
                 break;
             case MenuState.Lobby:
-                login.gameObject.SetActive(false);
-                lobby.gameObject.SetActive(true);
-                logo.gameObject.SetActive(false);
-                pressAnyKeyText.gameObject.SetActive(false);
+                onLobbyState?.Invoke();
+                break;
+            case MenuState.JoiningRoom:
+                onJoiningRoomState?.Invoke();
                 break;
         }
         
@@ -110,18 +108,18 @@ public class MainMenuManager : MonoBehaviourPunCallbacks
         }
         
         PhotonNetwork.JoinRoom(roomName);
+        
+        Instance.ChangeMenuState(MenuState.JoiningRoom);
     }
 
     public override void OnConnectedToMaster()
     {
-        login.gameObject.SetActive(false);
-        
         PhotonNetwork.JoinLobby();
     }
 
     public override void OnJoinedLobby()
     {
-        lobby.gameObject.SetActive(true);
+        ChangeMenuState(MenuState.Lobby);
     }
 
     public override void OnJoinedRoom()
@@ -166,8 +164,6 @@ public class MainMenuManager : MonoBehaviourPunCallbacks
         }
         
         Debug.Log($"Updated room list. Total available rooms: {_availableRooms.Count}");
-        
-        lobby.UpdateRoomList(_availableRooms);
     }
 
     public static void CreateRoom(string roomName)
@@ -185,9 +181,11 @@ public class MainMenuManager : MonoBehaviourPunCallbacks
             IsOpen = true,
             CustomRoomProperties = new ExitGames.Client.Photon.Hashtable
             {
-                { "sceneName",  GameSceneName }
+                { "sceneName",  GameManager.Instance.gameSceneName }
             }
         };
+        
+        Instance.ChangeMenuState(MenuState.JoiningRoom);
 
         PhotonNetwork.CreateRoom(roomName, options, TypedLobby.Default);
     }
