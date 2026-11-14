@@ -80,13 +80,15 @@ namespace _Game.Scripts
         [SerializeField] private PickupSpawnSettings pickupSpawnSettingsWith3CharactersAlive;
         [SerializeField] private float radiusCheckPlayerPickup = 5.0f;
 
-        [Header("Dengue Source")] [SerializeField]
-        private BoxCollider2D dengueSourceSpawnArea;
-
+        [Header("Dengue Source")] 
+        [SerializeField] private BoxCollider2D dengueSourceSpawnArea;       
         [SerializeField] private DengueSourceSpawnSettings dengueSourceSpawnSettingsWith1CharacterAlive;
         [SerializeField] private DengueSourceSpawnSettings dengueSourceSpawnSettingsWith2CharactersAlive;
         [SerializeField] private DengueSourceSpawnSettings dengueSourceSpawnSettingsWith3CharactersAlive;
         [SerializeField] private float radiusCheckPlayerDengueSource = 5.0f;
+
+        [Header("Musics")]
+        public AudioClip awatingPlayersMusic;
 
         [Header("Debug")] public bool bDebugMode = false;
         public float playerAroundCheckDebugTime = 3.0f;
@@ -157,6 +159,7 @@ namespace _Game.Scripts
 
             _currentLives = startingLives;
             _currentGameState = GameState.WaitingForPlayers;
+            GameManager.Instance.AudioManager.PlayMusic(awatingPlayersMusic);
 
             MosquitosLimit.OnMosquitosReachedLimit += OnMosquitosReachedLimit;
 
@@ -368,6 +371,9 @@ namespace _Game.Scripts
             if (_gameCountdown > -1)
             {
                 _currentGameState = GameState.Countdown;
+
+                GameManager.Instance.AudioManager.MusicFadeOut(_gameCountdown);
+
                 OnGameCooldownChanged?.Invoke(_gameCountdown);
 
                 if (bDebugMode)

@@ -80,11 +80,12 @@ MonoBehaviour:
   stopMovement: 0
   hordeVerticalInterpolationDuration: 0.5
   hordeSpawnSfx: {fileID: 11400000, guid: d82518173ca12aa44b5f8e103ab55849, type: 2}
-  hordeMovingSfx: {fileID: 11400000, guid: 5c379d4c79c7fa44b82b3d3f96994114, type: 2}
+  hordeBuzzSfx: {fileID: 11400000, guid: 5c379d4c79c7fa44b82b3d3f96994114, type: 2}
   hordeKilledSfx: {fileID: 11400000, guid: 71521030fd3e4534fab1c041955e1565, type: 2}
   mosquitoKilledSfx: {fileID: 11400000, guid: a67fe29eee3556946a68ab985d264963, type: 2}
   mosquitoSpawnSfx: {fileID: 11400000, guid: 79d369b37806d1941aee9b83a1692e70, type: 2}
   mosquitoFireSfx: {fileID: 11400000, guid: 09c9ef8191c86ea499eed734ef44a89b, type: 2}
+  pitchIncreasePerMosquitoKilled: 0.05
   standardZigZag: {fileID: 11400000, guid: 3f0cd42cac7e6634dbfaedbdb254bb31, type: 2}
   zigZagMovementSettings:
     _serializedList:

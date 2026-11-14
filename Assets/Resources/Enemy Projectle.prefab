@@ -17,6 +17,10 @@ PrefabInstance:
       value: 1
       objectReference: {fileID: 0}
     - target: {fileID: -8598748547545543793, guid: 1a2dc1bf48ef33445bd320b213005467, type: 3}
+      propertyPath: explosionSfx
+      value: 
+      objectReference: {fileID: 11400000, guid: 3fb0db44e54440444b6c27cc9e23cffb, type: 2}
+    - target: {fileID: -8598748547545543793, guid: 1a2dc1bf48ef33445bd320b213005467, type: 3}
       propertyPath: normalCollider
       value: 
       objectReference: {fileID: 7946883236904392962}

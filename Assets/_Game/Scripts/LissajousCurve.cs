@@ -122,7 +122,7 @@ namespace _Game.Scripts
             
             _bAlredySwitched = true;
 
-            if (interpolateToNewSettings && _owner != null)
+            if (interpolateToNewSettings && _owner != null && _owner.gameObject.activeInHierarchy)
                 _transitionCoroutine = _owner.StartCoroutine(Transition());
             else
                 _progress = 1f;

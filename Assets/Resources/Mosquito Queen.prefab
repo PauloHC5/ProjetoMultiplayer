@@ -116,7 +116,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::_Game.Scripts.Enemies.MosquitoQueen
   points: 300
   type: 2
-  positionInterpolationDuration: 3
+  positionInterpolationDuration: 2
   zigZagMovement:
     zigZagMovementSettings: {fileID: 11400000, guid: 801680464c590ac4e84747340bb595bf, type: 2}
     bInterpolateMovement: 1
@@ -164,6 +164,16 @@ MonoBehaviour:
   onDamageMaterial: {fileID: 2100000, guid: 0e30a797c12d61e47a005fbfd8f60aff, type: 2}
   onDamageVfxDuration: 0.1
   queenHitSfx: {fileID: 11400000, guid: 8512794af0652f943a652be481a50571, type: 2}
+  queenBuzzSfx: {fileID: 11400000, guid: 26475b1c0e18b2a4fb74bee6123dd90e, type: 2}
+  queenFireSfx: {fileID: 11400000, guid: 09c9ef8191c86ea499eed734ef44a89b, type: 2}
+  queenDescendingSfx: {fileID: 11400000, guid: 63a9ca912da7f6c4e9a70e8151f6b6e1, type: 2}
+  queenAscendingSfx: {fileID: 11400000, guid: 4fed5349aaea5ca429d01d5543e93862, type: 2}
+  queenPreparingSfx: {fileID: 11400000, guid: e512e8182187ce0458f4ab35e724d619, type: 2}
+  queenKilledSfx: {fileID: 11400000, guid: 71521030fd3e4534fab1c041955e1565, type: 2}
+  mosquitoSpawnSfx: {fileID: 11400000, guid: 79d369b37806d1941aee9b83a1692e70, type: 2}
+  mosquitoKilledSfx: {fileID: 11400000, guid: a67fe29eee3556946a68ab985d264963, type: 2}
+  ascendingSfxDelay: 0.1
+  descendingSfxDelay: 0.2
   projectilePrefab: {fileID: 8615181883404891688, guid: 525f2b816ca79f54f8992594a20a0b28, type: 3}
   mosquitoPrefab: {fileID: 721702209136384595, guid: c27f82190daed0543816a4df5edd6210, type: 3}
   projectileSpawnPoint: {fileID: 5663861538857627995}

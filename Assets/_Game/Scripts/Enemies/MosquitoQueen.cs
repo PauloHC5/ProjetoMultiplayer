@@ -5,6 +5,7 @@ using System.Linq;
 using Photon.Pun;
 using Photon.Realtime;
 using TMPro;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.UI;
@@ -49,6 +50,16 @@ namespace _Game.Scripts.Enemies
         
         [Header("SFX")]
         public AudioCue queenHitSfx;
+        public AudioCue queenBuzzSfx;
+        public AudioCue queenFireSfx;
+        public AudioCue queenDescendingSfx;
+        public AudioCue queenAscendingSfx;
+        public AudioCue queenPreparingSfx;
+        public AudioCue queenKilledSfx;
+        public AudioCue mosquitoSpawnSfx;
+        public AudioCue mosquitoKilledSfx;        
+        public float ascendingSfxDelay = 1f;
+        public float descendingSfxDelay = 1f;
 
         [Header("Prefabs")] 
         [SerializeField] private Projectile projectilePrefab;
@@ -125,6 +136,8 @@ namespace _Game.Scripts.Enemies
         private SpriteRenderer _spriteRenderer;
         private Material _originalMaterial;
         private Coroutine _onDamageVfxCoroutine;
+        private AudioStop _stopQueenBuzzAudio;
+        private AudioStop _stopQueenPreparingAudio;
 
         public float StandardBehaviourDuration =>
             Random.Range(minStandardBehaviourDuration, maxStandardBehaviourDuration);
@@ -159,6 +172,9 @@ namespace _Game.Scripts.Enemies
             base.Start();
 
             StartCoroutine(BootstrapRoutine());
+
+            _stopQueenBuzzAudio = GameManager.Instance.AudioManager.PlaySfxInLoop(queenBuzzSfx);
+            GameManager.Instance.AudioManager.PlaySfxWithDelay(queenDescendingSfx, descendingSfxDelay);
         }
 
         protected override void Update()
@@ -187,6 +203,10 @@ namespace _Game.Scripts.Enemies
             // Limpa o estado da sala pra uma futura rainha não ler lixo.
             if (PhotonHandlers.CanUseNetwork && PhotonNetwork.IsMasterClient)
                 PhotonNetwork.CurrentRoom.SetCustomProperties(new Hashtable { { RoomStateKey, null } });
+
+            _stopQueenBuzzAudio.Invoke();
+
+            GameManager.Instance.AudioManager.PlaySfx(queenKilledSfx);
 
             PhotonNetwork.RemoveCallbackTarget(this);
         }
@@ -427,6 +447,9 @@ namespace _Game.Scripts.Enemies
                     case QueenPhase.MovingToCenter:
                         zigZagMovement.SwitchMovementSettings(queenStandardZigZagSettings);
                         lissajousCurve.SwitchCurveSettings(null);
+
+                        _stopQueenBuzzAudio = GameManager.Instance.AudioManager.PlaySfxInLoop(queenBuzzSfx);
+                        GameManager.Instance.AudioManager.PlaySfxWithDelay(queenDescendingSfx, descendingSfxDelay);
                         break;
                     case QueenPhase.Standard:
                         zigZagMovement.SwitchMovementSettings(queenStandardZigZagSettings);
@@ -436,11 +459,15 @@ namespace _Game.Scripts.Enemies
                     case QueenPhase.Preparing:
                         zigZagMovement.SwitchMovementSettings(queenPrepareToAttackZigZagSettings);
                         _queenTrailRenderer.emitting = false;
+
+                        _stopQueenPreparingAudio = GameManager.Instance.AudioManager.PlaySfxInLoop(queenPreparingSfx);
                         break;
                     case QueenPhase.Attack:
                         zigZagMovement.SwitchMovementSettings(null);
                         CancelInvoke(nameof(InvokeSpawnProjectile));
                         _queenTrailRenderer.emitting = true;
+
+                        _stopQueenPreparingAudio.Invoke();
                         break;
                     case QueenPhase.Retreat:
                         lissajousCurve.SwitchCurveSettings(null);
@@ -485,6 +512,8 @@ namespace _Game.Scripts.Enemies
                 }
 
                 _mosquitos[i].LissajousCurve.SwitchCurveSettings(mosquitosPatrolMovementSettings[patrolmovementIndex]);
+
+                GameManager.Instance.AudioManager.PlaySfx(mosquitoSpawnSfx);
             }
         }
 
@@ -518,7 +547,7 @@ namespace _Game.Scripts.Enemies
             
             for (var i = 0; i < _mosquitos.Length; i++)
             {
-                _mosquitos[i].gameObject.SetActive(true);
+                _mosquitos[i].gameObject.SetActive(true);                
             }
             
         }
@@ -545,6 +574,8 @@ namespace _Game.Scripts.Enemies
             mosquitoKilled.LissajousCurve.SwitchCurveSettings(null);
             mosquitoKilled.gameObject.SetActive(false);
 
+            GameManager.Instance.AudioManager.PlaySfx(mosquitoKilledSfx);
+
             OnMosquitoKilled?.Invoke(instigatorPlayerId, mosquitoKilled.points);
         }
 
@@ -557,6 +588,8 @@ namespace _Game.Scripts.Enemies
             yield return new WaitForSeconds(preparationTime);
 
             GoToNewPosition(retreatPosition);
+
+            GameManager.Instance.AudioManager.PlaySfxWithDelay(queenAscendingSfx, ascendingSfxDelay);
 
             _queenTrailRenderer.emitting = false;
 
@@ -577,6 +610,8 @@ namespace _Game.Scripts.Enemies
                     mosquitosHorde.AllMosquitosDestroyedEvent -= onAllDestroyed;
                 }
             }
+
+            _stopQueenBuzzAudio.Invoke();        
 
             _retreatCoroutine = null;
             yield return null;
@@ -633,6 +668,8 @@ namespace _Game.Scripts.Enemies
                 Projectile projectile = Instantiate(projectilePrefab, spawnPosition, rotation);
                 projectile.Init(MosquitosInstigatorId, Random.Range(0, int.MaxValue), pierceThroughEnemies: false,
                     doubleSpeed: false);
+
+                GameManager.Instance.AudioManager.PlaySfx(queenFireSfx);
 
                 if (bDebugLogs)
                     Debug.Log($"[MosquitoQueen] Spawned projectile {i + 1}/{projectilesPerShot}");
@@ -728,5 +765,5 @@ namespace _Game.Scripts.Enemies
 
             return false;
         }
-    }
+    }    
 }

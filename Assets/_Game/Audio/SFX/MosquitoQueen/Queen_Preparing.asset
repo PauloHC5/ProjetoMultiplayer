@@ -10,11 +10,11 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: b91623fd58d62de46bd6be7e22cac7d4, type: 3}
-  m_Name: Horde_Moving
+  m_Name: Queen_Preparing
   m_EditorClassIdentifier: Assembly-CSharp::AudioCue
   _samples:
-  - {fileID: 8300000, guid: 4c446dd66a2fd6449b71b395e3e792b5, type: 3}
-  _minPitch: 1
-  _Maxpitch: 1
-  _minVolume: 0.258
-  _maxVolume: 0.258
+  - {fileID: 8300000, guid: b6d5458760ccc5648ba19d4f81275679, type: 3}
+  _minPitch: 2.79
+  _Maxpitch: 2.77
+  _minVolume: 1
+  _maxVolume: 1

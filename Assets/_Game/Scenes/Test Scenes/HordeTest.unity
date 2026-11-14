@@ -464,10 +464,6 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 7380585379183910588, guid: 2cdd92942844e9544828eece9b9cef8b, type: 3}
-      propertyPath: rows
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 7380585379183910588, guid: 2cdd92942844e9544828eece9b9cef8b, type: 3}
       propertyPath: debugLogs
       value: 1
       objectReference: {fileID: 0}

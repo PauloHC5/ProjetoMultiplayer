@@ -142,6 +142,18 @@ public class AudioManager
         InternalPlaySfx(sfx.GetSample(), sfx.GetPitch(), sfx.GetVolume());
     }
 
+    public void PlaySfxWithDelay(AudioCue sfx, float delay)
+    {
+        GameManager.Instance.StartCoroutine(SfxDelayRoutine(sfx, delay));
+    }
+
+    private IEnumerator SfxDelayRoutine(AudioCue sfx, float delay)
+    {
+        yield return new WaitForSeconds(delay);
+
+        PlaySfx(sfx);
+    }
+
     public AudioStop PlaySfxInLoop(AudioCue sfx)
     {
         return InternalPlaySfx(sfx.GetSample(), sfx.GetPitch(), sfx.GetVolume(), true);        
@@ -151,19 +163,7 @@ public class AudioManager
     {
         if (_sfxSource.isPlaying)
             _sfxSource.Stop();
-    }
-    
-    public void StopSfxInLoop(AudioCue sfx)
-    {
-        for (var index = 0; index < _sfxSourcePool.Count; index++)
-        {
-            if (_sfxSourcePool[index].isPlaying && _sfxSourcePool[index].clip == sfx.GetSample())
-            {
-                _sfxSourcePool[index].Stop();
-                break;
-            }
-        }
-    }
+    }        
 
     public void PauseSfx(bool bIsPause = true)
     {
@@ -286,6 +286,7 @@ public class AudioManager
 
         AudioStop result = () =>
         {
+            if (index > _sfxSourcePool.Count || !GameManager.IsGameRunning) return;
             _sfxSourcePool[index].Stop();
         };
 

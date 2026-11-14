@@ -720,7 +720,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::_Game.Scripts.GameMode
   startGameDelay: 3
   startingLives: 3
-  hordesPerWave: 5
+  hordesPerWave: 1
   intervalBetweenHordes: 1.5
   playerDeathCooldown: 2
   playerAndDengueSourceLayerMask:
@@ -765,6 +765,7 @@ MonoBehaviour:
     ToolboxSpawnChance: 25
   radiusCheckPlayerPickup: 5
   dengueSourceSpawnArea: {fileID: 1244994348}
+  awatingPlayersMusic: {fileID: 8300000, guid: 491ab77211805a1438f265f68ca63f5c, type: 3}
   dengueSourceSpawnSettingsWith1CharacterAlive:
     MinSpawnInterval: 10
     MaxSpawnInterval: 20
@@ -4963,7 +4964,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: -4019097937451829302, guid: d0221e9686a093d48bd87a13c8907dd3, type: 3}
+  m_Sprite: {fileID: 21300000, guid: d0221e9686a093d48bd87a13c8907dd3, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1

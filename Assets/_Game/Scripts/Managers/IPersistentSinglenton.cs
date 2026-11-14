@@ -5,6 +5,8 @@ public abstract class IPersistentSinglenton<T> : MonoBehaviour where T : MonoBeh
     private static T _uniqueInstance;
     private static bool bIsRunning = true;
 
+    public static bool IsGameRunning => bIsRunning;
+
     public static T Instance {
 
         get
