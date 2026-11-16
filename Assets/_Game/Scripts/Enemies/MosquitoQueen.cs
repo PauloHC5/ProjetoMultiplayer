@@ -53,7 +53,6 @@ namespace _Game.Scripts.Enemies
         public AudioCue queenBuzzSfx;
         public AudioCue queenFireSfx;
         public AudioCue queenDescendingSfx;
-        public AudioCue queenAscendingSfx;
         public AudioCue queenPreparingSfx;
         public AudioCue queenKilledSfx;
         public AudioCue mosquitoSpawnSfx;
@@ -592,8 +591,6 @@ namespace _Game.Scripts.Enemies
             yield return new WaitForSeconds(preparationTime);
 
             GoToNewPosition(retreatPosition);
-
-            GameManager.Instance.AudioManager.PlaySfxWithDelay(queenAscendingSfx, ascendingSfxDelay);
             
             _stopQueenBuzzAudio?.Invoke();     
 

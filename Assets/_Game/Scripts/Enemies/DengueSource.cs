@@ -20,8 +20,14 @@ public class DengueSource : MonoBehaviour
     public bool debugLog = false;
     
     private MosquitosHorde _mosquitosHorde;
+    private PhotonView _photonView;
 
     public Action<DengueSource, int, int> OnDengueSourceDestroyed;
+
+    private void Awake()
+    {
+        _photonView = GetComponent<PhotonView>();
+    }
 
     private void Start()
     {
@@ -69,9 +75,13 @@ public class DengueSource : MonoBehaviour
         
         GameManager.Instance.AudioManager.PlaySfx(dengueSourceDestroyedSfx);
         
-        Destroy(playerID);
+        if(PhotonNetwork.IsMasterClient)
+            Destroy(playerID);
+        else
+            _photonView.RPC(nameof(Destroy), RpcTarget.MasterClient, playerID);
     }
 
+    [PunRPC]
     private void Destroy(int playerID = -1)
     {
         if(!PhotonNetwork.IsMasterClient) return;

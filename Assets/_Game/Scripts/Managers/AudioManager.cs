@@ -292,7 +292,11 @@ public class AudioManager
         AudioStop result = () =>
         {
             if (index >= _sfxSourcePool.Count || !GameManager.IsGameRunning) return;
-            _sfxSourcePool[index].Stop();
+            
+            if(index == -1)
+                _sfxSource.Stop();
+            else
+                _sfxSourcePool[index].Stop();
         };
 
 
