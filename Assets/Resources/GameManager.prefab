@@ -49,6 +49,12 @@ MonoBehaviour:
   _currentScene: 
   mainMenuSceneName: MenuScene
   gameSceneName: GameScene
+  sceneMusic:
+    _serializedList:
+    - Key: MenuScene
+      Value: {fileID: 8300000, guid: 9651514508e5ec84b8c5b3f3557fa61e, type: 3}
+    - Key: GameScene
+      Value: {fileID: 8300000, guid: 491ab77211805a1438f265f68ca63f5c, type: 3}
   _audioManager:
     _audioMixer: {fileID: 24100000, guid: e1510e5bb3ebbd0469cea7bfbded578b, type: 2}
     _musicSource: {fileID: 872042203241412623}

@@ -159,7 +159,6 @@ namespace _Game.Scripts
 
             _currentLives = startingLives;
             _currentGameState = GameState.WaitingForPlayers;
-            GameManager.Instance.AudioManager.PlayMusic(awatingPlayersMusic);
 
             MosquitosLimit.OnMosquitosReachedLimit += OnMosquitosReachedLimit;
 

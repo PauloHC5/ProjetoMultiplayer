@@ -40,8 +40,6 @@ public class MainMenuManager : SceneSingleton<MainMenuManager>
 
     private void Start()
     {
-        GameManager.Instance.AudioManager.PlayMusic(mainMenuMusic);
-        
         if(PhotonNetwork.IsConnected && PhotonNetwork.NickName != null)
         {
             ChangeMenuState(MenuState.Lobby);
@@ -143,7 +141,7 @@ public class MainMenuManager : SceneSingleton<MainMenuManager>
         
         if (PhotonNetwork.IsMasterClient)
         {
-            PhotonNetwork.LoadLevel(sceneName);
+            GameManager.Instance.LoadScene(GameManager.Instance.gameSceneName);
         }
         else
         {
