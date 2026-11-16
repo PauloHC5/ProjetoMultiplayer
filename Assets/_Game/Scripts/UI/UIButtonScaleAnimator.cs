@@ -64,7 +64,8 @@ public class UIButtonScaleAnimator : MonoBehaviour,
 
     public void OnPointerClick(PointerEventData eventData)
     {
-        if (clicked) return;
+        if (clicked || eventData.button != PointerEventData.InputButton.Left) return;
+        
         ShrinkButton();
     }
 
