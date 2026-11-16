@@ -446,6 +446,10 @@ public class PlayerCharacter : MonoBehaviourPun
                 if(!photonView.IsMine || !BarriersManager.Instance) return;
                 BarriersManager.Instance.RestoreBarrier();
                 break;
+            case Pickup.PickupType.Medkit:
+                if(!photonView.IsMine || !GameMode.Instance) return;
+                GameMode.Instance.RequestRespawnDeadPlayer();
+                break;
             default:
                 Debug.LogWarning("Unknown pickup type: " + pickupType);
                 break;

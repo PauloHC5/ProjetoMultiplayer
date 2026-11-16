@@ -222,7 +222,7 @@ public class UI_Game : MonoBehaviour, IInRoomCallbacks, IMatchmakingCallbacks
         _localPlayerStatus.LivesCounterText.text = lives.ToString();
     }
     
-    private void OnPlayerCharacterSpawned(Player player, PlayerCharacter playerCharacter)
+    private void OnPlayerCharacterSpawned(Player player, PlayerCharacter playerCharacter, int currentLives)
     {
         if(player == null || playerCharacter == null) return;
         
@@ -231,6 +231,7 @@ public class UI_Game : MonoBehaviour, IInRoomCallbacks, IMatchmakingCallbacks
             SpawnPlayerStatusUI(player);
             playerCharacter.OnPickupCollected += OnPickupCollected;
             playerCharacter.OnPlayerDeath += OnPlayerCharacterDestroyed;
+            _localPlayerStatus.LivesCounterText.text = currentLives.ToString();
         }
     }
 

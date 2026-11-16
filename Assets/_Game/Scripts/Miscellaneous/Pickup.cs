@@ -13,6 +13,7 @@ public class Pickup : MonoBehaviour
         SpeedBuff,
         TripleFire,
         Toolbox,
+        Medkit,
         
         Default
     }

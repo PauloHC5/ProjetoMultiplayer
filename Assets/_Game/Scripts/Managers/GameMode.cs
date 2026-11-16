@@ -27,6 +27,7 @@ namespace _Game.Scripts
             public float MinSpawnInterval;
             public float MaxSpawnInterval;
             public int OneUpSpawnChance;
+            public int MedkitSpawnChance;
             public int ToolboxSpawnChance;
         }
 
@@ -80,15 +81,15 @@ namespace _Game.Scripts
         [SerializeField] private PickupSpawnSettings pickupSpawnSettingsWith3CharactersAlive;
         [SerializeField] private float radiusCheckPlayerPickup = 5.0f;
 
-        [Header("Dengue Source")] 
-        [SerializeField] private BoxCollider2D dengueSourceSpawnArea;       
+        [Header("Dengue Source")] [SerializeField]
+        private BoxCollider2D dengueSourceSpawnArea;
+
         [SerializeField] private DengueSourceSpawnSettings dengueSourceSpawnSettingsWith1CharacterAlive;
         [SerializeField] private DengueSourceSpawnSettings dengueSourceSpawnSettingsWith2CharactersAlive;
         [SerializeField] private DengueSourceSpawnSettings dengueSourceSpawnSettingsWith3CharactersAlive;
         [SerializeField] private float radiusCheckPlayerDengueSource = 5.0f;
 
-        [Header("Musics")]
-        public AudioClip awatingPlayersMusic;
+        [Header("Musics")] public AudioClip awatingPlayersMusic;
 
         [Header("Debug")] public bool bDebugMode = false;
         public float playerAroundCheckDebugTime = 3.0f;
@@ -131,7 +132,7 @@ namespace _Game.Scripts
         public static Action<int> WaveStartedEvent;
         public static Action<int> WaveCompletedEvent;
         public static Action<GameOverReason> GameOverEvent;
-        public static Action<Player, PlayerCharacter> OnPlayerCharacterSpawned;
+        public static Action<Player, PlayerCharacter, int> OnPlayerCharacterSpawned;
         public static Action RoomReady;
         public static Action<float> OnHordeProgressChanged;
 
@@ -304,7 +305,7 @@ namespace _Game.Scripts
                 .GetComponent<PlayerCharacter>();
             PlayerController.Local.Possess(playerCharacter);
 
-            OnPlayerCharacterSpawned?.Invoke(PhotonNetwork.LocalPlayer, playerCharacter);
+            OnPlayerCharacterSpawned?.Invoke(PhotonNetwork.LocalPlayer, playerCharacter, _currentLives);
 
             SetPlayerCharactersAlive(_playerCharactersAlive + 1);
 
@@ -411,7 +412,7 @@ namespace _Game.Scripts
                     Quaternion.identity).GetComponent<MosquitosHorde>();
 
             _photonView.RPC(nameof(RpcSubscribeToMosquitosHordeEvents), RpcTarget.All);
-            
+
             return _mosquitosHordeInTheScene;
         }
 
@@ -462,6 +463,7 @@ namespace _Game.Scripts
             {
                 return (int)index;
             }
+
             Debug.LogError("GameMode.GetPlayerScore: Player " + player.NickName +
                            " does not have a PlayerScore custom property. This should not happen.");
             return 0;
@@ -478,13 +480,13 @@ namespace _Game.Scripts
         {
             if (bDebugMode)
                 Debug.Log("GameMode.HordeKilled");
-            
-            if(_hordesSpawnedInCurrentWave == hordesPerWave) return;
+
+            if (_hordesSpawnedInCurrentWave == hordesPerWave) return;
 
             _hordesSpawnedInCurrentWave++;
             OnHordeProgressChanged?.Invoke(HordeProgressPercentage);
 
-             if (_hordesSpawnedInCurrentWave >= hordesPerWave)
+            if (_hordesSpawnedInCurrentWave >= hordesPerWave)
             {
                 Invoke(nameof(SpawnMosquitoQueen), 3f);
             }
@@ -492,36 +494,27 @@ namespace _Game.Scripts
             {
                 Invoke(nameof(SpawnHorde), intervalBetweenHordes);
             }
-
-            if (_currentLives <= 0)
-            {
-                _currentLives = startingLives;
-
-                PlayerType playerType = GetPlayerType(PhotonNetwork.LocalPlayer);
-
-                RpcSpawnPlayerCharacter(playerType);
-            }
         }
-        
+
         private void SpawnMosquitoQueen()
         {
             if (!PhotonNetwork.IsMasterClient) return;
-            
+
             var mosquitoQueen = PhotonNetwork
                 .InstantiateRoomObject(mosquitoQueenPrefab.name, mosquitoQueenPrefab.transform.position,
                     Quaternion.identity).GetComponent<MosquitoQueen>();
-            
+
             _mosquitoQueenInTheScene = mosquitoQueen;
-            
+
             _photonView.RPC(nameof(RpcSubscribeToQueenDeathEvent), RpcTarget.All);
         }
-        
+
         [PunRPC]
         private void RpcSubscribeToQueenDeathEvent()
         {
-            if(_mosquitoQueenInTheScene == null)
+            if (_mosquitoQueenInTheScene == null)
                 _mosquitoQueenInTheScene = FindAnyObjectByType<MosquitoQueen>();
-            
+
             _mosquitoQueenInTheScene.MosquitoQueenDeathEvent += WaveCompleted;
 
             _mosquitoQueenInTheScene.OnMosquitoKilled += MosquitoKilled;
@@ -534,12 +527,15 @@ namespace _Game.Scripts
         {
             if (bDebugMode)
                 Debug.Log("GameMode.WaveCompleted");
-            
+
             _mosquitoQueenInTheScene.MosquitoQueenDeathEvent -= WaveCompleted;
             _mosquitoQueenInTheScene.OnMosquitoKilled -= MosquitoKilled;
             _mosquitoQueenInTheScene = null;
-            
+
             _hordesSpawnedInCurrentWave = 0;
+
+            if(PhotonNetwork.IsMasterClient)
+                photonView.RPC(nameof(RpcRespawnDeadPlayer), RpcTarget.All);
 
             WaveCompletedEvent?.Invoke(_currentWave);
 
@@ -552,6 +548,23 @@ namespace _Game.Scripts
             CancelInvoke(nameof(SpawnPickup));
             CancelInvoke(nameof(SpawnDengueSource));
             photonView.RPC(nameof(RpcReplicateUnsubscribeFromMosquitosHordeEvents), RpcTarget.All);
+        }
+
+        public void RequestRespawnDeadPlayer()
+        {
+            photonView.RPC(nameof(RpcRespawnDeadPlayer), RpcTarget.All);
+        }
+
+        [PunRPC]
+        private void RpcRespawnDeadPlayer()
+        {
+            if (_currentLives > 0) return;
+
+            _currentLives = startingLives;
+
+            PlayerType playerType = GetPlayerType(PhotonNetwork.LocalPlayer);
+
+            RpcSpawnPlayerCharacter(playerType);
         }
 
         [PunRPC]
@@ -742,18 +755,31 @@ namespace _Game.Scripts
                 return chance < spawnSettings.OneUpSpawnChance;
             }
 
+            if (pickupType == Pickup.PickupType.Medkit)
+            {
+                if (PhotonNetwork.CurrentRoom == null || PhotonNetwork.CurrentRoom.PlayerCount <= 1)
+                    return false;
+
+                bool conditionToSpawnMedkit = PhotonNetwork.CurrentRoom.PlayerCount switch
+                {
+                    2 => _playerCharactersAlive < 2,
+                    3 => _playerCharactersAlive < 3,
+                    _ => false
+                };
+
+                var spawnSettings = GetCurrentPickupSpawnSettings();
+                var chance = UnityEngine.Random.Range(0, 100);
+                
+                return conditionToSpawnMedkit && chance < spawnSettings.MedkitSpawnChance;
+            }
+
             if (pickupType == Pickup.PickupType.Toolbox)
             {
-                if (BarriersManager.IsAnyBarrierDestroyed())
-                {
-                    var spawnSettings = GetCurrentPickupSpawnSettings();
-                    var chance = UnityEngine.Random.Range(0, 100);
-                    return chance < spawnSettings.ToolboxSpawnChance;
-                }
-                else
-                {
-                    return false;
-                }
+                if (!BarriersManager.IsAnyBarrierDestroyed()) return false;
+
+                var spawnSettings = GetCurrentPickupSpawnSettings();
+                var chance = UnityEngine.Random.Range(0, 100);
+                return chance < spawnSettings.ToolboxSpawnChance;
             }
 
             return true;
@@ -871,3 +897,4 @@ namespace _Game.Scripts
         }
     }
 }
+

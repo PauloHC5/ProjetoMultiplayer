@@ -857,6 +857,7 @@ MonoBehaviour:
   - {fileID: 8412091804287373089, guid: f7e52f81c1424ce40af53e57fdd66c53, type: 3}
   - {fileID: 6605038136104068284, guid: 2f9fc2d6ceea7614a8c9b6cebebc0559, type: 3}
   - {fileID: 3203711729101826982, guid: efaaaf0b3303a8a4b9a8d5a078c2b9b9, type: 3}
+  - {fileID: 3791672552661323981, guid: 2bde68fdb441fa94dbc3b2c5ddb9d316, type: 3}
   dengueSourcePrefabs:
   - {fileID: 6675925251535046082, guid: d98248927a03bb24499b505be43e623f, type: 3}
   - {fileID: 6675925251535046082, guid: 9649aafe80adde94fbcada1c637117b5, type: 3}
@@ -869,16 +870,19 @@ MonoBehaviour:
     MinSpawnInterval: 5
     MaxSpawnInterval: 12
     OneUpSpawnChance: 10
+    MedkitSpawnChance: 90
     ToolboxSpawnChance: 40
   pickupSpawnSettingsWith2CharactersAlive:
     MinSpawnInterval: 3
     MaxSpawnInterval: 10
     OneUpSpawnChance: 10
+    MedkitSpawnChance: 90
     ToolboxSpawnChance: 25
   pickupSpawnSettingsWith3CharactersAlive:
     MinSpawnInterval: 3
     MaxSpawnInterval: 8
     OneUpSpawnChance: 15
+    MedkitSpawnChance: 90
     ToolboxSpawnChance: 25
   radiusCheckPlayerPickup: 5
   dengueSourceSpawnArea: {fileID: 1244994348}
@@ -2826,7 +2830,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 6.4750366, y: 7.1000977}
+  m_AnchoredPosition: {x: 6.4750977, y: 7.1000977}
   m_SizeDelta: {x: 205.31, y: 205.31}
   m_Pivot: {x: 0, y: 0}
 --- !u!114 &777810350
