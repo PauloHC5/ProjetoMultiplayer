@@ -2505,6 +2505,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::UIButtonScaleAnimator
   normalScale: {x: 1, y: 1, z: 1}
   hoverScale: {x: 1.15, y: 1.15, z: 1}
+  onClickAction: 2
+  pulseScale: {x: 0.9, y: 0.9, z: 1}
   hoverDuration: 0.15
   clickDuration: 0.2
   curve:
