@@ -33,8 +33,10 @@ public class MainMenuManager : SceneSingleton<MainMenuManager>
     
     private Dictionary<string, RoomInfo> _availableRooms = new Dictionary<string, RoomInfo>();
 
-    private void Awake()
+    protected override void Awake()
     {
+        base.Awake();
+
         PhotonNetwork.AutomaticallySyncScene = true;
     }
 
