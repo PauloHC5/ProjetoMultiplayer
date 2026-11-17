@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using _Game.Scripts.Enemies;
 using _Game.Scripts.SpaceInvaders;
+using AYellowpaper.SerializedCollections;
 using Photon.Pun;
 using Photon.Realtime;
 using UnityEngine;
@@ -67,6 +68,7 @@ namespace _Game.Scripts
         [SerializeField] private float intervalBetweenHordes = 2.0f;
         public float playerDeathCooldown = 3.0f;
         [SerializeField] private LayerMask playerAndDengueSourceLayerMask;
+        [SerializeField] private SerializedDictionary<PlayerType, Transform> playerSpawnLocations;
 
         [Header("Prefabs")] [SerializeField] private PlayerController playerControllerPrefab;
         [SerializeField] private MosquitosHorde mosquitosHordePrefab;
@@ -115,8 +117,7 @@ namespace _Game.Scripts
         public MosquitosHorde MosquitosHordeInTheScene => _mosquitosHordeInTheScene;
 
         private List<DebugPlayerCheck> _debugCheckPlayerAround;
-
-        private readonly Vector3 _playerSpawnPosition = new Vector3(0, -18.2f, 0);
+        
         private Pickup.PickupType _lastPickupTypeSpawned = Pickup.PickupType.Default;
 
         public static readonly string PlayerTypeKey = "AvailablePlayerTypes";
@@ -299,9 +300,11 @@ namespace _Game.Scripts
             if (bDebugMode)
                 Debug.Log("GameMode.RpcSpawnPlayerCharacter: received player type " + playerType + " for player " +
                           PhotonNetwork.LocalPlayer.NickName);
+            
+            Vector3 playerSpawnPosition = playerSpawnLocations[playerType].position;
 
             var playerCharacter = PhotonNetwork
-                .Instantiate(_playerCharacters[playerType].name, _playerSpawnPosition, Quaternion.identity)
+                .Instantiate(_playerCharacters[playerType].name, playerSpawnPosition, Quaternion.identity)
                 .GetComponent<PlayerCharacter>();
             PlayerController.Local.Possess(playerCharacter);
 
