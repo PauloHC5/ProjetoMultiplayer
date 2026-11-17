@@ -3,6 +3,7 @@ using System.Collections;
 using _Game.Scripts;
 using AYellowpaper.SerializedCollections;
 using Photon.Pun;
+using Photon.Realtime;
 using TMPro;
 using UnityEngine;
 using UnityEngine.InputSystem;
@@ -13,7 +14,7 @@ public enum PlayerType
     Player1,
     Player2,
     Player3,
-    
+
     None
 }
 
@@ -25,22 +26,25 @@ public class PlayerCharacter : MonoBehaviourPun
     [Header("Player Settings")]
     [SerializeField] private float speed = 10.0f;
     [SerializeField] private Transform projectileSpawnPoint;
-    
+    [SerializeField] private Collider2D playerCollider;
+    [SerializeField] private Collider2D otherPlayersCollider;
+
     [Header("UI")]
     [SerializeField] private RectTransform pickupsStatusPanel;
     public SerializedDictionary<Pickup.PickupType, Sprite> pickupTypeSprites;
-    
+
     [Header("Prefabs")]
     public Projectile projectilePrefab;
 
     [Header("Bot Settings")]
     public bool bBotMode = false;
-    
+
     [Header("SFX")]
     public AudioCue shootSfx;
     public AudioCue deathSfx;
-    
-    public SpriteRenderer SpriteRenderer { get; private set; }
+    public AudioCue ressurectSfx;
+
+    private SpriteRenderer _spriteRenderer;
     private Rigidbody2D _rigidbody2D;
     private Animator _characterAnimator;
 
@@ -51,41 +55,45 @@ public class PlayerCharacter : MonoBehaviourPun
     private int _projectilesLayer;
     private int _enemiesLayer;
     private int _pickupsLayer;
+    private int _playersLayer;
     private Coroutine _invincibleCoroutine;
     private TrailRenderer _trailRenderer;
     private Shield_VFX _shieldVFX;
-    
+    private Image _medkitIconImage;
+
     public Action<PlayerCharacter> OnPlayerDeath;
     public Action<Pickup.PickupType, float> OnPickupCollected;
-    
+
     private readonly int MoveXHash = Animator.StringToHash("MoveX");
     private readonly int MoveYHash = Animator.StringToHash("MoveY");
     private readonly int IsMovingHash = Animator.StringToHash("IsMoving");
     private readonly int IsDeadHash = Animator.StringToHash("IsDead");
     private readonly int AnimMultiplierHash = Animator.StringToHash("AnimMultiplier");
-    
+
     // Buffs & Status
     private bool _invincible;
     private bool _tripleShootActive = false;
     private bool _piercingProjectilesActive = false;
     private bool _fasterFireActive = false;
     private bool _speedBuffActive = false;
-    
+    private bool _hasMedkit = false;
+
     public int GetPlayerId() => photonView.OwnerActorNr;
 
     private void Awake()
     {
-        SpriteRenderer = GetComponentInChildren<SpriteRenderer>();
+        _spriteRenderer = GetComponentInChildren<SpriteRenderer>();
         _rigidbody2D = GetComponent<Rigidbody2D>();
         _playerNicknameText = GetComponentInChildren<TextMeshProUGUI>();
         _characterAnimator = GetComponentInChildren<Animator>();
         _trailRenderer = GetComponentInChildren<TrailRenderer>();
         _shieldVFX = GetComponentInChildren<Shield_VFX>();
-        
+
         _projectilesLayer = LayerMask.NameToLayer("EnemiesProjectiles");
         _enemiesLayer = LayerMask.NameToLayer("Enemies");
         _pickupsLayer = LayerMask.NameToLayer("Pickups");
-        
+        _playersLayer = LayerMask.NameToLayer("Player");
+
         // Only the owner needs a real physics simulation to get blocked by
         // walls/obstacles. Remote copies get their position overwritten by
         // PhotonTransformView every frame - if they stayed Dynamic, their
@@ -110,14 +118,14 @@ public class PlayerCharacter : MonoBehaviourPun
     private IEnumerator WaitForRoomBeReady()
     {
         yield return new WaitUntil(() => PhotonNetwork.InRoom);
-        
+
         photonView.RPC(nameof(RpcStartInvincible), RpcTarget.AllBuffered);
-        
+
         photonView.RPC(nameof(RpcSetNickname), RpcTarget.AllBuffered, PhotonNetwork.NickName);
-        
+
         if(!photonView.IsMine)
-            GetComponent<Collider2D>().enabled = false;
-            
+            playerCollider.enabled = false;
+
     }
 
     private void Update()
@@ -131,6 +139,26 @@ public class PlayerCharacter : MonoBehaviourPun
                 photonView.RPC(nameof(RpcDeath), RpcTarget.All);
             else
                 RpcDeath();
+        }
+
+        if (Keyboard.current.tKey.wasPressedThisFrame)
+        {
+            // Get other player in the room
+            Player otherPlayer = null;
+            foreach (var player in PhotonNetwork.PlayerList)
+            {
+                if (player != PhotonNetwork.LocalPlayer)
+                {
+                    otherPlayer = player;
+                    break;
+                }
+            }
+
+            if (otherPlayer == null) return;
+
+            bool isOtherPlayerOutOfLives = otherPlayer.CustomProperties.TryGetValue(GameMode.PlayerOutOfLivesKey, out var isOutOfLives) && (bool)isOutOfLives;
+
+            Debug.Log("Is other player out of lives? " + isOtherPlayerOutOfLives);
         }
 #endif
 
@@ -161,7 +189,7 @@ public class PlayerCharacter : MonoBehaviourPun
         _playerNicknameText.color = GameMode.GetPlayerColorBasedOnPlayerType(photonView.Owner);
     }
 
-    public void Move(Vector2 direction) 
+    public void Move(Vector2 direction)
     {
         _characterAnimator.SetBool(IsMovingHash, direction.sqrMagnitude > 0.01f);
         _characterAnimator.SetFloat(MoveXHash, direction.x);
@@ -170,15 +198,15 @@ public class PlayerCharacter : MonoBehaviourPun
         Vector2 movement = new Vector2(direction.x, direction.y) * speed;
         _rigidbody2D.linearVelocity = movement;
     }
-    
+
     public void TryShoot()
     {
         if(_projectilesActive > 0) return;
-        
+
         if (PhotonNetwork.IsConnected)
         {
             if (!photonView.IsMine) return;
-            
+
             Vector2 projectileSpawnPosition = projectileSpawnPoint.position;
             Vector2 characterVelocity = _rigidbody2D.linearVelocity;
 
@@ -194,7 +222,7 @@ public class PlayerCharacter : MonoBehaviourPun
             RpcShoot(projectileSpawnPoint.position, _rigidbody2D.linearVelocity, _shotCounter++, new PhotonMessageInfo());
         }
     }
-    
+
     [PunRPC]
     private void RpcShoot(Vector2 projectileSpawnPosition, Vector2 shooterVelocity, int shotId, PhotonMessageInfo info)
     {
@@ -234,15 +262,15 @@ public class PlayerCharacter : MonoBehaviourPun
         if(other.gameObject.layer == _projectilesLayer || other.gameObject.layer == _enemiesLayer)
         {
             if (_invincible || bBotMode) return;
-            
+
             photonView.RPC(nameof(RpcDeath), RpcTarget.All);
         }
-        
+
         if(other.gameObject.layer == _pickupsLayer)
         {
             var pickup = other.GetComponent<Pickup>();
             if (pickup == null) return;
-            
+
             if(CheckIfThisPickupIsActive(pickup.Type)) return;
 
             if (PhotonHandlers.CanUseNetwork)
@@ -255,40 +283,66 @@ public class PlayerCharacter : MonoBehaviourPun
                 RpcSetPickupState(pickup.Type, pickup.Duration);
                 Destroy(other.gameObject);
             }
-            
+
             if(photonView.IsMine)
                 GameManager.Instance.AudioManager.PlaySfx(pickup.pickupCollectedSfx);
+        }
+
+        if (other.gameObject.layer == _playersLayer)
+        {
+            if(!_hasMedkit) return;
+            
+            Player otherPlayer = other.GetComponent<PhotonView>().Owner;
+            
+            if(otherPlayer == null || otherPlayer == PhotonNetwork.LocalPlayer || !GameMode.IsPlayerOutOfLives(otherPlayer)) return;
+            
+            SetPickupState(Pickup.PickupType.Medkit, false);
+            
+            GameMode.Instance.RequestRespawnDeadPlayer(otherPlayer);
         }
     }
 
     private void OnCollisionEnter2D(Collision2D other)
     {
         if(!bBotMode || !photonView.IsMine) return;
-        
+
         _botMoveDirection = -_botMoveDirection; // Reverse direction on collision
+    }
+    
+    [PunRPC]
+    public void RessurectPlayer()
+    {
+        if(photonView.IsMine)
+            photonView.RPC(nameof(RessurectPlayer), RpcTarget.Others);
+        
+        photonView.RPC(nameof(RpcStartInvincible), RpcTarget.AllBuffered);
+        _characterAnimator.SetBool(IsDeadHash, false);
+        _characterAnimator.Rebind();
+        _rigidbody2D.linearVelocity = Vector2.zero;
+        //GameManager.Instance.AudioManager.PlaySfx(ressurectSfx);
     }
 
     [PunRPC]
     private void RpcDeath()
     {
         bBotMode = false;
-        
+
         _rigidbody2D.linearVelocity = Vector2.zero;
-        
+
         _characterAnimator.SetBool(IsDeadHash, true);
-        
+
         _shieldVFX.BreakShield();
-        
+
         GameManager.Instance.AudioManager.PlaySfx(deathSfx);
-        
+
         OnPlayerDeath?.Invoke(this);
-        
+
         StartCoroutine(DeathRoutine());
     }
 
     private IEnumerator DeathRoutine()
     {
-        SpriteRenderer.enabled = true;
+        _spriteRenderer.enabled = true;
         float elapsedTime = 0f;
 
         float deathDuration = GameMode.Instance ? GameMode.Instance.playerDeathCooldown : 1.5f;
@@ -304,18 +358,20 @@ public class PlayerCharacter : MonoBehaviourPun
             yield return new WaitForSeconds(0.05f);
             elapsedTime += 0.1f;
         }
-        
-        if(photonView.IsMine)
+
+        _spriteRenderer.enabled = true;
+
+        if (photonView.IsMine && GameMode.Instance.CurrentLives > 0)
         {
             PhotonNetwork.Destroy(gameObject);
         }
     }
-    
+
     private IEnumerator DeathBlinkEffect(float interval)
     {
         while (true)
         {
-            SpriteRenderer.enabled = !SpriteRenderer.enabled;
+            _spriteRenderer.enabled = !_spriteRenderer.enabled;
             yield return new WaitForSeconds(interval);
         }
     }
@@ -324,12 +380,12 @@ public class PlayerCharacter : MonoBehaviourPun
     private void RpcStartInvincible()
     {
         if(_invincible) return;
-        
+
         if(_invincibleCoroutine != null)
             StopCoroutine(_invincibleCoroutine);
         _invincibleCoroutine = StartCoroutine(Invincible(true));
     }
-    
+
     [PunRPC]
     private void RpcEndInvincible()
     {
@@ -340,20 +396,20 @@ public class PlayerCharacter : MonoBehaviourPun
         }
 
         _invincible = false;
-        SpriteRenderer.enabled = true;
+        _spriteRenderer.enabled = true;
     }
-    
+
     private IEnumerator Invincible(bool isSpawnInvencible, float duration = 3.0f)
     {
         _invincible = true;
-        SpriteRenderer.enabled = true;
+        _spriteRenderer.enabled = true;
 
         if (isSpawnInvencible)
         {
             float elapsedTime = 0.0f;
             while (elapsedTime < duration)
             {
-                SpriteRenderer.enabled = !SpriteRenderer.enabled;
+                _spriteRenderer.enabled = !_spriteRenderer.enabled;
 
                 yield return new WaitForSeconds(0.2f);
                 elapsedTime += 0.2f;
@@ -365,34 +421,36 @@ public class PlayerCharacter : MonoBehaviourPun
             yield return new WaitForSeconds(duration);
         }
 
-        SpriteRenderer.enabled = true;
+        _spriteRenderer.enabled = true;
         _invincible = false;
-        
+
         _shieldVFX.BreakShield();
-        
+
         if(PhotonHandlers.CanUseNetwork)
             photonView.RPC(nameof(RpcEndInvincible), RpcTarget.OthersBuffered);
         else
             RpcEndInvincible();
     }
-    
+
     [PunRPC]
     private void RpcSetPickupState(Pickup.PickupType pickupType, float duration)
     {
         StartCoroutine(PickupDuration(pickupType, duration));
-        
+
         OnPickupCollected?.Invoke(pickupType, duration);
     }
-    
+
     private IEnumerator PickupDuration(Pickup.PickupType pickupType, float duration)
     {
         SetPickupState(pickupType, true, duration);
-        
+
+        if(pickupType == Pickup.PickupType.Medkit) yield break;
+
         yield return new WaitForSeconds(duration);
-        
+
         SetPickupState(pickupType, false);
     }
-    
+
     private bool CheckIfThisPickupIsActive(Pickup.PickupType pickupType)
     {
         return pickupType switch
@@ -405,14 +463,14 @@ public class PlayerCharacter : MonoBehaviourPun
             _ => false
         };
     }
-    
+
     private void SetPickupState(Pickup.PickupType pickupType, bool state, float duration = 0f)
     {
         switch (pickupType)
         {
             case Pickup.PickupType._1UP:
                 if(!photonView.IsMine) return;
-                
+
                 if(GameMode.Instance == null) return;
                 GameMode.Instance.AddExtraLife();
                 break;
@@ -448,25 +506,25 @@ public class PlayerCharacter : MonoBehaviourPun
                 break;
             case Pickup.PickupType.Medkit:
                 if(!photonView.IsMine || !GameMode.Instance) return;
-                GameMode.Instance.RequestRespawnDeadPlayer();
+                _hasMedkit = state;
+                
+                if(!state)
+                    Destroy(_medkitIconImage.gameObject);
+                else
+                    _medkitIconImage = CreatePickupIcon(pickupType);
                 break;
             default:
                 Debug.LogWarning("Unknown pickup type: " + pickupType);
                 break;
         }
     }
-    
+
     private IEnumerator PickupIconRoutine(Pickup.PickupType pickupType, float duration)
     {
         if(!photonView.IsMine) yield break;
-        
+
         // Create an empty GameObject to hold the pickup icon
-        GameObject pickupIconGO = new GameObject("PickupIcon");
-        pickupIconGO.transform.SetParent(pickupsStatusPanel, false);
-        pickupIconGO.AddComponent<Image>();
-        
-        var pickIconImage = pickupIconGO.GetComponent<Image>();
-        pickIconImage.sprite = pickupTypeSprites[pickupType];
+        var pickIconImage = CreatePickupIcon(pickupType);
 
         float countdown = duration;
         Color originalColor = pickIconImage.color;
@@ -485,13 +543,24 @@ public class PlayerCharacter : MonoBehaviourPun
 
         Destroy(pickIconImage.gameObject);
     }
-    
+
+    private Image CreatePickupIcon(Pickup.PickupType pickupType)
+    {
+        GameObject pickupIconGO = new GameObject("PickupIcon");
+        pickupIconGO.transform.SetParent(pickupsStatusPanel, false);
+        pickupIconGO.AddComponent<Image>();
+
+        var pickIconImage = pickupIconGO.GetComponent<Image>();
+        pickIconImage.sprite = pickupTypeSprites[pickupType];
+        return pickIconImage;
+    }
+
     private void OnGameOver(GameMode.GameOverReason reason)
     {
         if(!photonView.IsMine) return;
-        
+
         bBotMode = false;
-        
+
         photonView.RPC(nameof(RpcDeath), RpcTarget.All);
     }
 
@@ -499,7 +568,7 @@ public class PlayerCharacter : MonoBehaviourPun
     {
         GameMode.GameOverEvent += OnGameOver;
     }
-    
+
     private void OnDisable()
     {
         GameMode.GameOverEvent -= OnGameOver;

@@ -211,6 +211,8 @@ public class UI_Game : MonoBehaviour, IInRoomCallbacks, IMatchmakingCallbacks
     
     private void OnLivesChanged(int lives)
     {
+        if(_localPlayerStatus.LivesCounterText == null) return;
+        
         if(lives <= 0)
         {            
             _localPlayerStatus.LivesCounterText.text = "0";

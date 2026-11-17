@@ -111,6 +111,18 @@ namespace _Game.Scripts
         private int _hordesSpawnedInCurrentWave = 0;
         private Dictionary<PlayerType, PlayerCharacter> _playerCharacters;
 
+        public int CurrentLives
+        {
+            get => _currentLives;
+            private set
+            {
+                _currentLives = value;
+                OnLivesChanged?.Invoke(_currentLives);
+                
+                PhotonNetwork.LocalPlayer.SetCustomProperties(new Hashtable { { PlayerOutOfLivesKey, _currentLives <= 0 } });
+            }
+        }
+
         public int CurrentWave => _currentWave;
         public int HordesSpawnedInCurrentWave => _hordesSpawnedInCurrentWave;
         public GameState CurrentGameState => _currentGameState;
@@ -122,6 +134,7 @@ namespace _Game.Scripts
 
         public static readonly string PlayerTypeKey = "AvailablePlayerTypes";
         public static readonly string PlayerScoreKey = "PlayerScore";
+        public static readonly string PlayerOutOfLivesKey = "PlayerOutOfLives";
 
         public int StartingLives => startingLives;
         public int StartGameDelay => startGameDelay;
@@ -159,7 +172,7 @@ namespace _Game.Scripts
             if (bDebugMode)
                 Debug.Log("GameMode.Start");
 
-            _currentLives = startingLives;
+            CurrentLives = startingLives;
             _currentGameState = GameState.WaitingForPlayers;
 
             MosquitosLimit.OnMosquitosReachedLimit += OnMosquitosReachedLimit;
@@ -293,6 +306,13 @@ namespace _Game.Scripts
 
             player.SetCustomProperties(new Hashtable { { PlayerTypeKey, playerType } });
         }
+        
+        public static bool IsPlayerOutOfLives(Player player)
+        {
+            if (player == null) return false;
+
+            return player.CustomProperties.TryGetValue(PlayerOutOfLivesKey, out var isOutOfLives) && (bool)isOutOfLives;
+        }
 
         [PunRPC]
         private void RpcSpawnPlayerCharacter(PlayerType playerType)
@@ -302,13 +322,29 @@ namespace _Game.Scripts
                           PhotonNetwork.LocalPlayer.NickName);
             
             Vector3 playerSpawnPosition = playerSpawnLocations[playerType].position;
-
-            var playerCharacter = PhotonNetwork
-                .Instantiate(_playerCharacters[playerType].name, playerSpawnPosition, Quaternion.identity)
+            
+            PlayerCharacter playerCharacter = FindObjectsOfType<PlayerCharacter>().FirstOrDefault(pc =>
+            {
+                var photonView = pc.GetComponent<PhotonView>();
+                
+                return photonView != null &&
+                       photonView.Owner == PhotonNetwork.LocalPlayer &&
+                       photonView.Owner.CustomProperties.TryGetValue(PlayerTypeKey, out var index) &&
+                       (PlayerType)index == playerType;
+            });
+            
+            if(playerCharacter == null)
+                playerCharacter = PhotonNetwork.Instantiate(_playerCharacters[playerType].name, playerSpawnPosition, Quaternion.identity)
                 .GetComponent<PlayerCharacter>();
+            else
+            {
+                playerCharacter.RessurectPlayer();
+            }
+            
+            
             PlayerController.Local.Possess(playerCharacter);
 
-            OnPlayerCharacterSpawned?.Invoke(PhotonNetwork.LocalPlayer, playerCharacter, _currentLives);
+            OnPlayerCharacterSpawned?.Invoke(PhotonNetwork.LocalPlayer, playerCharacter, CurrentLives);
 
             SetPlayerCharactersAlive(_playerCharactersAlive + 1);
 
@@ -553,17 +589,22 @@ namespace _Game.Scripts
             photonView.RPC(nameof(RpcReplicateUnsubscribeFromMosquitosHordeEvents), RpcTarget.All);
         }
 
-        public void RequestRespawnDeadPlayer()
+        public void RequestRespawnDeadPlayer(Player player = null)
         {
-            photonView.RPC(nameof(RpcRespawnDeadPlayer), RpcTarget.All);
+            if(player == null)
+                photonView.RPC(nameof(RpcRespawnDeadPlayer), RpcTarget.All);
+            else
+            {
+                photonView.RPC(nameof(RpcRespawnDeadPlayer), player);
+            }
         }
 
         [PunRPC]
         private void RpcRespawnDeadPlayer()
         {
-            if (_currentLives > 0) return;
+            if (CurrentLives > 0) return;
 
-            _currentLives = startingLives;
+            CurrentLives = startingLives;
 
             PlayerType playerType = GetPlayerType(PhotonNetwork.LocalPlayer);
 
@@ -605,7 +646,7 @@ namespace _Game.Scripts
 
             OnPlayerCharacterSpawned = null;
 
-            _currentLives = 0;
+            CurrentLives = 0;
             _currentGameState = GameState.GameOver;
 
             if (!PhotonNetwork.IsMasterClient) return;
@@ -624,16 +665,14 @@ namespace _Game.Scripts
 
             PlayerController.Local.UnPossess();
 
-            _currentLives--;
+            CurrentLives--;
 
             SetPlayerCharactersAlive(_playerCharactersAlive - 1);
-
-            OnLivesChanged?.Invoke(_currentLives);
 
             if (PhotonNetwork.CurrentRoom.PlayerCount == 1 && _mosquitosHordeInTheScene)
                 _mosquitosHordeInTheScene.stopMovement = true;
 
-            if (_playerCharactersAlive <= 0 && _currentLives <= 0 && _currentGameState != GameState.GameOver)
+            if (_playerCharactersAlive <= 0 && CurrentLives <= 0 && _currentGameState != GameState.GameOver)
             {
                 _photonView.RPC(nameof(RpcGameOver), RpcTarget.All, GameOverReason.AllPlayersDied);
                 return;
@@ -653,7 +692,7 @@ namespace _Game.Scripts
             if (PhotonNetwork.CurrentRoom.IsOpen)
                 PhotonNetwork.CurrentRoom.IsOpen = false;
 
-            _currentLives = 0;
+            CurrentLives = 0;
 
             StopAllCoroutines();
             CancelInvoke(nameof(SpawnPickup));
@@ -663,7 +702,7 @@ namespace _Game.Scripts
 
         private IEnumerator PlayerDeathCooldown()
         {
-            if (_currentLives <= 0)
+            if (CurrentLives <= 0)
                 yield break;
 
             yield return new WaitForSeconds(playerDeathCooldown);
@@ -680,8 +719,7 @@ namespace _Game.Scripts
 
         public void AddExtraLife()
         {
-            _currentLives++;
-            OnLivesChanged?.Invoke(_currentLives);
+            CurrentLives++;
         }
 
         private void InvokePickupSpawn()
