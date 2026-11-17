@@ -23,6 +23,7 @@ public class Projectile : MonoBehaviour
     [SerializeField] private Collider2D normalCollider;
     [SerializeField] private Collider2D piercingCollider;
     [SerializeField] private PlayerType instigatorPlayerType = PlayerType.None;
+    public Vector2 piercingScale = new Vector2(1, 1);
     
     [Header("SFX")]
     public AudioCue explosionSfx;
@@ -73,6 +74,7 @@ public class Projectile : MonoBehaviour
         {
             piercingCollider.enabled = true;
             normalCollider.enabled = false;
+            transform.localScale = new Vector3(piercingScale.x, piercingScale.y, 1);
         }
 
         _animator.SetBool(PiercingHash, pierceThroughEnemies);
