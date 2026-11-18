@@ -149,6 +149,8 @@ namespace _Game.Scripts
         public static Action<Player, PlayerCharacter, int> OnPlayerCharacterSpawned;
         public static Action RoomReady;
         public static Action<float> OnHordeProgressChanged;
+        public static Action<List<PlayerCharacter>> OnPlayerOutOfLives;
+        
 
         protected override void Awake()
         {
@@ -314,19 +316,21 @@ namespace _Game.Scripts
             return player.CustomProperties.TryGetValue(PlayerOutOfLivesKey, out var isOutOfLives) && (bool)isOutOfLives;
         }
 
-        public PlayerCharacter CheckIfIsThereAnyPlayerOutOfLives()
+        public List<PlayerCharacter> CheckIfIsThereAnyPlayersOutOfLives()
         {
+            List<PlayerCharacter> outOfLivesPlayers = new List<PlayerCharacter>();
+            
             PlayerCharacter[] charactersInTheScene = GameObject.FindObjectsByType<PlayerCharacter>(FindObjectsSortMode.None);
 
-            foreach (var character in charactersInTheScene)
+            for (var i = 0; i < charactersInTheScene.Length; i++)
             {
-                if (IsPlayerOutOfLives(character.Owner))
+                if (IsPlayerOutOfLives(charactersInTheScene[i].Owner))
                 {
-                    return character;
+                    outOfLivesPlayers.Add(charactersInTheScene[i]);
                 }
             }
 
-            return null;
+            return outOfLivesPlayers;
         }
 
         [PunRPC]
@@ -686,6 +690,9 @@ namespace _Game.Scripts
 
             if (PhotonNetwork.CurrentRoom.PlayerCount == 1 && _mosquitosHordeInTheScene)
                 _mosquitosHordeInTheScene.stopMovement = true;
+            
+            if(CurrentLives <= 0)
+                _photonView.RPC(nameof(RpcOnPlayerOutOfLives), RpcTarget.All);
 
             if (_playerCharactersAlive <= 0 && CurrentLives <= 0 && _currentGameState != GameState.GameOver)
             {
@@ -694,6 +701,14 @@ namespace _Game.Scripts
             }
 
             StartCoroutine(PlayerDeathCooldown());
+        }
+
+        [PunRPC]
+        private void RpcOnPlayerOutOfLives()
+        {
+            List<PlayerCharacter> outOfLivesPlayers = CheckIfIsThereAnyPlayersOutOfLives();
+            
+            OnPlayerOutOfLives?.Invoke(outOfLivesPlayers);
         }
 
         [PunRPC]

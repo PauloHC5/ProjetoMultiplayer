@@ -13,8 +13,8 @@ MonoBehaviour:
   m_Name: Medkit_Collected
   m_EditorClassIdentifier: Assembly-CSharp::AudioCue
   _samples:
-  - {fileID: 8300000, guid: 318af886b0b47394ea7943fc7f189fc3, type: 3}
-  _minPitch: 0.82
+  - {fileID: 8300000, guid: be40a4b69bd609d408536f59f4f7e21e, type: 3}
+  _minPitch: 0.96
   _Maxpitch: 1.1
-  _minVolume: 0.79
+  _minVolume: 0.859
   _maxVolume: 1

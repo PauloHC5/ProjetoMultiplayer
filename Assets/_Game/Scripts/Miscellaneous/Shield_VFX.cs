@@ -57,8 +57,6 @@ public class Shield_VFX : MonoBehaviour
     {
         HitSide hitSide = GetHitSide(other.transform.position, transform.position);
         
-        Debug.Log($"Shield hit from {hitSide}");
-        
         switch (hitSide)
         {
             case HitSide.Up:

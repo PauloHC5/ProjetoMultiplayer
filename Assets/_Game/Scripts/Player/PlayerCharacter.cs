@@ -1,5 +1,7 @@
 using System;
 using System.Collections;
+using System.Collections.Generic;
+using System.Linq;
 using _Game.Scripts;
 using AYellowpaper.SerializedCollections;
 using Photon.Pun;
@@ -34,6 +36,7 @@ public class PlayerCharacter : MonoBehaviourPun
     public SerializedDictionary<Pickup.PickupType, Sprite> pickupTypeSprites;
     public RectTransform playerMedkitWarningPanel;    
     public float medkitWarningPanelSinMultiplier = 1.0f;
+    public float medkitWarningPanelAmplitude = 5.0f;
     public float maxMedkitWarningPanelAlpha = 0.5f;    
 
     [Header("Prefabs")]
@@ -66,6 +69,12 @@ public class PlayerCharacter : MonoBehaviourPun
 
     public Action<PlayerCharacter> OnPlayerDeath;
     public Action<Pickup.PickupType, float> OnPickupCollected;
+    public Action<PlayerCharacter> OnPlayerRessurected;
+    
+    private delegate void DisableMedkitWarningDelegate();
+    
+    private readonly Dictionary<int, DisableMedkitWarningDelegate> _medkitWarningPanelDisableCallback = new Dictionary<int, DisableMedkitWarningDelegate>();
+    
     public Player Owner => photonView.Owner;
 
     private readonly int MoveXHash = Animator.StringToHash("MoveX");
@@ -141,7 +150,7 @@ public class PlayerCharacter : MonoBehaviourPun
             Color color = playerMedkitWarningPanel.GetComponent<Image>().color;
             color.a = alpha;
             playerMedkitWarningPanel.GetComponent<Image>().color = color;
-            playerMedkitWarningPanel.localPosition += new Vector3(0, Mathf.Sin(Time.time * medkitWarningPanelSinMultiplier) * 5.0f, 0);
+            playerMedkitWarningPanel.localPosition += new Vector3(0, Mathf.Sin(Time.time * medkitWarningPanelSinMultiplier) * medkitWarningPanelAmplitude, 0);
         }            
 
         if (!photonView.IsMine) return;
@@ -336,7 +345,9 @@ public class PlayerCharacter : MonoBehaviourPun
         _characterAnimator.SetBool(IsDeadHash, false);
         _characterAnimator.Rebind();
         _rigidbody2D.linearVelocity = Vector2.zero;
-        //GameManager.Instance.AudioManager.PlaySfx(ressurectSfx);
+        GameManager.Instance.AudioManager.PlaySfx(ressurectSfx);
+        
+        OnPlayerRessurected?.Invoke(this);
     }
 
     [PunRPC]
@@ -356,8 +367,17 @@ public class PlayerCharacter : MonoBehaviourPun
 
         StartCoroutine(DeathRoutine());
 
-        if(photonView.IsMine)
+        if (photonView.IsMine)
+        {
             playerCollider.enabled = false;
+            
+            if(_medkitWarningPanelDisableCallback.Count <= 0) return;
+            
+            foreach (var key in _medkitWarningPanelDisableCallback.Keys.ToList())
+            {
+                _medkitWarningPanelDisableCallback[key]?.Invoke();
+            }
+        }
     }
 
     private IEnumerator DeathRoutine()
@@ -480,6 +500,7 @@ public class PlayerCharacter : MonoBehaviourPun
             Pickup.PickupType.Repellent => _invincible,
             Pickup.PickupType.SpeedBuff => _speedBuffActive,
             Pickup.PickupType.TripleFire => _tripleShootActive,
+            Pickup.PickupType.Medkit => _hasMedkit,
             _ => false
         };
     }
@@ -533,14 +554,60 @@ public class PlayerCharacter : MonoBehaviourPun
                 else
                     _medkitIconImage = CreatePickupIcon(pickupType);
 
-                PlayerCharacter deadCharacter = GameMode.Instance.CheckIfIsThereAnyPlayerOutOfLives();
+                List<PlayerCharacter> deadPlayers = GameMode.Instance.CheckIfIsThereAnyPlayersOutOfLives();
+                
+                EnableMedkitWarning(deadPlayers);
 
-                deadCharacter?.playerMedkitWarningPanel.gameObject.SetActive(true);
                 break;
             default:
                 Debug.LogWarning("Unknown pickup type: " + pickupType);
                 break;
         }
+    }
+    
+    private void EnableMedkitWarning(List<PlayerCharacter> deadPlayers)
+    {
+        if(!photonView.IsMine || deadPlayers == null || deadPlayers.Count <= 0 || !_hasMedkit) return;
+
+        foreach (var deadPlayer in deadPlayers)
+        {
+            if(deadPlayer == null || _medkitWarningPanelDisableCallback.ContainsKey(deadPlayer.Owner.ActorNumber)) continue;
+
+            deadPlayer.playerMedkitWarningPanel.gameObject.SetActive(true);
+
+            _medkitWarningPanelDisableCallback.Add(deadPlayer.Owner.ActorNumber, () =>
+            {
+                if (!photonView.IsMine) return;
+
+                deadPlayer.playerMedkitWarningPanel.gameObject.SetActive(false);
+                
+                _medkitWarningPanelDisableCallback.Remove(deadPlayer.Owner.ActorNumber);
+            });
+            
+            deadPlayer.OnPlayerRessurected += DisableMedkitWarning;
+        }
+    }
+    
+    private void DisableMedkitWarning(PlayerCharacter resurrectedPlayer)
+    {
+        if(!_hasMedkit)
+        {
+            if(_medkitWarningPanelDisableCallback.Count <= 0) return;
+            
+            foreach (var key in _medkitWarningPanelDisableCallback.Keys.ToList())
+            {
+                _medkitWarningPanelDisableCallback[key]?.Invoke();
+            }
+        }
+        else
+        {
+            if (!_medkitWarningPanelDisableCallback.TryGetValue(resurrectedPlayer.Owner.ActorNumber,
+                    out var disableCallback)) return;
+        
+            disableCallback?.Invoke();
+        }
+        
+        resurrectedPlayer.OnPlayerRessurected -= DisableMedkitWarning;
     }
 
     private IEnumerator PickupIconRoutine(Pickup.PickupType pickupType, float duration)
@@ -591,10 +658,12 @@ public class PlayerCharacter : MonoBehaviourPun
     private void OnEnable()
     {
         GameMode.GameOverEvent += OnGameOver;
+        GameMode.OnPlayerOutOfLives += EnableMedkitWarning;
     }
 
     private void OnDisable()
     {
         GameMode.GameOverEvent -= OnGameOver;
+        GameMode.OnPlayerOutOfLives -= EnableMedkitWarning;
     }
 }
