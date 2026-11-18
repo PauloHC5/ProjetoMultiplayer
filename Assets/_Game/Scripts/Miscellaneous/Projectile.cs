@@ -75,6 +75,8 @@ public class Projectile : MonoBehaviour
             piercingCollider.enabled = true;
             normalCollider.enabled = false;
             transform.localScale = new Vector3(piercingScale.x, piercingScale.y, 1);
+            _trailRenderer.startWidth = piercingScale.x;
+            _trailRenderer.endWidth = piercingScale.x;
         }
 
         _animator.SetBool(PiercingHash, pierceThroughEnemies);
