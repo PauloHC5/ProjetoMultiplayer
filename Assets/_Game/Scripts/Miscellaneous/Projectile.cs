@@ -27,6 +27,8 @@ public class Projectile : MonoBehaviour
     
     [Header("SFX")]
     public AudioCue explosionSfx;
+    public AudioCue speedBuffSfx;
+    public AudioCue piercingBuffSfx;
     
     public float Speed => speed;
 
@@ -77,6 +79,7 @@ public class Projectile : MonoBehaviour
             transform.localScale = new Vector3(piercingScale.x, piercingScale.y, 1);
             _trailRenderer.startWidth = piercingScale.x;
             _trailRenderer.endWidth = piercingScale.x;
+            GameManager.Instance.AudioManager.PlaySfx(piercingBuffSfx);
         }
 
         _animator.SetBool(PiercingHash, pierceThroughEnemies);
@@ -88,6 +91,7 @@ public class Projectile : MonoBehaviour
         if (doubleSpeed)
         {
             speed *= 2f;            
+            GameManager.Instance.AudioManager.PlaySfx(speedBuffSfx, _pierceThroughEnemies ? 0.5f : -1f);
         }
         
         ProjectileVelocity();

@@ -137,9 +137,9 @@ public class AudioManager
         InternalPlaySfx(clip, pitch, volume);
     }    
 
-    public void PlaySfx(AudioCue sfx)
+    public void PlaySfx(AudioCue sfx, float pitch = -1f)
     {
-        InternalPlaySfx(sfx.GetSample(), sfx.GetPitch(), sfx.GetVolume());
+        InternalPlaySfx(sfx.GetSample(),  pitch == -1f ? sfx.GetPitch() : pitch, sfx.GetVolume());
     }
     
     public void PlaySfx(AudioClip clip, float pitch, float volume, bool bLoop)
