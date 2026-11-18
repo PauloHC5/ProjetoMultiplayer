@@ -657,7 +657,7 @@ MonoBehaviour:
   beginShow:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 247556409}
+      - m_Target: {fileID: 345395261}
         m_TargetAssemblyTypeName: UnityEngine.AudioSource, UnityEngine
         m_MethodName: PlayOneShot
         m_Mode: 2
@@ -671,110 +671,83 @@ MonoBehaviour:
         m_CallState: 2
   onShown:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 247556409}
+        m_TargetAssemblyTypeName: UIScalePulse, Assembly-CSharp
+        m_MethodName: set_enabled
+        m_Mode: 6
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 1
+        m_CallState: 2
   beginHide:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 247556409}
+        m_TargetAssemblyTypeName: UIScalePulse, Assembly-CSharp
+        m_MethodName: set_enabled
+        m_Mode: 6
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
   onHidden:
     m_PersistentCalls:
       m_Calls: []
---- !u!82 &247556409
-AudioSource:
+--- !u!114 &247556409
+MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 247556404}
-  m_Enabled: 1
-  serializedVersion: 4
-  OutputAudioMixerGroup: {fileID: -669819918315706721, guid: e1510e5bb3ebbd0469cea7bfbded578b, type: 2}
-  m_audioClip: {fileID: 0}
-  m_Resource: {fileID: 0}
-  m_PlayOnAwake: 0
-  m_Volume: 1
-  m_Pitch: 1
-  Loop: 0
-  Mute: 0
-  Spatialize: 0
-  SpatializePostEffects: 0
-  Priority: 128
-  DopplerLevel: 1
-  MinDistance: 1
-  MaxDistance: 500
-  Pan2D: 0
-  rolloffMode: 0
-  BypassEffects: 0
-  BypassListenerEffects: 0
-  BypassReverbZones: 0
-  rolloffCustomCurve:
+  m_Enabled: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bd6b3373761d78e49ab1d8bf38e34836, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::UIScalePulse
+  minScale: {x: 1, y: 1, z: 1}
+  maxScale: {x: 1.2, y: 1.2, z: 1}
+  duration: 0.5
+  curve:
     serializedVersion: 2
     m_Curve:
     - serializedVersion: 3
       time: 0
-      value: 1
+      value: 0
       inSlope: 0
       outSlope: 0
       tangentMode: 0
       weightedMode: 0
-      inWeight: 0.33333334
-      outWeight: 0.33333334
+      inWeight: 0
+      outWeight: 0
     - serializedVersion: 3
       time: 1
-      value: 0
-      inSlope: 0
-      outSlope: 0
-      tangentMode: 0
-      weightedMode: 0
-      inWeight: 0.33333334
-      outWeight: 0.33333334
-    m_PreInfinity: 2
-    m_PostInfinity: 2
-    m_RotationOrder: 4
-  panLevelCustomCurve:
-    serializedVersion: 2
-    m_Curve:
-    - serializedVersion: 3
-      time: 0
-      value: 0
-      inSlope: 0
-      outSlope: 0
-      tangentMode: 0
-      weightedMode: 0
-      inWeight: 0.33333334
-      outWeight: 0.33333334
-    m_PreInfinity: 2
-    m_PostInfinity: 2
-    m_RotationOrder: 4
-  spreadCustomCurve:
-    serializedVersion: 2
-    m_Curve:
-    - serializedVersion: 3
-      time: 0
-      value: 0
-      inSlope: 0
-      outSlope: 0
-      tangentMode: 0
-      weightedMode: 0
-      inWeight: 0.33333334
-      outWeight: 0.33333334
-    m_PreInfinity: 2
-    m_PostInfinity: 2
-    m_RotationOrder: 4
-  reverbZoneMixCustomCurve:
-    serializedVersion: 2
-    m_Curve:
-    - serializedVersion: 3
-      time: 0
       value: 1
       inSlope: 0
       outSlope: 0
       tangentMode: 0
       weightedMode: 0
-      inWeight: 0.33333334
-      outWeight: 0.33333334
+      inWeight: 0
+      outWeight: 0
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
+  ignoreTimeScale: 1
+  onShown:
+    m_PersistentCalls:
+      m_Calls: []
+  onHidden:
+    m_PersistentCalls:
+      m_Calls: []
 --- !u!1 &274422551
 GameObject:
   m_ObjectHideFlags: 0
@@ -1488,67 +1461,6 @@ SpriteRenderer:
   m_SpriteTileMode: 0
   m_WasSpriteAssigned: 1
   m_SpriteSortPoint: 0
---- !u!1001 &380459552
-PrefabInstance:
-  m_ObjectHideFlags: 0
-  serializedVersion: 2
-  m_Modification:
-    serializedVersion: 3
-    m_TransformParent: {fileID: 0}
-    m_Modifications:
-    - target: {fileID: 2766612844741126211, guid: 8e4ba7b0373b782488eb067a8d1962cf, type: 3}
-      propertyPath: m_LocalPosition.x
-      value: -3.59
-      objectReference: {fileID: 0}
-    - target: {fileID: 2766612844741126211, guid: 8e4ba7b0373b782488eb067a8d1962cf, type: 3}
-      propertyPath: m_LocalPosition.y
-      value: -8.43
-      objectReference: {fileID: 0}
-    - target: {fileID: 2766612844741126211, guid: 8e4ba7b0373b782488eb067a8d1962cf, type: 3}
-      propertyPath: m_LocalPosition.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 2766612844741126211, guid: 8e4ba7b0373b782488eb067a8d1962cf, type: 3}
-      propertyPath: m_LocalRotation.w
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 2766612844741126211, guid: 8e4ba7b0373b782488eb067a8d1962cf, type: 3}
-      propertyPath: m_LocalRotation.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 2766612844741126211, guid: 8e4ba7b0373b782488eb067a8d1962cf, type: 3}
-      propertyPath: m_LocalRotation.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 2766612844741126211, guid: 8e4ba7b0373b782488eb067a8d1962cf, type: 3}
-      propertyPath: m_LocalRotation.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 2766612844741126211, guid: 8e4ba7b0373b782488eb067a8d1962cf, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 2766612844741126211, guid: 8e4ba7b0373b782488eb067a8d1962cf, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 2766612844741126211, guid: 8e4ba7b0373b782488eb067a8d1962cf, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 5303597459420787867, guid: 8e4ba7b0373b782488eb067a8d1962cf, type: 3}
-      propertyPath: m_Name
-      value: Piercing Projectiles
-      objectReference: {fileID: 0}
-    - target: {fileID: 5424411071446052392, guid: 8e4ba7b0373b782488eb067a8d1962cf, type: 3}
-      propertyPath: sceneViewId
-      value: 6
-      objectReference: {fileID: 0}
-    m_RemovedComponents: []
-    m_RemovedGameObjects: []
-    m_AddedGameObjects: []
-    m_AddedComponents: []
-  m_SourcePrefab: {fileID: 100100000, guid: 8e4ba7b0373b782488eb067a8d1962cf, type: 3}
 --- !u!1 &380685511
 GameObject:
   m_ObjectHideFlags: 0
@@ -3165,6 +3077,7 @@ GameObject:
   - component: {fileID: 795305635}
   - component: {fileID: 795305634}
   - component: {fileID: 795305636}
+  - component: {fileID: 795305637}
   m_Layer: 5
   m_Name: Queen Incoming
   m_TagString: Untagged
@@ -3188,7 +3101,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 1}
   m_AnchorMax: {x: 0.5, y: 1}
-  m_AnchoredPosition: {x: 0, y: -87.140015}
+  m_AnchoredPosition: {x: 0, y: -155}
   m_SizeDelta: {x: 522.6, y: 174.29}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &795305634
@@ -3242,7 +3155,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::UIPanelScaleAnimator
   showDuration: 0.25
-  hideDuration: 0.5
+  hideDuration: 0.3
   showCurve:
     serializedVersion: 2
     m_Curve:
@@ -3298,8 +3211,78 @@ MonoBehaviour:
       m_Calls: []
   onShown:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 795305637}
+        m_TargetAssemblyTypeName: UIScalePulse, Assembly-CSharp
+        m_MethodName: set_enabled
+        m_Mode: 6
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 1
+        m_CallState: 2
   beginHide:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 795305637}
+        m_TargetAssemblyTypeName: UIScalePulse, Assembly-CSharp
+        m_MethodName: set_enabled
+        m_Mode: 6
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+  onHidden:
+    m_PersistentCalls:
+      m_Calls: []
+--- !u!114 &795305637
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 795305632}
+  m_Enabled: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bd6b3373761d78e49ab1d8bf38e34836, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::UIScalePulse
+  minScale: {x: 1, y: 1, z: 1}
+  maxScale: {x: 1.5, y: 1.5, z: 1}
+  duration: 0.8
+  curve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    - serializedVersion: 3
+      time: 1
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  ignoreTimeScale: 1
+  onShown:
     m_PersistentCalls:
       m_Calls: []
   onHidden:
@@ -4278,6 +4261,7 @@ GameObject:
   - component: {fileID: 1330378936}
   - component: {fileID: 1330378935}
   - component: {fileID: 1330378937}
+  - component: {fileID: 1330378938}
   m_Layer: 5
   m_Name: Wave Completed
   m_TagString: Untagged
@@ -4354,7 +4338,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0fe99a181ceb2414ea5471f56f7f0405, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::UIPanelScaleAnimator
-  showDuration: 0.25
+  showDuration: 1
   hideDuration: 0.25
   showCurve:
     serializedVersion: 2
@@ -4411,8 +4395,78 @@ MonoBehaviour:
       m_Calls: []
   onShown:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 1330378938}
+        m_TargetAssemblyTypeName: UIScalePulse, Assembly-CSharp
+        m_MethodName: set_enabled
+        m_Mode: 6
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 1
+        m_CallState: 2
   beginHide:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 1330378938}
+        m_TargetAssemblyTypeName: UIScalePulse, Assembly-CSharp
+        m_MethodName: set_enabled
+        m_Mode: 6
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+  onHidden:
+    m_PersistentCalls:
+      m_Calls: []
+--- !u!114 &1330378938
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1330378933}
+  m_Enabled: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bd6b3373761d78e49ab1d8bf38e34836, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::UIScalePulse
+  minScale: {x: 1, y: 1, z: 1}
+  maxScale: {x: 1.2, y: 1.2, z: 1}
+  duration: 0.5
+  curve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    - serializedVersion: 3
+      time: 1
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  ignoreTimeScale: 1
+  onShown:
     m_PersistentCalls:
       m_Calls: []
   onHidden:
@@ -5979,67 +6033,6 @@ MonoBehaviour:
   m_ChildScaleWidth: 0
   m_ChildScaleHeight: 0
   m_ReverseArrangement: 0
---- !u!1001 &1820569716
-PrefabInstance:
-  m_ObjectHideFlags: 0
-  serializedVersion: 2
-  m_Modification:
-    serializedVersion: 3
-    m_TransformParent: {fileID: 0}
-    m_Modifications:
-    - target: {fileID: 1869639176960147643, guid: 8fdec7b0f08722f44b0d468e8c2d09f4, type: 3}
-      propertyPath: m_Name
-      value: Faster FIre
-      objectReference: {fileID: 0}
-    - target: {fileID: 1958786595868989960, guid: 8fdec7b0f08722f44b0d468e8c2d09f4, type: 3}
-      propertyPath: sceneViewId
-      value: 7
-      objectReference: {fileID: 0}
-    - target: {fileID: 8506341607841094755, guid: 8fdec7b0f08722f44b0d468e8c2d09f4, type: 3}
-      propertyPath: m_LocalPosition.x
-      value: 1.8772091
-      objectReference: {fileID: 0}
-    - target: {fileID: 8506341607841094755, guid: 8fdec7b0f08722f44b0d468e8c2d09f4, type: 3}
-      propertyPath: m_LocalPosition.y
-      value: -10.920834
-      objectReference: {fileID: 0}
-    - target: {fileID: 8506341607841094755, guid: 8fdec7b0f08722f44b0d468e8c2d09f4, type: 3}
-      propertyPath: m_LocalPosition.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 8506341607841094755, guid: 8fdec7b0f08722f44b0d468e8c2d09f4, type: 3}
-      propertyPath: m_LocalRotation.w
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 8506341607841094755, guid: 8fdec7b0f08722f44b0d468e8c2d09f4, type: 3}
-      propertyPath: m_LocalRotation.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 8506341607841094755, guid: 8fdec7b0f08722f44b0d468e8c2d09f4, type: 3}
-      propertyPath: m_LocalRotation.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 8506341607841094755, guid: 8fdec7b0f08722f44b0d468e8c2d09f4, type: 3}
-      propertyPath: m_LocalRotation.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 8506341607841094755, guid: 8fdec7b0f08722f44b0d468e8c2d09f4, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 8506341607841094755, guid: 8fdec7b0f08722f44b0d468e8c2d09f4, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 8506341607841094755, guid: 8fdec7b0f08722f44b0d468e8c2d09f4, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.z
-      value: 0
-      objectReference: {fileID: 0}
-    m_RemovedComponents: []
-    m_RemovedGameObjects: []
-    m_AddedGameObjects: []
-    m_AddedComponents: []
-  m_SourcePrefab: {fileID: 100100000, guid: 8fdec7b0f08722f44b0d468e8c2d09f4, type: 3}
 --- !u!1 &1980534253
 GameObject:
   m_ObjectHideFlags: 0
@@ -6954,7 +6947,7 @@ RectTransform:
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 3223.29, y: 1074.95}
+  m_SizeDelta: {x: 2771.875, y: 1385.9375}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!1001 &5177481107037386092
 PrefabInstance:
@@ -7141,5 +7134,3 @@ SceneRoots:
   - {fileID: 1016793504}
   - {fileID: 2106803663}
   - {fileID: 1272641705}
-  - {fileID: 380459552}
-  - {fileID: 1820569716}
