@@ -32,6 +32,9 @@ public class PlayerCharacter : MonoBehaviourPun
     [Header("UI")]
     [SerializeField] private RectTransform pickupsStatusPanel;
     public SerializedDictionary<Pickup.PickupType, Sprite> pickupTypeSprites;
+    public RectTransform playerMedkitWarningPanel;    
+    public float medkitWarningPanelSinMultiplier = 1.0f;
+    public float maxMedkitWarningPanelAlpha = 0.5f;    
 
     [Header("Prefabs")]
     public Projectile projectilePrefab;
@@ -63,6 +66,7 @@ public class PlayerCharacter : MonoBehaviourPun
 
     public Action<PlayerCharacter> OnPlayerDeath;
     public Action<Pickup.PickupType, float> OnPickupCollected;
+    public Player Owner => photonView.Owner;
 
     private readonly int MoveXHash = Animator.StringToHash("MoveX");
     private readonly int MoveYHash = Animator.StringToHash("MoveY");
@@ -130,6 +134,16 @@ public class PlayerCharacter : MonoBehaviourPun
 
     private void Update()
     {
+        if (playerMedkitWarningPanel.gameObject.activeInHierarchy)
+        {
+            float sinValue = Mathf.Sin(Time.time * medkitWarningPanelSinMultiplier);
+            float alpha = Mathf.InverseLerp(maxMedkitWarningPanelAlpha, 1.0f, sinValue);
+            Color color = playerMedkitWarningPanel.GetComponent<Image>().color;
+            color.a = alpha;
+            playerMedkitWarningPanel.GetComponent<Image>().color = color;
+            playerMedkitWarningPanel.localPosition += new Vector3(0, Mathf.Sin(Time.time * medkitWarningPanelSinMultiplier) * 5.0f, 0);
+        }            
+
         if (!photonView.IsMine) return;
 
 #if UNITY_EDITOR
@@ -312,8 +326,11 @@ public class PlayerCharacter : MonoBehaviourPun
     [PunRPC]
     public void RessurectPlayer()
     {
-        if(photonView.IsMine)
-            photonView.RPC(nameof(RessurectPlayer), RpcTarget.Others);
+        if (photonView.IsMine)
+        {
+            photonView.RPC(nameof(RessurectPlayer), RpcTarget.Others);            
+            playerCollider.enabled = true;
+        }
         
         photonView.RPC(nameof(RpcStartInvincible), RpcTarget.AllBuffered);
         _characterAnimator.SetBool(IsDeadHash, false);
@@ -338,10 +355,13 @@ public class PlayerCharacter : MonoBehaviourPun
         OnPlayerDeath?.Invoke(this);
 
         StartCoroutine(DeathRoutine());
+
+        if(photonView.IsMine)
+            playerCollider.enabled = false;
     }
 
     private IEnumerator DeathRoutine()
-    {
+    {        
         _spriteRenderer.enabled = true;
         float elapsedTime = 0f;
 
@@ -509,9 +529,13 @@ public class PlayerCharacter : MonoBehaviourPun
                 _hasMedkit = state;
                 
                 if(!state)
-                    Destroy(_medkitIconImage.gameObject);
+                    Destroy(_medkitIconImage.gameObject);                
                 else
                     _medkitIconImage = CreatePickupIcon(pickupType);
+
+                PlayerCharacter deadCharacter = GameMode.Instance.CheckIfIsThereAnyPlayerOutOfLives();
+
+                deadCharacter?.playerMedkitWarningPanel.gameObject.SetActive(true);
                 break;
             default:
                 Debug.LogWarning("Unknown pickup type: " + pickupType);

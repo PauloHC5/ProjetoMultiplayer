@@ -314,6 +314,21 @@ namespace _Game.Scripts
             return player.CustomProperties.TryGetValue(PlayerOutOfLivesKey, out var isOutOfLives) && (bool)isOutOfLives;
         }
 
+        public PlayerCharacter CheckIfIsThereAnyPlayerOutOfLives()
+        {
+            PlayerCharacter[] charactersInTheScene = GameObject.FindObjectsByType<PlayerCharacter>(FindObjectsSortMode.None);
+
+            foreach (var character in charactersInTheScene)
+            {
+                if (IsPlayerOutOfLives(character.Owner))
+                {
+                    return character;
+                }
+            }
+
+            return null;
+        }
+
         [PunRPC]
         private void RpcSpawnPlayerCharacter(PlayerType playerType)
         {
@@ -323,7 +338,7 @@ namespace _Game.Scripts
             
             Vector3 playerSpawnPosition = playerSpawnLocations[playerType].position;
             
-            PlayerCharacter playerCharacter = FindObjectsOfType<PlayerCharacter>().FirstOrDefault(pc =>
+            PlayerCharacter playerCharacter = GameObject.FindObjectsByType<PlayerCharacter>(FindObjectsSortMode.None).FirstOrDefault(pc =>
             {
                 var photonView = pc.GetComponent<PhotonView>();
                 
