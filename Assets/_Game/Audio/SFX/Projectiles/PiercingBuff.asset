@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::AudioCue
   _samples:
   - {fileID: 8300000, guid: 8ba664ba499d6ba459fa5634ae845a60, type: 3}
-  _minPitch: 0.838
-  _Maxpitch: 1
-  _minVolume: 1
+  _minPitch: 0.798
+  _Maxpitch: 1.117
+  _minVolume: 0.686
   _maxVolume: 1

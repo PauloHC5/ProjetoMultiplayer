@@ -78,7 +78,7 @@ public class GameManager : IPersistentSinglenton<GameManager>
     private void PlayMusicForScene(string sceneName)
     {
         if (sceneMusic.TryGetValue(sceneName, out AudioClip musicClip))
-            AudioManager.PlayMusic(musicClip);
+            AudioManager.PlayMusic(musicClip, bLoop: true);
         else
             Debug.LogWarning($"No music found for scene: {sceneName}");
     }

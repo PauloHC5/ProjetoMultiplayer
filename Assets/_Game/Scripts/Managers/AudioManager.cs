@@ -63,12 +63,26 @@ public class AudioManager
         return true;
     }
 
-    public void PlayMusic(AudioClip music, bool bLoop = false)
+
+    public void PlayMusic(AudioClip music, bool bLoop = false, float delay = -1f, float volume = 1f)
     {
         _musicSource.Stop();
         _musicSource.loop = bLoop;
-        _musicSource.volume = 1f;
+        _musicSource.volume = volume;
         _musicSource.clip = music;
+        
+        if(delay != -1) 
+        {
+            GameManager.Instance.StartCoroutine(PlayMusicWithDelay(delay));
+            return;
+        }
+        
+        _musicSource.Play();
+    }
+    
+    private IEnumerator PlayMusicWithDelay(float delay)
+    {
+        yield return new WaitForSeconds(delay);
         _musicSource.Play();
     }
 

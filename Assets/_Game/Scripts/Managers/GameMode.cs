@@ -91,7 +91,9 @@ namespace _Game.Scripts
         [SerializeField] private DengueSourceSpawnSettings dengueSourceSpawnSettingsWith3CharactersAlive;
         [SerializeField] private float radiusCheckPlayerDengueSource = 5.0f;
 
-        [Header("Musics")] public AudioClip awatingPlayersMusic;
+        [Header("Musics")] 
+        public AudioClip awaitingPlayersMusic;
+        public AudioClip battleMusic;
 
         [Header("Debug")] public bool bDebugMode = false;
         public float playerAroundCheckDebugTime = 3.0f;
@@ -446,6 +448,8 @@ namespace _Game.Scripts
             _currentGameState = GameState.InProgress;
 
             WaveStartedEvent?.Invoke(_currentWave);
+            
+            GameManager.Instance.AudioManager.PlayMusic(battleMusic, bLoop: true, 1f, 0.8f);
 
             InvokePickupSpawn();
             InvokeDengueSourceSpawn();
@@ -606,6 +610,9 @@ namespace _Game.Scripts
             CancelInvoke(nameof(SpawnPickup));
             CancelInvoke(nameof(SpawnDengueSource));
             photonView.RPC(nameof(RpcReplicateUnsubscribeFromMosquitosHordeEvents), RpcTarget.All);
+            
+            GameManager.Instance.AudioManager.StopMusic();
+            GameManager.Instance.AudioManager.PlayMusic(awaitingPlayersMusic, bLoop: true, 3f);
         }
 
         public void RequestRespawnDeadPlayer(Player player = null)
