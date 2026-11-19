@@ -1099,7 +1099,6 @@ RectTransform:
   - {fileID: 998729549}
   - {fileID: 247556405}
   - {fileID: 480027234}
-  - {fileID: 1789183826}
   - {fileID: 2026567442}
   - {fileID: 1052558045}
   - {fileID: 1116274357}
@@ -1138,7 +1137,6 @@ MonoBehaviour:
   waveCounterText: {fileID: 1708115333}
   waveProgressBarObj: {fileID: 1734537418}
   statusBarUI: {fileID: 480027233}
-  pickupStatusUI: {fileID: 1789183826}
   playerIconSprites:
     _serializedList:
     - Key: 0
@@ -1160,22 +1158,6 @@ MonoBehaviour:
   scoreBoardContent: {fileID: 845783920}
   playerStatusPrefab: {fileID: 7177965442330558712, guid: 996d9d058aeca5f4b864e2211111b3c5, type: 3}
   playerScoreInfoPrefab: {fileID: 3877657472195122984, guid: d0a4d878101b8a947a960639919b5561, type: 3}
-  pickupTypeSprites:
-    _serializedList:
-    - Key: 1
-      Value: {fileID: 21300000, guid: 1329b242281113944a2bbdb14452ee94, type: 3}
-    - Key: 2
-      Value: {fileID: 21300000, guid: 5c0682fa82adbbc4a973cfe02af4ffa5, type: 3}
-    - Key: 3
-      Value: {fileID: 21300000, guid: e0a8333937369744a8e467eb10be2a72, type: 3}
-    - Key: 4
-      Value: {fileID: 21300000, guid: 1b57edafb7df37c4f9593dce2cf11d5d, type: 3}
-    - Key: 5
-      Value: {fileID: 21300000, guid: d254337ca02d75b4cb702d23f23492fe, type: 3}
-    - Key: 6
-      Value: {fileID: 21300000, guid: c5790a46f495e4946bc0dd7a63105993, type: 3}
-    - Key: 7
-      Value: {fileID: 21300000, guid: a053ba3f18b0496488a6bca20b7bd4d3, type: 3}
   playerTypeColors:
     _serializedList:
     - Key: 0
@@ -5996,68 +5978,6 @@ RectTransform:
   m_AnchoredPosition: {x: -187, y: -112.5}
   m_SizeDelta: {x: 182.72, y: 66.211}
   m_Pivot: {x: 0.5, y: 0.5}
---- !u!1 &1789183825
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 1789183826}
-  - component: {fileID: 1789183827}
-  m_Layer: 5
-  m_Name: Pickups Status Bar
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!224 &1789183826
-RectTransform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1789183825}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 345395259}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 1}
-  m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 479.72003, y: -170}
-  m_SizeDelta: {x: 959.44, y: 81.469}
-  m_Pivot: {x: 0.5, y: 0.5}
---- !u!114 &1789183827
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1789183825}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 30649d3a9faa99c48a7b1166b86bf2a0, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.HorizontalLayoutGroup
-  m_Padding:
-    m_Left: 10
-    m_Right: 0
-    m_Top: 0
-    m_Bottom: 0
-  m_ChildAlignment: 3
-  m_Spacing: 15.62
-  m_ChildForceExpandWidth: 0
-  m_ChildForceExpandHeight: 1
-  m_ChildControlWidth: 0
-  m_ChildControlHeight: 0
-  m_ChildScaleWidth: 0
-  m_ChildScaleHeight: 0
-  m_ReverseArrangement: 0
 --- !u!1 &1980534253
 GameObject:
   m_ObjectHideFlags: 0

@@ -51,8 +51,7 @@ public class UI_Game : MonoBehaviour, IInRoomCallbacks, IMatchmakingCallbacks
     public GameObject waveProgressBarObj;
     
     [Header("Player Status UI Elements")]
-    public GameObject statusBarUI;
-    public Transform pickupStatusUI;
+    public GameObject statusBarUI;    
     public SerializedDictionary<PlayerType, Sprite> playerIconSprites;
     public SerializedDictionary<int, Sprite> playerRankIconSprites;
     
@@ -64,13 +63,6 @@ public class UI_Game : MonoBehaviour, IInRoomCallbacks, IMatchmakingCallbacks
     [Header("UI Prefabs")]
     public GameObject playerStatusPrefab;
     public GameObject playerScoreInfoPrefab;
-
-    [Space(20)]
-    
-    [SerializedDictionary("Pickup Type", "Sprite")]
-    public SerializedDictionary<Pickup.PickupType, Sprite> pickupTypeSprites;
-    
-    [Space(20)]
     
     public SerializedDictionary<PlayerType, Color> playerTypeColors;
     
@@ -230,9 +222,7 @@ public class UI_Game : MonoBehaviour, IInRoomCallbacks, IMatchmakingCallbacks
         
         if(player.IsLocal)
         {
-            SpawnPlayerStatusUI(player);
-            playerCharacter.OnPickupCollected += OnPickupCollected;
-            playerCharacter.OnPlayerDeath += OnPlayerCharacterDestroyed;
+            SpawnPlayerStatusUI(player);                        
             _localPlayerStatus.LivesCounterText.text = currentLives.ToString();
         }
     }
@@ -278,42 +268,6 @@ public class UI_Game : MonoBehaviour, IInRoomCallbacks, IMatchmakingCallbacks
         playerStatus.LivesCounterText.color = playerColor;
 
         _localPlayerStatus = playerStatus;
-    }
-    
-    private void OnPlayerCharacterDestroyed(PlayerCharacter playerCharacter)
-    {
-        if(!_bGameIsRunning) return;
-        
-        StopAllCoroutines();
-        for(int i = pickupStatusUI.childCount - 1; i >= 0; i--)
-        {
-            Destroy(pickupStatusUI.GetChild(i).gameObject);
-        }
-        
-        playerCharacter.OnPlayerDeath -= OnPlayerCharacterDestroyed;
-        playerCharacter.OnPickupCollected -= OnPickupCollected;
-    }
-    
-    private void OnPickupCollected(Pickup.PickupType pickupType, float duration)
-    {
-        if(pickupType is Pickup.PickupType._1UP or Pickup.PickupType.Toolbox) return;
-
-        if(!pickupTypeSprites.ContainsKey(pickupType))
-        {
-            Debug.LogWarning($"Pickup type {pickupType} does not have a corresponding sprite in the dictionary.");
-            return;
-        }
-
-        // Instantiate image for the pickup type
-        var pickupImageGO = new GameObject(pickupType.ToString());
-        pickupImageGO.transform.SetParent(pickupStatusUI, false);
-        
-        var pickupImage = pickupImageGO.AddComponent<Image>();
-        pickupImage.GetComponent<RectTransform>().sizeDelta = new Vector2(35, 35);
-        pickupImage.preserveAspect = true;
-        pickupImage.sprite = pickupTypeSprites[pickupType];
-        
-        StartCoroutine(PickupIconRoutine(pickupImage, duration));
     }
 
     private void OnGameOver(GameMode.GameOverReason reason)
@@ -416,28 +370,6 @@ public class UI_Game : MonoBehaviour, IInRoomCallbacks, IMatchmakingCallbacks
         waveCounterText.text = $"Wave: {waveNumber}";
         
         UpdateProgressBar(GameMode.Instance.HordeProgressPercentage);
-    }
-    
-    private IEnumerator PickupIconRoutine(Image pickupImage, float duration)
-    {
-        if(pickupImage == null) yield break;
-
-        float countdown = duration;
-        Color originalColor = pickupImage.color;
-        float aThirdDuration = duration / 3f;
-
-        while (countdown > 0)
-        {
-            if (countdown <= aThirdDuration)
-            {
-                float alpha = Mathf.PingPong(Time.time * 5, 1);
-                pickupImage.color = new Color(originalColor.r, originalColor.g, originalColor.b, alpha);
-            }
-            countdown -= Time.deltaTime;
-            yield return null;
-        }
-
-        Destroy(pickupImage.gameObject);
     }
     
     private void UpdateProgressBar(float progress)
