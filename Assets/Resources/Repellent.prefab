@@ -32,6 +32,10 @@ PrefabInstance:
       propertyPath: pickupEndEffectSfx
       value: 
       objectReference: {fileID: 11400000, guid: e60542b8d2ec86646b421ece6acb9bd4, type: 2}
+    - target: {fileID: 5968020724791024298, guid: 350251513ff2cc74991d08cf4f071c65, type: 3}
+      propertyPath: m_Sprite
+      value: 
+      objectReference: {fileID: 21300000, guid: e0a8333937369744a8e467eb10be2a72, type: 3}
     - target: {fileID: 7391475007303937962, guid: 350251513ff2cc74991d08cf4f071c65, type: 3}
       propertyPath: m_SpriteTilingProperty.oldSize.x
       value: 1.359375

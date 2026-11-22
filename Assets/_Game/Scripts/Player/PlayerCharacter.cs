@@ -52,7 +52,7 @@ public class PlayerCharacter : MonoBehaviourPun
 
     private SpriteRenderer _spriteRenderer;
     private Rigidbody2D _rigidbody2D;
-    private Animator _characterAnimator;
+    private Animator[] _characterAnimators;
 
     private int _projectilesActive;
     private TextMeshProUGUI _playerNicknameText;
@@ -98,7 +98,7 @@ public class PlayerCharacter : MonoBehaviourPun
         _spriteRenderer = GetComponentInChildren<SpriteRenderer>();
         _rigidbody2D = GetComponent<Rigidbody2D>();
         _playerNicknameText = GetComponentInChildren<TextMeshProUGUI>();
-        _characterAnimator = GetComponentInChildren<Animator>();
+        _characterAnimators = GetComponentsInChildren<Animator>();
         _trailRenderer = GetComponentInChildren<TrailRenderer>();
         _shieldVFX = GetComponentInChildren<Shield_VFX>();
 
@@ -214,9 +214,12 @@ public class PlayerCharacter : MonoBehaviourPun
 
     public void Move(Vector2 direction)
     {
-        _characterAnimator.SetBool(IsMovingHash, direction.sqrMagnitude > 0.01f);
-        _characterAnimator.SetFloat(MoveXHash, direction.x);
-        _characterAnimator.SetFloat(MoveYHash, direction.y);
+        foreach (var animator in _characterAnimators)
+        {
+            animator.SetBool(IsMovingHash, direction.sqrMagnitude > 0.01f);
+            animator.SetFloat(MoveXHash, direction.x);
+            animator.SetFloat(MoveYHash, direction.y);
+        }
 
         Vector2 movement = new Vector2(direction.x, direction.y) * speed;
         _rigidbody2D.linearVelocity = movement;
@@ -342,8 +345,11 @@ public class PlayerCharacter : MonoBehaviourPun
         }
         
         photonView.RPC(nameof(RpcStartInvincible), RpcTarget.AllBuffered);
-        _characterAnimator.SetBool(IsDeadHash, false);
-        _characterAnimator.Rebind();
+        foreach (var animator in _characterAnimators)
+        {
+            animator.SetBool(IsDeadHash, false);
+            animator.Rebind();
+        }
         _rigidbody2D.linearVelocity = Vector2.zero;
         GameManager.Instance.AudioManager.PlaySfx(ressurectSfx);
         
@@ -357,7 +363,10 @@ public class PlayerCharacter : MonoBehaviourPun
 
         _rigidbody2D.linearVelocity = Vector2.zero;
 
-        _characterAnimator.SetBool(IsDeadHash, true);
+        foreach (var animator in _characterAnimators)
+        {
+            animator.SetBool(IsDeadHash, true);
+        }
 
         _shieldVFX.BreakShield();
 
@@ -534,7 +543,10 @@ public class PlayerCharacter : MonoBehaviourPun
                 _speedBuffActive = state;
                 _trailRenderer.emitting = state;
                 speed = state ? speed * 2f : speed / 2f; // Double speed when active, revert when inactive
-                _characterAnimator.SetFloat(AnimMultiplierHash, state ? 2f : 1f);
+                foreach (var animator in _characterAnimators)
+                {
+                    animator.SetFloat(AnimMultiplierHash, state ? 2f : 1f);
+                }
                 StartCoroutine(PickupIconRoutine(pickupType, duration));
                 break;
             case Pickup.PickupType.TripleFire:

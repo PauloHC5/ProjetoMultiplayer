@@ -47,6 +47,9 @@ TagManager:
   - name: Barrier
     uniqueID: 884387271
     locked: 0
+  - name: Dengue Sources
+    uniqueID: 3002884579
+    locked: 0
   - name: Pickups
     uniqueID: 2583546217
     locked: 0

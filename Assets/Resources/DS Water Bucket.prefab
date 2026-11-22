@@ -8,13 +8,29 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 110713997207832700, guid: b07fcb8cd55d8524ebaf480efb845855, type: 3}
+      propertyPath: m_LocalScale.x
+      value: 3.952147
+      objectReference: {fileID: 0}
+    - target: {fileID: 110713997207832700, guid: b07fcb8cd55d8524ebaf480efb845855, type: 3}
+      propertyPath: m_LocalScale.y
+      value: 5.2315493
+      objectReference: {fileID: 0}
+    - target: {fileID: 110713997207832700, guid: b07fcb8cd55d8524ebaf480efb845855, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0.09
+      objectReference: {fileID: 0}
+    - target: {fileID: 110713997207832700, guid: b07fcb8cd55d8524ebaf480efb845855, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0.2
+      objectReference: {fileID: 0}
     - target: {fileID: 3060623373785674395, guid: b07fcb8cd55d8524ebaf480efb845855, type: 3}
       propertyPath: m_Sprite
       value: 
       objectReference: {fileID: 21300000, guid: b7d537be31e58794084f4770b07ea683, type: 3}
     - target: {fileID: 8305871071559561539, guid: b07fcb8cd55d8524ebaf480efb845855, type: 3}
       propertyPath: m_Name
-      value: DS Tire With Water 1
+      value: DS Water Bucket
       objectReference: {fileID: 0}
     - target: {fileID: 8908790597433715696, guid: b07fcb8cd55d8524ebaf480efb845855, type: 3}
       propertyPath: m_LocalPosition.x
