@@ -1895,7 +1895,7 @@ BoxCollider2D:
     m_Bits: 0
   m_ExcludeLayers:
     serializedVersion: 2
-    m_Bits: 4031
+    m_Bits: 3903
   m_LayerOverridePriority: 0
   m_ForceSendLayers:
     serializedVersion: 2
@@ -1941,7 +1941,7 @@ BoxCollider2D:
     m_Bits: 0
   m_ExcludeLayers:
     serializedVersion: 2
-    m_Bits: 4031
+    m_Bits: 3903
   m_LayerOverridePriority: 0
   m_ForceSendLayers:
     serializedVersion: 2
@@ -3447,12 +3447,12 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 729577040}
   serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: -0.7071068, w: 0.7071068}
-  m_LocalPosition: {x: -31.24, y: -8.9832, z: 0}
-  m_LocalScale: {x: 6.007592, y: 1.5442235, z: 1}
+  m_LocalRotation: {x: -0, y: -0, z: -0.7071068, w: 0.7071068}
+  m_LocalPosition: {x: -7.118051, y: -1.6130112, z: 0}
+  m_LocalScale: {x: 1.3529236, y: 0.351554, z: 0.2281074}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 0}
+  m_Father: {fileID: 1520260651}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: -90}
 --- !u!1 &740164482
 GameObject:
@@ -4320,7 +4320,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.Image
   m_Material: {fileID: 0}
-  m_Color: {r: 0.003921569, g: 0.9450981, b: 0.007843138, a: 0.5019608}
+  m_Color: {r: 0.003921569, g: 0.9450981, b: 0.007843138, a: 0.9019608}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
@@ -5160,12 +5160,12 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1196480703}
   serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0.7071068, w: 0.7071068}
-  m_LocalPosition: {x: 31.74, y: -8.98, z: 0}
-  m_LocalScale: {x: 6.007592, y: 1.5442235, z: 1}
+  m_LocalRotation: {x: -0, y: -0, z: 0.7071068, w: 0.7071068}
+  m_LocalPosition: {x: 7.2198133, y: -1.6122904, z: 0}
+  m_LocalScale: {x: 1.3529236, y: 0.351554, z: 0.2281074}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 0}
+  m_Father: {fileID: 1520260651}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 90}
 --- !u!1 &1198829233
 GameObject:
@@ -5767,7 +5767,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.Image
   m_Material: {fileID: 0}
-  m_Color: {r: 1, g: 1, b: 1, a: 0.5019608}
+  m_Color: {r: 1, g: 1, b: 1, a: 0.9019608}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
@@ -5876,12 +5876,12 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1465643072}
   serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: -0.99999964, w: 0.0008727885}
-  m_LocalPosition: {x: 0.1828, y: 14.0662, z: 0}
-  m_LocalScale: {x: 7.98139, y: 1.5442235, z: 1}
+  m_LocalRotation: {x: -0, y: -0, z: -0.99999964, w: 0.0008727885}
+  m_LocalPosition: {x: 0.035582855, y: 3.5777657, z: 0}
+  m_LocalScale: {x: 1.8170227, y: 0.3477626, z: 0.2281074}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 0}
+  m_Father: {fileID: 1520260651}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: -179.9}
 --- !u!1 &1483461196
 GameObject:
@@ -5933,7 +5933,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.Image
   m_Material: {fileID: 0}
-  m_Color: {r: 0, g: 0.6792453, b: 0, a: 0.5019608}
+  m_Color: {r: 0, g: 0.6792453, b: 0, a: 0.9019608}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
@@ -6380,7 +6380,10 @@ Transform:
   m_LocalPosition: {x: 0.0265, y: -1.8207, z: 0}
   m_LocalScale: {x: 4.392565, y: 4.4404526, z: 4.3839}
   m_ConstrainProportionsScale: 0
-  m_Children: []
+  m_Children:
+  - {fileID: 1465643074}
+  - {fileID: 729577042}
+  - {fileID: 1196480705}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1551202077
@@ -8689,6 +8692,3 @@ SceneRoots:
   - {fileID: 1272641705}
   - {fileID: 1164364184}
   - {fileID: 1520260651}
-  - {fileID: 1465643074}
-  - {fileID: 729577042}
-  - {fileID: 1196480705}

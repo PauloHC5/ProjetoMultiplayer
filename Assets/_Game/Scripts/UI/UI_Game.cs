@@ -64,8 +64,6 @@ public class UI_Game : MonoBehaviour, IInRoomCallbacks, IMatchmakingCallbacks
     public GameObject playerStatusPrefab;
     public GameObject playerScoreInfoPrefab;
     
-    public SerializedDictionary<PlayerType, Color> playerTypeColors;
-    
     [Header("Events")]
     public UnityEvent onCountdownChanged;
 
@@ -257,15 +255,10 @@ public class UI_Game : MonoBehaviour, IInRoomCallbacks, IMatchmakingCallbacks
             LivesCounterText = livesCounterText
         };
 
-        Color playerColor = playerTypeColors[GameMode.GetPlayerType(player)];
-
         playerIcon.sprite = playerIconSprites[GameMode.GetPlayerType(player)];
         playerStatus.PlayerNicknameText.text = player.NickName;
-        playerStatus.PlayerNicknameText.color = GameMode.GetPlayerColorBasedOnPlayerType(player);
         playerStatus.ScoreCounterText.text = "0";
-        playerStatus.ScoreCounterText.color = playerColor;
         playerStatus.LivesCounterText.text = GameMode.Instance.StartingLives.ToString();
-        playerStatus.LivesCounterText.color = playerColor;
 
         _localPlayerStatus = playerStatus;
     }
