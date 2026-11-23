@@ -1,6 +1,8 @@
 using System;
+using System.Collections;
 using AYellowpaper.SerializedCollections;
 using Photon.Pun;
+using PixeLadder.EasyTransition;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -46,6 +48,20 @@ public class GameManager : IPersistentSinglenton<GameManager>
     // Ponto único de entrada para trocar de cena
     public void LoadScene(string name)
     {
+        StartCoroutine(LoadSceneRoutine(name));
+    }
+    
+    private IEnumerator LoadSceneRoutine(string name)
+    {
+        bool reachedMidPoint = false;
+
+        SceneTransitioner.Instance.PlayTransition(() =>
+        {
+            reachedMidPoint = true;
+        });
+
+        yield return new WaitUntil(() => reachedMidPoint);
+        
         if (PhotonNetwork.InRoom)
         {
             // Dentro da sala só o MasterClient decide a cena;
@@ -53,7 +69,7 @@ public class GameManager : IPersistentSinglenton<GameManager>
             if (!PhotonNetwork.IsMasterClient)
             {
                 Debug.LogWarning("Apenas o MasterClient pode trocar de cena dentro da sala.");
-                return;
+                yield break;
             }
 
             PhotonNetwork.LoadLevel(name);

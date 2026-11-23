@@ -71,5 +71,8 @@ TagManager:
   - name: UI_Chat
     uniqueID: 1139064329
     locked: 0
+  - name: UI_Transition
+    uniqueID: 821912689
+    locked: 0
   m_RenderingLayers:
   - Default

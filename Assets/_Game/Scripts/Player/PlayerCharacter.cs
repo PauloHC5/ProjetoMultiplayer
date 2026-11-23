@@ -30,6 +30,7 @@ public class PlayerCharacter : MonoBehaviourPun
     [SerializeField] private Transform projectileSpawnPoint;
     [SerializeField] private Collider2D playerCollider;
     [SerializeField] private Collider2D otherPlayersCollider;
+    [SerializeField] private Animator[] characterAnimators;
 
     [Header("UI")]
     [SerializeField] private RectTransform pickupsStatusPanel;
@@ -52,7 +53,6 @@ public class PlayerCharacter : MonoBehaviourPun
 
     private SpriteRenderer _spriteRenderer;
     private Rigidbody2D _rigidbody2D;
-    private Animator[] _characterAnimators;
 
     private int _projectilesActive;
     private TextMeshProUGUI _playerNicknameText;
@@ -98,7 +98,7 @@ public class PlayerCharacter : MonoBehaviourPun
         _spriteRenderer = GetComponentInChildren<SpriteRenderer>();
         _rigidbody2D = GetComponent<Rigidbody2D>();
         _playerNicknameText = GetComponentInChildren<TextMeshProUGUI>();
-        _characterAnimators = GetComponentsInChildren<Animator>();
+        characterAnimators = GetComponentsInChildren<Animator>();
         _trailRenderer = GetComponentInChildren<TrailRenderer>();
         _shieldVFX = GetComponentInChildren<Shield_VFX>();
 
@@ -214,7 +214,7 @@ public class PlayerCharacter : MonoBehaviourPun
 
     public void Move(Vector2 direction)
     {
-        foreach (var animator in _characterAnimators)
+        foreach (var animator in characterAnimators)
         {
             animator.SetBool(IsMovingHash, direction.sqrMagnitude > 0.01f);
             animator.SetFloat(MoveXHash, direction.x);
@@ -345,7 +345,7 @@ public class PlayerCharacter : MonoBehaviourPun
         }
         
         photonView.RPC(nameof(RpcStartInvincible), RpcTarget.AllBuffered);
-        foreach (var animator in _characterAnimators)
+        foreach (var animator in characterAnimators)
         {
             animator.SetBool(IsDeadHash, false);
             animator.Rebind();
@@ -363,7 +363,7 @@ public class PlayerCharacter : MonoBehaviourPun
 
         _rigidbody2D.linearVelocity = Vector2.zero;
 
-        foreach (var animator in _characterAnimators)
+        foreach (var animator in characterAnimators)
         {
             animator.SetBool(IsDeadHash, true);
         }
@@ -543,7 +543,7 @@ public class PlayerCharacter : MonoBehaviourPun
                 _speedBuffActive = state;
                 _trailRenderer.emitting = state;
                 speed = state ? speed * 2f : speed / 2f; // Double speed when active, revert when inactive
-                foreach (var animator in _characterAnimators)
+                foreach (var animator in characterAnimators)
                 {
                     animator.SetFloat(AnimMultiplierHash, state ? 2f : 1f);
                 }

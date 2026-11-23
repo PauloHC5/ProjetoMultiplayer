@@ -586,7 +586,7 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 51.75
+  m_fontSize: 51.7
   m_fontSizeBase: 56.62
   m_fontWeight: 400
   m_enableAutoSizing: 1
@@ -1025,7 +1025,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 1, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 53.00006, y: 0}
+  m_AnchoredPosition: {x: 53.000076, y: 0}
   m_SizeDelta: {x: 20, y: -17}
   m_Pivot: {x: 1, y: 1}
 --- !u!114 &295774815
@@ -1857,8 +1857,8 @@ Canvas:
   m_GameObject: {fileID: 455236399}
   m_Enabled: 1
   serializedVersion: 3
-  m_RenderMode: 0
-  m_Camera: {fileID: 0}
+  m_RenderMode: 1
+  m_Camera: {fileID: 867311807}
   m_PlaneDistance: 100
   m_PixelPerfect: 0
   m_ReceivesEvents: 1
@@ -2905,8 +2905,8 @@ Canvas:
   m_GameObject: {fileID: 726108595}
   m_Enabled: 1
   serializedVersion: 3
-  m_RenderMode: 0
-  m_Camera: {fileID: 0}
+  m_RenderMode: 1
+  m_Camera: {fileID: 867311807}
   m_PlaneDistance: 100
   m_PixelPerfect: 0
   m_ReceivesEvents: 1
@@ -3440,8 +3440,8 @@ Canvas:
   m_GameObject: {fileID: 886669130}
   m_Enabled: 1
   serializedVersion: 3
-  m_RenderMode: 0
-  m_Camera: {fileID: 0}
+  m_RenderMode: 1
+  m_Camera: {fileID: 867311807}
   m_PlaneDistance: 100
   m_PixelPerfect: 0
   m_ReceivesEvents: 1
@@ -4563,7 +4563,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 6.8, y: 0}
+  m_AnchoredPosition: {x: 6.800003, y: 0}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1390765753
@@ -4952,6 +4952,91 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1645217947}
   m_CullTransparentMesh: 1
+--- !u!1001 &1697519268
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 0}
+    m_Modifications:
+    - target: {fileID: 775292240556594921, guid: 9e231ba446800aa4ebe635b040ef13bd, type: 3}
+      propertyPath: m_Camera
+      value: 
+      objectReference: {fileID: 867311807}
+    - target: {fileID: 775292240556594921, guid: 9e231ba446800aa4ebe635b040ef13bd, type: 3}
+      propertyPath: m_RenderMode
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2541666409870520583, guid: 9e231ba446800aa4ebe635b040ef13bd, type: 3}
+      propertyPath: targetCamera
+      value: 
+      objectReference: {fileID: 867311807}
+    - target: {fileID: 2541666409870520583, guid: 9e231ba446800aa4ebe635b040ef13bd, type: 3}
+      propertyPath: canvasRenderMode
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2541666409870520583, guid: 9e231ba446800aa4ebe635b040ef13bd, type: 3}
+      propertyPath: OnTransitionStart.m_PersistentCalls.m_Calls.Array.size
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2541666409870520583, guid: 9e231ba446800aa4ebe635b040ef13bd, type: 3}
+      propertyPath: OnTransitionStart.m_PersistentCalls.m_Calls.Array.data[0].m_Mode
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2541666409870520583, guid: 9e231ba446800aa4ebe635b040ef13bd, type: 3}
+      propertyPath: OnTransitionStart.m_PersistentCalls.m_Calls.Array.data[0].m_CallState
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 4834223626572779385, guid: 9e231ba446800aa4ebe635b040ef13bd, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 612.6422
+      objectReference: {fileID: 0}
+    - target: {fileID: 4834223626572779385, guid: 9e231ba446800aa4ebe635b040ef13bd, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 374.65848
+      objectReference: {fileID: 0}
+    - target: {fileID: 4834223626572779385, guid: 9e231ba446800aa4ebe635b040ef13bd, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4834223626572779385, guid: 9e231ba446800aa4ebe635b040ef13bd, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4834223626572779385, guid: 9e231ba446800aa4ebe635b040ef13bd, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4834223626572779385, guid: 9e231ba446800aa4ebe635b040ef13bd, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4834223626572779385, guid: 9e231ba446800aa4ebe635b040ef13bd, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4834223626572779385, guid: 9e231ba446800aa4ebe635b040ef13bd, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4834223626572779385, guid: 9e231ba446800aa4ebe635b040ef13bd, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4834223626572779385, guid: 9e231ba446800aa4ebe635b040ef13bd, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7370688103532160360, guid: 9e231ba446800aa4ebe635b040ef13bd, type: 3}
+      propertyPath: m_Name
+      value: SceneTransitioner
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: 9e231ba446800aa4ebe635b040ef13bd, type: 3}
 --- !u!1 &1743610629
 GameObject:
   m_ObjectHideFlags: 0
@@ -5966,7 +6051,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 0, y: 0.00007162814}
+  m_AnchoredPosition: {x: 0, y: 0.000035407113}
   m_SizeDelta: {x: 425.26318, y: 0}
   m_Pivot: {x: 0, y: 1}
 --- !u!114 &2142836080
@@ -6596,6 +6681,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::UIButtonScaleAnimator
   normalScale: {x: 0.26, y: 0.26, z: 0.26}
   hoverScale: {x: 0.35, y: 0.35, z: 0.35}
+  onClickAction: 1
+  pulseScale: {x: 1.2, y: 1.2, z: 1}
   hoverDuration: 0.15
   clickDuration: 0.2
   curve:
@@ -7020,6 +7107,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::UIButtonScaleAnimator
   normalScale: {x: 0.26, y: 0.26, z: 0.26}
   hoverScale: {x: 0.35, y: 0.35, z: 0.35}
+  onClickAction: 1
+  pulseScale: {x: 1.2, y: 1.2, z: 1}
   hoverDuration: 0.15
   clickDuration: 0.2
   curve:
@@ -7275,3 +7364,4 @@ SceneRoots:
   - {fileID: 206725541}
   - {fileID: 355315494}
   - {fileID: 1854983581}
+  - {fileID: 1697519268}

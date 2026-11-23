@@ -403,7 +403,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: 2146183049
-  m_SortingLayer: 3
+  m_SortingLayer: 4
   m_SortingOrder: 0
   m_MaskInteraction: 0
   m_Sprite: {fileID: 21300000, guid: d23c119d71d49dc4e9612fa11b303e15, type: 3}
@@ -587,7 +587,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: 2146183049
-  m_SortingLayer: 3
+  m_SortingLayer: 4
   m_SortingOrder: 0
   m_MaskInteraction: 0
   m_Sprite: {fileID: 21300000, guid: f5b14a036a685524bad530b67fb9c239, type: 3}
@@ -681,7 +681,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: 2146183049
-  m_SortingLayer: 3
+  m_SortingLayer: 4
   m_SortingOrder: 1
   m_MaskInteraction: 0
   m_Sprite: {fileID: 2219744957585625196, guid: 837a053581f5aaf49848e662a9eb0da4, type: 3}
@@ -1072,6 +1072,9 @@ MonoBehaviour:
   projectileSpawnPoint: {fileID: 4017231318131708658}
   playerCollider: {fileID: 7563700425935545264}
   otherPlayersCollider: {fileID: 8390533413080093012}
+  characterAnimators:
+  - {fileID: 7635905824344413223}
+  - {fileID: 2261623593267131715}
   pickupsStatusPanel: {fileID: 7610627058565193096}
   pickupTypeSprites:
     _serializedList:
@@ -1297,7 +1300,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: 2146183049
-  m_SortingLayer: 3
+  m_SortingLayer: 4
   m_SortingOrder: 0
   m_MaskInteraction: 0
   m_Sprite: {fileID: 21300000, guid: d23c119d71d49dc4e9612fa11b303e15, type: 3}

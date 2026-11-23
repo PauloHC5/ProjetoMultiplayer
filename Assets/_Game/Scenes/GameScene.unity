@@ -1342,14 +1342,6 @@ MonoBehaviour:
   scoreBoardContent: {fileID: 845783920}
   playerStatusPrefab: {fileID: 7177965442330558712, guid: 996d9d058aeca5f4b864e2211111b3c5, type: 3}
   playerScoreInfoPrefab: {fileID: 3877657472195122984, guid: d0a4d878101b8a947a960639919b5561, type: 3}
-  playerTypeColors:
-    _serializedList:
-    - Key: 0
-      Value: {r: 0, g: 1, b: 0, a: 1}
-    - Key: 1
-      Value: {r: 0, g: 0, b: 1, a: 1}
-    - Key: 2
-      Value: {r: 1, g: 0.2705882, b: 0, a: 1}
   onCountdownChanged:
     m_PersistentCalls:
       m_Calls:

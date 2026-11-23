@@ -4,6 +4,7 @@ using _Game.Scripts;
 using AYellowpaper.SerializedCollections;
 using Photon.Pun;
 using Photon.Realtime;
+using PixeLadder.EasyTransition;
 using TMPro;
 using UnityEngine;
 using UnityEngine.Events;
@@ -400,6 +401,14 @@ public class UI_Game : MonoBehaviour, IInRoomCallbacks, IMatchmakingCallbacks
             _matchPreparationUI.AwaitingHostText.gameObject.SetActive(true);
         }
     }
+    
+    private void OnTransitionStart()
+    {
+        if (_bGameIsRunning)
+        {
+            gameObject.SetActive(false);
+        }
+    }
 
     private void OnEnable()
     {
@@ -412,6 +421,7 @@ public class UI_Game : MonoBehaviour, IInRoomCallbacks, IMatchmakingCallbacks
         GameMode.OnHordeProgressChanged += UpdateProgressBar;
         GameMode.WaveCompletedEvent += OnWaveCompleted;
         GameMode.RoomReady += OnRoomReady;
+        SceneTransitioner.Instance?.OnTransitionStart.AddListener(OnTransitionStart);
         
         PhotonNetwork.AddCallbackTarget(this);
     }
@@ -427,6 +437,7 @@ public class UI_Game : MonoBehaviour, IInRoomCallbacks, IMatchmakingCallbacks
         GameMode.OnHordeProgressChanged -= UpdateProgressBar;
         GameMode.WaveCompletedEvent -= OnWaveCompleted;
         GameMode.RoomReady -= OnRoomReady;
+        SceneTransitioner.Instance?.OnTransitionStart.RemoveListener(OnTransitionStart);
         
         PhotonNetwork.RemoveCallbackTarget(this);
     }
