@@ -38,10 +38,18 @@ public class PlayerCharacter : MonoBehaviourPun
     public RectTransform playerMedkitWarningPanel;    
     public float medkitWarningPanelSinMultiplier = 1.0f;
     public float medkitWarningPanelAmplitude = 5.0f;
-    public float maxMedkitWarningPanelAlpha = 0.5f;    
+    public float maxMedkitWarningPanelAlpha = 0.5f;
+
+    [Header("Score UI")] 
+    [SerializeField] private RectTransform playerCanvas;
+    [SerializeField] private RectTransform plusScoreContainer;
+    [SerializeField] private int plusScoreTextPoolSize = 5;
+    public float plusScoreTextAnimationDuration = 1.0f;
+    public float plusScoreTextDespawnDelay = 3.0f;
 
     [Header("Prefabs")]
     public Projectile projectilePrefab;
+    public TextMeshProUGUI plusScoreTextPrefab;
 
     [Header("Bot Settings")]
     public bool bBotMode = false;
@@ -66,6 +74,10 @@ public class PlayerCharacter : MonoBehaviourPun
     private TrailRenderer _trailRenderer;
     private Shield_VFX _shieldVFX;
     private Image _medkitIconImage;
+    private Stack<TextMeshProUGUI> _plusScoreTextPool;
+    private Queue<TextMeshProUGUI> _usedPlusScoreTextQueue = new Queue<TextMeshProUGUI>();
+    private Dictionary<TextMeshProUGUI, Coroutine> _plusScoreTextAnimations = new Dictionary<TextMeshProUGUI, Coroutine>();
+    private Dictionary<TextMeshProUGUI, Vector3> _plusScoreTextOriginalScales = new Dictionary<TextMeshProUGUI, Vector3>();
 
     public Action<PlayerCharacter> OnPlayerDeath;
     public Action<Pickup.PickupType, float> OnPickupCollected;
@@ -98,7 +110,6 @@ public class PlayerCharacter : MonoBehaviourPun
         _spriteRenderer = GetComponentInChildren<SpriteRenderer>();
         _rigidbody2D = GetComponent<Rigidbody2D>();
         _playerNicknameText = GetComponentInChildren<TextMeshProUGUI>();
-        characterAnimators = GetComponentsInChildren<Animator>();
         _trailRenderer = GetComponentInChildren<TrailRenderer>();
         _shieldVFX = GetComponentInChildren<Shield_VFX>();
 
@@ -115,6 +126,8 @@ public class PlayerCharacter : MonoBehaviourPun
         {
             _rigidbody2D.bodyType = RigidbodyType2D.Kinematic;
         }
+        
+        _plusScoreTextPool = new Stack<TextMeshProUGUI>(plusScoreTextPoolSize);
     }
 
     private void Start()
@@ -126,6 +139,125 @@ public class PlayerCharacter : MonoBehaviourPun
             RpcStartInvincible();
             RpcSetNickname("LocalPlayer");
         }
+        
+        InitializePlusScoreTextPool();
+    }
+    
+    private void InitializePlusScoreTextPool()
+    {
+        for (int i = 0; i < plusScoreTextPoolSize; i++)
+        {
+            CreatePlusScoreText();
+        }
+    }
+    
+    private void CreatePlusScoreText()
+    {
+        TextMeshProUGUI plusScoreText = Instantiate(plusScoreTextPrefab, playerCanvas);
+        plusScoreText.color = GameMode.GetPlayerColorBasedOnPlayerType(photonView.Owner);
+        plusScoreText.text = string.Empty;
+        plusScoreText.gameObject.SetActive(false);
+        _plusScoreTextPool.Push(plusScoreText);
+    }
+    
+    private void AddScoreText(int points)
+    {
+        if (_plusScoreTextPool.Count == 0)
+        {
+            // If the pool is empty, need to create a new TextMeshProUGUI instance
+            CreatePlusScoreText();
+        }
+
+        for (int i = 0; i < _usedPlusScoreTextQueue.Count; i++)
+        {
+            TextMeshProUGUI scoreText = _usedPlusScoreTextQueue.ElementAt(i);
+
+            if (TryGetPlusScoreTextMultiplier(scoreText.text, points, out int multiplier))
+            {
+                scoreText.text = $"{multiplier + 1}x+{points}";
+                RestartPlusScoreAnimation(scoreText);
+                return;
+            }
+        }
+        
+        TextMeshProUGUI plusScoreTextToUse = _plusScoreTextPool.Pop();
+        plusScoreTextToUse.text = $"+{points}";
+        plusScoreTextToUse.gameObject.SetActive(true);
+        plusScoreTextToUse.rectTransform.SetParent(plusScoreContainer);
+        _usedPlusScoreTextQueue.Enqueue(plusScoreTextToUse);
+
+        RestartPlusScoreAnimation(plusScoreTextToUse);
+    }
+
+    private void RestartPlusScoreAnimation(TextMeshProUGUI plusScoreText)
+    {
+        if (_plusScoreTextAnimations.TryGetValue(plusScoreText, out Coroutine animationCoroutine))
+        {
+            StopCoroutine(animationCoroutine);
+        }
+        else
+        {
+            _plusScoreTextOriginalScales[plusScoreText] = plusScoreText.rectTransform.localScale;
+        }
+
+        Coroutine newAnimationCoroutine = StartCoroutine(
+            AnimatePlusScore(plusScoreText, _plusScoreTextOriginalScales[plusScoreText])
+        );
+        _plusScoreTextAnimations[plusScoreText] = newAnimationCoroutine;
+    }
+
+    private bool TryGetPlusScoreTextMultiplier(string text, int points, out int multiplier)
+    {
+        string scoreText = $"+{points}";
+
+        if (text.Equals(scoreText))
+        {
+            multiplier = 1;
+            return true;
+        }
+
+        int multiplierSeparatorIndex = text.IndexOf('x');
+        if (multiplierSeparatorIndex > 0 &&
+            text.Substring(multiplierSeparatorIndex + 1).Equals(scoreText) &&
+            int.TryParse(text.Substring(0, multiplierSeparatorIndex), out multiplier))
+        {
+            return true;
+        }
+
+        multiplier = 0;
+        return false;
+    }
+    
+    private IEnumerator AnimatePlusScore(TextMeshProUGUI plusScoreText, Vector3 originalScale)
+    {
+        float duration = plusScoreTextAnimationDuration;
+        float elapsedTime = 0.0f;
+        plusScoreText.rectTransform.localScale = Vector3.zero;
+        
+        while (elapsedTime < duration)
+        {
+            float t = elapsedTime / duration;
+            plusScoreText.rectTransform.localScale = Vector3.Lerp(Vector3.zero, originalScale, Mathf.SmoothStep(0f, 1f, t));
+            elapsedTime += Time.deltaTime;
+            yield return null;
+        }
+        
+        yield return new WaitForSeconds(plusScoreText.text == "+300" ? 3f : plusScoreTextDespawnDelay);
+
+        ReturnScoreTextToPoolAndRemoveFromQueue(plusScoreText);
+    }
+
+    private void ReturnScoreTextToPoolAndRemoveFromQueue(TextMeshProUGUI plusScoreText)
+    {
+        plusScoreText.text = string.Empty;
+        plusScoreText.gameObject.SetActive(false);
+        plusScoreText.gameObject.transform.SetParent(playerCanvas);
+        _usedPlusScoreTextQueue = new Queue<TextMeshProUGUI>(
+            _usedPlusScoreTextQueue.Where(text => text != plusScoreText)
+        );
+        _plusScoreTextAnimations.Remove(plusScoreText);
+        _plusScoreTextOriginalScales.Remove(plusScoreText);
+        _plusScoreTextPool.Push(plusScoreText);
     }
 
     private IEnumerator WaitForRoomBeReady()
@@ -182,6 +314,14 @@ public class PlayerCharacter : MonoBehaviourPun
             bool isOtherPlayerOutOfLives = otherPlayer.CustomProperties.TryGetValue(GameMode.PlayerOutOfLivesKey, out var isOutOfLives) && (bool)isOutOfLives;
 
             Debug.Log("Is other player out of lives? " + isOtherPlayerOutOfLives);
+        }
+
+        if (Keyboard.current.leftShiftKey.isPressed && Keyboard.current.pKey.wasPressedThisFrame)
+        {
+            // Choose 10 or 40
+            int pointsToAdd = UnityEngine.Random.value < 0.5f ? 10 : 40;
+            
+            AddScoreText(pointsToAdd);
         }
 #endif
 
@@ -667,15 +807,24 @@ public class PlayerCharacter : MonoBehaviourPun
         photonView.RPC(nameof(RpcDeath), RpcTarget.All);
     }
 
+    private void OnAddScoreToPlayer(int playerID, int points)
+    {
+        if(!photonView.IsMine || playerID != photonView.OwnerActorNr) return;
+
+        AddScoreText(points);
+    }
+
     private void OnEnable()
     {
         GameMode.GameOverEvent += OnGameOver;
         GameMode.OnPlayerOutOfLives += EnableMedkitWarning;
+        GameMode.OnAddScoreToPlayer += OnAddScoreToPlayer;
     }
 
     private void OnDisable()
     {
         GameMode.GameOverEvent -= OnGameOver;
         GameMode.OnPlayerOutOfLives -= EnableMedkitWarning;
+        GameMode.OnAddScoreToPlayer -= OnAddScoreToPlayer;
     }
 }

@@ -69,6 +69,7 @@ namespace _Game.Scripts
         public float playerDeathCooldown = 3.0f;
         [SerializeField] private LayerMask playerAndDengueSourceLayerMask;
         [SerializeField] private SerializedDictionary<PlayerType, Transform> playerSpawnLocations;
+        [SerializeField] private SerializedDictionary<PlayerType, Color> playerColors;
 
         [Header("Prefabs")] [SerializeField] private PlayerController playerControllerPrefab;
         [SerializeField] private MosquitosHorde mosquitosHordePrefab;
@@ -152,6 +153,7 @@ namespace _Game.Scripts
         public static Action RoomReady;
         public static Action<float> OnHordeProgressChanged;
         public static Action<List<PlayerCharacter>> OnPlayerOutOfLives;
+        public static Action<int, int> OnAddScoreToPlayer;
         
 
         protected override void Awake()
@@ -295,13 +297,8 @@ namespace _Game.Scripts
             }
 
             PlayerType playerType = GetPlayerType(player);
-            return playerType switch
-            {
-                PlayerType.Player1 => Color.green,
-                PlayerType.Player2 => Color.blue,
-                PlayerType.Player3 => Color.red,
-                _ => Color.white
-            };
+            
+            return Instance.playerColors.TryGetValue(playerType, out Color color) ? color : Color.white;
         }
 
         private void SetPlayerType(Player player, PlayerType playerType)
@@ -507,6 +504,8 @@ namespace _Game.Scripts
 
         private void AddScoreToPlayer(int playerID, int points)
         {
+            OnAddScoreToPlayer?.Invoke(playerID, points);
+            
             if (!PhotonNetwork.IsMasterClient || playerID == -1) return;
 
             if (bDebugMode)
@@ -517,6 +516,18 @@ namespace _Game.Scripts
 
             var playerScore = GetPlayerScore(player) + points;
             SetPlayerScore(player, playerScore);
+        }
+        
+        public void AddScoreToAllPlayers(int points)
+        {
+            if (!PhotonNetwork.IsMasterClient) return;
+
+            foreach (var player in PhotonNetwork.CurrentRoom.Players.Values)
+            {
+                var playerScore = GetPlayerScore(player) + points;
+                SetPlayerScore(player, playerScore);
+                OnAddScoreToPlayer?.Invoke(player.ActorNumber, points);
+            }
         }
 
         public static int GetPlayerScore(Player player)

@@ -1478,7 +1478,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::_Game.Scripts.GameMode
   startGameDelay: 3
   startingLives: 3
-  hordesPerWave: 5
+  hordesPerWave: 1
   intervalBetweenHordes: 1.5
   playerDeathCooldown: 2
   playerAndDengueSourceLayerMask:
@@ -1492,6 +1492,14 @@ MonoBehaviour:
       Value: {fileID: 247480411}
     - Key: 2
       Value: {fileID: 100109982}
+  playerColors:
+    _serializedList:
+    - Key: 0
+      Value: {r: 0, g: 1, b: 0, a: 1}
+    - Key: 1
+      Value: {r: 0, g: 0, b: 1, a: 1}
+    - Key: 2
+      Value: {r: 1, g: 0.2705882, b: 0, a: 1}
   playerControllerPrefab: {fileID: 7145116076282536125, guid: b8ac1bb3e2e04e649afa5032e52a1b6f, type: 3}
   mosquitosHordePrefab: {fileID: 7380585379183910588, guid: 2cdd92942844e9544828eece9b9cef8b, type: 3}
   playerCharacterPrefabs:
