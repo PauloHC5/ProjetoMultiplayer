@@ -80,7 +80,7 @@ public class UIButtonScaleAnimator : MonoBehaviour,
 
     public void OnPointerClick(PointerEventData eventData)
     {
-        if (_clicked || eventData.button != PointerEventData.InputButton.Left || !Interactable) return;
+        if (_clicked || eventData.button != PointerEventData.InputButton.Left) return;
         
         switch (onClickAction)
         {
@@ -88,6 +88,7 @@ public class UIButtonScaleAnimator : MonoBehaviour,
                 ShrinkButton();
                 break;
             case ButtonOnClickAction.Pulse:
+                if(!Interactable) return;
                 _currentRoutine = StartCoroutine(PulseAnimation());
                 break;
         }

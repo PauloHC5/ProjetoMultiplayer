@@ -11,7 +11,7 @@ public class UI_Tutorial : MonoBehaviour
     public Sprite buttonOnImage;
     public Sprite buttonOffImage;
     
-    private void Start()
+    private void Awake()
     {
         if(GameManager.AlreadyShownTutorial)
         {
@@ -27,7 +27,6 @@ public class UI_Tutorial : MonoBehaviour
     public void ShowTutorial()
     {
         tutorialWindow.gameObject.SetActive(true);
-        GameManager.AlreadyShownTutorial = true;
         tutorialButton.image.sprite = buttonOffImage;
         tutorialButton.interactable = false;
     }
@@ -35,7 +34,6 @@ public class UI_Tutorial : MonoBehaviour
     public void HideTutorial()
     {
         tutorialWindow.gameObject.SetActive(false);
-        GameManager.AlreadyShownTutorial = false;
         tutorialButton.image.sprite = buttonOnImage;
         tutorialButton.interactable = true;
     }
