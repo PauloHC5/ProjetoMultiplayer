@@ -45,15 +45,10 @@ namespace _Game.Scripts.SpaceInvaders
         {
             if (possessedPlayerCharacter != null)
             {
-                if (Keyboard.current.spaceKey.wasPressedThisFrame || Mouse.current.leftButton.wasPressedThisFrame)
+                if (Keyboard.current.spaceKey.isPressed || Mouse.current.leftButton.isPressed)
                 {
                     possessedPlayerCharacter.TryShoot();
                 }
-            }
-            else
-            {
-                // TODO: menu/spectator input (e.g. navigate options, cycle
-                // between teammates' cameras) goes here instead.
             }
         }
 
