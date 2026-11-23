@@ -1,0 +1,1001 @@
+fileFormatVersion: 2
+guid: 15312e6b1174c7c409e9180d7d46bcb1
+TextureImporter:
+  internalIDToNameTable:
+  - first:
+      213: 3533582624669804629
+    second: Space Icon_0
+  - first:
+      213: 4126359572232622411
+    second: Space Icon_1
+  - first:
+      213: -611079307915707750
+    second: Space Icon_2
+  - first:
+      213: 4131334522099549853
+    second: Space Icon_3
+  - first:
+      213: 93756881464343401
+    second: Space Icon_4
+  - first:
+      213: 5493761268055292362
+    second: Space Icon_5
+  - first:
+      213: 7889669936502083788
+    second: Space Icon_6
+  - first:
+      213: -7433568071018362193
+    second: Space Icon_7
+  - first:
+      213: 3320522029262873132
+    second: Space Icon_8
+  - first:
+      213: 2607833538594679941
+    second: Space Icon_9
+  - first:
+      213: 3752137364316789999
+    second: Space Icon_10
+  - first:
+      213: -4128501132696168531
+    second: Space Icon_11
+  - first:
+      213: 1452655839028228614
+    second: Space Icon_12
+  - first:
+      213: 5284851993035376777
+    second: Space Icon_13
+  - first:
+      213: -5214897165782181283
+    second: Space Icon_14
+  - first:
+      213: -9153489865680391757
+    second: Space Icon_15
+  - first:
+      213: 650362095870329816
+    second: Space Icon_16
+  - first:
+      213: -4699002852918787036
+    second: Space Icon_17
+  - first:
+      213: -9050657234472209086
+    second: Space Icon_18
+  - first:
+      213: 2398037292113347128
+    second: Space Icon_19
+  - first:
+      213: -5304753522269696552
+    second: Space Icon_20
+  - first:
+      213: 4733939445244497287
+    second: Space Icon_21
+  - first:
+      213: 3707828343666316964
+    second: Space Icon_22
+  - first:
+      213: 1530449247082091818
+    second: Space Icon_23
+  - first:
+      213: -2971482542374436655
+    second: Space Icon_24
+  - first:
+      213: 2827615867169614811
+    second: Space Icon_25
+  - first:
+      213: -2211995444997835250
+    second: Space Icon_26
+  - first:
+      213: -5684790320900688736
+    second: Space Icon_27
+  - first:
+      213: -3920115196226533001
+    second: Space Icon_28
+  - first:
+      213: 4201542499517553297
+    second: Space Icon_29
+  - first:
+      213: 4746675117189703511
+    second: Space Icon_30
+  - first:
+      213: 2715365311517645422
+    second: Space Icon_31
+  - first:
+      213: -3980642845734290779
+    second: Space Icon_32
+  externalObjects: {}
+  serializedVersion: 13
+  mipmaps:
+    mipMapMode: 0
+    enableMipMap: 0
+    sRGBTexture: 1
+    linearTexture: 0
+    fadeOut: 0
+    borderMipMap: 0
+    mipMapsPreserveCoverage: 0
+    alphaTestReferenceValue: 0.5
+    mipMapFadeDistanceStart: 1
+    mipMapFadeDistanceEnd: 3
+  bumpmap:
+    convertToNormalMap: 0
+    externalNormalMap: 0
+    heightScale: 0.25
+    normalMapFilter: 0
+    flipGreenChannel: 0
+  isReadable: 0
+  streamingMipmaps: 0
+  streamingMipmapsPriority: 0
+  vTOnly: 0
+  ignoreMipmapLimit: 0
+  grayScaleToAlpha: 0
+  generateCubemap: 6
+  cubemapConvolution: 0
+  seamlessCubemap: 0
+  textureFormat: 1
+  maxTextureSize: 2048
+  textureSettings:
+    serializedVersion: 2
+    filterMode: 0
+    aniso: 1
+    mipBias: 0
+    wrapU: 1
+    wrapV: 1
+    wrapW: 1
+  nPOTScale: 0
+  lightmap: 0
+  compressionQuality: 50
+  spriteMode: 1
+  spriteExtrude: 1
+  spriteMeshType: 1
+  alignment: 0
+  spritePivot: {x: 0.5, y: 0.5}
+  spritePixelsToUnits: 100
+  spriteBorder: {x: 0, y: 0, z: 0, w: 0}
+  spriteGenerateFallbackPhysicsShape: 1
+  alphaUsage: 1
+  alphaIsTransparency: 1
+  spriteTessellationDetail: -1
+  textureType: 8
+  textureShape: 1
+  singleChannelComponent: 0
+  flipbookRows: 1
+  flipbookColumns: 1
+  maxTextureSizeSet: 0
+  compressionQualitySet: 0
+  textureFormatSet: 0
+  ignorePngGamma: 0
+  applyGammaDecoding: 0
+  swizzle: 50462976
+  cookieLightType: 0
+  platformSettings:
+  - serializedVersion: 4
+    buildTarget: DefaultTexturePlatform
+    maxTextureSize: 512
+    resizeAlgorithm: 1
+    textureFormat: -1
+    textureCompression: 0
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: Standalone
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: Android
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: WebGL
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  spriteSheet:
+    serializedVersion: 2
+    sprites:
+    - serializedVersion: 2
+      name: Space Icon_0
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 681
+        width: 162
+        height: 328
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 558afe7ecaec90130800000000000000
+      internalID: 3533582624669804629
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Space Icon_1
+      rect:
+        serializedVersion: 2
+        x: 209
+        y: 786
+        width: 81
+        height: 46
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: b4155762b26c34930800000000000000
+      internalID: 4126359572232622411
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Space Icon_2
+      rect:
+        serializedVersion: 2
+        x: 271
+        y: 778
+        width: 26
+        height: 28
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: a9ab71a6b920587f0800000000000000
+      internalID: -611079307915707750
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Space Icon_3
+      rect:
+        serializedVersion: 2
+        x: 291
+        y: 794
+        width: 12
+        height: 9
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: d964d0eebd2755930800000000000000
+      internalID: 4131334522099549853
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Space Icon_4
+      rect:
+        serializedVersion: 2
+        x: 303
+        y: 723
+        width: 209
+        height: 147
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 96b3eee03671d4100800000000000000
+      internalID: 93756881464343401
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Space Icon_5
+      rect:
+        serializedVersion: 2
+        x: 547
+        y: 745
+        width: 157
+        height: 158
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: ac93c3f14c2cd3c40800000000000000
+      internalID: 5493761268055292362
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Space Icon_6
+      rect:
+        serializedVersion: 2
+        x: 555
+        y: 764
+        width: 7
+        height: 10
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: cc01948810dbd7d60800000000000000
+      internalID: 7889669936502083788
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Space Icon_7
+      rect:
+        serializedVersion: 2
+        x: 811
+        y: 730
+        width: 36
+        height: 50
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: faac3416939a6d890800000000000000
+      internalID: -7433568071018362193
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Space Icon_8
+      rect:
+        serializedVersion: 2
+        x: 918
+        y: 763
+        width: 192
+        height: 273
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: c22a217513dd41e20800000000000000
+      internalID: 3320522029262873132
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Space Icon_9
+      rect:
+        serializedVersion: 2
+        x: 940
+        y: 745
+        width: 12
+        height: 12
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 58c294559c2e03420800000000000000
+      internalID: 2607833538594679941
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Space Icon_10
+      rect:
+        serializedVersion: 2
+        x: 1141
+        y: 793
+        width: 12
+        height: 15
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: fec929c9d05421430800000000000000
+      internalID: 3752137364316789999
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Space Icon_11
+      rect:
+        serializedVersion: 2
+        x: 1182
+        y: 753
+        width: 226
+        height: 259
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: da7d8d2f71e94b6c0800000000000000
+      internalID: -4128501132696168531
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Space Icon_12
+      rect:
+        serializedVersion: 2
+        x: 84
+        y: 549
+        width: 175
+        height: 107
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 602bc220aced82410800000000000000
+      internalID: 1452655839028228614
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Space Icon_13
+      rect:
+        serializedVersion: 2
+        x: 156
+        y: 612
+        width: 133
+        height: 137
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 988836723e0975940800000000000000
+      internalID: 5284851993035376777
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Space Icon_14
+      rect:
+        serializedVersion: 2
+        x: 169
+        y: 44
+        width: 995
+        height: 666
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: d5a9c5d48a6f0a7b0800000000000000
+      internalID: -5214897165782181283
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Space Icon_15
+      rect:
+        serializedVersion: 2
+        x: 1156
+        y: 612
+        width: 132
+        height: 137
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 3b17bf4e67548f080800000000000000
+      internalID: -9153489865680391757
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Space Icon_16
+      rect:
+        serializedVersion: 2
+        x: 1192
+        y: 549
+        width: 164
+        height: 107
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 8d3cab361ec860900800000000000000
+      internalID: 650362095870329816
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Space Icon_17
+      rect:
+        serializedVersion: 2
+        x: 24
+        y: 283
+        width: 244
+        height: 246
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 4248a393dc9c9ceb0800000000000000
+      internalID: -4699002852918787036
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Space Icon_18
+      rect:
+        serializedVersion: 2
+        x: 450
+        y: 356
+        width: 7
+        height: 15
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 245f67b923b956280800000000000000
+      internalID: -9050657234472209086
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Space Icon_19
+      rect:
+        serializedVersion: 2
+        x: 456
+        y: 350
+        width: 11
+        height: 18
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 8324e8a363a874120800000000000000
+      internalID: 2398037292113347128
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Space Icon_20
+      rect:
+        serializedVersion: 2
+        x: 528
+        y: 321
+        width: 26
+        height: 26
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 8ddcc1cf6cab166b0800000000000000
+      internalID: -5304753522269696552
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Space Icon_21
+      rect:
+        serializedVersion: 2
+        x: 677
+        y: 338
+        width: 7
+        height: 13
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 78d020e08d452b140800000000000000
+      internalID: 4733939445244497287
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Space Icon_22
+      rect:
+        serializedVersion: 2
+        x: 683
+        y: 335
+        width: 25
+        height: 30
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 4a61b50db3ad47330800000000000000
+      internalID: 3707828343666316964
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Space Icon_23
+      rect:
+        serializedVersion: 2
+        x: 707
+        y: 356
+        width: 6
+        height: 9
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: a2597174b7f3d3510800000000000000
+      internalID: 1530449247082091818
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Space Icon_24
+      rect:
+        serializedVersion: 2
+        x: 868
+        y: 342
+        width: 7
+        height: 9
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 1d04f7d0f5c23c6d0800000000000000
+      internalID: -2971482542374436655
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Space Icon_25
+      rect:
+        serializedVersion: 2
+        x: 888
+        y: 346
+        width: 7
+        height: 8
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: bdb27eb56a5bd3720800000000000000
+      internalID: 2827615867169614811
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Space Icon_26
+      rect:
+        serializedVersion: 2
+        x: 906
+        y: 327
+        width: 12
+        height: 22
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: e063f18ccd96d41e0800000000000000
+      internalID: -2211995444997835250
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Space Icon_27
+      rect:
+        serializedVersion: 2
+        x: 916
+        y: 325
+        width: 10
+        height: 10
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 0a4b22c82519b11b0800000000000000
+      internalID: -5684790320900688736
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Space Icon_28
+      rect:
+        serializedVersion: 2
+        x: 934
+        y: 327
+        width: 6
+        height: 6
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 7798e4aaff3f899c0800000000000000
+      internalID: -3920115196226533001
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Space Icon_29
+      rect:
+        serializedVersion: 2
+        x: 946
+        y: 340
+        width: 6
+        height: 8
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 19a537084a0ee4a30800000000000000
+      internalID: 4201542499517553297
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Space Icon_30
+      rect:
+        serializedVersion: 2
+        x: 973
+        y: 354
+        width: 17
+        height: 17
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 7572740ced39fd140800000000000000
+      internalID: 4746675117189703511
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Space Icon_31
+      rect:
+        serializedVersion: 2
+        x: 1029
+        y: 355
+        width: 15
+        height: 16
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: e6a5d6c3d5aeea520800000000000000
+      internalID: 2715365311517645422
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Space Icon_32
+      rect:
+        serializedVersion: 2
+        x: 1195
+        y: 285
+        width: 217
+        height: 244
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 5aabe421c6ae1c8c0800000000000000
+      internalID: -3980642845734290779
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    outline: []
+    customData: 
+    physicsShape: []
+    bones: []
+    spriteID: 5e97eb03825dee720800000000000000
+    internalID: 0
+    vertices: []
+    indices: 
+    edges: []
+    weights: []
+    secondaryTextures: []
+    spriteCustomMetadata:
+      entries: []
+    nameFileIdTable:
+      Space Icon_0: 3533582624669804629
+      Space Icon_1: 4126359572232622411
+      Space Icon_10: 3752137364316789999
+      Space Icon_11: -4128501132696168531
+      Space Icon_12: 1452655839028228614
+      Space Icon_13: 5284851993035376777
+      Space Icon_14: -5214897165782181283
+      Space Icon_15: -9153489865680391757
+      Space Icon_16: 650362095870329816
+      Space Icon_17: -4699002852918787036
+      Space Icon_18: -9050657234472209086
+      Space Icon_19: 2398037292113347128
+      Space Icon_2: -611079307915707750
+      Space Icon_20: -5304753522269696552
+      Space Icon_21: 4733939445244497287
+      Space Icon_22: 3707828343666316964
+      Space Icon_23: 1530449247082091818
+      Space Icon_24: -2971482542374436655
+      Space Icon_25: 2827615867169614811
+      Space Icon_26: -2211995444997835250
+      Space Icon_27: -5684790320900688736
+      Space Icon_28: -3920115196226533001
+      Space Icon_29: 4201542499517553297
+      Space Icon_3: 4131334522099549853
+      Space Icon_30: 4746675117189703511
+      Space Icon_31: 2715365311517645422
+      Space Icon_32: -3980642845734290779
+      Space Icon_4: 93756881464343401
+      Space Icon_5: 5493761268055292362
+      Space Icon_6: 7889669936502083788
+      Space Icon_7: -7433568071018362193
+      Space Icon_8: 3320522029262873132
+      Space Icon_9: 2607833538594679941
+  mipmapLimitGroupName: 
+  pSDRemoveMatte: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
