@@ -58,8 +58,8 @@ namespace _Game.Scripts.SpaceInvaders
 
             Vector2 direction = Vector2.zero;
             
-            //EightWayMovement(direction);
-            FourWayMovement(direction);
+            EightWayMovement(direction);
+            //FourWayMovement(direction);
         }
         
         private void EightWayMovement(Vector2 direction)
@@ -81,7 +81,7 @@ namespace _Game.Scripts.SpaceInvaders
                 direction.y -= 1f;
             }
 
-            possessedPlayerCharacter.Move(direction);
+            possessedPlayerCharacter.Move(direction.normalized);
         }
         
         private void FourWayMovement(Vector2 direction)
