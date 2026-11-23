@@ -44,6 +44,7 @@ public class UIButtonScaleAnimator : MonoBehaviour,
     private RectTransform _rectTransform;
     private Coroutine _currentRoutine;
     private bool _clicked;
+    private bool Interactable => GetComponent<UnityEngine.UI.Button>()?.interactable ?? true;
 
     private void Awake()
     {
@@ -65,7 +66,7 @@ public class UIButtonScaleAnimator : MonoBehaviour,
 
     public void OnPointerEnter(PointerEventData eventData)
     {
-        if (_clicked) return;
+        if (_clicked || !Interactable) return;
         ScaleTo(hoverScale, hoverDuration);
         onPointerEnter?.Invoke();
     }
@@ -79,7 +80,7 @@ public class UIButtonScaleAnimator : MonoBehaviour,
 
     public void OnPointerClick(PointerEventData eventData)
     {
-        if (_clicked || eventData.button != PointerEventData.InputButton.Left) return;
+        if (_clicked || eventData.button != PointerEventData.InputButton.Left || !Interactable) return;
         
         switch (onClickAction)
         {

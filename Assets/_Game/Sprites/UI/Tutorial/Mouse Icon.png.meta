@@ -1,0 +1,281 @@
+fileFormatVersion: 2
+guid: dda7a66e152a3e445a41743859f99fed
+TextureImporter:
+  internalIDToNameTable:
+  - first:
+      213: -320349199061999712
+    second: Mouse Icon_0
+  - first:
+      213: 1285668343159181393
+    second: Mouse Icon_1
+  - first:
+      213: -4367303670497400439
+    second: Mouse Icon_2
+  - first:
+      213: 4876560611985936313
+    second: Mouse Icon_3
+  - first:
+      213: 7405706732529199824
+    second: Mouse Icon_4
+  - first:
+      213: -3427058681994126853
+    second: Mouse Icon_5
+  - first:
+      213: -6597331651642768130
+    second: Mouse Icon_6
+  - first:
+      213: -7605197502715187652
+    second: Mouse Icon_7
+  - first:
+      213: 2022598212405700192
+    second: Mouse Icon_8
+  - first:
+      213: -7371335966293237481
+    second: Mouse Icon_9
+  - first:
+      213: -6733106253735447092
+    second: Mouse Icon_10
+  - first:
+      213: -8657628458653302685
+    second: Mouse Icon_11
+  - first:
+      213: 4500788666306607364
+    second: Mouse Icon_12
+  - first:
+      213: -3391704603276831433
+    second: Mouse Icon_13
+  - first:
+      213: -9192676459724331727
+    second: Mouse Icon_14
+  - first:
+      213: 7886441619016047481
+    second: Mouse Icon_15
+  - first:
+      213: 1213226268019515379
+    second: Mouse Icon_16
+  - first:
+      213: 3530921823160977651
+    second: Mouse Icon_17
+  - first:
+      213: -9138018879580335670
+    second: Mouse Icon_18
+  - first:
+      213: 6103365134859370906
+    second: Mouse Icon_19
+  - first:
+      213: 6649769971665991909
+    second: Mouse Icon_20
+  - first:
+      213: -1378988982443403668
+    second: Mouse Icon_21
+  - first:
+      213: -2736014429070142769
+    second: Mouse Icon_22
+  - first:
+      213: -2204993499562318937
+    second: Mouse Icon_23
+  - first:
+      213: -379752301358554445
+    second: Mouse Icon_24
+  - first:
+      213: -5403062040711767135
+    second: Mouse Icon_25
+  - first:
+      213: 3393956372562743789
+    second: Mouse Icon_26
+  - first:
+      213: -3566389582881803943
+    second: Mouse Icon_27
+  - first:
+      213: -2012483218015131450
+    second: Mouse Icon_28
+  - first:
+      213: -4852201819860662728
+    second: Mouse Icon_29
+  externalObjects: {}
+  serializedVersion: 13
+  mipmaps:
+    mipMapMode: 0
+    enableMipMap: 0
+    sRGBTexture: 1
+    linearTexture: 0
+    fadeOut: 0
+    borderMipMap: 0
+    mipMapsPreserveCoverage: 0
+    alphaTestReferenceValue: 0.5
+    mipMapFadeDistanceStart: 1
+    mipMapFadeDistanceEnd: 3
+  bumpmap:
+    convertToNormalMap: 0
+    externalNormalMap: 0
+    heightScale: 0.25
+    normalMapFilter: 0
+    flipGreenChannel: 0
+  isReadable: 0
+  streamingMipmaps: 0
+  streamingMipmapsPriority: 0
+  vTOnly: 0
+  ignoreMipmapLimit: 0
+  grayScaleToAlpha: 0
+  generateCubemap: 6
+  cubemapConvolution: 0
+  seamlessCubemap: 0
+  textureFormat: 1
+  maxTextureSize: 2048
+  textureSettings:
+    serializedVersion: 2
+    filterMode: 0
+    aniso: 1
+    mipBias: 0
+    wrapU: 1
+    wrapV: 1
+    wrapW: 1
+  nPOTScale: 0
+  lightmap: 0
+  compressionQuality: 50
+  spriteMode: 2
+  spriteExtrude: 1
+  spriteMeshType: 1
+  alignment: 0
+  spritePivot: {x: 0.5, y: 0.5}
+  spritePixelsToUnits: 100
+  spriteBorder: {x: 0, y: 0, z: 0, w: 0}
+  spriteGenerateFallbackPhysicsShape: 1
+  alphaUsage: 1
+  alphaIsTransparency: 1
+  spriteTessellationDetail: -1
+  textureType: 8
+  textureShape: 1
+  singleChannelComponent: 0
+  flipbookRows: 1
+  flipbookColumns: 1
+  maxTextureSizeSet: 0
+  compressionQualitySet: 0
+  textureFormatSet: 0
+  ignorePngGamma: 0
+  applyGammaDecoding: 0
+  swizzle: 50462976
+  cookieLightType: 0
+  platformSettings:
+  - serializedVersion: 4
+    buildTarget: DefaultTexturePlatform
+    maxTextureSize: 512
+    resizeAlgorithm: 1
+    textureFormat: -1
+    textureCompression: 0
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: Standalone
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: Android
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: WebGL
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  spriteSheet:
+    serializedVersion: 2
+    sprites:
+    - serializedVersion: 2
+      name: Mouse Icon_0
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 0
+        width: 887
+        height: 887
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 0af14d9c914ed8bf0800000000000000
+      internalID: -320349199061999712
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Mouse Icon_1
+      rect:
+        serializedVersion: 2
+        x: 887
+        y: 0
+        width: 887
+        height: 887
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 150d7fcdb8c97d110800000000000000
+      internalID: 1285668343159181393
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    outline: []
+    customData: 
+    physicsShape: []
+    bones: []
+    spriteID: 3b96ff6a4cf309e4489344c6e82802af
+    internalID: 0
+    vertices: []
+    indices: 
+    edges: []
+    weights: []
+    secondaryTextures: []
+    spriteCustomMetadata:
+      entries:
+      - key: SpriteEditor.SliceSettings
+        value: '{"sliceOnImport":false,"gridCellCount":{"x":2.0,"y":1.0},"gridSpriteSize":{"x":887.0,"y":887.0},"gridSpriteOffset":{"x":0.0,"y":0.0},"gridSpritePadding":{"x":0.0,"y":0.0},"pivot":{"x":0.5,"y":0.5},"pivotPixels":{"x":0.0,"y":0.0},"autoSlicingMethod":0,"spriteAlignment":0,"pivotUnitMode":0,"slicingType":2,"keepEmptyRects":false,"isAlternate":false}'
+    nameFileIdTable:
+      Mouse Icon_0: -320349199061999712
+      Mouse Icon_1: 1285668343159181393
+  mipmapLimitGroupName: 
+  pSDRemoveMatte: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

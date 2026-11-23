@@ -23,6 +23,8 @@ public class GameManager : IPersistentSinglenton<GameManager>
     public const int MaxRoomNameLength = 11;
 
     private bool _initialized;
+    
+    public static bool AlreadyShownTutorial = false;
 
     protected override void Awake()
     {
