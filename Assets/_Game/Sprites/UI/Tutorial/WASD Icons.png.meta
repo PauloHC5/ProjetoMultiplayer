@@ -1,0 +1,470 @@
+fileFormatVersion: 2
+guid: 91301dff4a9a7854493722d5e128a4b0
+TextureImporter:
+  internalIDToNameTable:
+  - first:
+      213: 7661431007079951743
+    second: WASD Icons_0
+  - first:
+      213: -4297256793979427936
+    second: WASD Icons_1
+  - first:
+      213: -6154164772406509797
+    second: WASD Icons_2
+  - first:
+      213: 1707416145234598602
+    second: WASD Icons_3
+  - first:
+      213: 495621593099491423
+    second: WASD Icons_4
+  - first:
+      213: 1738150106038014078
+    second: WASD Icons_5
+  - first:
+      213: 5503814361626352814
+    second: WASD Icons_6
+  - first:
+      213: -6014442209009708446
+    second: WASD Icons_7
+  - first:
+      213: -7494154944275350302
+    second: WASD Icons_8
+  - first:
+      213: -5739510750100478770
+    second: WASD Icons_9
+  - first:
+      213: 4667567814368424242
+    second: WASD Icons_10
+  - first:
+      213: -6752653517744168146
+    second: WASD Icons_11
+  - first:
+      213: 6031882206524121119
+    second: WASD Icons_12
+  - first:
+      213: -1568316161938139912
+    second: WASD Icons_13
+  - first:
+      213: 5722871889609345950
+    second: WASD Icons_14
+  - first:
+      213: 5569104081856908705
+    second: WASD Icons_15
+  - first:
+      213: -4130664821518932084
+    second: WASD Icons_16
+  - first:
+      213: 2941552128708349479
+    second: WASD Icons_17
+  - first:
+      213: 3350513132601970642
+    second: WASD Icons_18
+  - first:
+      213: 6328733524797512146
+    second: WASD Icons_19
+  - first:
+      213: -4869065750995032188
+    second: WASD Icons_20
+  - first:
+      213: 5402928187897991839
+    second: WASD Icons_21
+  - first:
+      213: -1729572520472892317
+    second: WASD Icons_22
+  - first:
+      213: -4142299105873693404
+    second: WASD Icons_23
+  - first:
+      213: 7953922276381089270
+    second: WASD Icons_24
+  - first:
+      213: -7230116571822047001
+    second: WASD Icons_25
+  - first:
+      213: -3930636942885382914
+    second: WASD Icons_26
+  - first:
+      213: -7325508113091190693
+    second: WASD Icons_27
+  - first:
+      213: 8131173525700094363
+    second: WASD Icons_28
+  - first:
+      213: -3308573212524907866
+    second: WASD Icons_29
+  - first:
+      213: 4444804125364701864
+    second: WASD Icons_30
+  - first:
+      213: 5117488176903763866
+    second: WASD Icons_31
+  - first:
+      213: -2966641936582632468
+    second: WASD Icons_32
+  - first:
+      213: 3838444636170301097
+    second: WASD Icons_33
+  - first:
+      213: 9030031934686874837
+    second: WASD Icons_34
+  - first:
+      213: -7200132432638940531
+    second: WASD Icons_35
+  - first:
+      213: -5752428186910272522
+    second: WASD Icons_36
+  externalObjects: {}
+  serializedVersion: 13
+  mipmaps:
+    mipMapMode: 0
+    enableMipMap: 0
+    sRGBTexture: 1
+    linearTexture: 0
+    fadeOut: 0
+    borderMipMap: 0
+    mipMapsPreserveCoverage: 0
+    alphaTestReferenceValue: 0.5
+    mipMapFadeDistanceStart: 1
+    mipMapFadeDistanceEnd: 3
+  bumpmap:
+    convertToNormalMap: 0
+    externalNormalMap: 0
+    heightScale: 0.25
+    normalMapFilter: 0
+    flipGreenChannel: 0
+  isReadable: 0
+  streamingMipmaps: 0
+  streamingMipmapsPriority: 0
+  vTOnly: 0
+  ignoreMipmapLimit: 0
+  grayScaleToAlpha: 0
+  generateCubemap: 6
+  cubemapConvolution: 0
+  seamlessCubemap: 0
+  textureFormat: 1
+  maxTextureSize: 2048
+  textureSettings:
+    serializedVersion: 2
+    filterMode: 0
+    aniso: 1
+    mipBias: 0
+    wrapU: 1
+    wrapV: 1
+    wrapW: 1
+  nPOTScale: 0
+  lightmap: 0
+  compressionQuality: 50
+  spriteMode: 2
+  spriteExtrude: 1
+  spriteMeshType: 1
+  alignment: 0
+  spritePivot: {x: 0.5, y: 0.5}
+  spritePixelsToUnits: 100
+  spriteBorder: {x: 0, y: 0, z: 0, w: 0}
+  spriteGenerateFallbackPhysicsShape: 1
+  alphaUsage: 1
+  alphaIsTransparency: 1
+  spriteTessellationDetail: -1
+  textureType: 8
+  textureShape: 1
+  singleChannelComponent: 0
+  flipbookRows: 1
+  flipbookColumns: 1
+  maxTextureSizeSet: 0
+  compressionQualitySet: 0
+  textureFormatSet: 0
+  ignorePngGamma: 0
+  applyGammaDecoding: 0
+  swizzle: 50462976
+  cookieLightType: 0
+  platformSettings:
+  - serializedVersion: 4
+    buildTarget: DefaultTexturePlatform
+    maxTextureSize: 512
+    resizeAlgorithm: 1
+    textureFormat: -1
+    textureCompression: 0
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: Standalone
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: Android
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: WebGL
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  spriteSheet:
+    serializedVersion: 2
+    sprites:
+    - serializedVersion: 2
+      name: WASD Icons_0
+      rect:
+        serializedVersion: 2
+        x: 71
+        y: 82
+        width: 282
+        height: 254
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline:
+      - - {x: 137, y: 99.92376}
+        - {x: 132.98438, y: 127}
+        - {x: -136.39452, y: 127}
+        - {x: -136.39452, y: -127}
+        - {x: 137, y: -127}
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: f7de920b8eed25a60800000000000000
+      internalID: 7661431007079951743
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: WASD Icons_1
+      rect:
+        serializedVersion: 2
+        x: 396
+        y: 84
+        width: 274
+        height: 254
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline:
+      - - {x: 137, y: 99.92376}
+        - {x: 132.98438, y: 127}
+        - {x: -136.39452, y: 127}
+        - {x: -136.39452, y: -127}
+        - {x: 137, y: -127}
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 0a3e836b6b31d54c0800000000000000
+      internalID: -4297256793979427936
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: WASD Icons_2
+      rect:
+        serializedVersion: 2
+        x: 706
+        y: 88
+        width: 274
+        height: 252
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline:
+      - - {x: 137, y: 99.92376}
+        - {x: 132.98438, y: 126}
+        - {x: -136.39452, y: 126}
+        - {x: -136.39452, y: -126}
+        - {x: 137, y: -126}
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: b1fbc73eeb3089aa0800000000000000
+      internalID: -6154164772406509797
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: WASD Icons_3
+      rect:
+        serializedVersion: 2
+        x: 1185
+        y: 90
+        width: 277
+        height: 251
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline:
+      - - {x: 137, y: 99.92376}
+        - {x: 132.98438, y: 125.5}
+        - {x: -136.39452, y: 125.5}
+        - {x: -136.39452, y: -125.5}
+        - {x: 137, y: -125.5}
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: aca997410f5f1b710800000000000000
+      internalID: 1707416145234598602
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: WASD Icons_4
+      rect:
+        serializedVersion: 2
+        x: 1503
+        y: 91
+        width: 272
+        height: 249
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline:
+      - - {x: 136, y: 99.92376}
+        - {x: 132.98438, y: 124.5}
+        - {x: -136, y: 124.5}
+        - {x: -136, y: -124.5}
+        - {x: 136, y: -124.5}
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: f5855b7863dc0e600800000000000000
+      internalID: 495621593099491423
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: WASD Icons_5
+      rect:
+        serializedVersion: 2
+        x: 1815
+        y: 90
+        width: 278
+        height: 251
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline:
+      - - {x: 137, y: 99.92376}
+        - {x: 132.98438, y: 125.5}
+        - {x: -136.39452, y: 125.5}
+        - {x: -136.39452, y: -125.5}
+        - {x: 137, y: -125.5}
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: e7014b4ff462f1810800000000000000
+      internalID: 1738150106038014078
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: WASD Icons_6
+      rect:
+        serializedVersion: 2
+        x: 395
+        y: 361
+        width: 273
+        height: 254
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 316ff46fe4caf6d448d5f64951f2bcd8
+      internalID: -1577226760
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: WASD Icons_7
+      rect:
+        serializedVersion: 2
+        x: 1501
+        y: 360
+        width: 273
+        height: 254
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: d2cc03f191287e54283d32f3ade510ed
+      internalID: -1569852624
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    outline: []
+    customData: 
+    physicsShape: []
+    bones: []
+    spriteID: 627ed36cd93060440a60f2e3bb3e31d3
+    internalID: 0
+    vertices: []
+    indices: 
+    edges: []
+    weights: []
+    secondaryTextures: []
+    spriteCustomMetadata:
+      entries:
+      - key: SpriteEditor.SliceSettings
+        value: '{"sliceOnImport":false,"gridCellCount":{"x":6.0,"y":2.0},"gridSpriteSize":{"x":352.0,"y":375.0},"gridSpriteOffset":{"x":0.0,"y":0.0},"gridSpritePadding":{"x":0.0,"y":0.0},"pivot":{"x":0.5,"y":0.5},"pivotPixels":{"x":0.0,"y":0.0},"autoSlicingMethod":0,"spriteAlignment":0,"pivotUnitMode":0,"slicingType":1,"keepEmptyRects":false,"isAlternate":false}'
+    nameFileIdTable:
+      WASD Icons_0: 7661431007079951743
+      WASD Icons_1: -4297256793979427936
+      WASD Icons_2: -6154164772406509797
+      WASD Icons_3: 1707416145234598602
+      WASD Icons_4: 495621593099491423
+      WASD Icons_5: 1738150106038014078
+      WASD Icons_6: -1577226760
+      WASD Icons_7: -1569852624
+  mipmapLimitGroupName: 
+  pSDRemoveMatte: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

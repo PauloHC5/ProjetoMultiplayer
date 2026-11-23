@@ -45,15 +45,10 @@ namespace _Game.Scripts.SpaceInvaders
         {
             if (possessedPlayerCharacter != null)
             {
-                if (Keyboard.current.spaceKey.wasPressedThisFrame || Mouse.current.leftButton.wasPressedThisFrame)
+                if (Keyboard.current.spaceKey.isPressed || Mouse.current.leftButton.isPressed)
                 {
                     possessedPlayerCharacter.TryShoot();
                 }
-            }
-            else
-            {
-                // TODO: menu/spectator input (e.g. navigate options, cycle
-                // between teammates' cameras) goes here instead.
             }
         }
 
@@ -63,8 +58,8 @@ namespace _Game.Scripts.SpaceInvaders
 
             Vector2 direction = Vector2.zero;
             
-            //EightWayMovement(direction);
-            FourWayMovement(direction);
+            EightWayMovement(direction);
+            //FourWayMovement(direction);
         }
         
         private void EightWayMovement(Vector2 direction)
@@ -86,7 +81,7 @@ namespace _Game.Scripts.SpaceInvaders
                 direction.y -= 1f;
             }
 
-            possessedPlayerCharacter.Move(direction);
+            possessedPlayerCharacter.Move(direction.normalized);
         }
         
         private void FourWayMovement(Vector2 direction)

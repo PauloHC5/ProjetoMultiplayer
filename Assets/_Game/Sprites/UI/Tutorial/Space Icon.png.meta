@@ -1,0 +1,297 @@
+fileFormatVersion: 2
+guid: 15312e6b1174c7c409e9180d7d46bcb1
+TextureImporter:
+  internalIDToNameTable:
+  - first:
+      213: 3533582624669804629
+    second: Space Icon_0
+  - first:
+      213: 4126359572232622411
+    second: Space Icon_1
+  - first:
+      213: -611079307915707750
+    second: Space Icon_2
+  - first:
+      213: 4131334522099549853
+    second: Space Icon_3
+  - first:
+      213: 93756881464343401
+    second: Space Icon_4
+  - first:
+      213: 5493761268055292362
+    second: Space Icon_5
+  - first:
+      213: 7889669936502083788
+    second: Space Icon_6
+  - first:
+      213: -7433568071018362193
+    second: Space Icon_7
+  - first:
+      213: 3320522029262873132
+    second: Space Icon_8
+  - first:
+      213: 2607833538594679941
+    second: Space Icon_9
+  - first:
+      213: 3752137364316789999
+    second: Space Icon_10
+  - first:
+      213: -4128501132696168531
+    second: Space Icon_11
+  - first:
+      213: 1452655839028228614
+    second: Space Icon_12
+  - first:
+      213: 5284851993035376777
+    second: Space Icon_13
+  - first:
+      213: -5214897165782181283
+    second: Space Icon_14
+  - first:
+      213: -9153489865680391757
+    second: Space Icon_15
+  - first:
+      213: 650362095870329816
+    second: Space Icon_16
+  - first:
+      213: -4699002852918787036
+    second: Space Icon_17
+  - first:
+      213: -9050657234472209086
+    second: Space Icon_18
+  - first:
+      213: 2398037292113347128
+    second: Space Icon_19
+  - first:
+      213: -5304753522269696552
+    second: Space Icon_20
+  - first:
+      213: 4733939445244497287
+    second: Space Icon_21
+  - first:
+      213: 3707828343666316964
+    second: Space Icon_22
+  - first:
+      213: 1530449247082091818
+    second: Space Icon_23
+  - first:
+      213: -2971482542374436655
+    second: Space Icon_24
+  - first:
+      213: 2827615867169614811
+    second: Space Icon_25
+  - first:
+      213: -2211995444997835250
+    second: Space Icon_26
+  - first:
+      213: -5684790320900688736
+    second: Space Icon_27
+  - first:
+      213: -3920115196226533001
+    second: Space Icon_28
+  - first:
+      213: 4201542499517553297
+    second: Space Icon_29
+  - first:
+      213: 4746675117189703511
+    second: Space Icon_30
+  - first:
+      213: 2715365311517645422
+    second: Space Icon_31
+  - first:
+      213: -3980642845734290779
+    second: Space Icon_32
+  externalObjects: {}
+  serializedVersion: 13
+  mipmaps:
+    mipMapMode: 0
+    enableMipMap: 0
+    sRGBTexture: 1
+    linearTexture: 0
+    fadeOut: 0
+    borderMipMap: 0
+    mipMapsPreserveCoverage: 0
+    alphaTestReferenceValue: 0.5
+    mipMapFadeDistanceStart: 1
+    mipMapFadeDistanceEnd: 3
+  bumpmap:
+    convertToNormalMap: 0
+    externalNormalMap: 0
+    heightScale: 0.25
+    normalMapFilter: 0
+    flipGreenChannel: 0
+  isReadable: 0
+  streamingMipmaps: 0
+  streamingMipmapsPriority: 0
+  vTOnly: 0
+  ignoreMipmapLimit: 0
+  grayScaleToAlpha: 0
+  generateCubemap: 6
+  cubemapConvolution: 0
+  seamlessCubemap: 0
+  textureFormat: 1
+  maxTextureSize: 2048
+  textureSettings:
+    serializedVersion: 2
+    filterMode: 0
+    aniso: 1
+    mipBias: 0
+    wrapU: 1
+    wrapV: 1
+    wrapW: 1
+  nPOTScale: 0
+  lightmap: 0
+  compressionQuality: 50
+  spriteMode: 2
+  spriteExtrude: 1
+  spriteMeshType: 1
+  alignment: 0
+  spritePivot: {x: 0.5, y: 0.5}
+  spritePixelsToUnits: 100
+  spriteBorder: {x: 285, y: 398, z: 288, w: 407}
+  spriteGenerateFallbackPhysicsShape: 1
+  alphaUsage: 1
+  alphaIsTransparency: 1
+  spriteTessellationDetail: -1
+  textureType: 8
+  textureShape: 1
+  singleChannelComponent: 0
+  flipbookRows: 1
+  flipbookColumns: 1
+  maxTextureSizeSet: 0
+  compressionQualitySet: 0
+  textureFormatSet: 0
+  ignorePngGamma: 0
+  applyGammaDecoding: 0
+  swizzle: 50462976
+  cookieLightType: 0
+  platformSettings:
+  - serializedVersion: 4
+    buildTarget: DefaultTexturePlatform
+    maxTextureSize: 512
+    resizeAlgorithm: 1
+    textureFormat: -1
+    textureCompression: 0
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: Standalone
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: Android
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: WebGL
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  spriteSheet:
+    serializedVersion: 2
+    sprites:
+    - serializedVersion: 2
+      name: Space Icon_14
+      rect:
+        serializedVersion: 2
+        x: 285
+        y: 398
+        width: 874
+        height: 282
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: d5a9c5d48a6f0a7b0800000000000000
+      internalID: -5214897165782181283
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    outline: []
+    customData: 
+    physicsShape: []
+    bones: []
+    spriteID: 5e97eb03825dee720800000000000000
+    internalID: 1537655665
+    vertices: []
+    indices: 
+    edges: []
+    weights: []
+    secondaryTextures: []
+    spriteCustomMetadata:
+      entries: []
+    nameFileIdTable:
+      Space Icon_0: 3533582624669804629
+      Space Icon_1: 4126359572232622411
+      Space Icon_10: 3752137364316789999
+      Space Icon_11: -4128501132696168531
+      Space Icon_12: 1452655839028228614
+      Space Icon_13: 5284851993035376777
+      Space Icon_14: -5214897165782181283
+      Space Icon_15: -9153489865680391757
+      Space Icon_16: 650362095870329816
+      Space Icon_17: -4699002852918787036
+      Space Icon_18: -9050657234472209086
+      Space Icon_19: 2398037292113347128
+      Space Icon_2: -611079307915707750
+      Space Icon_20: -5304753522269696552
+      Space Icon_21: 4733939445244497287
+      Space Icon_22: 3707828343666316964
+      Space Icon_23: 1530449247082091818
+      Space Icon_24: -2971482542374436655
+      Space Icon_25: 2827615867169614811
+      Space Icon_26: -2211995444997835250
+      Space Icon_27: -5684790320900688736
+      Space Icon_28: -3920115196226533001
+      Space Icon_29: 4201542499517553297
+      Space Icon_3: 4131334522099549853
+      Space Icon_30: 4746675117189703511
+      Space Icon_31: 2715365311517645422
+      Space Icon_32: -3980642845734290779
+      Space Icon_4: 93756881464343401
+      Space Icon_5: 5493761268055292362
+      Space Icon_6: 7889669936502083788
+      Space Icon_7: -7433568071018362193
+      Space Icon_8: 3320522029262873132
+      Space Icon_9: 2607833538594679941
+  mipmapLimitGroupName: 
+  pSDRemoveMatte: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

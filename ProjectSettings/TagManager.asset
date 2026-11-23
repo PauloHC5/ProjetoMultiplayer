@@ -47,6 +47,9 @@ TagManager:
   - name: Barrier
     uniqueID: 884387271
     locked: 0
+  - name: Dengue Sources
+    uniqueID: 3002884579
+    locked: 0
   - name: Pickups
     uniqueID: 2583546217
     locked: 0
@@ -67,6 +70,12 @@ TagManager:
     locked: 0
   - name: UI_Chat
     uniqueID: 1139064329
+    locked: 0
+  - name: UI_Tutorial
+    uniqueID: 924114617
+    locked: 0
+  - name: UI_Transition
+    uniqueID: 821912689
     locked: 0
   m_RenderingLayers:
   - Default

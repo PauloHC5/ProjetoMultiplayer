@@ -4,6 +4,7 @@ using _Game.Scripts;
 using AYellowpaper.SerializedCollections;
 using Photon.Pun;
 using Photon.Realtime;
+using PixeLadder.EasyTransition;
 using TMPro;
 using UnityEngine;
 using UnityEngine.Events;
@@ -63,8 +64,6 @@ public class UI_Game : MonoBehaviour, IInRoomCallbacks, IMatchmakingCallbacks
     [Header("UI Prefabs")]
     public GameObject playerStatusPrefab;
     public GameObject playerScoreInfoPrefab;
-    
-    public SerializedDictionary<PlayerType, Color> playerTypeColors;
     
     [Header("Events")]
     public UnityEvent onCountdownChanged;
@@ -257,15 +256,10 @@ public class UI_Game : MonoBehaviour, IInRoomCallbacks, IMatchmakingCallbacks
             LivesCounterText = livesCounterText
         };
 
-        Color playerColor = playerTypeColors[GameMode.GetPlayerType(player)];
-
         playerIcon.sprite = playerIconSprites[GameMode.GetPlayerType(player)];
         playerStatus.PlayerNicknameText.text = player.NickName;
-        playerStatus.PlayerNicknameText.color = GameMode.GetPlayerColorBasedOnPlayerType(player);
         playerStatus.ScoreCounterText.text = "0";
-        playerStatus.ScoreCounterText.color = playerColor;
         playerStatus.LivesCounterText.text = GameMode.Instance.StartingLives.ToString();
-        playerStatus.LivesCounterText.color = playerColor;
 
         _localPlayerStatus = playerStatus;
     }
@@ -407,6 +401,14 @@ public class UI_Game : MonoBehaviour, IInRoomCallbacks, IMatchmakingCallbacks
             _matchPreparationUI.AwaitingHostText.gameObject.SetActive(true);
         }
     }
+    
+    private void OnTransitionStart()
+    {
+        if (_bGameIsRunning)
+        {
+            gameObject.SetActive(false);
+        }
+    }
 
     private void OnEnable()
     {
@@ -419,6 +421,7 @@ public class UI_Game : MonoBehaviour, IInRoomCallbacks, IMatchmakingCallbacks
         GameMode.OnHordeProgressChanged += UpdateProgressBar;
         GameMode.WaveCompletedEvent += OnWaveCompleted;
         GameMode.RoomReady += OnRoomReady;
+        SceneTransitioner.Instance?.OnTransitionStart.AddListener(OnTransitionStart);
         
         PhotonNetwork.AddCallbackTarget(this);
     }
@@ -434,6 +437,7 @@ public class UI_Game : MonoBehaviour, IInRoomCallbacks, IMatchmakingCallbacks
         GameMode.OnHordeProgressChanged -= UpdateProgressBar;
         GameMode.WaveCompletedEvent -= OnWaveCompleted;
         GameMode.RoomReady -= OnRoomReady;
+        SceneTransitioner.Instance?.OnTransitionStart.RemoveListener(OnTransitionStart);
         
         PhotonNetwork.RemoveCallbackTarget(this);
     }

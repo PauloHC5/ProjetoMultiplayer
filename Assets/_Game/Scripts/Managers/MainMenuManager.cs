@@ -44,7 +44,10 @@ public class MainMenuManager : SceneSingleton<MainMenuManager>
     {
         if(PhotonNetwork.IsConnected && PhotonNetwork.NickName != null)
         {
-            ChangeMenuState(MenuState.Lobby);
+            if(PhotonNetwork.InRoom)
+                PhotonNetwork.LeaveRoom();
+            
+            PhotonNetwork.JoinLobby();
         }
         else
         {
@@ -171,6 +174,12 @@ public class MainMenuManager : SceneSingleton<MainMenuManager>
         if(string.IsNullOrEmpty(roomName))
         {
             Debug.LogError("Room name cannot be empty to create a room.");
+            return;
+        }
+        
+        if(PhotonNetwork.NetworkClientState != ClientState.JoinedLobby)
+        {
+            Debug.LogWarning("Cannot create room right now, client state: " + PhotonNetwork.NetworkClientState);
             return;
         }
 

@@ -205,8 +205,11 @@ namespace _Game.Scripts.Enemies
                 PhotonNetwork.CurrentRoom.SetCustomProperties(new Hashtable { { RoomStateKey, null } });
 
             _stopQueenBuzzAudio.Invoke();
+            _stopQueenPreparingAudio.Invoke();
 
             GameManager.Instance.AudioManager.PlaySfx(queenKilledSfx);
+            
+            GameMode.Instance.AddScoreToAllPlayers(points);
 
             PhotonNetwork.RemoveCallbackTarget(this);
         }

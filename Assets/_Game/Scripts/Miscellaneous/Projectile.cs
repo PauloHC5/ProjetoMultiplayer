@@ -155,6 +155,8 @@ public class Projectile : MonoBehaviour
 
     public void DestroyProjectile()
     {
+        Destroyed?.Invoke(this);
+        
         if (_destroyed) return;
         _destroyed = true;
  

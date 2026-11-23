@@ -1,0 +1,296 @@
+fileFormatVersion: 2
+guid: 78cfbc92bdca19d4890b88c2653a54b3
+TextureImporter:
+  internalIDToNameTable:
+  - first:
+      213: -7490853887083474261
+    second: Tutorial Button_0
+  - first:
+      213: -8935958620474452132
+    second: Tutorial Button_1
+  - first:
+      213: 2447223810294828824
+    second: Tutorial Button_2
+  - first:
+      213: 7509123987128415610
+    second: Tutorial Button_3
+  - first:
+      213: -7893137566026418097
+    second: Tutorial Button_4
+  - first:
+      213: 6532636863698997638
+    second: Tutorial Button_5
+  - first:
+      213: 1817284400719712768
+    second: Tutorial Button_6
+  - first:
+      213: -4190629840573080819
+    second: Tutorial Button_7
+  - first:
+      213: 9129632061367377796
+    second: Tutorial Button_8
+  - first:
+      213: 8938681941530643977
+    second: Tutorial Button_9
+  - first:
+      213: -417427331791693304
+    second: Tutorial Button_10
+  - first:
+      213: 6838445877258180913
+    second: Tutorial Button_11
+  - first:
+      213: -2727412212528305252
+    second: Tutorial Button_12
+  - first:
+      213: -343247324718968116
+    second: Tutorial Button_13
+  - first:
+      213: -1798305154517036518
+    second: Tutorial Button_14
+  - first:
+      213: -2614264105232715793
+    second: Tutorial Button_15
+  - first:
+      213: -6288293765286074461
+    second: Tutorial Button_16
+  - first:
+      213: 6610128365215647858
+    second: Tutorial Button_17
+  - first:
+      213: -1320839019944251385
+    second: Tutorial Button_18
+  - first:
+      213: -2547792548855625975
+    second: Tutorial Button_19
+  - first:
+      213: 2569664461190779808
+    second: Tutorial Button_20
+  - first:
+      213: -6871934121110672481
+    second: Tutorial Button_21
+  - first:
+      213: 3224995434884524954
+    second: Tutorial Button_22
+  - first:
+      213: -7815293186542058247
+    second: Tutorial Button_23
+  - first:
+      213: -5273331888112627980
+    second: Tutorial Button_24
+  - first:
+      213: -6271629740834245527
+    second: Tutorial Button_25
+  - first:
+      213: 660711989381941443
+    second: Tutorial Button_26
+  - first:
+      213: -7598500814766858494
+    second: Tutorial Button_27
+  - first:
+      213: 595974321484573871
+    second: Tutorial Button_28
+  - first:
+      213: -5607255907675172510
+    second: Tutorial Button_29
+  - first:
+      213: -3339948592463565084
+    second: Tutorial Button_30
+  - first:
+      213: 3699933247649840736
+    second: Tutorial Button_31
+  - first:
+      213: -6180406955734553835
+    second: Tutorial Button_32
+  - first:
+      213: -1243442239746314766
+    second: Tutorial Button_33
+  - first:
+      213: 6413528913950856214
+    second: Tutorial Button_34
+  externalObjects: {}
+  serializedVersion: 13
+  mipmaps:
+    mipMapMode: 0
+    enableMipMap: 0
+    sRGBTexture: 1
+    linearTexture: 0
+    fadeOut: 0
+    borderMipMap: 0
+    mipMapsPreserveCoverage: 0
+    alphaTestReferenceValue: 0.5
+    mipMapFadeDistanceStart: 1
+    mipMapFadeDistanceEnd: 3
+  bumpmap:
+    convertToNormalMap: 0
+    externalNormalMap: 0
+    heightScale: 0.25
+    normalMapFilter: 0
+    flipGreenChannel: 0
+  isReadable: 0
+  streamingMipmaps: 0
+  streamingMipmapsPriority: 0
+  vTOnly: 0
+  ignoreMipmapLimit: 0
+  grayScaleToAlpha: 0
+  generateCubemap: 6
+  cubemapConvolution: 0
+  seamlessCubemap: 0
+  textureFormat: 1
+  maxTextureSize: 2048
+  textureSettings:
+    serializedVersion: 2
+    filterMode: 0
+    aniso: 1
+    mipBias: 0
+    wrapU: 1
+    wrapV: 1
+    wrapW: 1
+  nPOTScale: 0
+  lightmap: 0
+  compressionQuality: 50
+  spriteMode: 2
+  spriteExtrude: 1
+  spriteMeshType: 1
+  alignment: 0
+  spritePivot: {x: 0.5, y: 0.5}
+  spritePixelsToUnits: 100
+  spriteBorder: {x: 0, y: 0, z: 0, w: 0}
+  spriteGenerateFallbackPhysicsShape: 1
+  alphaUsage: 1
+  alphaIsTransparency: 1
+  spriteTessellationDetail: -1
+  textureType: 8
+  textureShape: 1
+  singleChannelComponent: 0
+  flipbookRows: 1
+  flipbookColumns: 1
+  maxTextureSizeSet: 0
+  compressionQualitySet: 0
+  textureFormatSet: 0
+  ignorePngGamma: 0
+  applyGammaDecoding: 0
+  swizzle: 50462976
+  cookieLightType: 0
+  platformSettings:
+  - serializedVersion: 4
+    buildTarget: DefaultTexturePlatform
+    maxTextureSize: 128
+    resizeAlgorithm: 1
+    textureFormat: -1
+    textureCompression: 0
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: Standalone
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: Android
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: WebGL
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  spriteSheet:
+    serializedVersion: 2
+    sprites:
+    - serializedVersion: 2
+      name: Tutorial Button_0
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 0
+        width: 887
+        height: 887
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: ba21904f3142b0890800000000000000
+      internalID: -7490853887083474261
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Tutorial Button_1
+      rect:
+        serializedVersion: 2
+        x: 887
+        y: 0
+        width: 887
+        height: 887
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: c57d70bbaf81df380800000000000000
+      internalID: -8935958620474452132
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    outline: []
+    customData: 
+    physicsShape: []
+    bones: []
+    spriteID: d7eb9e39414d98944b71e378b3b5e2a7
+    internalID: 0
+    vertices: []
+    indices: 
+    edges: []
+    weights: []
+    secondaryTextures: []
+    spriteCustomMetadata:
+      entries:
+      - key: SpriteEditor.SliceSettings
+        value: '{"sliceOnImport":false,"gridCellCount":{"x":2.0,"y":1.0},"gridSpriteSize":{"x":887.0,"y":887.0},"gridSpriteOffset":{"x":0.0,"y":0.0},"gridSpritePadding":{"x":0.0,"y":0.0},"pivot":{"x":0.5,"y":0.5},"pivotPixels":{"x":0.0,"y":0.0},"autoSlicingMethod":0,"spriteAlignment":0,"pivotUnitMode":0,"slicingType":2,"keepEmptyRects":false,"isAlternate":false}'
+    nameFileIdTable:
+      Tutorial Button_0: -7490853887083474261
+      Tutorial Button_1: -8935958620474452132
+  mipmapLimitGroupName: 
+  pSDRemoveMatte: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
