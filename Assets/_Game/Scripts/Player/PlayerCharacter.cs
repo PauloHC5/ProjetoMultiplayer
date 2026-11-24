@@ -31,6 +31,7 @@ public class PlayerCharacter : MonoBehaviourPun
     [SerializeField] private Collider2D playerCollider;
     [SerializeField] private Collider2D otherPlayersCollider;
     [SerializeField] private Animator[] characterAnimators;
+    [SerializeField] private SpriteRenderer playerSpriteRenderer;
 
     [Header("UI")]
     [SerializeField] private RectTransform pickupsStatusPanel;
@@ -60,7 +61,6 @@ public class PlayerCharacter : MonoBehaviourPun
     public AudioCue deathSfx;
     public AudioCue ressurectSfx;
 
-    private SpriteRenderer _spriteRenderer;
     private Rigidbody2D _rigidbody2D;
 
     private int _projectilesActive;
@@ -106,8 +106,7 @@ public class PlayerCharacter : MonoBehaviourPun
     public int GetPlayerId() => photonView.OwnerActorNr;
 
     private void Awake()
-    {
-        _spriteRenderer = GetComponentInChildren<SpriteRenderer>();
+    {        
         _rigidbody2D = GetComponent<Rigidbody2D>();
         _trailRenderer = GetComponentInChildren<TrailRenderer>();
         _shieldVFX = GetComponentInChildren<Shield_VFX>();
@@ -530,7 +529,7 @@ public class PlayerCharacter : MonoBehaviourPun
 
     private IEnumerator DeathRoutine()
     {        
-        _spriteRenderer.enabled = true;
+        playerSpriteRenderer.enabled = true;
         float elapsedTime = 0f;
 
         float deathDuration = GameMode.Instance ? GameMode.Instance.playerDeathCooldown : 1.5f;
@@ -547,7 +546,7 @@ public class PlayerCharacter : MonoBehaviourPun
             elapsedTime += 0.1f;
         }
 
-        _spriteRenderer.enabled = true;
+        playerSpriteRenderer.enabled = true;
 
         if (photonView.IsMine && GameMode.Instance.CurrentLives > 0)
         {
@@ -559,7 +558,7 @@ public class PlayerCharacter : MonoBehaviourPun
     {
         while (true)
         {
-            _spriteRenderer.enabled = !_spriteRenderer.enabled;
+            playerSpriteRenderer.enabled = !playerSpriteRenderer.enabled;
             yield return new WaitForSeconds(interval);
         }
     }
@@ -584,20 +583,20 @@ public class PlayerCharacter : MonoBehaviourPun
         }
 
         _invincible = false;
-        _spriteRenderer.enabled = true;
+        playerSpriteRenderer.enabled = true;
     }
 
     private IEnumerator Invincible(bool isSpawnInvencible, float duration = 3.0f)
     {
         _invincible = true;
-        _spriteRenderer.enabled = true;
+        playerSpriteRenderer.enabled = true;
 
         if (isSpawnInvencible)
         {
             float elapsedTime = 0.0f;
             while (elapsedTime < duration)
             {
-                _spriteRenderer.enabled = !_spriteRenderer.enabled;
+                playerSpriteRenderer.enabled = !playerSpriteRenderer.enabled;
 
                 yield return new WaitForSeconds(0.2f);
                 elapsedTime += 0.2f;
@@ -609,7 +608,7 @@ public class PlayerCharacter : MonoBehaviourPun
             yield return new WaitForSeconds(duration);
         }
 
-        _spriteRenderer.enabled = true;
+        playerSpriteRenderer.enabled = true;
         _invincible = false;
 
         _shieldVFX.BreakShield();

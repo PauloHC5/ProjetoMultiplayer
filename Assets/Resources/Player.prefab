@@ -1075,6 +1075,7 @@ MonoBehaviour:
   characterAnimators:
   - {fileID: 7635905824344413223}
   - {fileID: 2261623593267131715}
+  playerSpriteRenderer: {fileID: 2764516007797317965}
   pickupsStatusPanel: {fileID: 7610627058565193096}
   pickupTypeSprites:
     _serializedList:
