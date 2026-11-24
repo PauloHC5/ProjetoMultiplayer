@@ -62,6 +62,7 @@ namespace _Game.Scripts.Enemies
         [Header("Prefabs")] 
         [SerializeField] private Projectile projectilePrefab;
         [SerializeField] private Mosquito mosquitoPrefab;
+        [SerializeField] private GameObject queenDeadPrefab;
 
         [Header("Projectile Settings")]
         [SerializeField] private Transform projectileSpawnPoint;
@@ -204,8 +205,8 @@ namespace _Game.Scripts.Enemies
             if (PhotonHandlers.CanUseNetwork && PhotonNetwork.IsMasterClient)
                 PhotonNetwork.CurrentRoom.SetCustomProperties(new Hashtable { { RoomStateKey, null } });
 
-            _stopQueenBuzzAudio.Invoke();
-            _stopQueenPreparingAudio.Invoke();
+            _stopQueenBuzzAudio?.Invoke();
+            _stopQueenPreparingAudio?.Invoke();
 
             GameManager.Instance.AudioManager.PlaySfx(queenKilledSfx);
             
@@ -716,6 +717,9 @@ namespace _Game.Scripts.Enemies
 
             if (_currentHealth > 0) return;
             
+            MosquitoQueenDeathEvent?.Invoke();
+            Instantiate(queenDeadPrefab, transform.position, transform.rotation);
+            
             if (PhotonHandlers.CanUseNetwork)
             {
                 if (PhotonHandlers.IsAuthority)
@@ -730,8 +734,6 @@ namespace _Game.Scripts.Enemies
             {
                 Destroy(gameObject);
             }
-            
-            MosquitoQueenDeathEvent?.Invoke();
         }
 
         private IEnumerator OnDamageVFXRoutine()

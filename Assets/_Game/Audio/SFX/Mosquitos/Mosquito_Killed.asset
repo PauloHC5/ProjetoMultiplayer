@@ -13,7 +13,13 @@ MonoBehaviour:
   m_Name: Mosquito_Killed
   m_EditorClassIdentifier: Assembly-CSharp::AudioCue
   _samples:
-  - {fileID: 8300000, guid: 6932f98535e3a13439ffa29690267f2d, type: 3}
+  - {fileID: 8300000, guid: 00cc9ec3dbb25584fae1cc6e1d11f2f4, type: 3}
+  - {fileID: 8300000, guid: 30822fb56fdbb944a837f736de7420f5, type: 3}
+  - {fileID: 8300000, guid: e8c527f4c18bfe348820457f71e3e511, type: 3}
+  - {fileID: 8300000, guid: 42dbb9cbacb490148b4466ba2dbbbc85, type: 3}
+  - {fileID: 8300000, guid: 6697786900014e84c8a9cfc92a213032, type: 3}
+  - {fileID: 8300000, guid: f8f2c1cdda925af4084b8897588ac797, type: 3}
+  - {fileID: 8300000, guid: b52b8ccf0ca68c04ea6961c16dbed87e, type: 3}
   _minPitch: 0.715
   _Maxpitch: 1.003
   _minVolume: 0.639

@@ -73,6 +73,7 @@ public class MosquitosHorde : MonoBehaviourPunCallbacks
     public AudioCue hordeKilledSfx;
     public AudioCue mosquitoSpawnSfx;
     public AudioCue mosquitoFireSfx;
+    public AudioCue mosquitoKilledSfx;
     public float pitchIncreasePerMosquitoKilled = 0.05f;
 
     [Header("ZigZag Movement Settings")]
@@ -481,6 +482,9 @@ public class MosquitosHorde : MonoBehaviourPunCallbacks
         if (selectedMosquito == null || !selectedMosquito.gameObject.activeInHierarchy) return;
 
         var mosquitoKilled = selectedMosquito;
+        
+        if(instigatorPlayerId != -1)
+            MosquitosDeadBodiesManager.Instance.SpawnDeadMosquito(mosquitoKilled.transform.position, mosquitoKilled.transform.rotation, mosquitoKilled.Type);
 
         OnMosquitoKilled?.Invoke(instigatorPlayerId, mosquitoKilled.points);
 
@@ -501,6 +505,8 @@ public class MosquitosHorde : MonoBehaviourPunCallbacks
             if (PhotonNetwork.IsMasterClient)
                 PhotonNetwork.Destroy(gameObject);
         }
+        
+        GameManager.Instance.AudioManager.PlaySfx(mosquitoKilledSfx);
         
         UpdateMosquitosMovement();
     }

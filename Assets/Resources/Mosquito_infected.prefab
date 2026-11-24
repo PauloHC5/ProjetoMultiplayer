@@ -17,6 +17,10 @@ PrefabInstance:
       value: 40
       objectReference: {fileID: 0}
     - target: {fileID: -2141858161189176034, guid: 9e2412c119f379d47bb0ec19dd06c263, type: 3}
+      propertyPath: deadPrefab
+      value: 
+      objectReference: {fileID: 2604399703185938345, guid: 78bc8c354e8ca284986e5f07375c74d3, type: 3}
+    - target: {fileID: -2141858161189176034, guid: 9e2412c119f379d47bb0ec19dd06c263, type: 3}
       propertyPath: animationSprites.Array.size
       value: 2
       objectReference: {fileID: 0}
@@ -124,6 +128,10 @@ PrefabInstance:
       propertyPath: m_SpriteTilingProperty.adaptiveTilingThreshold
       value: 0.5
       objectReference: {fileID: 0}
+    - target: {fileID: 7972994805674474069, guid: 9e2412c119f379d47bb0ec19dd06c263, type: 3}
+      propertyPath: deadSprite
+      value: 
+      objectReference: {fileID: 21300000, guid: c292bf4aaf4941141b5917e32f930592, type: 3}
     - target: {fileID: 8085477824393298412, guid: 9e2412c119f379d47bb0ec19dd06c263, type: 3}
       propertyPath: m_Sprite
       value: 

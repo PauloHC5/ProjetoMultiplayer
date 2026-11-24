@@ -7,9 +7,17 @@ public static class EasyCurves
 
     public static float InBack(float t)
     {
-        const float c1 = 1.70158f;
+        const float c1 = 30.70158f;
         const float c3 = c1 + 1f;
         return c3 * t * t * t - c1 * t * t;
+    }
+    
+    public static float InElastic(float t)
+    {
+        const float c4 = (2f * Mathf.PI) / 3f;
+        return t == 0f ? 0f
+             : t == 1f ? 1f
+             : -Mathf.Pow(2f, 10f * t - 10f) * Mathf.Sin((t * 10f - 10.75f) * c4);
     }
 
     public static float OutBounce(float t)
@@ -36,15 +44,13 @@ public static class EasyCurves
              : Mathf.Pow(2f, -10f * t) * Mathf.Sin((t * 10f - 0.75f) * c4) + 1f;
     }
 
-    public static float InOutBack(float t)
+
+    public static float InOutBack(float t, float c1Multiplier = 1, float c2Multiplier = 1.525f)
     {
-        const float c1 = 1.70158f;
-        const float c2 = c1 * 1.525f;
+        float c1 = 1.70158f * c1Multiplier;
+        float c2 = c1 * c2Multiplier;
         return t < 0.5
             ? (Mathf.Pow(2f * t, 2f) * ((c2 + 1f) * 2f * t - c2)) / 2f
             : (Mathf.Pow(2f * t - 2f, 2f) * ((c2 + 1f) * (t * 2f - 2f) + c2) + 2f) / 2f;
     }
-
-    public static float Amplify(float eased, float t, float amplitude)
-    => t + (eased - t) * amplitude;
 }

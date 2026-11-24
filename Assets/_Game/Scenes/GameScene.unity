@@ -5485,6 +5485,53 @@ RectTransform:
   m_AnchoredPosition: {x: 6.929001, y: 0}
   m_SizeDelta: {x: -3.86, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
+--- !u!1 &870462288
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 870462289}
+  - component: {fileID: 870462290}
+  m_Layer: 0
+  m_Name: Mosquitos Dead Bodies Manager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 2147483647
+  m_IsActive: 1
+--- !u!4 &870462289
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 870462288}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -5.02482, y: -5.77961, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &870462290
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 870462288}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 240fe341b91cb0342a939f74d8482899, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::MosquitosDeadBodiesManager
+  standardDeadMosquitoPrefab: {fileID: 4142170118600857328, guid: 7b9067c7d3256704e963c44220686fdb, type: 3}
+  infectedDeadMosquitoPrefab: {fileID: 2604399703185938345, guid: 78bc8c354e8ca284986e5f07375c74d3, type: 3}
+  deadBodiesPoolSize: 20
 --- !u!1 &881523085
 GameObject:
   m_ObjectHideFlags: 0
@@ -12345,3 +12392,4 @@ SceneRoots:
   - {fileID: 1520260651}
   - {fileID: 1733015750}
   - {fileID: 936117195}
+  - {fileID: 870462289}

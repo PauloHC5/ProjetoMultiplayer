@@ -175,6 +175,7 @@ MonoBehaviour:
   descendingSfxDelay: 0.2
   projectilePrefab: {fileID: 8615181883404891688, guid: 525f2b816ca79f54f8992594a20a0b28, type: 3}
   mosquitoPrefab: {fileID: 721702209136384595, guid: c27f82190daed0543816a4df5edd6210, type: 3}
+  queenDeadPrefab: {fileID: 8700463563771055669, guid: e00e5b10a11c0f342b751b5327d4830d, type: 3}
   projectileSpawnPoint: {fileID: 5663861538857627995}
   projectileSpawnRate: 1
   projectilesPerShot: 3

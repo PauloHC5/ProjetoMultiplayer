@@ -13,6 +13,10 @@ PrefabInstance:
       value: 10
       objectReference: {fileID: 0}
     - target: {fileID: -2141858161189176034, guid: 9e2412c119f379d47bb0ec19dd06c263, type: 3}
+      propertyPath: deadPrefab
+      value: 
+      objectReference: {fileID: 4142170118600857328, guid: 7b9067c7d3256704e963c44220686fdb, type: 3}
+    - target: {fileID: -2141858161189176034, guid: 9e2412c119f379d47bb0ec19dd06c263, type: 3}
       propertyPath: animationSprites.Array.size
       value: 2
       objectReference: {fileID: 0}

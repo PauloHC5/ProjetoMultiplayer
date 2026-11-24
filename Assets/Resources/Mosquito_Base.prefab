@@ -227,6 +227,7 @@ MonoBehaviour:
   debugGoToPosition: {x: 0, y: 0}
   moveToHordeCenter: 0
   scaleUpDuration: 0.8
+  deadPrefab: {fileID: 4142170118600857328, guid: 7b9067c7d3256704e963c44220686fdb, type: 3}
   hordePositionKey:
     row: 0
     col: 0
