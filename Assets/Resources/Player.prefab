@@ -1099,6 +1099,7 @@ MonoBehaviour:
   medkitWarningPanelAmplitude: 3
   maxMedkitWarningPanelAlpha: -1.21
   playerCanvas: {fileID: 8002074995823689418}
+  playerNicknameText: {fileID: 8158743021063156602}
   plusScoreContainer: {fileID: 7594038542810443563}
   plusScoreTextPoolSize: 8
   plusScoreTextAnimationDuration: 0.25

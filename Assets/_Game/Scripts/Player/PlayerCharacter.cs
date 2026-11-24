@@ -42,6 +42,7 @@ public class PlayerCharacter : MonoBehaviourPun
 
     [Header("Score UI")] 
     [SerializeField] private RectTransform playerCanvas;
+    [SerializeField] private TextMeshProUGUI playerNicknameText;
     [SerializeField] private RectTransform plusScoreContainer;
     [SerializeField] private int plusScoreTextPoolSize = 5;
     public float plusScoreTextAnimationDuration = 1.0f;
@@ -63,7 +64,6 @@ public class PlayerCharacter : MonoBehaviourPun
     private Rigidbody2D _rigidbody2D;
 
     private int _projectilesActive;
-    private TextMeshProUGUI _playerNicknameText;
     private int _shotCounter;
     private Vector2 _botMoveDirection = Vector2.zero;
     private int _projectilesLayer;
@@ -109,7 +109,6 @@ public class PlayerCharacter : MonoBehaviourPun
     {
         _spriteRenderer = GetComponentInChildren<SpriteRenderer>();
         _rigidbody2D = GetComponent<Rigidbody2D>();
-        _playerNicknameText = GetComponentInChildren<TextMeshProUGUI>();
         _trailRenderer = GetComponentInChildren<TrailRenderer>();
         _shieldVFX = GetComponentInChildren<Shield_VFX>();
 
@@ -266,7 +265,7 @@ public class PlayerCharacter : MonoBehaviourPun
 
         photonView.RPC(nameof(RpcStartInvincible), RpcTarget.AllBuffered);
 
-        photonView.RPC(nameof(RpcSetNickname), RpcTarget.AllBuffered, PhotonNetwork.NickName);
+        photonView.RPC(nameof(RpcSetNickname), RpcTarget.All, photonView.Owner.NickName);
 
         if(!photonView.IsMine)
             playerCollider.enabled = false;
@@ -348,8 +347,8 @@ public class PlayerCharacter : MonoBehaviourPun
     [PunRPC]
     private void RpcSetNickname(string nickname)
     {
-        _playerNicknameText.text = nickname;
-        _playerNicknameText.color = GameMode.GetPlayerColorBasedOnPlayerType(photonView.Owner);
+        playerNicknameText.text = nickname;
+        playerNicknameText.color = GameMode.GetPlayerColorBasedOnPlayerType(photonView.Owner);
     }
 
     public void Move(Vector2 direction)
