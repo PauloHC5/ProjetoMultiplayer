@@ -633,7 +633,7 @@ public class PlayerCharacter : MonoBehaviourPun
     {
         SetPickupState(pickupType, true, duration);
 
-        if(pickupType == Pickup.PickupType.Medkit) yield break;
+        if(pickupType == Pickup.PickupType.Medkit || pickupType == Pickup.PickupType.Toolbox || pickupType == Pickup.PickupType._1UP) yield break;
 
         yield return new WaitForSeconds(duration);
 
