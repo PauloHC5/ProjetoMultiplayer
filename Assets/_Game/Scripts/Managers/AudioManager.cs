@@ -233,7 +233,7 @@ public class AudioManager
     {
         for (var index = 0; index < _sfxSourcePool.Count; index++)
         {
-            if (_sfxSourcePool[index].isPlaying && _sfxSourcePool[index].clip == sfx.GetSample())
+            if (_sfxSourcePool != null && _sfxSourcePool[index] != null && _sfxSourcePool[index].isPlaying && _sfxSourcePool[index].clip == sfx.GetSample())
             {
                 return _sfxSourcePool[index].pitch;
             }
@@ -247,7 +247,7 @@ public class AudioManager
         AudioSource sfxSource = null;
         for (var index = 0; index < _sfxSourcePool.Count; index++)
         {
-            if (_sfxSourcePool[index].isPlaying && _sfxSourcePool[index].clip == sfx.GetSample())
+            if (_sfxSourcePool != null && _sfxSourcePool[index] != null && _sfxSourcePool[index].isPlaying && _sfxSourcePool[index].clip == sfx.GetSample())
             {
                 sfxSource = _sfxSourcePool[index];
                 break;
@@ -273,7 +273,7 @@ public class AudioManager
         {
             for (int i = 0; i < _sfxSourcePool.Count; i++)
             {
-                if (!_sfxSourcePool[i].isPlaying)
+                if (_sfxSourcePool[i] != null && !_sfxSourcePool[i].isPlaying)
                 {
                     index = i;
                     break;
