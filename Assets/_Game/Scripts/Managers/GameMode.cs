@@ -95,6 +95,7 @@ namespace _Game.Scripts
         [Header("Musics")] 
         public AudioClip awaitingPlayersMusic;
         public AudioClip battleMusic;
+        public AudioClip gameOverMusic;
 
         [Header("Debug")] public bool bDebugMode = false;
         public float playerAroundCheckDebugTime = 3.0f;
@@ -745,6 +746,9 @@ namespace _Game.Scripts
             StopAllCoroutines();
             CancelInvoke(nameof(SpawnPickup));
 
+            GameManager.Instance.AudioManager.StopMusic();
+            GameManager.Instance.AudioManager.PlayMusic(gameOverMusic);
+            
             GameOverEvent?.Invoke(reason);
         }
 
