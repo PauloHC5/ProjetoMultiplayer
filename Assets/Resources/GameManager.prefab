@@ -52,7 +52,7 @@ MonoBehaviour:
   sceneMusic:
     _serializedList:
     - Key: MenuScene
-      Value: {fileID: 8300000, guid: 9651514508e5ec84b8c5b3f3557fa61e, type: 3}
+      Value: {fileID: 8300000, guid: 32faf9d867b6a41488aba417e2961daf, type: 3}
     - Key: GameScene
       Value: {fileID: 8300000, guid: 491ab77211805a1438f265f68ca63f5c, type: 3}
   _audioManager:
