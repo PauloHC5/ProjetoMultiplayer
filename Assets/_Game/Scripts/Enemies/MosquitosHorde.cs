@@ -434,7 +434,10 @@ public class MosquitosHorde : MonoBehaviourPunCallbacks
 
         if (_infectedMosquitos != null && _infectedMosquitos.Count > 0)
         {
-            mosquitoToAttack = _infectedMosquitos[UnityEngine.Random.Range(0, _infectedMosquitos.Count)];
+            List<Mosquito> activeInfectedMosquitos = _infectedMosquitos.FindAll(m => m != null && m.gameObject.activeInHierarchy);
+
+            if(activeInfectedMosquitos.Count > 0)
+                mosquitoToAttack = activeInfectedMosquitos.ElementAt(UnityEngine.Random.Range(0, activeInfectedMosquitos.Count - 1));
         }
 
         if (mosquitoToAttack == null) return;
@@ -488,10 +491,7 @@ public class MosquitosHorde : MonoBehaviourPunCallbacks
 
         OnMosquitoKilled?.Invoke(instigatorPlayerId, mosquitoKilled.points);
 
-        mosquitoKilled.gameObject.SetActive(false);
-        
-        if(mosquitoKilled.Type == MosquitoType.Infected)
-            _infectedMosquitos.Remove(mosquitoKilled);
+        mosquitoKilled.gameObject.SetActive(false);            
 
         mosquitoKilled.OnMosquitoKilled -= MosquitoKilled;
         mosquitoKilled.OnMosquitoHitBoundaries -= MosquitoHitBoundaries;
@@ -517,8 +517,11 @@ public class MosquitosHorde : MonoBehaviourPunCallbacks
         
         if (amountAlive == 1)
         {
-            CancelInvoke(nameof(RequestMosquitoFire));
-            InvokeRepeating(nameof(RequestMosquitoFire), missileAttackRate / 2, missileAttackRate / 2);
+            InvokeRepeating(nameof(LastOneRapidFire), 0f, 0.5f);            
+        }
+        else
+        {
+            CancelInvoke(nameof(LastOneRapidFire));            
         }
 
         if (amountAlive <= 10 && _mosquitosBehaviourRoutine != null)
@@ -773,6 +776,16 @@ public class MosquitosHorde : MonoBehaviourPunCallbacks
         if (!PhotonNetwork.IsMasterClient) return;
         
         if(debugLogs)
+            Debug.Log("Rapid fire requested.");
+
+        RequestMosquitoFire();
+    }
+
+    private void LastOneRapidFire()
+    {
+        if (!PhotonNetwork.IsMasterClient) return;
+
+        if (debugLogs)
             Debug.Log("Rapid fire requested.");
 
         RequestMosquitoFire();
