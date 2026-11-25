@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: PixelateEffect
   m_EditorClassIdentifier: 
   transitionMaterial: {fileID: 2100000, guid: fae9dcb3e157d5246a054e84b0d1f747, type: 2}
-  middleDelay: 0
+  middleDelay: 1
   duration: 2
   easingCurve:
     serializedVersion: 2

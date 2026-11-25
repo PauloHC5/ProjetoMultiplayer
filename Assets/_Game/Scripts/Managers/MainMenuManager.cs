@@ -113,14 +113,7 @@ public class MainMenuManager : SceneSingleton<MainMenuManager>
         
         Instance.ChangeMenuState(MenuState.JoiningRoom);
         
-        PhotonNetwork.JoinRoom(roomName);
-        
-        //SceneTransitioner.Instance.PlayTransition(() => DoJoinRoom(roomName));
-    }
-
-    private static void DoJoinRoom(string roomName)
-    {
-        
+        SceneTransitioner.Instance.PlayTransition(() => PhotonNetwork.JoinRoom(roomName));
     }
 
     public override void OnConnectedToMaster()
