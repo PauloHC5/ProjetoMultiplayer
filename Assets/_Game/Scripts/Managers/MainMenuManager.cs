@@ -58,10 +58,17 @@ public class MainMenuManager : SceneSingleton<MainMenuManager>
 
     private void Update()
     {
-        if(_currentMenuState == MenuState.PressAnyKey && Keyboard.current.anyKey.wasPressedThisFrame)
+        if(_currentMenuState == MenuState.PressAnyKey && (Keyboard.current.anyKey.wasPressedThisFrame || IsMouseButtonPressed()))
         {
             ChangeMenuState(MenuState.Login);
         }
+    }
+
+    private bool IsMouseButtonPressed()
+    {
+        return Mouse.current.leftButton.wasPressedThisFrame ||
+               Mouse.current.rightButton.wasPressedThisFrame ||
+               Mouse.current.middleButton.wasPressedThisFrame;
     }
 
     private void ChangeMenuState(MenuState newState)
