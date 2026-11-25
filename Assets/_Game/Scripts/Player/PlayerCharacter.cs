@@ -32,7 +32,7 @@ public class PlayerCharacter : MonoBehaviourPun
     [SerializeField] private Collider2D playerCollider;
     [SerializeField] private Collider2D otherPlayersCollider;
     [SerializeField] private Animator[] characterAnimators;
-    [SerializeField] private SpriteRenderer playerSpriteRenderer;
+    [SerializeField] private SpriteRenderer[] playerSprites;
 
     [Header("UI")]
     [SerializeField] private RectTransform pickupsStatusPanel;
@@ -535,8 +535,12 @@ public class PlayerCharacter : MonoBehaviourPun
     }
 
     private IEnumerator DeathRoutine()
-    {        
-        playerSpriteRenderer.enabled = true;
+    {   
+        for(int i = 0; i < playerSprites.Length; i++)
+        {
+            playerSprites[i].enabled = true;
+        }
+
         float elapsedTime = 0f;
 
         float deathDuration = GameMode.Instance ? GameMode.Instance.playerDeathCooldown : 1.5f;
@@ -553,7 +557,10 @@ public class PlayerCharacter : MonoBehaviourPun
             elapsedTime += 0.1f;
         }
 
-        playerSpriteRenderer.enabled = true;
+        for(int i = 0; i < playerSprites.Length; i++)
+        {
+            playerSprites[i].enabled = true;
+        }
 
         if (photonView.IsMine && GameMode.Instance.CurrentLives > 0)
         {
@@ -565,7 +572,10 @@ public class PlayerCharacter : MonoBehaviourPun
     {
         while (true)
         {
-            playerSpriteRenderer.enabled = !playerSpriteRenderer.enabled;
+            for(int i = 0; i < playerSprites.Length; i++)
+            {
+                playerSprites[i].enabled = !playerSprites[i].enabled;
+            }
             yield return new WaitForSeconds(interval);
         }
     }
@@ -590,20 +600,32 @@ public class PlayerCharacter : MonoBehaviourPun
         }
 
         _invincible = false;
-        playerSpriteRenderer.enabled = true;
+        
+        for(int i = 0; i < playerSprites.Length; i++)
+        {
+            playerSprites[i].enabled = true;
+        }
     }
 
     private IEnumerator Invincible(bool isSpawnInvencible, float duration = 3.0f)
     {
         _invincible = true;
-        playerSpriteRenderer.enabled = true;
+        
+        for(int i = 0; i < playerSprites.Length; i++)
+        {
+            playerSprites[i].enabled = true;
+        }
 
         if (isSpawnInvencible)
         {
             float elapsedTime = 0.0f;
             while (elapsedTime < duration)
             {
-                playerSpriteRenderer.enabled = !playerSpriteRenderer.enabled;
+                
+                for(int i = 0; i < playerSprites.Length; i++)
+                {
+                    playerSprites[i].enabled = !playerSprites[i].enabled;
+                }
 
                 yield return new WaitForSeconds(0.2f);
                 elapsedTime += 0.2f;
@@ -615,7 +637,11 @@ public class PlayerCharacter : MonoBehaviourPun
             yield return new WaitForSeconds(duration);
         }
 
-        playerSpriteRenderer.enabled = true;
+        for(int i = 0; i < playerSprites.Length; i++)
+        {
+            playerSprites[i].enabled = true;
+        }
+        
         _invincible = false;
 
         _shieldVFX.BreakShield();
