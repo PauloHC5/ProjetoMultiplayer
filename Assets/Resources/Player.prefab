@@ -1119,6 +1119,7 @@ MonoBehaviour:
   shootSfx: {fileID: 11400000, guid: 3ecbd0275169aa7419067dc9b1efe996, type: 2}
   deathSfx: {fileID: 11400000, guid: 657d358f9fc080842ac682306633c9b8, type: 2}
   ressurectSfx: {fileID: 11400000, guid: a3da5880c335fbd44bb7c82133dd545f, type: 2}
+  plusScoreSfx: {fileID: 11400000, guid: b024c053752960a40a1d7d32b36a9515, type: 2}
 --- !u!114 &4465742883512400945
 MonoBehaviour:
   m_ObjectHideFlags: 0

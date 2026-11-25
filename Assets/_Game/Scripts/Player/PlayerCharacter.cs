@@ -65,6 +65,7 @@ public class PlayerCharacter : MonoBehaviourPun
     public AudioCue shootSfx;
     public AudioCue deathSfx;
     public AudioCue ressurectSfx;
+    public AudioCue plusScoreSfx;
 
     private Rigidbody2D _rigidbody2D;
 
@@ -85,6 +86,7 @@ public class PlayerCharacter : MonoBehaviourPun
     private Dictionary<TextMeshProUGUI, Coroutine> _plusScoreTextAnimations = new Dictionary<TextMeshProUGUI, Coroutine>();
     private VerticalLayoutGroup _plusScoreContainerLayoutGroup;
     private float _originalPlusScoreContainerSpacing;
+    private float _pitchMultiplier = 0.5f;
 
     public Action<PlayerCharacter> OnPlayerDeath;
     public Action<Pickup.PickupType, float> OnPickupCollected;
@@ -175,6 +177,13 @@ public class PlayerCharacter : MonoBehaviourPun
             CreatePlusScoreText();
         }
 
+        if (_usedPlusScoreTextQueue.Count != 0)
+        {
+            GameManager.Instance.AudioManager.PlaySfx(plusScoreSfx, _pitchMultiplier);
+            Debug.Log("Pitch multiplier for plus score SFX: " + _pitchMultiplier);
+            _pitchMultiplier = Mathf.Min(_pitchMultiplier + 0.1f, 2f);
+        }
+
         for (int i = 0; i < _usedPlusScoreTextQueue.Count; i++)
         {
             TextMeshProUGUI scoreText = _usedPlusScoreTextQueue.ElementAt(i);
@@ -185,6 +194,7 @@ public class PlayerCharacter : MonoBehaviourPun
                 
                 scoreText.text = $"{multiplier + 1}x+{points}";
                 RestartPlusScoreAnimation(scoreText, scaleMultiplier);
+                
                 return;
             }
         }
@@ -194,6 +204,8 @@ public class PlayerCharacter : MonoBehaviourPun
         plusScoreTextToUse.gameObject.SetActive(true);
         plusScoreTextToUse.rectTransform.SetParent(plusScoreContainer);
         _usedPlusScoreTextQueue.Enqueue(plusScoreTextToUse);
+        _pitchMultiplier = 0.5f;
+        
 
         RestartPlusScoreAnimation(plusScoreTextToUse);
     }
