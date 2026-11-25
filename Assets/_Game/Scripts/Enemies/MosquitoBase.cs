@@ -35,7 +35,8 @@ namespace _Game.Scripts.Enemies
         protected int BarrierLayer;
         protected Rigidbody2D Rigidbody2D;
         private float _positionInterpolationDurationCached;
-        
+        protected bool _movingFromDengueSource = false;
+
         public MosquitoType Type => type;
         public MosquitoZigZagMovement MosquitoZigZagMovement => zigZagMovement;
         public LissajousCurve LissajousCurve => lissajousCurve;
@@ -101,6 +102,20 @@ namespace _Game.Scripts.Enemies
             IsMoving = true;
             
             _positionInterpolationDurationCached = bFromDengueSource ? positionFromDengueSourceInterpolationDuration : positionInterpolationDuration;
+
+            if (bFromDengueSource)
+            {
+                _movingFromDengueSource = true;
+                Collider2D.enabled = false;
+                MoveArrivedCallback += EnableColliderOnArrive;
+            }
+        }
+
+        private void EnableColliderOnArrive()
+        {
+            MoveArrivedCallback -= EnableColliderOnArrive;
+            Collider2D.enabled = true;
+            _movingFromDengueSource = false;
         }
         
 #if UNITY_EDITOR

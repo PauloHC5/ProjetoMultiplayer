@@ -69,7 +69,9 @@ public class Mosquito : MosquitoBase
         }
 
         transform.localScale = _originalScale;
-        Collider2D.enabled = true;
+
+        if(!_movingFromDengueSource)
+            Collider2D.enabled = true;
     }
 
     private void OnEnable()

@@ -228,6 +228,7 @@ MonoBehaviour:
   debugGoToPosition: {x: 0, y: 0}
   moveToHordeCenter: 0
   scaleUpDuration: 0.5
+  timeToEnableCollider: 2
   hordePositionKey:
     row: 0
     col: 0
