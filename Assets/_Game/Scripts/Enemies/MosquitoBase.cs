@@ -103,12 +103,12 @@ namespace _Game.Scripts.Enemies
             
             _positionInterpolationDurationCached = bFromDengueSource ? positionFromDengueSourceInterpolationDuration : positionInterpolationDuration;
 
-            if (bFromDengueSource)
+            /*if (bFromDengueSource)
             {
                 _movingFromDengueSource = true;
                 Collider2D.enabled = false;
                 MoveArrivedCallback += EnableColliderOnArrive;
-            }
+            }*/
         }
 
         private void EnableColliderOnArrive()
