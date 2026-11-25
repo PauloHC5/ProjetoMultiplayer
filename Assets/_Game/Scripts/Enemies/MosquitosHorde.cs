@@ -10,6 +10,7 @@ using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.Serialization;
 using AYellowpaper.SerializedCollections;
+using NaughtyAttributes;
 
 public class MosquitosHorde : MonoBehaviourPunCallbacks
 {
@@ -90,9 +91,10 @@ public class MosquitosHorde : MonoBehaviourPunCallbacks
     [Header("Prefabs")] public Mosquito[] prefabs = new Mosquito[3];
     public Projectile mosquitoProjectilePrefab;
 
-    [Header("Debug")] public bool debugLogs = false;
-    public bool bDrawDebugGizmos = false;
-    public HordePositionKey debugHordePositionKey;
+    [Header("Debug")]
+    public bool debugLogs = false;
+    [ShowIf("debugLogs")] public bool bDrawDebugGizmos = false;
+    [ShowIf("debugLogs")] public HordePositionKey debugHordePositionKey;
 
     private Vector3 _direction = Vector3.right;
     private Dictionary<HordePositionKey, Mosquito> _mosquitosDict;
@@ -107,9 +109,6 @@ public class MosquitosHorde : MonoBehaviourPunCallbacks
     private MosquitoBehaviourStateDifficulty _currentBehaviourDifficulty;
     private List<Mosquito> _infectedMosquitos = new List<Mosquito>();
     private AudioStop _stopHordeBuzzAudio;
-    
-    public float speedBuff = 1f;
-    public bool rapidFireActive = false;
 
     public int TotalMosquitos => this.rows * this.columns;
     public float PercentAlive => ((float)AmountAlive / (float)TotalMosquitos) * 100f;
@@ -227,7 +226,7 @@ public class MosquitosHorde : MonoBehaviourPunCallbacks
             HordePositionKey hordePositionKey = new HordePositionKey(i / this.columns, i % this.columns);
 
             _photonView.RPC(nameof(SpawnMosquitoAtHorde), RpcTarget.AllBuffered, mosquitoType,
-                hordePositionKey, 0f, 0f, false);
+                hordePositionKey, 0f, 0f, false, false);
         }
     }
 
@@ -249,7 +248,7 @@ public class MosquitosHorde : MonoBehaviourPunCallbacks
 
     [PunRPC]
     private void SpawnMosquitoAtHorde(MosquitoType mosquitoType, HordePositionKey hordePositionKey, float starPosX, float starPosY,
-        bool isWorldPosition)
+        bool isWorldPosition, bool bFromDengueSource = false)
     {
         if (!_hordePositions.TryGetValue(hordePositionKey, out Vector2 rowPosition))
         {
@@ -286,7 +285,7 @@ public class MosquitosHorde : MonoBehaviourPunCallbacks
         _mosquitosDict[hordePositionKey].OnMosquitoHitBoundaries += MosquitoHitBoundaries;
         _mosquitosDict[hordePositionKey].OnMosquitoKilled += MosquitoKilled;
 
-        MoveMosquitoToNewHordePosition(mosquitoSpawned, hordePositionKey, PhotonNetwork.Time + 0.1f, startPos);
+        MoveMosquitoToNewHordePosition(mosquitoSpawned, hordePositionKey, PhotonNetwork.Time + 0.1f, startPos, bFromDengueSource);
         
         if(_bAlreadySpawnedMosquitos)
             GameManager.Instance.AudioManager.PlaySfx(mosquitoSpawnSfx);
@@ -308,7 +307,7 @@ public class MosquitosHorde : MonoBehaviourPunCallbacks
         MosquitoType mosquitoType = RandomizeMosquitoType(availablePosition.row);
 
         _photonView.RPC(nameof(SpawnMosquitoAtHorde), RpcTarget.AllBuffered, mosquitoType,
-            availablePosition, dengueSourcePosition.x, dengueSourcePosition.y, true);
+            availablePosition, dengueSourcePosition.x, dengueSourcePosition.y, true, true);
     }
 
     private HordePositionKey GetAvailableHordePositionKey()
@@ -399,7 +398,7 @@ public class MosquitosHorde : MonoBehaviourPunCallbacks
         if (!PhotonNetwork.IsMasterClient || !PhotonNetwork.InRoom) return;
         if (stopMovement || AmountAlive <= 0) return;
 
-        transform.position += _direction * (hordeSpeedCurve.Evaluate(PercentAlive) * speedBuff * Time.fixedDeltaTime);
+        transform.position += _direction * (hordeSpeedCurve.Evaluate(PercentAlive) * Time.fixedDeltaTime);
     }
 
     public override void OnMasterClientSwitched(Player newMasterClient)
@@ -603,7 +602,7 @@ public class MosquitosHorde : MonoBehaviourPunCallbacks
     }
 
     public void MoveMosquitoToNewHordePosition(Mosquito mosquito, HordePositionKey newHordePositionKey,
-        double startTime, Vector3 startPos = default)
+        double startTime, Vector3 startPos = default, bool bFromDengueSource = false)
     {
         if (!_hordePositions.TryGetValue(newHordePositionKey, out Vector2 newHordePosition))
         {
@@ -615,7 +614,7 @@ public class MosquitosHorde : MonoBehaviourPunCallbacks
 
         Vector2 startPosition = startPos == default ? mosquito.transform.localPosition : startPos;
 
-        mosquito.GoToNewPosition(hordePosition, startPosition);
+        mosquito.GoToNewPosition(hordePosition, startPosition, null, bFromDengueSource);
     }
 
     public void MosquitoHitBoundaries()
@@ -697,7 +696,6 @@ public class MosquitosHorde : MonoBehaviourPunCallbacks
             if (hordeBehaviour.IsRapidFire)
             {
                 InvokeRepeating(nameof(RapidFire), 0f, hordeBehaviour.RapidFireTime);
-                rapidFireActive = true;
             }
 
             yield return new WaitForSeconds(hordeBehaviour.BehaviourDuration);
@@ -709,7 +707,6 @@ public class MosquitosHorde : MonoBehaviourPunCallbacks
             if (hordeBehaviour.IsRapidFire)
             {
                 CancelInvoke(nameof(RapidFire));
-                rapidFireActive = false;
             }
 
             yield return new WaitForSeconds(hordeBehaviour.TimeToReorder);

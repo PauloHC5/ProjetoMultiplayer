@@ -1,4 +1,5 @@
 using System;
+using NaughtyAttributes;
 using Photon.Pun;
 using UnityEngine;
 
@@ -10,6 +11,7 @@ namespace _Game.Scripts.Enemies
         public int points;
         [SerializeField] protected MosquitoType type;
         public float positionInterpolationDuration = 0.5f;
+        public float positionFromDengueSourceInterpolationDuration = 2f;
         
         [Header("Zig Zag Movement Settings")]
         [SerializeField] protected MosquitoZigZagMovement zigZagMovement;
@@ -19,8 +21,8 @@ namespace _Game.Scripts.Enemies
         
         [Header("Debug")]
         public bool bDebugLogs;
-        public Vector2 debugGoToPosition;
-        public bool moveToHordeCenter = false;
+        [ShowIf("bDebugLogs")] public Vector2 debugGoToPosition;
+        [ShowIf("bDebugLogs")] public bool moveToHordeCenter = false;
         
         protected Vector2 AnchorPos;
         protected Vector2 MoveStartPos;
@@ -32,6 +34,7 @@ namespace _Game.Scripts.Enemies
         protected int ProjectilesLayer;
         protected int BarrierLayer;
         protected Rigidbody2D Rigidbody2D;
+        private float _positionInterpolationDurationCached;
         
         public MosquitoType Type => type;
         public MosquitoZigZagMovement MosquitoZigZagMovement => zigZagMovement;
@@ -63,7 +66,7 @@ namespace _Game.Scripts.Enemies
         
             if (IsMoving)
             {
-                float t = Mathf.Clamp01((float)((now - MoveStartTime) / positionInterpolationDuration));
+                float t = Mathf.Clamp01((float)((now - MoveStartTime) / _positionInterpolationDurationCached));
                 AnchorPos = Vector2.Lerp(MoveStartPos, MoveTargetPos, Mathf.SmoothStep(0f, 1f, t));
                 if (t >= 1f)
                 {
@@ -89,13 +92,15 @@ namespace _Game.Scripts.Enemies
         }
         
         public void GoToNewPosition(Vector2 newPos, Vector2? startPos = null,
-            Action onArrived = null)
+            Action onArrived = null, bool bFromDengueSource = false)
         {
             MoveStartPos = startPos ?? AnchorPos;
             MoveTargetPos = newPos;
             MoveStartTime = PhotonHandlers.Now() + 0.1f; // Adding a small delay to ensure smooth transition
             MoveArrivedCallback = onArrived;
             IsMoving = true;
+            
+            _positionInterpolationDurationCached = bFromDengueSource ? positionFromDengueSourceInterpolationDuration : positionInterpolationDuration;
         }
         
 #if UNITY_EDITOR

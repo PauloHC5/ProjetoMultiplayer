@@ -206,6 +206,7 @@ MonoBehaviour:
   points: 10
   type: 0
   positionInterpolationDuration: 1
+  positionFromDengueSourceInterpolationDuration: 2
   zigZagMovement:
     zigZagMovementSettings: {fileID: 11400000, guid: 3f0cd42cac7e6634dbfaedbdb254bb31, type: 2}
     bInterpolateMovement: 1
@@ -226,8 +227,7 @@ MonoBehaviour:
   bDebugLogs: 0
   debugGoToPosition: {x: 0, y: 0}
   moveToHordeCenter: 0
-  scaleUpDuration: 0.8
-  deadPrefab: {fileID: 4142170118600857328, guid: 7b9067c7d3256704e963c44220686fdb, type: 3}
+  scaleUpDuration: 0.5
   hordePositionKey:
     row: 0
     col: 0
