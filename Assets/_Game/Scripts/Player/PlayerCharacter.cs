@@ -228,7 +228,7 @@ public class PlayerCharacter : MonoBehaviourPun
         return false;
     }
     
-    private IEnumerator AnimatePlusScore(TextMeshProUGUI plusScoreText, Vector3 originalScale)
+    private IEnumerator AnimatePlusScore(TextMeshProUGUI plusScoreText, Vector3 originalScale, bool bDestroyAfterAnimation = false)
     {
         float duration = plusScoreTextAnimationDuration;
         float elapsedTime = 0.0f;
@@ -244,6 +244,12 @@ public class PlayerCharacter : MonoBehaviourPun
         
         yield return new WaitForSeconds(plusScoreText.text == "+300" ? 3f : plusScoreTextDespawnDelay);
 
+        if(bDestroyAfterAnimation)
+        {
+            Destroy(plusScoreText.gameObject);
+            yield break;
+        }
+        
         ReturnScoreTextToPoolAndRemoveFromQueue(plusScoreText);
     }
 
@@ -694,6 +700,12 @@ public class PlayerCharacter : MonoBehaviourPun
 
                 if(GameMode.Instance == null) return;
                 GameMode.Instance.AddExtraLife();
+                
+                TextMeshProUGUI oneUPText = Instantiate(plusScoreTextPrefab, plusScoreContainer);
+                oneUPText.text = "+1UP";
+                oneUPText.color = GameMode.GetPlayerColorBasedOnPlayerType(photonView.Owner);
+                StartCoroutine(AnimatePlusScore(oneUPText, oneUPText.rectTransform.localScale, true));
+                
                 break;
             case Pickup.PickupType.FasterFire:
                 _fasterFireActive = state;
