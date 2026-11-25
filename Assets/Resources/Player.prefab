@@ -1069,6 +1069,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Player
   speed: 10
+  fireCooldownDuration: 0.3
   projectileSpawnPoint: {fileID: 4017231318131708658}
   playerCollider: {fileID: 7563700425935545264}
   otherPlayersCollider: {fileID: 8390533413080093012}

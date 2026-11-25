@@ -27,6 +27,7 @@ public class PlayerCharacter : MonoBehaviourPun
 {
     [Header("Player Settings")]
     [SerializeField] private float speed = 10.0f;
+    [SerializeField] private float fireCooldownDuration = 0.5f;
     [SerializeField] private Transform projectileSpawnPoint;
     [SerializeField] private Collider2D playerCollider;
     [SerializeField] private Collider2D otherPlayersCollider;
@@ -63,6 +64,7 @@ public class PlayerCharacter : MonoBehaviourPun
 
     private Rigidbody2D _rigidbody2D;
 
+    private bool _bFireCooldownFlag = false;
     private int _projectilesActive;
     private int _shotCounter;
     private Vector2 _botMoveDirection = Vector2.zero;
@@ -365,7 +367,7 @@ public class PlayerCharacter : MonoBehaviourPun
 
     public void TryShoot()
     {
-        if(_projectilesActive > 0) return;
+        if(_projectilesActive > 0 || _bFireCooldownFlag) return;
 
         if (PhotonNetwork.IsConnected)
         {
@@ -375,6 +377,9 @@ public class PlayerCharacter : MonoBehaviourPun
             Vector2 characterVelocity = _rigidbody2D.linearVelocity;
 
             int shotId = _shotCounter++;
+            
+            _bFireCooldownFlag = true;
+            Invoke(nameof(ResetFireCooldown), fireCooldownDuration);
 
             photonView.RPC(nameof(RpcShoot), RpcTarget.All,
                 projectileSpawnPosition,
@@ -386,7 +391,9 @@ public class PlayerCharacter : MonoBehaviourPun
             RpcShoot(projectileSpawnPoint.position, _rigidbody2D.linearVelocity, _shotCounter++, new PhotonMessageInfo());
         }
     }
-
+    
+    private void ResetFireCooldown() => _bFireCooldownFlag = false;
+    
     [PunRPC]
     private void RpcShoot(Vector2 projectileSpawnPosition, Vector2 shooterVelocity, int shotId, PhotonMessageInfo info)
     {
