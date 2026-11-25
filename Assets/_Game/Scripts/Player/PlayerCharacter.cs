@@ -49,6 +49,10 @@ public class PlayerCharacter : MonoBehaviourPun
     [SerializeField] private int plusScoreTextPoolSize = 5;
     public float plusScoreTextAnimationDuration = 1.0f;
     public float plusScoreTextDespawnDelay = 3.0f;
+    public Vector3 plusScoreTextScaleMultiplier = new Vector3(0.5f, 0.5f, 0.5f);
+    public Vector3 plusScoreTextMaxScale = new Vector3(3f, 3f, 3f);
+    public float plusScoreTextSpacingMultiplier = 10f;
+    public float plusScoreTextMaxSpacing = 100f;
 
     [Header("Prefabs")]
     public Projectile projectilePrefab;
@@ -79,7 +83,8 @@ public class PlayerCharacter : MonoBehaviourPun
     private Stack<TextMeshProUGUI> _plusScoreTextPool;
     private Queue<TextMeshProUGUI> _usedPlusScoreTextQueue = new Queue<TextMeshProUGUI>();
     private Dictionary<TextMeshProUGUI, Coroutine> _plusScoreTextAnimations = new Dictionary<TextMeshProUGUI, Coroutine>();
-    private Dictionary<TextMeshProUGUI, Vector3> _plusScoreTextOriginalScales = new Dictionary<TextMeshProUGUI, Vector3>();
+    private VerticalLayoutGroup _plusScoreContainerLayoutGroup;
+    private float _originalPlusScoreContainerSpacing;
 
     public Action<PlayerCharacter> OnPlayerDeath;
     public Action<Pickup.PickupType, float> OnPickupCollected;
@@ -112,6 +117,8 @@ public class PlayerCharacter : MonoBehaviourPun
         _rigidbody2D = GetComponent<Rigidbody2D>();
         _trailRenderer = GetComponentInChildren<TrailRenderer>();
         _shieldVFX = GetComponentInChildren<Shield_VFX>();
+        _plusScoreContainerLayoutGroup = plusScoreContainer.GetComponent<VerticalLayoutGroup>();
+        _originalPlusScoreContainerSpacing = _plusScoreContainerLayoutGroup.spacing;
 
         _projectilesLayer = LayerMask.NameToLayer("EnemiesProjectiles");
         _enemiesLayer = LayerMask.NameToLayer("Enemies");
@@ -174,8 +181,10 @@ public class PlayerCharacter : MonoBehaviourPun
 
             if (TryGetPlusScoreTextMultiplier(scoreText.text, points, out int multiplier))
             {
+                Vector3 scaleMultiplier = new Vector3(multiplier, multiplier, multiplier);
+                
                 scoreText.text = $"{multiplier + 1}x+{points}";
-                RestartPlusScoreAnimation(scoreText);
+                RestartPlusScoreAnimation(scoreText, scaleMultiplier);
                 return;
             }
         }
@@ -189,19 +198,16 @@ public class PlayerCharacter : MonoBehaviourPun
         RestartPlusScoreAnimation(plusScoreTextToUse);
     }
 
-    private void RestartPlusScoreAnimation(TextMeshProUGUI plusScoreText)
+    private void RestartPlusScoreAnimation(TextMeshProUGUI plusScoreText, Vector3 scaleMultiplier = default)
     {
         if (_plusScoreTextAnimations.TryGetValue(plusScoreText, out Coroutine animationCoroutine))
         {
             StopCoroutine(animationCoroutine);
         }
-        else
-        {
-            _plusScoreTextOriginalScales[plusScoreText] = plusScoreText.rectTransform.localScale;
-        }
 
         Coroutine newAnimationCoroutine = StartCoroutine(
-            AnimatePlusScore(plusScoreText, _plusScoreTextOriginalScales[plusScoreText])
+            AnimatePlusScore(plusScoreText,
+                scaleMultiplier == default ? plusScoreTextScaleMultiplier : scaleMultiplier, false)
         );
         _plusScoreTextAnimations[plusScoreText] = newAnimationCoroutine;
     }
@@ -228,8 +234,13 @@ public class PlayerCharacter : MonoBehaviourPun
         return false;
     }
     
-    private IEnumerator AnimatePlusScore(TextMeshProUGUI plusScoreText, Vector3 originalScale, bool bDestroyAfterAnimation = false)
+    private IEnumerator AnimatePlusScore(TextMeshProUGUI plusScoreText, Vector3 scaleMultiplier, bool bDestroyAfterAnimation = false, float customSpacing = -1f)
     {
+        Vector3 originalScale = plusScoreTextPrefab.transform.localScale;
+        Vector3 targetScale = Vector3.Min(originalScale + scaleMultiplier, plusScoreTextMaxScale);
+        float currentSpacing = _plusScoreContainerLayoutGroup.spacing;
+        float targetSpacing = customSpacing > 0 ? customSpacing : currentSpacing + (scaleMultiplier.y * plusScoreTextSpacingMultiplier);
+        
         float duration = plusScoreTextAnimationDuration;
         float elapsedTime = 0.0f;
         plusScoreText.rectTransform.localScale = Vector3.zero;
@@ -237,12 +248,15 @@ public class PlayerCharacter : MonoBehaviourPun
         while (elapsedTime < duration)
         {
             float t = elapsedTime / duration;
-            plusScoreText.rectTransform.localScale = Vector3.Lerp(Vector3.zero, originalScale, Mathf.SmoothStep(0f, 1f, t));
+            plusScoreText.rectTransform.localScale = Vector3.Lerp(Vector3.zero, targetScale, Mathf.SmoothStep(0f, 1f, t));
+            _plusScoreContainerLayoutGroup.spacing = Mathf.Clamp(Mathf.Lerp(currentSpacing, targetSpacing, Mathf.SmoothStep(0f, 1f, t)), 0f, plusScoreTextMaxSpacing);
             elapsedTime += Time.deltaTime;
             yield return null;
         }
         
         yield return new WaitForSeconds(plusScoreText.text == "+300" ? 3f : plusScoreTextDespawnDelay);
+        
+        _plusScoreContainerLayoutGroup.spacing = _originalPlusScoreContainerSpacing;
 
         if(bDestroyAfterAnimation)
         {
@@ -262,7 +276,6 @@ public class PlayerCharacter : MonoBehaviourPun
             _usedPlusScoreTextQueue.Where(text => text != plusScoreText)
         );
         _plusScoreTextAnimations.Remove(plusScoreText);
-        _plusScoreTextOriginalScales.Remove(plusScoreText);
         _plusScoreTextPool.Push(plusScoreText);
     }
 
@@ -703,8 +716,8 @@ public class PlayerCharacter : MonoBehaviourPun
                 
                 TextMeshProUGUI oneUPText = Instantiate(plusScoreTextPrefab, plusScoreContainer);
                 oneUPText.text = "+1UP";
-                oneUPText.color = GameMode.GetPlayerColorBasedOnPlayerType(photonView.Owner);
-                StartCoroutine(AnimatePlusScore(oneUPText, oneUPText.rectTransform.localScale, true));
+                oneUPText.color = Color.red;
+                StartCoroutine(AnimatePlusScore(oneUPText, new Vector3(1.5f, 1.5f, 1.5f), true, 200f));
                 
                 break;
             case Pickup.PickupType.FasterFire:

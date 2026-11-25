@@ -1109,6 +1109,10 @@ MonoBehaviour:
   plusScoreTextPoolSize: 8
   plusScoreTextAnimationDuration: 0.25
   plusScoreTextDespawnDelay: 1
+  plusScoreTextScaleMultiplier: {x: 0.1, y: 0.1, z: 0.1}
+  plusScoreTextMaxScale: {x: 2, y: 2, z: 2}
+  plusScoreTextSpacingMultiplier: 20
+  plusScoreTextMaxSpacing: 200
   projectilePrefab: {fileID: -8598748547545543793, guid: 1a2dc1bf48ef33445bd320b213005467, type: 3}
   plusScoreTextPrefab: {fileID: 6553921991468975298, guid: d080d7e9b4ed50049a51f10b09f08fb2, type: 3}
   bBotMode: 0
