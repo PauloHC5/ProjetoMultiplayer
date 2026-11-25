@@ -257,12 +257,12 @@ namespace _Game.Scripts
                     {
                         availablePlayerTypes.Add((PlayerType)index);
                     }
-                    else
+                    /*else
                     {
                         Debug.LogError(
                             "There is a player in the room without a PlayerType custom property. This should not happen." +
                             "\nPlayer: " + player.Value.NickName + " ActorNumber: " + player.Value.ActorNumber);
-                    }
+                    }*/
                 }
 
                 for (int i = 0; i < Enum.GetValues(typeof(PlayerType)).Length; i++)
