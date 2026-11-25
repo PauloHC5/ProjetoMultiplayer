@@ -1527,7 +1527,7 @@ MonoBehaviour:
     MinSpawnInterval: 5
     MaxSpawnInterval: 12
     OneUpSpawnChance: 10
-    MedkitSpawnChance: 20
+    MedkitSpawnChance: 35
     ToolboxSpawnChance: 40
   pickupSpawnSettingsWith2CharactersAlive:
     MinSpawnInterval: 3
@@ -1539,7 +1539,7 @@ MonoBehaviour:
     MinSpawnInterval: 3
     MaxSpawnInterval: 8
     OneUpSpawnChance: 15
-    MedkitSpawnChance: 20
+    MedkitSpawnChance: 0
     ToolboxSpawnChance: 25
   radiusCheckPlayerPickup: 5
   dengueSourceSpawnArea: {fileID: 1244994348}
